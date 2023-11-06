@@ -1,0 +1,4 @@
+#Mon Nov 06 00:37:24 CET 2023
+base.0=/home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

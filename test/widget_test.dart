@@ -1,29 +1,64 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:namer_app/home_page.dart';
 
 void main() {
-  /*testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Counter increments smoke test', (tester) async {
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: Item(mot: "oui"),
+      ),
+    ));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text("oui"), findsOneWidget);
+    
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('test de la premiere page', (tester) async {
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: home_page()
+      ),
+    ));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });*/
+    expect(find.text("Association"), findsOneWidget);
+    
+  });
+
+  test('test', () {
+      var u = User("bonjour");
+      expect(u.getName(), "bonjour");
+    });
+}
+
+class User {
+  var name = "";
+
+  User(String nameParam) {
+    name = nameParam;
+  }
+
+  String getName() {
+    return name;
+  }
+}
+
+class Item extends StatelessWidget {
+  final String mot;
+
+  const Item({super.key, required this.mot});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 50,
+        color: Colors.amber[400],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.business),
+            Text(mot),
+          ],
+        ));
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:namer_app/loginController.dart';
 import 'Login.dart';
 import 'NavigationBarApp.dart';
 
@@ -55,7 +56,7 @@ class home_page extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => loginController()),
                       );
                     },
                     child: Text("Association"),

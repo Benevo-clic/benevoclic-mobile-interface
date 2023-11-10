@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'NavigationBarApp.dart';
+
+import 'services/auth.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -13,7 +13,6 @@ class LoginPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
-          //reverse: true,
           child: Column(
             children: [
               SizedBox(
@@ -55,6 +54,13 @@ class LoginPage extends StatelessWidget {
                 },
                 child: Text("Retour"),
               ),
+              ElevatedButton(
+                  onPressed: () async {
+                    print("init");
+                    await AuthService().authAnonymous();
+                    print("end");
+                  },
+                  child: Text("connexion anonyme")),
             ],
           ),
         ),
@@ -81,13 +87,13 @@ class Formulaire extends StatelessWidget {
           TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Enter a search term',
+              hintText: 'adress',
             ),
           ),
           TextField(
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Enter a search term',
+              hintText: 'password',
             ),
           ),
         ],
@@ -106,6 +112,8 @@ class FormulaireLogin extends StatefulWidget {
 class _FormulaireLoginState extends State<FormulaireLogin> {
   final myController = TextEditingController();
 
+  var _adress;
+  var _mdp;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -117,30 +125,50 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Form(
-          child: TextFormField(
-            validator: (value) {
-              if (value == null) {
-                return 'Please';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter a search term',
-            ),
+    return Form(
+      key: _formKey,
+      child: Column(children: [
+        TextFormField(
+          validator: (value) {
+            if (value == null) {
+              return 'Please';
+            }
+            setState(() {
+              _adress = value;
+            });
+            return null;
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Adresse ',
+          ),
+        ),TextFormField(
+          validator: (value) {
+            if (value == null) {
+              return 'Please';
+            }
+            setState(() {
+              _mdp = value;
+            });
+            return null;
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Mot de passe',
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(0),
+        Container(
+          padding: EdgeInsets.only(),
           child: ElevatedButton(
-            onPressed: () {},
-            child: Text("envoyer"),
+            onPressed: () async{
+              if(_formKey.currentState!.validate()){
+                await AuthService().authAdressPassword(_adress.toString(), _mdp.toString());
+              }
+            },
+            child: const Text("bien"),
           ),
-        ),
-      ],
+        )
+      ]),
     );
   }
 }

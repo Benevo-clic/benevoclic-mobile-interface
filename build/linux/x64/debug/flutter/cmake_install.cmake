@@ -1,8 +1,8 @@
-# Install script for directory: /home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/linux/flutter
+# Install script for directory: /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/linux/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/build/linux/x64/debug/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

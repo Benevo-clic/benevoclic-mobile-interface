@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "853243308452",
+    "project_id": "benevoclic-612be",
+    "storage_bucket": "benevoclic-612be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853243308452:android:8a24f0545b518527603931",
+        "android_client_info": {
+          "package_name": "com.example.front_end"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853243308452-dpf9kpm1g2lv2off6vg9neq0clgqh2oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_Ws7J00cFAO276x4S2ray78SZTASmOMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853243308452-dpf9kpm1g2lv2off6vg9neq0clgqh2oq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

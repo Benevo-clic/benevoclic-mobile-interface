@@ -1,7 +1,18 @@
 # benevoclic mobile interface
 
-A new Flutter project.
 
+# Installation 
+
+Effectuer la commande : - flutter clean 
+
+Pour éviter les erreurs de path
+
+# Executer le projet 
+
+Effectuer la commande : flutter run 
+
+Compile le projet et l'exécute
+ 
 ## Getting Started
 
 This project is a starting point for a Flutter application.

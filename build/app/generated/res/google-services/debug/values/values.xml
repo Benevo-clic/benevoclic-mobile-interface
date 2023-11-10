@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">853243308452-dpf9kpm1g2lv2off6vg9neq0clgqh2oq.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">853243308452</string>
+    <string name="google_api_key" translatable="false">AIzaSyA_Ws7J00cFAO276x4S2ray78SZTASmOMI</string>
+    <string name="google_app_id" translatable="false">1:853243308452:android:8a24f0545b518527603931</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA_Ws7J00cFAO276x4S2ray78SZTASmOMI</string>
+    <string name="google_storage_bucket" translatable="false">benevoclic-612be.appspot.com</string>
+    <string name="project_id" translatable="false">benevoclic-612be</string>
+</resources>

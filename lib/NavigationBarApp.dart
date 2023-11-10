@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'services/auth.dart';
+
 /// Flutter code sample for [NavigationBar].
 
 void main() => runApp(const NavigationBarApp());
@@ -81,7 +83,14 @@ class _NavigationExampleState extends State<NavigationExample> {
         Container(
           color: Colors.blue,
           alignment: Alignment.center,
-          child: const Text('Page 3'),
+          child: IconButton(
+            onPressed: () async {
+              print('init');
+              await AuthService().logout();
+              print("end");
+            },
+            icon: Icon(Icons.logout),
+          ),
         ),
       ][currentPageIndex],
     );
@@ -145,7 +154,6 @@ class annonce extends StatelessWidget {
   }
 }
 
-
 //abstract class
 class LineContent extends StatelessWidget {
   final String titreSection;
@@ -160,14 +168,17 @@ class LineContent extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.white ,border: Border.all(color: Colors.grey.shade500) ),
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade500)),
           //width: MediaQuery.of(context).size.width * 0.3,
           padding: const EdgeInsets.all(6.0),
-          child: Text(titreSection, textAlign: TextAlign.center,style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-          )),
+          child: Text(titreSection,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              )),
         )
       ],
     );

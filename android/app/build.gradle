@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.front_end"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -65,3 +65,5 @@ flutter {
 }
 
 dependencies {}
+
+apply plugin: 'com.google.gms.google-services'

@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__front_end
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /snap/flutter/141/usr/bin/cmake -S/home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/linux -B/home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/build/linux/x64/debug
+  command = /snap/flutter/141/usr/bin/cmake -S/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/linux -B/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug
   description = Re-running CMake...
   generator = 1
 

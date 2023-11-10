@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.front_end.app-mergeDebugResources-9:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.example.front_end.app-mergeDebugResources-14:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/home/20015223/Desktop/Ulille/S3/platine/benevo_app/front_end/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

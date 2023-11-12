@@ -17,7 +17,7 @@ void main() {
   testWidgets('test de la premiere page', (tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: Scaffold(
-        body: home_page()
+        body: Home_page()
       ),
     ));
 

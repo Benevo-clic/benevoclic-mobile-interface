@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:namer_app/loginController.dart';
-import 'Login.dart';
-import 'NavigationBarApp.dart';
+import 'navigationBarApp.dart';
 
-class home_page extends StatelessWidget {
-  const home_page({super.key});
+class Home_page extends StatelessWidget {
+  const Home_page({super.key});
 
   @override
   Widget build(BuildContext context) {
     //permet de ne pas changer l'orientation du telephone
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -56,7 +54,8 @@ class home_page extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => loginController()),
+                        MaterialPageRoute(
+                            builder: (context) => LoginController()),
                       );
                     },
                     child: Text("Association"),
@@ -72,7 +71,7 @@ class home_page extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NavigationBarApp()),
+                            builder: (context) => NavigationExample()),
                       );
                     },
                     child: Text("Bénévole"),
@@ -95,7 +94,6 @@ class home_page extends StatelessWidget {
                       )
                     ],
                   ),
-                  
                 ],
               ),
             ),

@@ -1,33 +1,33 @@
 name: namer_app
 description: A new Flutter project.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 0.0.1+1
 
 environment:
-  sdk: '>=2.19.4 <4.0.0'
+  sdk: ">=2.19.4 <4.0.0"
 
 dependencies:
+  bot_toast: ^4.1.3
+  english_words: ^4.0.0
+  firebase_auth: ^4.13.0
+  firebase_core: ^2.12.0
+  firebase_messaging: ^14.7.4
   flutter:
     sdk: flutter
-  firebase_core: ^2.12.0
-  firebase_auth: ^4.13.0
-
-  english_words: ^4.0.0
-  provider: ^6.0.0
   flutter_application_1: ^0.0.2
-  bot_toast: ^4.1.3
+  font_awesome_flutter: ^10.6.0
+  google_sign_in: ^6.1.6
+  provider: ^6.0.0
 
 dependency_overrides:
   firebase_core_platform_interface: 5.0.0
 
-
 dev_dependencies:
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -35,3 +35,4 @@ flutter:
     - assets/logo.png
     - assets/background1.png
     - assets/background2.png
+    - assets/background3.png

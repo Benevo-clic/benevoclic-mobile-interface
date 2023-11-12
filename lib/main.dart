@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'home_page.dart';
 
 void main() async {
+  //Initialisation de firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
-        home: home_page(),
+        home: Home_page(),
       ),
     );
   }

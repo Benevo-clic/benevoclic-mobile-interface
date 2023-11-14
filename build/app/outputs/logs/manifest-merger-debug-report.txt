@@ -45,14 +45,14 @@ MERGED from [com.google.android.gms:play-services-basement:18.2.0] /home/geoffre
 MERGED from [com.google.android.gms:play-services-basement:18.2.0] /home/geoffrey/.gradle/caches/transforms-3/5ab269d53f6a1b8d1aed80b7ed0b33eb/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:20:5-24:19
 MERGED from [androidx.core:core:1.6.0] /home/geoffrey/.gradle/caches/transforms-3/9df09c476a8966dff0ab2c589910f62f/transformed/core-1.6.0/AndroidManifest.xml:24:5-89
 MERGED from [androidx.core:core:1.6.0] /home/geoffrey/.gradle/caches/transforms-3/9df09c476a8966dff0ab2c589910f62f/transformed/core-1.6.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /home/geoffrey/.gradle/caches/transforms-3/a53fb57b4e21ad1ffce5bcd26bce319b/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:23:5-31:19
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /home/geoffrey/.gradle/caches/transforms-3/a53fb57b4e21ad1ffce5bcd26bce319b/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:23:5-31:19
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] /home/geoffrey/.gradle/caches/transforms-3/24c5bfb1f8ea781637ef8bf0dde36d91/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:27:5-35:19
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] /home/geoffrey/.gradle/caches/transforms-3/24c5bfb1f8ea781637ef8bf0dde36d91/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:27:5-35:19
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.8] /home/geoffrey/.gradle/caches/transforms-3/edcfac4261cf7320c1761a1289a7fd30/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:25:5-39:19
 MERGED from [com.google.android.datatransport:transport-runtime:3.1.8] /home/geoffrey/.gradle/caches/transforms-3/edcfac4261cf7320c1761a1289a7fd30/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:25:5-39:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.6.0] /home/geoffrey/.gradle/caches/transforms-3/9df09c476a8966dff0ab2c589910f62f/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
 	android:name
@@ -66,7 +66,9 @@ MERGED from /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/
 MERGED from [:firebase_auth] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
 MERGED from [:firebase_messaging] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-50:12
 MERGED from [:firebase_core] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
+MERGED from [:path_provider_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:google_sign_in_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/google_sign_in_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:flutter_secure_storage] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.firebase:firebase-auth:22.2.0] /home/geoffrey/.gradle/caches/transforms-3/a34d367f12c3f81268e251f603589305/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:17:1-75:12
 MERGED from [com.google.firebase:firebase-messaging:23.3.1] /home/geoffrey/.gradle/caches/transforms-3/8c5ad7ced3409fa7d05702f389aa7c14/transformed/jetified-firebase-messaging-23.3.1/AndroidManifest.xml:17:1-66:12
 MERGED from [com.google.firebase:firebase-iid:21.1.0] /home/geoffrey/.gradle/caches/transforms-3/77bdb4432be343bb995d94dd298a1eae/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:17:1-38:12
@@ -78,6 +80,7 @@ MERGED from [com.google.android.recaptcha:recaptcha:18.1.2] /home/geoffrey/.grad
 MERGED from [androidx.window:window-java:1.0.0-beta04] /home/geoffrey/.gradle/caches/transforms-3/5a5a752a30ef8f927b89ee5d02868eb5/transformed/jetified-window-java-1.0.0-beta04/AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.window:window:1.0.0-beta04] /home/geoffrey/.gradle/caches/transforms-3/86a1a9f6804c8fc691a553244f0de821/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.multidex:multidex:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/22097d077dc99ac107e21d594a6c0fe5/transformed/multidex-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/geoffrey/.gradle/caches/transforms-3/8e6263cedba54ccfa40c534e6283d389/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.gms:play-services-stats:17.0.2] /home/geoffrey/.gradle/caches/transforms-3/301007ea1df3bf1f33f5bde8c871ded1/transformed/jetified-play-services-stats-17.0.2/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/4279cf94ece390654aa3464e5b4c6350/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] /home/geoffrey/.gradle/caches/transforms-3/baf9c55a2fb7718d4f9aac474f28da5b/transformed/localbroadcastmanager-1.1.0/AndroidManifest.xml:17:1-24:12
@@ -106,6 +109,7 @@ MERGED from [androidx.savedstate:savedstate:1.0.0] /home/geoffrey/.gradle/caches
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/8234eebd7be554ade58810530d29379a/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/4c95a96deda9fd57e5c4b6e379e06454/transformed/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.tracing:tracing:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/2a5ae7bc1fe485d15cb7371532c3b957/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
 MERGED from [com.google.firebase:firebase-components:17.1.5] /home/geoffrey/.gradle/caches/transforms-3/5a93340502b016367412e5c43ec38afc/transformed/jetified-firebase-components-17.1.5/AndroidManifest.xml:15:1-20:12
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /home/geoffrey/.gradle/caches/transforms-3/a53fb57b4e21ad1ffce5bcd26bce319b/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:15:1-33:12
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.8] /home/geoffrey/.gradle/caches/transforms-3/24c5bfb1f8ea781637ef8bf0dde36d91/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:15:1-37:12
@@ -113,7 +117,6 @@ MERGED from [com.google.android.datatransport:transport-runtime:3.1.8] /home/geo
 MERGED from [com.google.android.datatransport:transport-api:3.0.0] /home/geoffrey/.gradle/caches/transforms-3/ba5026f2aeedb996952a8bd8311b99a6/transformed/jetified-transport-api-3.0.0/AndroidManifest.xml:15:1-22:12
 MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] /home/geoffrey/.gradle/caches/transforms-3/2233e8acc134490b891608e0be3607bc/transformed/jetified-firebase-encoders-json-18.0.0/AndroidManifest.xml:15:1-23:12
 MERGED from [androidx.arch.core:core-runtime:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/fff2271d59e37da2eecbafe9ae4432b7/transformed/core-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/c887d6df70a4771ef330118cd86b2439/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/3c303f5ad6fc29b92707c1dc7cff4bb8/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/9f68adf02329b3da2d4e3a77227a93aa/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -146,8 +149,12 @@ MERGED from [:firebase_messaging] /home/geoffrey/Bureau/gitplatineFlutter/benevo
 MERGED from [:firebase_messaging] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_messaging/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:firebase_core] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:firebase_core] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:google_sign_in_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/google_sign_in_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:google_sign_in_android] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/google_sign_in_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_secure_storage] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
+MERGED from [:flutter_secure_storage] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
 MERGED from [com.google.firebase:firebase-auth:22.2.0] /home/geoffrey/.gradle/caches/transforms-3/a34d367f12c3f81268e251f603589305/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:21:5-23:64
 MERGED from [com.google.firebase:firebase-auth:22.2.0] /home/geoffrey/.gradle/caches/transforms-3/a34d367f12c3f81268e251f603589305/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:21:5-23:64
 MERGED from [com.google.firebase:firebase-messaging:23.3.1] /home/geoffrey/.gradle/caches/transforms-3/8c5ad7ced3409fa7d05702f389aa7c14/transformed/jetified-firebase-messaging-23.3.1/AndroidManifest.xml:20:5-44
@@ -170,6 +177,8 @@ MERGED from [androidx.window:window:1.0.0-beta04] /home/geoffrey/.gradle/caches/
 MERGED from [androidx.window:window:1.0.0-beta04] /home/geoffrey/.gradle/caches/transforms-3/86a1a9f6804c8fc691a553244f0de821/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.multidex:multidex:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/22097d077dc99ac107e21d594a6c0fe5/transformed/multidex-2.0.0/AndroidManifest.xml:20:5-43
 MERGED from [androidx.multidex:multidex:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/22097d077dc99ac107e21d594a6c0fe5/transformed/multidex-2.0.0/AndroidManifest.xml:20:5-43
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/geoffrey/.gradle/caches/transforms-3/8e6263cedba54ccfa40c534e6283d389/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/geoffrey/.gradle/caches/transforms-3/8e6263cedba54ccfa40c534e6283d389/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-stats:17.0.2] /home/geoffrey/.gradle/caches/transforms-3/301007ea1df3bf1f33f5bde8c871ded1/transformed/jetified-play-services-stats-17.0.2/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-stats:17.0.2] /home/geoffrey/.gradle/caches/transforms-3/301007ea1df3bf1f33f5bde8c871ded1/transformed/jetified-play-services-stats-17.0.2/AndroidManifest.xml:5:5-44
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/4279cf94ece390654aa3464e5b4c6350/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
@@ -226,6 +235,8 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/geoffrey/.g
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/4c95a96deda9fd57e5c4b6e379e06454/transformed/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.tracing:tracing:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/2a5ae7bc1fe485d15cb7371532c3b957/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.tracing:tracing:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/2a5ae7bc1fe485d15cb7371532c3b957/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.firebase:firebase-components:17.1.5] /home/geoffrey/.gradle/caches/transforms-3/5a93340502b016367412e5c43ec38afc/transformed/jetified-firebase-components-17.1.5/AndroidManifest.xml:18:5-44
 MERGED from [com.google.firebase:firebase-components:17.1.5] /home/geoffrey/.gradle/caches/transforms-3/5a93340502b016367412e5c43ec38afc/transformed/jetified-firebase-components-17.1.5/AndroidManifest.xml:18:5-44
 MERGED from [com.google.firebase:firebase-datatransport:18.1.7] /home/geoffrey/.gradle/caches/transforms-3/a53fb57b4e21ad1ffce5bcd26bce319b/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:18:5-20:41
@@ -240,8 +251,6 @@ MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] /home/geoffrey/.
 MERGED from [com.google.firebase:firebase-encoders-json:18.0.0] /home/geoffrey/.gradle/caches/transforms-3/2233e8acc134490b891608e0be3607bc/transformed/jetified-firebase-encoders-json-18.0.0/AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.arch.core:core-runtime:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/fff2271d59e37da2eecbafe9ae4432b7/transformed/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.arch.core:core-runtime:2.0.0] /home/geoffrey/.gradle/caches/transforms-3/fff2271d59e37da2eecbafe9ae4432b7/transformed/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/geoffrey/.gradle/caches/transforms-3/3757e4ba9f7c57762e08b8a0c6c81bbe/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/c887d6df70a4771ef330118cd86b2439/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/c887d6df70a4771ef330118cd86b2439/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] /home/geoffrey/.gradle/caches/transforms-3/3c303f5ad6fc29b92707c1dc7cff4bb8/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
@@ -255,7 +264,7 @@ MERGED from [androidx.annotation:annotation-experimental:1.1.0] /home/geoffrey/.
 INJECTED from /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/android/app/src/debug/AndroidManifest.xml
 INJECTED from /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/android/app/src/debug/AndroidManifest.xml
 	tools:overrideLibrary
-		ADDED from [com.google.firebase:firebase-auth:22.2.0] /home/geoffrey/.gradle/caches/transforms-3/a34d367f12c3f81268e251f603589305/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:23:9-61
+		ADDED from [:flutter_secure_storage] /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:9:9-50
 	android:targetSdkVersion
 		INJECTED from /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/android/app/src/main/AndroidManifest.xml
 		INJECTED from /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/android/app/src/debug/AndroidManifest.xml

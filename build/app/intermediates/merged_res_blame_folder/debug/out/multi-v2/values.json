@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.front_end.app-mergeDebugResources-17:/values/values.xml",
+            "outputFile": "com.example.front_end.app-mergeDebugResources-18:/values/values.xml",
             "map": [
                 {
                     "source": "/home/geoffrey/.gradle/caches/transforms-3/8c5ad7ced3409fa7d05702f389aa7c14/transformed/jetified-firebase-messaging-23.3.1/res/values/values.xml",

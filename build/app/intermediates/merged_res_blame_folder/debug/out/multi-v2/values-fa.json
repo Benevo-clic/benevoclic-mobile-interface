@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.front_end.app-mergeDebugResources-17:/values-fa/values-fa.xml",
+            "outputFile": "com.example.front_end.app-mergeDebugResources-18:/values-fa/values-fa.xml",
             "map": [
                 {
                     "source": "/home/geoffrey/.gradle/caches/transforms-3/15eddd45100fa512963e6542464ed3b9/transformed/browser-1.4.0/res/values-fa/values-fa.xml",

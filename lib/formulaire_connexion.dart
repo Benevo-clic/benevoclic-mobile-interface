@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:namer_app/error_message.dart';
 
 import 'services/auth.dart';
 
@@ -103,18 +104,25 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                 backgroundColor: Color.fromRGBO(150, 62, 96, 1),
               ),
               onPressed: () async {
-                debugPrint("Logged!");
-
                 if (_formKey.currentState!.validate()) {
-                  await AuthService().authAdressPassword(_adress.toString(), _mdp.toString());
+                  try {
+                    await AuthService().authAdressPassword(
+                        _adress.toString(), _mdp.toString());
+                  } on FirebaseAuthException catch (e) {
+                    showDialog(
+                        context: context,
+                        
+                        builder: (context) {
+                          return ErrorMessage(
+                              type: "login incorrect", message: "retour");
+                        });
+                  }
                 }
-                
               },
               child: const Text("Connexion",
                   style: TextStyle(color: Colors.white)),
             ),
           ),
-          
         ]),
       ),
     );
@@ -130,7 +138,7 @@ class EmailVerification {
   }
 
   security() {
-    if (email == null || email.isEmpty) {
+    if (email.isEmpty) {
       message = "Veuillez remplir ce champs avec un email";
       return false;
     }

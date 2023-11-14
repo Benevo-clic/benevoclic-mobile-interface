@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.front_end.app-mergeDebugResources-17:/values-b+sr+Latn/values-b+sr+Latn.xml",
+            "outputFile": "com.example.front_end.app-mergeDebugResources-18:/values-b+sr+Latn/values-b+sr+Latn.xml",
             "map": [
                 {
                     "source": "/home/geoffrey/.gradle/caches/transforms-3/15eddd45100fa512963e6542464ed3b9/transformed/browser-1.4.0/res/values-b+sr+Latn/values-b+sr+Latn.xml",

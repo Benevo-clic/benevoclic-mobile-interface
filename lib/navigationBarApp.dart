@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/listeAnnonces.dart';
 import 'package:namer_app/services/auth.dart';
 
 import 'profil.dart';
@@ -15,15 +16,18 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Color.fromRGBO(150, 62, 96, 1), width: 2)),
-        ),
-        child: NavigationBar(
-          
-          backgroundColor: Color.fromRGBO(249, 148, 85, 1),
+    AuthService().getToken();
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(
+                    color: Color.fromRGBO(150, 62, 96, 1), width: 2)),
+          ),
+          child: NavigationBar(
+            backgroundColor: Color.fromRGBO(249, 148, 85, 1),
             onDestinationSelected: (int index) {
               setState(() {
                 currentPageIndex = index;
@@ -53,40 +57,14 @@ class _NavigationExampleState extends State<NavigationExample> {
               ),
             ],
           ),
-      ),
-      body: <Widget>[
-        Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/background2.png"),
-                    fit: BoxFit.cover)),
-            alignment: Alignment.center,
-            child: Annonce()),
-        Container(
-            color: Colors.green,
-            alignment: Alignment.center,
-            child: ListView(
-              padding: const EdgeInsets.all(15),
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  color: Colors.amber[600],
-                  child: const Center(child: Text('Entry A')),
-                ),
-                Container(
-                  height: 50,
-                  color: Colors.amber[500],
-                  child: const Center(child: Text('Entry B')),
-                ),
-                Item(mot: "moi")
-              ],
-            )),
-        Container(
-          alignment: Alignment.center,
-          child: Text("")
         ),
-        ProfilPage(),
-      ][currentPageIndex],
+        body: <Widget>[
+          ListeAnnonces(),
+          ListeAnnonces(),
+          Container(alignment: Alignment.center, child: Text("")),
+          ProfilPage(),
+        ][currentPageIndex],
+      ),
     );
   }
 }
@@ -111,7 +89,7 @@ class Item extends StatelessWidget {
   }
 }
 
-class Annonce extends StatelessWidget {
+/*class Annonce extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -149,7 +127,7 @@ class Annonce extends StatelessWidget {
       ]),
     );
   }
-}
+}*/
 
 //abstract class
 class LineContent extends StatelessWidget {

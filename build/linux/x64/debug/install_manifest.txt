@@ -7,7 +7,11 @@
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/NOTICES.Z
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/assets/background2.png
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/assets/background1.png
+/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/assets/background3.png
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/assets/logo.png
+/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf
+/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf
+/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/version.json
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.json
 /home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/linux/x64/debug/bundle/data/flutter_assets/AssetManifest.bin

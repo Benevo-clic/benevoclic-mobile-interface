@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:namer_app/other_connexion.dart';
 
-import 'formulaireConnexion.dart';
+import 'formulaire_connexion.dart';
 import 'services/auth.dart';
 
 class LoginPage extends StatelessWidget {
@@ -36,7 +39,16 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Center(),
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () async {
+                            print("init");
+                            await AuthService().authAnonymous();
+                            print("end");
+                          },
+                          icon: Icon(Icons.cancel_presentation_sharp),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -57,7 +69,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Container(
+              /*Container(
                 width: MediaQuery.sizeOf(context).width * 0.40,
                 padding: EdgeInsets.only(),
                 child: ElevatedButton(
@@ -78,32 +90,23 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-
-              /*TextButton(
-                /*style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                ),*/
-
-                onPressed: (){},  
+              ),*/
+              Container(
+                width: MediaQuery.sizeOf(context).width * 0.8,
                 child: Row(
-                children: [
-                      FaIcon(FontAwesomeIcons.google),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text("Google",
-                            style: TextStyle(color: Colors.black)),
-                      
-                    ],
-              )),*/
-              ElevatedButton(
-                  onPressed: () async {
-                    print("init");
-                    await AuthService().authAnonymous();
-                    print("end");
-                  },
-                  child: Text("connexion anonyme")),
+                  children: [
+                    Expanded(
+                        child: OtherConnection(context, "Google",
+                            FaIcon(FontAwesomeIcons.google))),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                        child: OtherConnection(context, "Facebook",
+                            FaIcon(FontAwesomeIcons.facebookF))),
+                  ],
+                ),
+              ), //OtherConnection(context, "Google", FaIcon(FontAwesomeIcons.google)),
               Container(
                 width: MediaQuery.sizeOf(context).width * 0.60,
                 padding: EdgeInsets.only(),

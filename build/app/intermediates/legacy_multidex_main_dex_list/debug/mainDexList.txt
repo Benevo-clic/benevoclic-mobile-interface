@@ -252,6 +252,13 @@ com/google/common/util/concurrent/ParametricNullness.class
 com/google/common/util/concurrent/Partially$GwtIncompatible.class
 com/google/common/xml/ElementTypesAreNonnullByDefault.class
 com/google/common/xml/ParametricNullness.class
+com/google/crypto/tink/AccessesPartialKey.class
+com/google/crypto/tink/annotations/Alpha.class
+com/google/crypto/tink/shaded/protobuf/CanIgnoreReturnValue.class
+com/google/crypto/tink/shaded/protobuf/CheckReturnValue.class
+com/google/crypto/tink/shaded/protobuf/CompileTimeConstant.class
+com/google/crypto/tink/shaded/protobuf/ExperimentalApi.class
+com/google/crypto/tink/shaded/protobuf/InlineMe.class
 com/google/errorprone/annotations/CanIgnoreReturnValue.class
 com/google/errorprone/annotations/CheckReturnValue.class
 com/google/errorprone/annotations/CompatibleWith.class
@@ -298,6 +305,11 @@ com/google/firebase/messaging/ktx/FirebaseMessagingKtxRegistrar.class
 com/google/firebase/messaging/ktx/MessagingKt.class
 com/google/firebase/platforminfo/AutoValue_LibraryVersion.class
 com/google/firebase/platforminfo/LibraryVersion.class
+com/google/gson/annotations/Expose.class
+com/google/gson/annotations/JsonAdapter.class
+com/google/gson/annotations/SerializedName.class
+com/google/gson/annotations/Since.class
+com/google/gson/annotations/Until.class
 com/google/j2objc/annotations/AutoreleasePool.class
 com/google/j2objc/annotations/J2ObjCIncompatible.class
 com/google/j2objc/annotations/ObjectiveCName.class

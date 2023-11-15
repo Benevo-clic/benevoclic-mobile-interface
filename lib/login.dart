@@ -69,28 +69,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              /*Container(
-                width: MediaQuery.sizeOf(context).width * 0.40,
-                padding: EdgeInsets.only(),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.grey.shade300),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ))),
-                  onPressed: () async {
-                    await AuthService().singInWithGoogle();
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(child: FaIcon(FontAwesomeIcons.google)),
-                      Text("Google", style: TextStyle(color: Colors.black)),
-                    ],
-                  ),
-                ),
-              ),*/
+
               Container(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child: Row(
@@ -119,7 +98,9 @@ class LoginPage extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
                               side: BorderSide(color: Colors.red)))),
-                  onPressed: () {},
+                  onPressed: () {
+                    AuthService().createAccount("efef@fee.com","nonnon");
+                  },
                   child: Text("Créer un compte",
                       style: TextStyle(color: Colors.white)),
                 ),

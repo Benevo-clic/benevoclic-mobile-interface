@@ -16,7 +16,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    AuthService().getToken();
+    //AuthService().getToken();
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

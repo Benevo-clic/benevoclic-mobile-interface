@@ -1,4 +1,4 @@
-#Tue Nov 14 23:44:49 CET 2023
+#Wed Nov 15 00:02:27 CET 2023
 base.0=/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 base.1=/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/app/intermediates/dex/debug/mergeDexDebug/classes2.dex
 base.2=/home/geoffrey/Bureau/gitplatineFlutter/benevoclic-mobile-interface/build/app/intermediates/dex/debug/mergeDexDebug/classes3.dex

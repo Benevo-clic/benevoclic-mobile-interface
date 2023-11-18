@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/listeAnnonces.dart';
+import 'package:namer_app/widgets/listeAnnonces.dart';
 import 'package:namer_app/services/auth.dart';
 
-import 'profil.dart';
+import '../profil.dart';
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});

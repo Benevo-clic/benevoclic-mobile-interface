@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../globals.dart' as globals;
+import '../util/globals.dart' as globals;
 
 class AuthService {
   var _auth = FirebaseAuth.instance;

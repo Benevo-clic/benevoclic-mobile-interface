@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/fiche_annonce.dart';
+import 'package:namer_app/widgets/fiche_annonce.dart';
 
 class ListeAnnonces extends StatelessWidget {
   @override

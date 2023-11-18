@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/error_message.dart';
+import 'package:namer_app/error/error_message.dart';
 
-import 'services/auth.dart';
+import '../services/auth.dart';
 
 class FormulaireLogin extends StatefulWidget {
   const FormulaireLogin({super.key});

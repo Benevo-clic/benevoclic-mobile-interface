@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/other_connexion.dart';
 
-import 'formulaire_connexion.dart';
-import 'services/auth.dart';
+import '../widgets/formulaire_connexion.dart';
+import '../services/auth.dart';
 
 class LoginPage extends StatelessWidget {
   @override

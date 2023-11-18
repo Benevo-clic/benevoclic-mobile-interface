@@ -1,42 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:namer_app/error/error_message.dart';
+import 'package:namer_app/services/auth.dart';
 
 class Inscription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/background1.png"), fit: BoxFit.cover)),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 120,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.backspace_outlined),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/background1.png"),
+                fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 120,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.backspace_outlined),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Image.asset(
-                        "assets/logo.png",
-                        height: 80,
+                      Expanded(
+                        child: Image.asset(
+                          "assets/logo.png",
+                          height: 80,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(""),
-                    )
-                  ],
+                      Expanded(
+                        child: Text(""),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
+                SizedBox(
                   height: 30,
                 ),
                 Text("Inscription",
@@ -48,12 +54,13 @@ class Inscription extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(30),
-                  height: MediaQuery.sizeOf(context).height * 0.6,
-                  child: FormulaireInscription()),
-            ],
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(30),
+                    height: MediaQuery.sizeOf(context).height * 0.6,
+                    child: FormulaireInscription()),
+              ],
+            ),
           ),
         ),
       ),
@@ -94,7 +101,17 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
         key: _formKey,
         child: Column(children: [
           TextFormField(
-            validator: (value) {},
+            validator: (value) {
+              var email = EmailVerification(value.toString());
+              if (email.security()) {
+                setState(() {
+                  _adress = value;
+                });
+                return null;
+              } else {
+                return email.message;
+              }
+            },
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -109,7 +126,16 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
           ),
           TextFormField(
             obscureText: true,
-            validator: (value) {},
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Veuillez rentrer un mot de passe";
+              } else {
+                setState(() {
+                  _mdp = value;
+                });
+                return null;
+              }
+            },
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -147,7 +173,20 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(150, 62, 96, 1),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                try {
+                  await AuthService()
+                      .createAccount(_adress.toString(), _mdp.toString());
+                } on FirebaseAuthException catch (e) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ErrorMessage(
+                            type: "inscription incorrect", message: "retour");
+                      });
+                }}
+              },
               child: const Text("Inscription",
                   style: TextStyle(color: Colors.white)),
             ),
@@ -163,5 +202,29 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
         ]),
       ),
     );
+  }
+}
+
+class EmailVerification {
+  var email = "";
+  var message = "";
+
+  EmailVerification(String emailParam) {
+    email = emailParam;
+  }
+
+  security() {
+    if (email.isEmpty) {
+      message = "Veuillez remplir ce champs avec un email";
+      return false;
+    }
+
+    if (RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email)) {
+      return true;
+    }
+    message = "Cet email ne possède pas un bon format";
+    return false;
   }
 }

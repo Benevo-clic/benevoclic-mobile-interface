@@ -18,6 +18,7 @@ class AuthService {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     print("token Email/password");
+    print(result);
     print(await result.user!.getIdToken());
   }
 
@@ -37,21 +38,25 @@ class AuthService {
     globals.id = googlAuth!.idToken!;
 
     await FirebaseAuth.instance.signInWithCredential(credential);
+    print(googlAuth!);
     print("token gmail");
     print(googlAuth!.idToken!);
   }
 
   createAccount(email, password) async {
-    try {
+    
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+          
       print(user.user?.getIdToken(true));
-    } on FirebaseAuthException catch (e) {
-      print(e);
-    }
+      _auth.currentUser?.sendEmailVerification();
+      
   }
 
   /*signInWithFacebook() async{
 
   }*/
+
+
+  
 }

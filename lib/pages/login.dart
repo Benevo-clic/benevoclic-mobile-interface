@@ -1,10 +1,12 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:namer_app/color/color.dart';
 import 'package:namer_app/other_connexion.dart';
+import 'package:namer_app/pages/inscription_page.dart';
+import 'package:namer_app/widgets/formulaire_connexion.dart';
 
-import '../widgets/formulaire_connexion.dart';
 import '../services/auth.dart';
 
 class LoginPage extends StatelessWidget {
@@ -39,16 +41,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Center(
-                        child: IconButton(
-                          onPressed: () async {
-                            print("init");
-                            await AuthService().authAnonymous();
-                            print("end");
-                          },
-                          icon: Icon(Icons.cancel_presentation_sharp),
-                        ),
-                      ),
+                      child: Text(""),
                     )
                   ],
                 ),
@@ -92,14 +85,16 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(249, 148, 85, 1)),
+                          orange),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
                               side: BorderSide(color: Colors.red)))),
                   onPressed: () {
-                    AuthService().createAccount("efef@fee.com","nonnon");
+                    Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => Inscription()),);
+                    //AuthService().createAccount("efef@fee.com","nonnon");
                   },
                   child: Text("Créer un compte",
                       style: TextStyle(color: Colors.white)),

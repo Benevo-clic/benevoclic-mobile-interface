@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/error/error_message.dart';
-import 'package:namer_app/services/auth.dart';
+import 'package:namer_app/pages/inscription.dart';
+import 'package:namer_app/util/email_verification.dart';
 
 class Inscription extends StatelessWidget {
   @override
@@ -176,8 +177,9 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                 try {
-                  await AuthService()
-                      .createAccount(_adress.toString(), _mdp.toString());
+                  //await AuthService().createAccount(_adress.toString(), _mdp.toString());
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => InscriptionDemarche(adress :_adress.toString(),mdp: _mdp.toString())));
                 } on FirebaseAuthException catch (e) {
                   showDialog(
                       context: context,
@@ -202,29 +204,5 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
         ]),
       ),
     );
-  }
-}
-
-class EmailVerification {
-  var email = "";
-  var message = "";
-
-  EmailVerification(String emailParam) {
-    email = emailParam;
-  }
-
-  security() {
-    if (email.isEmpty) {
-      message = "Veuillez remplir ce champs avec un email";
-      return false;
-    }
-
-    if (RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email)) {
-      return true;
-    }
-    message = "Cet email ne possède pas un bon format";
-    return false;
   }
 }

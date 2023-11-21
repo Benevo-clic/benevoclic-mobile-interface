@@ -11,24 +11,20 @@ void main() {
     ));
 
     expect(find.text("oui"), findsOneWidget);
-    
   });
 
   testWidgets('test de la premiere page', (tester) async {
     await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: Home_page()
-      ),
+      home: Scaffold(body: Home_page()),
     ));
 
     expect(find.text("Association"), findsOneWidget);
-    
   });
 
   test('test', () {
-      var u = User("bonjour");
-      expect(u.getName(), "bonjour");
-    });
+    var u = User("bonjour");
+    expect(u.getName(), "bonjour");
+  });
 }
 
 class User {

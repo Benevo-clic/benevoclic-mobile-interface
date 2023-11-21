@@ -1,13 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/color/color.dart';
 import 'package:namer_app/other_connexion.dart';
 import 'package:namer_app/pages/inscription_page.dart';
 import 'package:namer_app/widgets/formulaire_connexion.dart';
-
-import '../services/auth.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -62,7 +58,6 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-
               Container(
                 width: MediaQuery.sizeOf(context).width * 0.8,
                 child: Row(
@@ -78,23 +73,23 @@ class LoginPage extends StatelessWidget {
                             FaIcon(FontAwesomeIcons.facebookF))),
                   ],
                 ),
-              ), //OtherConnection(context, "Google", FaIcon(FontAwesomeIcons.google)),
+              ),
               Container(
                 width: MediaQuery.sizeOf(context).width * 0.60,
                 padding: EdgeInsets.only(),
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          orange),
+                      backgroundColor: MaterialStateProperty.all<Color>(orange),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
                               side: BorderSide(color: Colors.red)))),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => Inscription()),);
-                    //AuthService().createAccount("efef@fee.com","nonnon");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Inscription()),
+                    );
                   },
                   child: Text("Créer un compte",
                       style: TextStyle(color: Colors.white)),

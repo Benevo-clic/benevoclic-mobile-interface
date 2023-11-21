@@ -4,22 +4,20 @@ import '../util/globals.dart' as globals;
 
 class AuthService {
   var _auth = FirebaseAuth.instance;
-
-  /*getToken() async {
-    print(globals.id);
-  }*/
-
   Stream<User?> get userChanged => _auth.authStateChanges();
 
-  Future<void> authAnonymous() =>
-      _auth.signInAnonymously().then((credential) => "anonymous");
+  /*Future<void> authAnonymous() =>
+      _auth.signInAnonymously().then((credential) => "anonymous");*/
 
   authAdressPassword(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
+
+    print(_auth);
     print("token Email/password");
-    print(result);
+    print(result.user?.emailVerified);
     print(await result.user!.getIdToken());
+    print(result.additionalUserInfo?.isNewUser);
   }
 
   Future<void> logout() => _auth.signOut().then((value) => null);
@@ -37,26 +35,23 @@ class AuthService {
     );
     globals.id = googlAuth!.idToken!;
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    print(googlAuth!);
+    UserCredential userInfo =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    print(userInfo.additionalUserInfo?.isNewUser);
     print("token gmail");
     print(googlAuth!.idToken!);
   }
 
   createAccount(email, password) async {
-    
-      UserCredential user = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-          
-      print(user.user?.getIdToken(true));
-      _auth.currentUser?.sendEmailVerification();
-      
+    UserCredential user = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    print(user.user?.getIdToken(true));
+    _auth.currentUser?.sendEmailVerification();
   }
 
-  /*signInWithFacebook() async{
-
-  }*/
-
-
-  
+  bool? verifiedEmail() {
+    _auth.currentUser?.reload();
+    return _auth.currentUser?.emailVerified;
+  }
 }

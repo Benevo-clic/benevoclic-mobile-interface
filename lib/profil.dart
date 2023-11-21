@@ -59,10 +59,10 @@ class LineProfil extends StatelessWidget {
               await AuthService().logout();
               print("end");
             },
-            icon: this.icon,
+            icon: icon,
           ),
         ),
-        Expanded(child: Text(this.text)),
+        Expanded(child: Text(text)),
         Expanded(child: Text(""))
       ],
     );

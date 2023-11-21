@@ -88,46 +88,6 @@ class Item extends StatelessWidget {
   }
 }
 
-/*class Annonce extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      reverse: true,
-      child: Column(children: [
-        SizedBox(height: 50),
-        Text("Mon annonce",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        SizedBox(height: 50),
-        Container(
-            width: MediaQuery.of(context).size.width * 0.65,
-            height: MediaQuery.of(context).size.height * 0.70,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.black, width: 3.0, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-            ),
-            child: Column(children: [
-              Container(
-                  width: 250,
-                  padding: EdgeInsets.all(15),
-                  child: Text("Une bonne annonce et hop c'est dans la poche !",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange.shade800,
-                      ))),
-              LineContent(titreSection: "nombre de benevoles"),
-              LineContent(titreSection: "nombre d'heures de la mission"),
-              LineContent(titreSection: "Date et heure de la mission"),
-              LineContent(titreSection: "Localisation de la mission"),
-            ])),
-      ]),
-    );
-  }
-}*/
-
 //abstract class
 class LineContent extends StatelessWidget {
   final String titreSection;

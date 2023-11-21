@@ -11,7 +11,9 @@ class LoginController extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: AuthService().userChanged,
       builder: (context, snapshot) {
-        return (snapshot.data?.emailVerified == true) ? NavigationExample() : LoginPage();
+        return (snapshot.data?.emailVerified == true)
+            ? NavigationExample()
+            : LoginPage();
       },
     );
   }

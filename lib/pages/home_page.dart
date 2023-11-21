@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:namer_app/loginController.dart';
-import 'navigationBarApp.dart';
 
 class Home_page extends StatelessWidget {
   const Home_page({super.key});
@@ -71,7 +70,7 @@ class Home_page extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NavigationExample()),
+                            builder: (context) => LoginController()),
                       );
                     },
                     child: Text("Bénévole"),

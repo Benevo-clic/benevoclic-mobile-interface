@@ -92,6 +92,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///home/geoffrey/.pub-cache/hosted/pub.dev/dio-5.3.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "english_words",
       "rootUri": "file:///home/geoffrey/.pub-cache/hosted/pub.dev/english_words-4.0.0",
       "packageUri": "lib/",
@@ -542,7 +548,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-11-13T13:04:17.856790Z",
+  "generated": "2023-11-23T09:54:50.815869Z",
   "generator": "pub",
   "generatorVersion": "3.1.0"
 }

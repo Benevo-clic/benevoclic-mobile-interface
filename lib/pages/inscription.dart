@@ -8,12 +8,8 @@ class InscriptionDemarche extends StatelessWidget {
 
   InscriptionDemarche({required this.adress, required this.mdp});
 
-  AuthService? service;
-
   @override
   Widget build(BuildContext context) {
-    service = AuthService();
-    AuthService().createAccount(adress, mdp);
     return Scaffold(
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -21,8 +17,11 @@ class InscriptionDemarche extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {
-              if(service?.verifiedEmail() == true){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => InfosInscription()));
+              if (AuthService().verifiedEmail() == true) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InfosInscription()));
               }
             },
             child: Text("J'ai vérifié mon adresse"))

@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:namer_app/loginController.dart';
 
 class Home_page extends StatelessWidget {
-  const Home_page({super.key});
+  Home_page({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +16,7 @@ class Home_page extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(

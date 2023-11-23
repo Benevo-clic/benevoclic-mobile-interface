@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../util/globals.dart' as globals;
+import 'package:namer_app/util/globals.dart' as globals;
 
 class AuthService {
   var _auth = FirebaseAuth.instance;
@@ -18,9 +18,18 @@ class AuthService {
     print(result.user?.emailVerified);
     print(await result.user!.getIdToken());
     print(result.additionalUserInfo?.isNewUser);
+
+
+    globals.id = (await result.user!.getIdToken())!;
   }
 
-  Future<void> logout() => _auth.signOut().then((value) => null);
+  /*Future<void> logout() => _auth.signOut().then((value) => null);*/
+
+  Future<void> logout() async { 
+    print(globals.id);
+    _auth.signOut();
+  
+  }
 
   Future<void>? deleteAccount() => _auth.currentUser?.delete();
 
@@ -33,6 +42,7 @@ class AuthService {
       accessToken: googlAuth?.accessToken,
       idToken: googlAuth?.idToken,
     );
+
     globals.id = googlAuth!.idToken!;
 
     UserCredential userInfo =
@@ -50,8 +60,21 @@ class AuthService {
     _auth.currentUser?.sendEmailVerification();
   }
 
+  /*String getToken(){
+    final res = token();
+    return res; 
+  }*/
+
+  Future<String?> token()async {
+    String? val = await _auth.currentUser?.getIdToken();
+    return val;
+  }
+
   bool? verifiedEmail() {
     _auth.currentUser?.reload();
+    
+    print(_auth.currentUser?.getIdToken(true));
+    //getToken();
     return _auth.currentUser?.emailVerified;
   }
 }

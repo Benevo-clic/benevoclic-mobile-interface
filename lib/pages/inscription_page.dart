@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/pages/inscription.dart';
+import 'package:namer_app/services/auth.dart';
 import 'package:namer_app/util/email_verification.dart';
 
 class Inscription extends StatelessWidget {
@@ -176,18 +177,23 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                try {
-                  //await AuthService().createAccount(_adress.toString(), _mdp.toString());
-
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => InscriptionDemarche(adress :_adress.toString(),mdp: _mdp.toString())));
-                } on FirebaseAuthException catch (e) {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ErrorMessage(
-                            type: "inscription incorrect", message: "retour");
-                      });
-                }}
+                  try {
+                    AuthService().createAccount(_adress, _mdp);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InscriptionDemarche(
+                                adress: _adress.toString(),
+                                mdp: _mdp.toString())));
+                  } on FirebaseAuthException catch (e) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ErrorMessage(
+                              type: "inscription incorrect", message: "retour");
+                        });
+                  }
+                }
               },
               child: const Text("Inscription",
                   style: TextStyle(color: Colors.white)),

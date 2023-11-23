@@ -112,7 +112,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   } on FirebaseAuthException catch (e) {
                     showDialog(
                         context: context,
-                        
                         builder: (context) {
                           return ErrorMessage(
                               type: "login incorrect", message: "retour");

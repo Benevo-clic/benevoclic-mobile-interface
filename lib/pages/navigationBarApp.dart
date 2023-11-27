@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/pages/annonces/annonces.dart';
+import 'package:namer_app/pages/messages/messages.dart';
 import 'package:namer_app/widgets/listeAnnonces.dart';
 
-import '../profil.dart';
+import 'profil/profil.dart';
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});
@@ -38,11 +40,11 @@ class _NavigationExampleState extends State<NavigationExample> {
               NavigationDestination(
                 selectedIcon: Icon(Icons.home),
                 icon: Icon(Icons.home_outlined),
-                label: 'Accueil',
+                label: 'Annonces',
               ),
               NavigationDestination(
-                icon: Icon(Icons.search),
-                label: 'Recherche',
+                icon: Icon(Icons.favorite_border),
+                label: 'Favoris',
               ),
               NavigationDestination(
                 //selectedIcon: Icon(Icons.search),
@@ -58,9 +60,9 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
         ),
         body: <Widget>[
-          ListeAnnonces(),
-          ListeAnnonces(),
-          Container(alignment: Alignment.center, child: Text("")),
+          Annonces(),
+          Annonces(),
+          Messages(),
           ProfilPage(),
         ][currentPageIndex],
       ),

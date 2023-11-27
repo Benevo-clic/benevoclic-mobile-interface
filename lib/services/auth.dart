@@ -12,14 +12,11 @@ class AuthService {
   authAdressPassword(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
-
+    
     print(_auth);
     print("token Email/password");
+    print(result.credential?.token);
     print(result.user?.emailVerified);
-    print(await result.user!.getIdToken());
-    print(result.additionalUserInfo?.isNewUser);
-
-
     globals.id = (await result.user!.getIdToken())!;
   }
 
@@ -43,7 +40,7 @@ class AuthService {
       idToken: googlAuth?.idToken,
     );
 
-    globals.id = googlAuth!.idToken!;
+    //globals.id = credential as String;
 
     UserCredential userInfo =
         await FirebaseAuth.instance.signInWithCredential(credential);

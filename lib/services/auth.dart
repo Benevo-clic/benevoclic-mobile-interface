@@ -6,13 +6,10 @@ class AuthService {
   var _auth = FirebaseAuth.instance;
   Stream<User?> get userChanged => _auth.authStateChanges();
 
-  /*Future<void> authAnonymous() =>
-      _auth.signInAnonymously().then((credential) => "anonymous");*/
-
   authAdressPassword(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
-    
+
     print(_auth);
     print("token Email/password");
     print(result.credential?.token);
@@ -22,10 +19,9 @@ class AuthService {
 
   /*Future<void> logout() => _auth.signOut().then((value) => null);*/
 
-  Future<void> logout() async { 
+  Future<void> logout() async {
     print(globals.id);
     _auth.signOut();
-  
   }
 
   Future<void>? deleteAccount() => _auth.currentUser?.delete();
@@ -62,14 +58,14 @@ class AuthService {
     return res; 
   }*/
 
-  Future<String?> token()async {
+  Future<String?> token() async {
     String? val = await _auth.currentUser?.getIdToken();
     return val;
   }
 
   bool? verifiedEmail() {
     _auth.currentUser?.reload();
-    
+
     print(_auth.currentUser?.getIdToken(true));
     //getToken();
     return _auth.currentUser?.emailVerified;

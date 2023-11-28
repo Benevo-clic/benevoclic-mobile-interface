@@ -152,7 +152,9 @@ class _FormulaireInscriptionState extends State<FormulaireInscription> {
           ),
           TextFormField(
             obscureText: true,
-            validator: (value) {},
+            validator: (value) {
+              return null;
+            },
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,

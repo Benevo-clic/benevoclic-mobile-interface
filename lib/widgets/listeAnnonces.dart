@@ -7,8 +7,7 @@ import 'package:namer_app/widgets/fiche_annonce.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 class ListeAnnonces extends StatelessWidget {
-  
-   //"eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2YzYzNTNmMmEzZWMxMjg2NTA1MzBkMTVmNmM0Y2Y0NTcxYTQ1NTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYmVuZXZvY2xpYy02MTJiZSIsImF1ZCI6ImJlbmV2b2NsaWMtNjEyYmUiLCJhdXRoX3RpbWUiOjE3MDA1ODE3MTksInVzZXJfaWQiOiJTNFlZQ29rOWw2ZHJjOFBJbjQyTGZzdnJ5YlYyIiwic3ViIjoiUzRZWUNvazlsNmRyYzhQSW40Mkxmc3ZyeWJWMiIsImlhdCI6MTcwMDU4MTcxOSwiZXhwIjoxNzAwNTg1MzE5LCJlbWFpbCI6ImFib3ViYWthcnNpcmlraTA2MEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWJvdWJha2Fyc2lyaWtpMDYwQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.Xyx1BNkXrDCH8V09qgKjyerBAPN2v9VNRqbiGnP46jdXNNtKmX_Z2ZJ1S-dk935hpBtOBjYFmMZak8Ud_AtUtCoLyJGcGsS2ZKVlHhCerB2BobkaMQSM0A9wEowvPmd1UdDqvyZ9_d870ULQTsbSKClbflxpJR07IsxpGZJP8uJxSzqPAjGz3e_x0_lTNgCIBT084oCEJPCj8GLY4Fs2MWrpf5YC2euUOkARV5Gr1GQHgdr_YfAjNfL1N9zWBK8UO-1IeSGMLwqmU7cgb8gHsP18-A0pr2-yeusRGNBfBWnfNZhhdiHrgN-r-xfwipMVdlynHhm8huDLSVAU50K_kQ";
+  //"eyJhbGciOiJSUzI1NiIsImtpZCI6ImE2YzYzNTNmMmEzZWMxMjg2NTA1MzBkMTVmNmM0Y2Y0NTcxYTQ1NTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYmVuZXZvY2xpYy02MTJiZSIsImF1ZCI6ImJlbmV2b2NsaWMtNjEyYmUiLCJhdXRoX3RpbWUiOjE3MDA1ODE3MTksInVzZXJfaWQiOiJTNFlZQ29rOWw2ZHJjOFBJbjQyTGZzdnJ5YlYyIiwic3ViIjoiUzRZWUNvazlsNmRyYzhQSW40Mkxmc3ZyeWJWMiIsImlhdCI6MTcwMDU4MTcxOSwiZXhwIjoxNzAwNTg1MzE5LCJlbWFpbCI6ImFib3ViYWthcnNpcmlraTA2MEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWJvdWJha2Fyc2lyaWtpMDYwQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.Xyx1BNkXrDCH8V09qgKjyerBAPN2v9VNRqbiGnP46jdXNNtKmX_Z2ZJ1S-dk935hpBtOBjYFmMZak8Ud_AtUtCoLyJGcGsS2ZKVlHhCerB2BobkaMQSM0A9wEowvPmd1UdDqvyZ9_d870ULQTsbSKClbflxpJR07IsxpGZJP8uJxSzqPAjGz3e_x0_lTNgCIBT084oCEJPCj8GLY4Fs2MWrpf5YC2euUOkARV5Gr1GQHgdr_YfAjNfL1N9zWBK8UO-1IeSGMLwqmU7cgb8gHsP18-A0pr2-yeusRGNBfBWnfNZhhdiHrgN-r-xfwipMVdlynHhm8huDLSVAU50K_kQ";
 
   Future<void> response() async {
     String token = globals.id;
@@ -17,10 +16,7 @@ class ListeAnnonces extends StatelessWidget {
     print(token);
 
     var params = {
-      "rule": {
-    "id": "string",
-    "rulesType": "ADMIN"
-  },
+      "rule": {"id": "string", "rulesType": "ADMIN"},
       "firstName": "string",
       "lastName": "string",
       "bio": "string",
@@ -46,14 +42,14 @@ class ListeAnnonces extends StatelessWidget {
     var dio = Dio();
 
     var response2 = await dio.post(
-        "http://192.168.1.17:8080/api/v1/volunteers/createVolnteer",
-        options: Options(headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type" : "application/json",
-          "rules": "USER_VOLUNTEER",
-        }),
-        //data: jsonEncode(params)
-        );
+      "http://192.168.1.17:8080/api/v1/volunteers/createVolnteer",
+      options: Options(headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+        "rules": "USER_VOLUNTEER",
+      }),
+      //data: jsonEncode(params)
+    );
 
     // var response = dio.get(
     //     "http://192.168.173.241:8080/api/v1/ads/allAds",

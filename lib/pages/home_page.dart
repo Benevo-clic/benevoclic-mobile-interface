@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:namer_app/loginController.dart';
 
-class Home_page extends StatelessWidget {
-  Home_page({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

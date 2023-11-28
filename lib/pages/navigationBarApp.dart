@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/pages/annonces/annonces.dart';
 import 'package:namer_app/pages/messages/messages.dart';
-import 'package:namer_app/widgets/listeAnnonces.dart';
 
 import 'profil/profil.dart';
 

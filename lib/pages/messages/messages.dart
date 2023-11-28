@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/color/color.dart';
+import 'package:namer_app/pages/messages/detail_messages.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -32,7 +33,11 @@ class Messages extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.all(20),
                 children: [
-                  Item(),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => DetailMessages()));
+                    },
+                    child: Item()),
                   SizedBox(
                     height: 10,
                   ),

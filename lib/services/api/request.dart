@@ -1,0 +1,110 @@
+import 'package:dio/dio.dart';
+import 'package:namer_app/util/globals.dart' as globals;
+
+var url = "192.168.173.241";
+
+Dio dio = Dio();
+
+createUser(int idTypeUser) async {
+  String type = "USER_VOLUNTEER";
+  if (idTypeUser == 2) {
+    type = "ADMIN";
+  } else if (idTypeUser == 1) {
+    type = "USER_ASSOCIATION";
+  }
+  String token = globals.id;
+  Response v = await dio.post(
+    "http://$url:8080/api/v1/users/create",
+    options: Options(headers: {
+      "Authorization": "Bearer $token",
+      "accept": "*/*",
+      "rules": type
+    }),
+  );
+  print(v.data);
+}
+
+Future<Response> connexion() {
+  String token = globals.id;
+  return dio.post(
+    "http://$url:8080/api/v1/users/connect",
+    options:
+        Options(headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
+  );
+}
+
+Future<Response> logoutAPI() {
+  String token = globals.id;
+  return dio.post(
+    "http://$url:8080/api/v1/users/disconnect",
+    options:
+        Options(headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
+  );
+}
+
+Future<Response> createAsso(Map<String, Object> param) async {
+  String token = globals.id;
+  var r = await dio.post(
+    "http://192.168.173.241:8080/api/v1/associations/createAssociation",
+    options:
+        Options(headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
+    data: param,
+  );
+
+  print(r);
+  return r;
+}
+
+Future<Response> getAllAsso() {
+  String token = globals.id;
+  return dio.get(
+    "http://$url:8080/api/v1/associations/allAssociations",
+    options:
+        Options(headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
+  );
+}
+
+Future<Response> createVolunteer(Map<String, Object> param) {
+  String token = globals.id;
+  return dio.post(
+      "http://192.168.173.241:8080/api/v1/volunteers/createVolunteer",
+      options: Options(headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      }),
+      data: param);
+}
+
+Future<Response> getAllVolunteers() {
+  String token = globals.id;
+  return dio.get(
+    "http://$url:8080/api/v1/volunteers/allVolunteers",
+    options: Options(headers: {
+      "Authorization": "Bearer $token",
+      "Content-Type": "application/json",
+    }),
+  );
+}
+
+
+Future<Response> createAds(Map<String, Object> param) {
+  String token = globals.id;
+  return dio.post("http://$url:8080/api/v1/ads/createAds",
+      options: Options(headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+        "accept": "application/json"
+      }),
+      data: param);
+}
+
+Future<Response> getAllAds() {
+  String token = globals.id;
+  return dio.get(
+    "http://$url:8080/api/v1/ads/allAds",
+    options: Options(headers: {
+      "Authorization": "Bearer $token",
+      "accept": "application/json"
+    }),
+  );
+}

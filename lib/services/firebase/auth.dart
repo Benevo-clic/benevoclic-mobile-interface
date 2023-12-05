@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:namer_app/services/api/request.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 class AuthService {
@@ -10,17 +11,20 @@ class AuthService {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
 
-    print(_auth);
+    //connexion();
+
     print("token Email/password");
     print(result.credential?.token);
     print(result.user?.emailVerified);
     globals.id = (await result.user!.getIdToken())!;
+    print(globals.id);
   }
 
   /*Future<void> logout() => _auth.signOut().then((value) => null);*/
 
   Future<void> logout() async {
     print(globals.id);
+    //await logout();
     _auth.signOut();
   }
 
@@ -36,11 +40,11 @@ class AuthService {
       idToken: googlAuth?.idToken,
     );
 
-    //globals.id = credential as String;
-
     UserCredential userInfo =
         await FirebaseAuth.instance.signInWithCredential(credential);
     print(userInfo.additionalUserInfo?.isNewUser);
+    String? token = await userInfo.user!.getIdToken(true);
+    globals.id = token!;
     print("token gmail");
     print(googlAuth!.idToken!);
   }
@@ -53,11 +57,6 @@ class AuthService {
     _auth.currentUser?.sendEmailVerification();
   }
 
-  /*String getToken(){
-    final res = token();
-    return res; 
-  }*/
-
   Future<String?> token() async {
     String? val = await _auth.currentUser?.getIdToken();
     return val;
@@ -67,7 +66,6 @@ class AuthService {
     _auth.currentUser?.reload();
 
     print(_auth.currentUser?.getIdToken(true));
-    //getToken();
     return _auth.currentUser?.emailVerified;
   }
 }

@@ -23,6 +23,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   font_awesome_flutter: ^10.6.0
   google_sign_in: ^6.1.6
+  mockito: ^5.4.3
   provider: ^6.0.0
 
 dependency_overrides:
@@ -44,4 +45,5 @@ flutter:
     - assets/background1.png
     - assets/background2.png
     - assets/background3.png
+    - assets/background4.png
     - assets/annonce.png

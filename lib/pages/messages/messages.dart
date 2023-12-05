@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/color/color.dart';
+import 'package:namer_app/util/color.dart';
 import 'package:namer_app/pages/messages/detail_messages.dart';
+import 'package:namer_app/widgets/abstract_container2.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -78,12 +79,7 @@ class Messages extends StatelessWidget {
 class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: marron, width: 2)),
-        child: Row(
+    return AbstractContainer2(content: Row(
           children: [
             Expanded(
                 flex: 0,

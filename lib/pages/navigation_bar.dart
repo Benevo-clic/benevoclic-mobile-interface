@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/util/color.dart';
 import 'package:namer_app/pages/annonces/annonces.dart';
 import 'package:namer_app/pages/messages/messages.dart';
 
@@ -16,7 +17,6 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    //AuthService().getToken();
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -24,10 +24,10 @@ class _NavigationExampleState extends State<NavigationExample> {
           decoration: BoxDecoration(
             border: Border(
                 top: BorderSide(
-                    color: Color.fromRGBO(150, 62, 96, 1), width: 2)),
+                    color: marron, width: 2)),
           ),
           child: NavigationBar(
-            backgroundColor: Color.fromRGBO(249, 148, 85, 1),
+            backgroundColor: orange,
             onDestinationSelected: (int index) {
               setState(() {
                 currentPageIndex = index;
@@ -59,62 +59,13 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
         ),
         body: <Widget>[
+          
           Annonces(),
           Annonces(),
           Messages(),
           ProfilPage(),
         ][currentPageIndex],
       ),
-    );
-  }
-}
-
-class Item extends StatelessWidget {
-  final String mot;
-
-  const Item({super.key, required this.mot});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        color: Colors.amber[400],
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.business),
-            Text(mot),
-          ],
-        ));
-  }
-}
-
-//abstract class
-class LineContent extends StatelessWidget {
-  final String titreSection;
-
-  const LineContent({super.key, required this.titreSection});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
-              border: Border.all(color: Colors.grey.shade500)),
-          padding: const EdgeInsets.all(6.0),
-          child: Text(titreSection,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-              )),
-        )
-      ],
     );
   }
 }

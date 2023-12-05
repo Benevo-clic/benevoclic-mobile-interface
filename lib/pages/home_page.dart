@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:namer_app/loginController.dart';
+import 'package:namer_app/login_controller.dart';
+import 'package:namer_app/widgets/background.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -13,11 +14,9 @@ class HomePage extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/background1.png"), fit: BoxFit.cover)),
-      child: Scaffold(
+    return Background(
+      image: "assets/background1.png",
+      widget: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
@@ -28,15 +27,10 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     height: 100,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/logo.png",
-                        height: 150,
-                        alignment: Alignment.center,
-                      ),
-                    ],
+                  Image.asset(
+                    "assets/logo.png",
+                    height: 150,
+                    alignment: Alignment.center,
                   ),
                   SizedBox(
                     height: 80,

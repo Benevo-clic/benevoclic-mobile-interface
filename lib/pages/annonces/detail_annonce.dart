@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/color/color.dart';
+import 'package:namer_app/util/color.dart';
+import 'package:namer_app/widgets/abstract_container.dart';
+import 'package:namer_app/widgets/button.dart';
 
 class DetailAnnonce extends StatelessWidget {
   @override
@@ -23,6 +25,9 @@ class DetailAnnonce extends StatelessWidget {
               Expanded(child: Text("")),
               Expanded(child: Text(""))
             ])),
+        SizedBox(
+          height: 15,
+        ),
         InfosMission(),
         SizedBox(
           height: 15,
@@ -52,22 +57,30 @@ class InfosMission extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: TextButton(
-                      style: ButtonStyle(),
-                      onPressed: () {},
-                      child: Text("Nous contacter"))),
+                  child: Button(
+                text: "Contacter",
+                color: Colors.white,
+                backgroundColor: orange,
+                fct: () => a(5),
+              )),
+              Expanded(child: Text("")),
               Expanded(
-                  child: TextButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(orange)),
-                      onPressed: () {},
-                      child: Text("Participer"))),
+                  child: Button(
+                text: "Participer",
+                color: Colors.white,
+                backgroundColor: marron,
+                fct: () => a(5),
+              )),
             ],
           ),
         ],
       ),
     );
   }
+}
+
+a(int b) {
+  print(b);
 }
 
 class Bio extends StatelessWidget {
@@ -96,35 +109,21 @@ class Asso extends StatelessWidget {
     return AbstractContainer(
         content: Row(
       children: [
-        Image.asset(
-          "assets/logo.png",
-          height: 80,
-        ),
-        Text("Nom asso"),
         Expanded(
-          child: TextButton(onPressed: (){
-        
-          }, child: Text("Adhérer")),
+          child: Image.asset(
+            "assets/logo.png",
+            height: 80,
+          ),
+        ),
+        Expanded(child: Text("Nom asso")),
+        Expanded(
+          child: Button(
+              backgroundColor: Colors.green,
+              color: Colors.white,
+              fct: () => {},
+              text: "Adhérer"),
         )
       ],
     ));
-  }
-}
-
-class AbstractContainer extends StatelessWidget {
-  final Widget content;
-
-  const AbstractContainer({super.key, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      width: MediaQuery.sizeOf(context).width * 0.85,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: orange, width: 2)),
-      child: content,
-    );
   }
 }

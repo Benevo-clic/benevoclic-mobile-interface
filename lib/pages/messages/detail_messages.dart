@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/color/color.dart';
+import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/background.dart';
 
 class DetailMessages extends StatelessWidget {

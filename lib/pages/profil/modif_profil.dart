@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/color/color.dart';
+import 'package:namer_app/util/color.dart';
+import 'package:namer_app/widgets/abstract_container.dart';
+import 'package:namer_app/widgets/button.dart';
 
 class ModifProfil extends StatelessWidget {
   @override
@@ -13,7 +15,6 @@ class ModifProfil extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Photo(),
-            Text("oui"),
             BioModif(text: "fcefefef"),
             SizedBox(
               height: 15,
@@ -22,12 +23,11 @@ class ModifProfil extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(orange)
-              ),
-              onPressed: (){}, 
-            child: Text("Enregistrer"))
+            Button(
+                text: "Enregistrer",
+                color: Colors.white,
+                fct: () => {},
+                backgroundColor: orange)
           ],
         ),
       ),
@@ -38,9 +38,7 @@ class ModifProfil extends StatelessWidget {
 class Photo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Photo de profil"),
-    );
+    return Text("Photo de profil");
   }
 }
 
@@ -51,16 +49,11 @@ class BioModif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(25),
-        width: MediaQuery.sizeOf(context).width * 0.85,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: orange, width: 2)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [Text("Bio"), SizedBox(height: 5), Text(text)],
-        ));
+    return AbstractContainer(
+        content: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [Text("Bio"), SizedBox(height: 5), Text(text)],
+    ));
   }
 }
 
@@ -69,30 +62,30 @@ class InformationsModif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(25),
-        width: MediaQuery.sizeOf(context).width * 0.85,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: orange, width: 2)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Section(
-              text: "3 rue du general Leclrece",icon: Icon(Icons.maps_home_work_outlined),
-            ),SizedBox(
-              height: 15,
-            )
-            ,Section(
-              text: "+33062548",icon: Icon(Icons.phone),
-            ),SizedBox(
-              height: 15,
-            )
-            ,Section(
-              text: "monsite@gmail.com",icon: Icon(Icons.mail),
-            )
-          ],
-        ));
+    return AbstractContainer(
+        content: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Section(
+          text: "3 rue du general Leclrece",
+          icon: Icon(Icons.maps_home_work_outlined),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Section(
+          text: "+33062548",
+          icon: Icon(Icons.phone),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Section(
+          text: "monsite@gmail.com",
+          icon: Icon(Icons.mail),
+        )
+      ],
+    ));
   }
 }
 

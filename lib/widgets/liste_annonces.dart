@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/widgets/fiche_annonce.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 class ListeAnnonces extends StatelessWidget {
@@ -59,7 +57,7 @@ class ListeAnnonces extends StatelessWidget {
     //     }),
     //     );
 
-    Response r = await response2;
+    Response r = response2;
     print(r.data);
   }
 
@@ -72,7 +70,6 @@ class ListeAnnonces extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Annonce(),
           Text("oui"),
           Text("oui"),
           Text("oui"),

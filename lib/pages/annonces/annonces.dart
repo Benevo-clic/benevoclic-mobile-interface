@@ -1,8 +1,85 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/color/color.dart';
-import 'package:namer_app/pages/annonces/detail_annonce.dart';
+import 'package:namer_app/services/api/params.dart';
+import 'package:namer_app/services/api/request.dart';
+import 'package:namer_app/util/color.dart';
+import 'package:namer_app/widgets/abstract_container2.dart';
 
-class Annonces extends StatelessWidget {
+class Annonces extends StatefulWidget {
+  @override
+  State<Annonces> createState() => _AnnoncesState();
+}
+
+class _AnnoncesState extends State<Annonces> {
+  Future<void> response() async {
+    AssoParam p = AssoParam(
+        name: "",
+        address: "",
+        bio: "",
+        city: "",
+        country: "",
+        email: "",
+        imageProfile: "",
+        phone: "",
+        postalCode: "",
+        verified: false,
+        siret: '',
+        ads: [],
+        volunteersWaiting: []);
+
+    UserParam p2 = UserParam(
+      firstName: "string",
+      birthDayDate: "string",
+      myAssociations: [],
+      lastName: "string",
+      myAssociationsWaiting: [],
+      address: "string",
+      bio: "string",
+      city: "string",
+      country: "string",
+      email: "geoffreyherman1902998@gmail.com",
+      imageProfile: "string",
+      phone: "string",
+      postalCode: "string",
+      verified: false,
+    );
+
+    Ads p3 = Ads(
+        associationId: "string",
+        dateEvent: "string",
+        datePublication: "string",
+        description: "string",
+        full: false,
+        image: "string",
+        location: "string",
+        nameAssociation: "string",
+        nameEvent: "string",
+        nbHours: 5,
+        nbPlaces: 10,
+        nbPlacesTaken: 2,
+        tags: [],
+        type: "string",
+        volunteers: [],
+        volunteersWaiting: []);
+
+    //Response r = await createAds(p3.map());
+    Response r = await getAllAds();
+    //await connexion();
+    //response r2 = await
+    //Response r = createAssociation;
+    print(r.data);
+    setState(() {
+      result = r.data;
+    });
+  }
+
+  List<dynamic> result = [];
+  get() async {
+    Response r = await getAllAds();
+    result = r.data;
+    return r;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +93,12 @@ class Annonces extends StatelessWidget {
                 color: orange,
                 child: Row(
                   children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        response();
+                      },
+                      child: Text("API"),
+                    ),
                     Expanded(
                         child: Center(
                             child: Image.asset(
@@ -35,28 +118,22 @@ class Annonces extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(20),
-                children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => DetailAnnonce()));
-                      },
-                      child: ItemAnnonce()),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ItemAnnonce(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ItemAnnonce(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+              child: ListView.separated(
+                  padding: EdgeInsets.all(20),
+                  itemCount: 2,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (result.isEmpty) {
+                      return Text("rien");
+                    } else {
+                      return ItemAnnonce(
+                        nameAsso: result[index]["nameAssociation"],
+                        nbHours: result[index]["nbHours"],
+                        nbPlaces: result[index]["nbPlaces"],
+                        nbPlacesTaken: result[index]["nbPlacesTaken"],
+                      );
+                    }
+                  },separatorBuilder: (BuildContext context, int index) => const Text(""),
+              )
             )
           ],
         ),
@@ -66,84 +143,90 @@ class Annonces extends StatelessWidget {
 }
 
 class ItemAnnonce extends StatelessWidget {
+  String nameAsso;
+  int nbHours;
+  int nbPlaces;
+  int nbPlacesTaken;
+
+  ItemAnnonce(
+      {required this.nameAsso,
+      required this.nbHours,
+      required this.nbPlaces,
+      required this.nbPlacesTaken});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: marron, width: 2)),
-        child: Column(
+    return AbstractContainer2(
+        content: Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                    flex: 0,
-                    child: Image.asset(
-                      "assets/logo.png",
-                      height: 50,
-                    )),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text("Asso"),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    onPressed: () {
-                      print("favorite");
-                    },
-                    color: marron,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                    flex: 0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InformationAnnonce(
-                            icon: Icon(Icons.map),
-                            text: "3 rue de tata toto, 59840 Lille"),
-                        InformationAnnonce(
-                            icon: Icon(Icons.calendar_month),
-                            text: "13/10/2024 18:45"),
-                        InformationAnnonce(
-                            icon: Icon(Icons.hourglass_empty_outlined),
-                            text: "4 heures")
-                      ],
-                    )),
-                Expanded(child: Text("")),
-                Expanded(
-                    flex:
-                        (MediaQuery.sizeOf(context).width * 0.0000001).toInt(),
-                    child: InformationAnnonce(
-                        icon: Icon(Icons.account_circle_outlined),
-                        text: "10/20"))
-              ],
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  border: BorderDirectional(
-                      bottom: BorderSide(color: Colors.black))),
-              child: Text(
-                "Distribution alimentaire",
-                style: TextStyle(fontWeight: FontWeight.bold),
+            Expanded(
+                flex: 0,
+                child: Image.asset(
+                  "assets/logo.png",
+                  height: 50,
+                )),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(nameAsso),
+                  SizedBox(height: 5),
+                ],
               ),
             ),
-            Text(
-                "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.")
+            Expanded(
+              child: IconButton(
+                icon: Icon(Icons.favorite_border),
+                onPressed: () {
+                  print("favorite");
+                },
+                color: marron,
+              ),
+            )
           ],
-        ));
+        ),
+        SizedBox(height: 15),
+        Row(
+          children: [
+            Expanded(
+                flex: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InformationAnnonce(
+                        icon: Icon(Icons.map),
+                        text: "3 rue de tata toto, 59840 Lille"),
+                    InformationAnnonce(
+                        icon: Icon(Icons.calendar_month),
+                        text: "13/10/2024 18:45"),
+                    InformationAnnonce(
+                        icon: Icon(Icons.hourglass_empty_outlined),
+                        text: "$nbHours heures")
+                  ],
+                )),
+            Expanded(child: Text("")),
+            Expanded(
+                flex: (MediaQuery.sizeOf(context).width * 0.0000001).toInt(),
+                child: InformationAnnonce(
+                    icon: Icon(Icons.account_circle_outlined),
+                    text: "$nbPlacesTaken/$nbPlaces"))
+          ],
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border:
+                  BorderDirectional(bottom: BorderSide(color: Colors.black))),
+          child: Text(
+            "Distribution alimentaire",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Text(
+            "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte.")
+      ],
+    ));
   }
 }
 

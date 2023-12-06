@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/pages/login.dart';
-import 'package:namer_app/services/firebase/auth.dart';
+import 'package:namer_app/views/login.dart';
+import 'package:namer_app/providers/firebase/auth.dart';
 
-import 'pages/navigation_bar.dart';
+import 'views/navigation_bar.dart';
 
 class LoginController extends StatelessWidget {
   @override

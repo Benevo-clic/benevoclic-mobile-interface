@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/pages/annonces/annonces.dart';
-import 'package:namer_app/pages/messages/messages.dart';
 
-import 'profil/profil.dart';
+import 'common/annonces/annonces.dart';
+import 'common/messages/messages.dart';
+import 'common/profiles/profil.dart';
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});

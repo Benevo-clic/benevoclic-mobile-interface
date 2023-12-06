@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/services/api/params.dart';
-import 'package:namer_app/services/api/request.dart';
+import 'package:namer_app/providers/api/params.dart';
+import 'package:namer_app/providers/api/request.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/pages/messages/detail_messages.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+
+import 'widgets/detail_messages.dart';
 
 class Messages extends StatelessWidget {
   @override

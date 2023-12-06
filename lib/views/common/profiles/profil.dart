@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/pages/profil/modif_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
-
-import '../../services/firebase/auth.dart';
+import '../../../providers/firebase/auth.dart';
+import 'modif_profil.dart';
 
 class ProfilPage extends StatelessWidget {
   @override

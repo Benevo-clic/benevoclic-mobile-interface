@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
+import '../../models/announcement_model.dart';
 import '../../type/rules_type.dart';
 
-var url = "192.168.173.241";
+var url = "37.187.38.160";
 
 Dio dio = Dio();
 
-createUser(RulesType rulesType) async {
+Future<dynamic> createUser(RulesType rulesType) async {
   String type = "";
   if (rulesType == RulesType.USER_VOLUNTEER) {
     type = "USER_VOLUNTEER";
@@ -15,7 +17,7 @@ createUser(RulesType rulesType) async {
     type = "USER_ASSOCIATION";
   }
   String token = globals.id;
-  Response v = await dio.post(
+  Response result = await dio.post(
     "http://$url:8080/api/v1/users/create",
     options: Options(headers: {
       "Authorization": "Bearer $token",
@@ -23,7 +25,10 @@ createUser(RulesType rulesType) async {
       "rules": type
     }),
   );
+    return result.statusCode;
 }
+
+
 
 Future<Response> connexion() {
   String token = globals.id;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/util/email_verification.dart';
 
-import '../providers/firebase/auth.dart';
+import '../repositories/firebase/auth.dart';
 
 class FormulaireLogin extends StatefulWidget {
   const FormulaireLogin({super.key});

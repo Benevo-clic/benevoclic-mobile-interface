@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/views/login.dart';
-import 'package:namer_app/providers/firebase/auth.dart';
+import 'package:namer_app/repositories/firebase/auth.dart';
 
 import 'views/navigation_bar.dart';
 

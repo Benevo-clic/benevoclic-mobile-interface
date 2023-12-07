@@ -1,15 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
+import '../../type/rules_type.dart';
+
 var url = "192.168.173.241";
 
 Dio dio = Dio();
 
-createUser(int idTypeUser) async {
-  String type = "USER_VOLUNTEER";
-  if (idTypeUser == 2) {
-    type = "ADMIN";
-  } else if (idTypeUser == 1) {
+createUser(RulesType rulesType) async {
+  String type = "";
+  if (rulesType == RulesType.USER_VOLUNTEER) {
+    type = "USER_VOLUNTEER";
+  } else if (rulesType == RulesType.USER_ASSOCIATION) {
     type = "USER_ASSOCIATION";
   }
   String token = globals.id;
@@ -21,7 +23,6 @@ createUser(int idTypeUser) async {
       "rules": type
     }),
   );
-  print(v.data);
 }
 
 Future<Response> connexion() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/providers/firebase/other_connexion.dart';
+import 'package:namer_app/repositories/firebase/other_connexion.dart';
 import 'package:namer_app/views/inscription_page.dart';
 import 'package:namer_app/widgets/formulaire_connexion.dart';
 

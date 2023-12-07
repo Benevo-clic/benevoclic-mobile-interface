@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/views/inscription.dart';
-import 'package:namer_app/providers/firebase/auth.dart';
+import 'package:namer_app/repositories/firebase/auth.dart';
 import 'package:namer_app/util/email_verification.dart';
 
 class Inscription extends StatelessWidget {

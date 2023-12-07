@@ -27,6 +27,8 @@ dependencies:
   provider:
   intl:
   json_annotation: ^4.8.1
+  bloc:
+  flutter_bloc:
 
 
 dependency_overrides:

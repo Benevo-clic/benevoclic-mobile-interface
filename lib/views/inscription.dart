@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/views/infos_inscription.dart';
-import 'package:namer_app/providers/firebase/auth.dart';
+import 'package:namer_app/repositories/firebase/auth.dart';
 
 class InscriptionDemarche extends StatelessWidget {
   final String adress;

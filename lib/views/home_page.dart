@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:namer_app/login_controller.dart';
 import 'package:namer_app/widgets/background.dart';
 
+import 'common/authentification/authentification_common_view.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -49,7 +51,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginController()),
+                            builder: (context) => AuthentificationView()),
                       );
                     },
                     child: Text("Association"),
@@ -65,7 +67,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginController()),
+                            builder: (context) => AuthentificationView()),
                       );
                     },
                     child: Text("Bénévole"),

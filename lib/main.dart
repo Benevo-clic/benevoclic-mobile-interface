@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
-import 'package:provider/provider.dart';
 
 import 'cubit/user/user_state.dart';
 import 'views/home_page.dart';
@@ -24,10 +23,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => UserCubit(userRepository: UserRepository())),
+          BlocProvider(
+              create: (context) => UserCubit(userRepository: UserRepository())),
           BlocProvider(create: (context) => AnnouncementCubit()),
         ],
-         child: BlocBuilder<UserCubit, UserState>(
+        child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             return MaterialApp(
               title: 'Namer',
@@ -38,11 +38,6 @@ class MyApp extends StatelessWidget {
               home: HomePage(),
             );
           },
-        )
-    );
+        ));
   }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
 }

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/util/email_verification.dart';
 
@@ -107,8 +109,10 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   try {
-                    await AuthService().authAdressPassword(
-                        _adress.toString(), _mdp.toString());
+                    /*await AuthService().authAdressPassword(
+                        _adress.toString(), _mdp.toString());*/
+                        BlocProvider.of<UserCubit>(context)
+                        .connexion();
                   } on FirebaseAuthException catch (e) {
                     showDialog(
                         context: context,

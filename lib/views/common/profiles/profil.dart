@@ -74,8 +74,9 @@ class ProfilPage extends StatelessWidget {
               icon: IconButton(
                 onPressed: () async {
                   print('init');
-                  await AuthService().logout();
+                  //await AuthService().logout();
                   print("end");
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.logout),
               )),

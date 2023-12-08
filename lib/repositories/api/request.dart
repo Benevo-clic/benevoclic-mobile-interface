@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
-import '../../models/announcement_model.dart';
 import '../../type/rules_type.dart';
 
 var url = "37.187.38.160";
@@ -25,14 +23,12 @@ Future<int> createUser(RulesType rulesType) async {
       "rules": type
     }),
   );
-  if(result.statusCode == 200){
+  if (result.statusCode == 200) {
     return 200;
-  }else{
+  } else {
     throw Exception('Failed to load users');
   }
 }
-
-
 
 Future<Response> connexion() {
   String token = globals.id;
@@ -95,7 +91,6 @@ Future<Response> getAllVolunteers() {
     }),
   );
 }
-
 
 Future<Response> createAds(Map<String, Object> param) {
   String token = globals.id;

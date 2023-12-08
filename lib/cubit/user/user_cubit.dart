@@ -1,6 +1,3 @@
-
-
-
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -43,5 +40,4 @@ class UserCubit extends Cubit<UserState> {
       emit(UserErrorState(message: e.toString()));
     }
   }
-
 }

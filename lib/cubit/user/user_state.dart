@@ -1,17 +1,11 @@
-
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-abstract class UserState {
-}
+abstract class UserState {}
 
-class UserInitialState extends UserState {
-}
+class UserInitialState extends UserState {}
 
-class UserLoadingState extends UserState {
-}
+class UserLoadingState extends UserState {}
 
 class ResponseUserState extends UserState {
   final String statusCode;

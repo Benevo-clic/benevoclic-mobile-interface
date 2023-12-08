@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/repositories/api/params.dart';
 import 'package:namer_app/repositories/api/request.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 
@@ -64,8 +63,8 @@ class _AnnoncesState extends State<Annonces> {
         volunteersWaiting: []);
 
     //Response r = await createAds(p3.map());
-    // Response r = await getAllAds();
-    int r = await createUser(RulesType.USER_VOLUNTEER);
+    Response r = await getAllAds();
+    //int r = await createUser(RulesType.USER_VOLUNTEER);
     //await connexion();
     //response r2 = await
     //Response r = createAssociation;
@@ -75,7 +74,12 @@ class _AnnoncesState extends State<Annonces> {
   List<dynamic> result = [];
   get() async {
     Response r = await getAllAds();
-    result = r.data;
+    print(r);
+    setState(() {
+      result = r.data;
+    });
+    print("api");
+    print(r.data);
     return r;
   }
 
@@ -94,7 +98,7 @@ class _AnnoncesState extends State<Annonces> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        response();
+                        get();
                       },
                       child: Text("API"),
                     ),

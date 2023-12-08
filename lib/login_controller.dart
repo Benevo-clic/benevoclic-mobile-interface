@@ -1,20 +1,26 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/user/user_cubit.dart';
+import 'package:namer_app/cubit/user/user_state.dart';
+import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/views/login.dart';
-import 'package:namer_app/repositories/firebase/auth.dart';
-
-import 'views/navigation_bar.dart';
+import 'package:namer_app/views/navigation_bar.dart';
 
 class LoginController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: AuthService().userChanged,
-      builder: (context, snapshot) {
-        return (snapshot.data?.emailVerified == true)
-            ? NavigationExample()
-            : LoginPage();
-      },
-    );
+    return BlocProvider(
+        create: (context) => UserCubit(userRepository: UserRepository()),
+        child: BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+          if (state is UserInitialState) {
+            return LoginPage();
+          } else if (state is UserLoadingState) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NavigationExample()),
+            );
+          }
+          return Scaffold();
+        }));
   }
 }

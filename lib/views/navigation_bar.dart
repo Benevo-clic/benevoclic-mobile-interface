@@ -22,9 +22,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       child: Scaffold(
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(
-                    color: marron, width: 2)),
+            border: Border(top: BorderSide(color: marron, width: 2)),
           ),
           child: NavigationBar(
             backgroundColor: orange,
@@ -59,7 +57,6 @@ class _NavigationExampleState extends State<NavigationExample> {
           ),
         ),
         body: <Widget>[
-          
           Annonces(),
           Annonces(),
           Messages(),

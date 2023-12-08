@@ -75,6 +75,4 @@ class Announcement {
       _$AnnouncementFromJson(json);
 
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
-
-
 }

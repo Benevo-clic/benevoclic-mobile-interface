@@ -14,7 +14,7 @@ class UserCubit extends Cubit<UserState> {
       : _userRepository = userRepository,
         super(UserInitialState());
 
-  Future<void> getUser(RulesType rulesType) async {
+  Future<void> createUser(RulesType rulesType) async {
     try {
       emit(UserLoadingState());
       final users = await _userRepository.createUser(rulesType);
@@ -23,4 +23,25 @@ class UserCubit extends Cubit<UserState> {
       emit(UserErrorState(message: e.toString()));
     }
   }
+
+  Future<void> connexion() async {
+    try {
+      emit(UserLoadingState());
+      final users = await _userRepository.connexion();
+      emit(ResponseUserState(statusCode: users.toString()));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> disconnect() async {
+    try {
+      emit(UserLoadingState());
+      final users = await _userRepository.disconnect();
+      emit(ResponseUserState(statusCode: users.toString()));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
 }

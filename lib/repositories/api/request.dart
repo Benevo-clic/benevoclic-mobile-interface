@@ -9,7 +9,7 @@ var url = "37.187.38.160";
 
 Dio dio = Dio();
 
-Future<dynamic> createUser(RulesType rulesType) async {
+Future<int> createUser(RulesType rulesType) async {
   String type = "";
   if (rulesType == RulesType.USER_VOLUNTEER) {
     type = "USER_VOLUNTEER";
@@ -25,7 +25,11 @@ Future<dynamic> createUser(RulesType rulesType) async {
       "rules": type
     }),
   );
-    return result.statusCode;
+  if(result.statusCode == 200){
+    return 200;
+  }else{
+    throw Exception('Failed to load users');
+  }
 }
 
 

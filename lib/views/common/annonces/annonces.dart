@@ -65,14 +65,11 @@ class _AnnoncesState extends State<Annonces> {
 
     //Response r = await createAds(p3.map());
     // Response r = await getAllAds();
-    Response r = await createUser(RulesType.USER_VOLUNTEER);
+    int r = await createUser(RulesType.USER_VOLUNTEER);
     //await connexion();
     //response r2 = await
     //Response r = createAssociation;
-    print(r.data);
-    setState(() {
-      result = r.data;
-    });
+    print(r);
   }
 
   List<dynamic> result = [];

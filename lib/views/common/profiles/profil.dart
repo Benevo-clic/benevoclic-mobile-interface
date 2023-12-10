@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 
+import '../authentification/login.dart';
 import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
 
@@ -75,7 +77,18 @@ class ProfilPage extends StatelessWidget {
               icon: IconButton(
                 onPressed: () async {
                   print('init');
-                  //await AuthService().logout();
+                  AuthRepository().logout().then((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(
+                            title: RulesType.USER_VOLUNTEER,
+                          ),
+                        ),
+                      );
+                    });
+                  });
                   print("end");
                   Navigator.pop(context);
                 },

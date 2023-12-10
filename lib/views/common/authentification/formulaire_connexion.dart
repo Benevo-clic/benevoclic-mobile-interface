@@ -178,8 +178,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        print(_email.toString());
-                        print(_password.toString());
                         AuthRepository()
                             .authAdressPassword(
                                 _email.toString(), _password.toString())

@@ -9,21 +9,12 @@ class AuthRepository {
   authAdressPassword(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
-
-    //connexion();
-
-    print("token Email/password");
-    print(result.credential?.token);
-    print(result.user?.emailVerified);
     globals.id = (await result.user!.getIdToken())!;
-    print(globals.id);
+    print("Token : ${globals.id}");
   }
 
-  /*Future<void> logout() => _auth.signOut().then((value) => null);*/
-
   Future<void> logout() async {
-    print(globals.id);
-    //await logout();
+    await GoogleSignIn().signOut();
     _auth.signOut();
   }
 
@@ -46,6 +37,7 @@ class AuthRepository {
       UserCredential userInfo =
           await FirebaseAuth.instance.signInWithCredential(credential);
       String? token = await userInfo.user?.getIdToken(true);
+    print("Token Google : $token");
     if (token != null) {
       globals.id = token;
       } else {

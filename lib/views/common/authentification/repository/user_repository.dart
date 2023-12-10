@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../../../type/rules_type.dart';
-import 'package:namer_app/util/globals.dart' as globals;
 
 class UserRepository {
   final String token = globals.id;

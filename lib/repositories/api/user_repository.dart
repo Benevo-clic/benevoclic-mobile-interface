@@ -42,6 +42,20 @@ class UserRepository {
     }
   }
 
+  Future<dynamic> getUser() async {
+    Response result = await Dio().get(
+      "http://$url:8080/api/v1/users/getUsers",
+      options: Options(
+          headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
+    );
+
+    if (result.statusCode == 200) {
+      return result.data;
+    } else {
+      throw Exception('Failed to load users');
+    }
+  }
+
   Future<int> disconnect() async {
     Response result = await Dio().post(
       "http://$url:8080/api/v1/users/disconnect",

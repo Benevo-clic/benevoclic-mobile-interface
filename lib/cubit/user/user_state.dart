@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 @immutable
 abstract class UserState {}
 
-class UserInitialState extends UserState {}
+class UserLoginState extends UserState {}
 
-class UserLoadingState extends UserState {}
+class UserLogedState extends UserState {}
+
+class UserCreatingState extends UserState {}
+
 
 class ResponseUserState extends UserState {
   final String statusCode;

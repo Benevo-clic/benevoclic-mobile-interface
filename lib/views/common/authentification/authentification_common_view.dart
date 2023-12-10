@@ -1,46 +1,138 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:namer_app/repositories/firebase/other_connexion.dart';
+import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/inscription_page.dart';
+import 'package:namer_app/widgets/formulaire_connexion.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/user/user_state.dart';
 import '../../../repositories/api/user_repository.dart';
-import '../../../widgets/loading_widget.dart';
-import '../../login.dart';
 import '../../navigation_bar.dart';
 
 class AuthentificationView extends StatelessWidget {
-
- const AuthentificationView({Key? key}) : super(key: key);
+  const AuthentificationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => UserCubit(userRepository: UserRepository()),
         child: BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-          if (state is UserInitialState) {
-            return LoginPage();
-          } else if (state is UserLoadingState) {
+          var body;
+          if (state is UserLoginState) {
+            body = LoginView();
+          } else if (state is UserLoginState) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NavigationExample()),
             );
           }
-          return Scaffold();
+          return Scaffold(
+            body: Header(
+              body: body,
+            ),
+          );
         }));
   }
+}
 
-  Widget _buildBody(BuildContext context, UserState state) {
-    if(state is UserLoadingState) {
-      return const LoadingWidget();
-    }
+class Header extends StatelessWidget {
+  final Widget body;
 
+  Header({required this.body});
 
-    return const Center(
-      child: Text("Error"),
-    );
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/background1.png"),
+                fit: BoxFit.cover)),
+        child: this.body);
+  }
+}
+
+class LoginView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      PopHeader(),
+      Text("Connexion",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.blue.shade700)),
+      Text("Connectez-vous en tant que bénévole"),
+      SizedBox(
+        height: 30,
+      ),
+      FormulaireLogin(),
+      SizedBox(
+        height: 30,
+      ),
+      Container(
+        width: MediaQuery.sizeOf(context).width * 0.8,
+        child: Row(
+          children: [
+            Expanded(
+                child: OtherConnection(
+                    context, "Google", FaIcon(FontAwesomeIcons.google))),
+            SizedBox(
+              width: 5,
+            ),
+            Expanded(
+                child: OtherConnection(
+                    context, "Facebook", FaIcon(FontAwesomeIcons.facebookF))),
+          ],
+        ),
+      ),
+      Container(
+        width: MediaQuery.sizeOf(context).width * 0.60,
+        padding: EdgeInsets.only(),
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(orange),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      side: BorderSide(color: Colors.red)))),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Inscription()),
+            );
+          },
+          child: Text("Créer un compte", style: TextStyle(color: Colors.white)),
+        ),
+      ),
+    ]);
+  }
+}
+
+class PopHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 120,
+        child: Row(children: [
+          Expanded(
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.backspace_outlined),
+            ),
+          ),
+          Expanded(
+            child: Image.asset(
+              "assets/logo.png",
+              height: 80,
+            ),
+          ),
+          Expanded(
+            child: Text(""),
+          ),
+        ]));
   }
 }

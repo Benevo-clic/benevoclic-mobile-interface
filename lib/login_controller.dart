@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
@@ -24,3 +24,4 @@ class LoginController extends StatelessWidget {
         }));
   }
 }
+*/

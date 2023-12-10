@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:namer_app/repositories/api/request.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 class AuthService {

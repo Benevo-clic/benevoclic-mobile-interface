@@ -5,7 +5,6 @@ import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/util/email_verification.dart';
 
-import '../repositories/firebase/auth.dart';
 
 class FormulaireLogin extends StatefulWidget {
   const FormulaireLogin({super.key});
@@ -17,8 +16,8 @@ class FormulaireLogin extends StatefulWidget {
 class _FormulaireLoginState extends State<FormulaireLogin> {
   final myController = TextEditingController();
 
-  var _adress;
-  var _mdp;
+  String? _adress;
+  String? _mdp;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -111,8 +110,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   try {
                     /*await AuthService().authAdressPassword(
                         _adress.toString(), _mdp.toString());*/
-                        BlocProvider.of<UserCubit>(context)
-                        .connexion();
+                    BlocProvider.of<UserCubit>(context).connexion();
                   } on FirebaseAuthException catch (e) {
                     showDialog(
                         context: context,

@@ -1,15 +1,10 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:namer_app/models/response_model.dart';
-
-import 'association_model.dart';
 
 part 'volunteer_model.g.dart';
 
 @JsonSerializable()
-class Volunteer{
-
+class Volunteer {
   @JsonKey(name: 'firstName')
   late final String firstName;
 
@@ -68,7 +63,8 @@ class Volunteer{
       required this.myAssociations,
       required this.myAssociationsWaiting});
 
-  factory Volunteer.fromJson(Map<String, dynamic> json) => _$VolunteerFromJson(json);
+  factory Volunteer.fromJson(Map<String, dynamic> json) =>
+      _$VolunteerFromJson(json);
 
   Map<String, dynamic> toJson() => _$VolunteerToJson(this);
 }

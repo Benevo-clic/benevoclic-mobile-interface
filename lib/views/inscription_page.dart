@@ -80,8 +80,8 @@ class FormulaireInscription extends StatefulWidget {
 class _FormulaireInscriptionState extends State<FormulaireInscription> {
   final myController = TextEditingController();
 
-  var _adress;
-  var _mdp;
+  String? _adress;
+  String? _mdp;
   final _formKey = GlobalKey<FormState>();
 
   @override

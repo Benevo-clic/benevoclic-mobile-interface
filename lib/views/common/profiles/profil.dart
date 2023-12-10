@@ -91,7 +91,7 @@ class ProfilPage extends StatelessWidget {
 
 class LineProfil extends StatelessWidget {
   final String text;
-  final icon;
+  final IconButton icon;
 
   const LineProfil({super.key, required this.text, required this.icon});
 

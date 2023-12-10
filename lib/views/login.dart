@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/repositories/firebase/other_connexion.dart';
 import 'package:namer_app/views/inscription_page.dart';
@@ -88,7 +86,6 @@ class LoginPage extends StatelessWidget {
                                   BorderRadius.all(Radius.circular(5)),
                               side: BorderSide(color: Colors.red)))),
                   onPressed: () {
-                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Inscription()),

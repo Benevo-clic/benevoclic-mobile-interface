@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
-import 'package:namer_app/type/rules_type.dart';
 
 import '../../repositories/api/user_repository.dart';
 
@@ -9,9 +8,9 @@ class UserCubit extends Cubit<UserState> {
 
   UserCubit({required UserRepository userRepository})
       : _userRepository = userRepository,
-        super(UserInitialState());
+        super(UserLoginState());
 
-  Future<void> createUser(RulesType rulesType) async {
+  /*Future<void> createUser(RulesType rulesType) async {
     try {
       emit(UserLoadingState());
       final users = await _userRepository.createUser(rulesType);
@@ -19,11 +18,10 @@ class UserCubit extends Cubit<UserState> {
     } catch (e) {
       emit(UserErrorState(message: e.toString()));
     }
-  }
+  }*/
 
   Future<void> connexion() async {
     try {
-      emit(UserLoadingState());
       final users = await _userRepository.connexion();
       emit(ResponseUserState(statusCode: users.toString()));
     } catch (e) {
@@ -31,7 +29,7 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> disconnect() async {
+  /*Future<void> disconnect() async {
     try {
       emit(UserLoadingState());
       final users = await _userRepository.disconnect();
@@ -39,5 +37,5 @@ class UserCubit extends Cubit<UserState> {
     } catch (e) {
       emit(UserErrorState(message: e.toString()));
     }
-  }
+  }*/
 }

@@ -121,23 +121,24 @@ class _AnnoncesState extends State<Annonces> {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                  padding: EdgeInsets.all(20),
-                  itemCount: 2,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (result.isEmpty) {
-                      return Text("rien");
-                    } else {
-                      return ItemAnnonce(
-                        nameAsso: result[index]["nameAssociation"],
-                        nbHours: result[index]["nbHours"],
-                        nbPlaces: result[index]["nbPlaces"],
-                        nbPlacesTaken: result[index]["nbPlacesTaken"],
-                      );
-                    }
-                  },separatorBuilder: (BuildContext context, int index) => const Text(""),
-              )
-            )
+                child: ListView.separated(
+              padding: EdgeInsets.all(20),
+              itemCount: 2,
+              itemBuilder: (BuildContext context, int index) {
+                if (result.isEmpty) {
+                  return Text("rien");
+                } else {
+                  return ItemAnnonce(
+                    nameAsso: result[index]["nameAssociation"],
+                    nbHours: result[index]["nbHours"],
+                    nbPlaces: result[index]["nbPlaces"],
+                    nbPlacesTaken: result[index]["nbPlacesTaken"],
+                  );
+                }
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Text(""),
+            ))
           ],
         ),
       ),

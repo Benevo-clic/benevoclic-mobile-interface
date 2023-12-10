@@ -21,11 +21,9 @@ class OtherAuthCubit extends Cubit<OtherAuthState> {
 
     try {
       _authRepository.singInWithGoogle().then((_) {
-        print("googleAuth++++++++++++++++++++++++++++++: ");
         emit(GoogleAuthState());
       });
     } catch (e) {
-      print("error++++++++++++++++++++++++++++++: $e");
       emit(OtherAuthErrorState(message: e.toString()));
     }
   }

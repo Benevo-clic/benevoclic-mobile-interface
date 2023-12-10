@@ -59,12 +59,6 @@ class _OtherConnectionState extends State<OtherConnection> {
   }
 }
 
-Widget _buildInitialInput() {
-  return const Center(
-    child: Text('Please enter an email and password'),
-  );
-}
-
 Widget _buildLoading(BuildContext context, OtherAuthLoadingState state) {
   return const Center(
     child: CircularProgressIndicator(),

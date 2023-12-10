@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
-import '../../../repositories/firebase/auth.dart';
+
+import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
 
 class ProfilPage extends StatelessWidget {
@@ -61,7 +62,7 @@ class ProfilPage extends StatelessWidget {
               icon: IconButton(
                 onPressed: () async {
                   print('init');
-                  await AuthService().deleteAccount();
+                  await AuthRepository().deleteAccount();
                   print("end");
                 },
                 icon: Icon(Icons.no_accounts_sharp),
@@ -105,7 +106,7 @@ class LineProfil extends StatelessWidget {
             child: IconButton(
               onPressed: () async {
                 print('init');
-                await AuthService().logout();
+                await AuthRepository().logout();
                 print("end");
               },
               icon: icon,

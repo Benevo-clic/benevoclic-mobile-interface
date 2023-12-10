@@ -1,44 +1,40 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/type/rules_type.dart';
 
-import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/user/user_state.dart';
-import '../../../repositories/api/user_repository.dart';
 import '../../../widgets/loading_widget.dart';
-import '../../login.dart';
-import '../../navigation_bar.dart';
+import 'cubit/typeAuth/auth_type_cubit.dart';
+import 'cubit/typeAuth/auth_type_state.dart';
+import 'login.dart';
 
 class AuthentificationView extends StatelessWidget {
-
- const AuthentificationView({Key? key}) : super(key: key);
+  const AuthentificationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => UserCubit(userRepository: UserRepository()),
-        child: BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-          if (state is UserInitialState) {
-            return LoginPage();
-          } else if (state is UserLoadingState) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NavigationExample()),
-            );
-          }
-          return Scaffold();
-        }));
+    return BlocBuilder<AuthTypeCubit, AuthTypeState>(
+      builder: (context, state) {
+        if (state is AssociationLoginState) {
+          return LoginPage(
+            title: RulesType.USER_ASSOCIATION,
+          );
+        } else if (state is VolunteerLoginState) {
+          return LoginPage(
+            title: RulesType.USER_VOLUNTEER,
+          );
+        }
+        return const Center(
+          child: Text("Error"),
+        );
+      },
+    );
   }
 
-  Widget _buildBody(BuildContext context, UserState state) {
-    if(state is UserLoadingState) {
+  Widget _buildBody(BuildContext context, InscriptionState state) {
+    if (state is UserLoadingState) {
       return const LoadingWidget();
     }
-
-
     return const Center(
       child: Text("Error"),
     );

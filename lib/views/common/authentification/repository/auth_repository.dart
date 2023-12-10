@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:namer_app/repositories/api/request.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
-class AuthService {
+class AuthRepository {
   var _auth = FirebaseAuth.instance;
   Stream<User?> get userChanged => _auth.authStateChanges();
 
@@ -31,22 +30,33 @@ class AuthService {
   Future<void>? deleteAccount() => _auth.currentUser?.delete();
 
   singInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    GoogleSignInAuthentication? googlAuth = await googleUser?.authentication;
+      if (googleUser == null) {
+        print("La connexion Google a été annulée par l'utilisateur.");
+        return;
+      }
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googlAuth?.accessToken,
-      idToken: googlAuth?.idToken,
-    );
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    UserCredential userInfo =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    print(userInfo.additionalUserInfo?.isNewUser);
-    String? token = await userInfo.user!.getIdToken(true);
-    globals.id = token!;
-    print("token gmail");
-    print(googlAuth!.idToken!);
+      UserCredential userInfo =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      String? token = await userInfo.user?.getIdToken(true);
+
+      if (token != null) {
+        globals.id = token;
+      } else {
+        print("Le token est null après la connexion Google.");
+      }
+    } catch (e) {
+      print("--------------------------------------------");
+      print("Erreur lors de la connexion Google: $e");
+    }
   }
 
   createAccount(email, password) async {

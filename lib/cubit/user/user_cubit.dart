@@ -11,6 +11,10 @@ class UserCubit extends Cubit<UserState> {
       : _userRepository = userRepository,
         super(UserInitialState());
 
+  void formLogin() {
+    emit(UserInitialState());
+  }
+
   Future<void> createUser(RulesType rulesType) async {
     try {
       emit(UserLoadingState());
@@ -24,9 +28,13 @@ class UserCubit extends Cubit<UserState> {
   Future<void> connexion() async {
     try {
       emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 2));
+
       final users = await _userRepository.connexion();
       emit(ResponseUserState(statusCode: users.toString()));
+      print(state);
     } catch (e) {
+      print(state);
       emit(UserErrorState(message: e.toString()));
     }
   }

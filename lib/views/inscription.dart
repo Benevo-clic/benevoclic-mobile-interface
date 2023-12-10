@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 import 'package:namer_app/views/infos_inscription.dart';
-import 'package:namer_app/repositories/firebase/auth.dart';
 
 class InscriptionDemarche extends StatelessWidget {
   final String adress;
@@ -17,7 +17,7 @@ class InscriptionDemarche extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {
-              if (AuthService().verifiedEmail() == true) {
+              if (AuthRepository().verifiedEmail() == true) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(

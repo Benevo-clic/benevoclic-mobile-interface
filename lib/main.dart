@@ -7,7 +7,6 @@ import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/views/navigation_bar.dart';
 
 import 'cubit/user/user_state.dart';
-import 'views/home_page.dart';
 
 void main() async {
   //Initialisation de firebase

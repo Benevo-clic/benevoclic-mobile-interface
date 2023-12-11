@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/util/get_format_date.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
-import 'package:namer_app/widgets/button.dart';
 
 class PublishAnnouncement extends StatelessWidget {
   @override
@@ -44,48 +44,43 @@ class PublishAnnouncement extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "Titre de l'annonce",
             ),
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "Description",
             ),
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "Nombre de bénévoles",
             ),
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "Nombre d'heures",
             ),
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "Date et heure de la mission",
             ),
             SizedBox(
               height: 15,
             ),
-            Item(
+            PublishItem(
               content: "La localisation de la mission",
             ),
             SizedBox(
               height: 35,
             ),
-            Button(
-              backgroundColor: Colors.grey,
-              color: Colors.black,
-              text: "Publier",
-              fct: () {},
-            ),
+            PublishItem2(content: "Date "),
             SizedBox(
               height: 15,
             ),
@@ -96,10 +91,10 @@ class PublishAnnouncement extends StatelessWidget {
   }
 }
 
-class Item extends StatelessWidget {
+class PublishItem extends StatelessWidget {
   final String content;
 
-  const Item({super.key, required this.content});
+  const PublishItem({super.key, required this.content});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -108,15 +103,73 @@ class Item extends StatelessWidget {
         AbstractContainer4(
           content: TextFormField(
             decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: orange)),
+                enabledBorder:
+                    UnderlineInputBorder(borderSide: BorderSide(color: orange)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black))),
-            style: TextStyle( decorationColor: orange),
+            style: TextStyle(decorationColor: orange),
             cursorColor: Colors.black,
             textAlign: TextAlign.center,
           ),
         )
+      ],
+    );
+  }
+}
+
+class Date extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      readOnly: true,
+      onTap: () async {
+        DateTime? pickDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime.now().add(Duration(days: 90)));
+      },
+    );
+  }
+}
+
+class PublishItem2 extends StatefulWidget {
+  final String content;
+
+  const PublishItem2({super.key, required this.content});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _PublishItem2();
+  }
+}
+
+class _PublishItem2 extends State<PublishItem2> {
+  DateTime? date;
+  final controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AbstractContainer3(content: Center(child: Text(widget.content))),
+        AbstractContainer4(
+            content: TextField(
+          textAlign: TextAlign.center,
+          controller: controller,
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(Duration(days: 90)));
+            controller.text = formatDate(pickDate!);
+            setState(() {
+              date = pickDate;
+            });
+          },
+        ))
       ],
     );
   }

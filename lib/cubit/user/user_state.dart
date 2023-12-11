@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/models/user_model.dart';
 
 @immutable
 abstract class UserState {}
@@ -8,14 +9,27 @@ class UserInitialState extends UserState {}
 class UserLoadingState extends UserState {}
 
 class ResponseUserState extends UserState {
+  final UserModel user;
+
+  ResponseUserState({required this.user});
+}
+
+class UserCreatedState extends UserState {
   final String statusCode;
-  ResponseUserState({required this.statusCode});
+
+  UserCreatedState({required this.statusCode});
+}
+
+class UserDisconnectedState extends UserState {
+  final String statusCode;
+
+  UserDisconnectedState({required this.statusCode});
 }
 
 class UserConnexionState extends UserState {
-  final String statusCode;
+  final UserModel userModel;
 
-  UserConnexionState({required this.statusCode});
+  UserConnexionState({required this.userModel});
 }
 
 class UserErrorState extends UserState {

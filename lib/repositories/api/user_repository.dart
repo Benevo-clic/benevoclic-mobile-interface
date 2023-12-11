@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
+import '../../models/user_model.dart';
 import '../../type/rules_type.dart';
 
 class UserRepository {
-  final String url = globals.url;
+  final String url = "37.187.38.160:8080";
 
   Future<dynamic> createUser(RulesType rulesType) async {
     String type = "";
@@ -14,7 +15,7 @@ class UserRepository {
       type = "USER_ASSOCIATION";
     }
     Response result = await Dio().post(
-      "http://$url:8080/api/v1/users/create",
+      "http://$url/api/v1/users/create",
       options: Options(headers: {
         "Authorization": "Bearer ${globals.id}",
         "accept": "*/*",
@@ -24,41 +25,47 @@ class UserRepository {
     if (result.statusCode == 200) {
       return result.statusCode;
     } else {
-      throw Exception('Failed to load users');
+      throw Exception(result.statusMessage);
     }
   }
 
-  Future<int> connexion() async {
+  Future<UserModel> connexion() async {
     Response result = await Dio().post(
-      "http://$url:8080/api/v1/users/connect",
+      "http://$url/api/v1/users/connect",
       options: Options(
           headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
     );
 
+    UserModel user = await getUser();
+
     if (result.statusCode == 200) {
-      return 200;
+      return user;
     } else {
-      throw Exception('Failed to connect');
+      throw Exception(result.statusMessage);
     }
   }
 
-  Future<dynamic> getUser() async {
-    Response result = await Dio().get(
-      "http://$url:8080/api/v1/users/getUsers",
+  Future<UserModel> getUser() async {
+    var headers = {'Authorization': 'Bearer ${globals.id}'};
+    var dio = Dio();
+    var response = await dio.request(
+      'http://$url/api/v1/users/getUsers',
       options: Options(
-          headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
+        method: 'GET',
+        headers: headers,
+      ),
     );
-
-    if (result.statusCode == 200) {
-      return result.data;
+    print(response.data);
+    if (response.statusCode == 200) {
+      return UserModel.fromJson(response.data);
     } else {
-      throw Exception('Failed to load users');
+      throw Exception(response.statusMessage);
     }
   }
 
   Future<int> disconnect() async {
     Response result = await Dio().post(
-      "http://$url:8080/api/v1/users/disconnect",
+      "http://$url/api/v1/users/disconnect",
       options: Options(
           headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
     );
@@ -66,13 +73,13 @@ class UserRepository {
     if (result.statusCode == 200) {
       return 200;
     } else {
-      throw Exception('Failed to disconnect');
+      throw Exception(result.statusMessage);
     }
   }
 
   Future<int> deleteUser() async {
     Response result = await Dio().delete(
-      "http://$url:8080/api/v1/users/delete",
+      "http://$url/api/v1/users/delete",
       options: Options(
           headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
     );
@@ -80,7 +87,7 @@ class UserRepository {
     if (result.statusCode == 200) {
       return 200;
     } else {
-      throw Exception('Failed to delete');
+      throw Exception(result.statusMessage);
     }
   }
 }

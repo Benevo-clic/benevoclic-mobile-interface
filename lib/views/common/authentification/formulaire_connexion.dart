@@ -32,7 +32,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<UserCubit>();
       cubit.formLogin();
     });
@@ -160,7 +160,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           MaterialPageRoute(
                               builder: (context) => NavigationExample()));
                       final cubit = context.read<UserCubit>();
-                      cubit.userConnexion(state.statusCode);
+                      cubit.userConnexion(state.user);
                     });
                     return Text("Connexion réussie");
                   } else if (state is UserErrorState) {
@@ -190,6 +190,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                                 type: "login incorrect", message: "retour");
                           },
                         );
+                        print(e.code);
                       }
                     }
                   },

@@ -1,20 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:namer_app/models/rule_model.dart';
 
 part 'user_model.g.dart';
 
 @JsonSerializable()
 class UserModel {
   @JsonKey(name: 'id')
-  final int id;
+  final String id;
 
   @JsonKey(name: 'isActif')
-  final String isActif;
+  final bool isActif;
 
   @JsonKey(name: 'isConnect')
-  final String isConnect;
+  final bool isConnect;
 
   @JsonKey(name: 'rule')
-  final String rule;
+  final RuleModel rule;
 
   UserModel({
     required this.id,

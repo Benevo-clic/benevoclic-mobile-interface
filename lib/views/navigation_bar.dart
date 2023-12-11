@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
+import 'package:namer_app/views/common/filter/filter_view.dart';
 
-import 'common/annonces/annonces.dart';
 import 'common/messages/messages.dart';
 import 'common/profiles/profil.dart';
 
@@ -59,7 +59,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         ),
         body: <Widget>[
           PublishAnnouncement(),
-          Annonces(),
+          FilterView(),
           Messages(),
           ProfilPage(),
         ][currentPageIndex],

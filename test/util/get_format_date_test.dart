@@ -8,5 +8,6 @@ void main() {
 
   test("Verification Date test, Date is correct", () {
     expect(formatDate(DateTime(2015, 02, 1)), "1/2/2015");
+    
   });
 }

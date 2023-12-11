@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/util/color.dart';
 
+import '../cubit/user/user_cubit.dart';
 import 'common/annonces/annonces.dart';
 import 'common/messages/messages.dart';
 import 'common/profiles/profil.dart';
@@ -14,6 +16,15 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<UserCubit>();
+      print('initState 2' + cubit.state.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

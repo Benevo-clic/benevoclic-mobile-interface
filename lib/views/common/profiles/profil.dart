@@ -29,7 +29,8 @@ class ProfilPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => ModifProfil()),
                   );
                 },
-              )),
+                ),
+              ),
             ],
           ),
           Image.asset("assets/logo.png", height: 200),
@@ -72,28 +73,20 @@ class ProfilPage extends StatelessWidget {
               SizedBox(
             height: 20,
           ),
-          LineProfil(
-              text: "Suppression compte",
-              icon: IconButton(
-                onPressed: () async {
-                  print('init');
-                  AuthRepository().logout().then((_) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(
-                            title: RulesType.USER_VOLUNTEER,
-                          ),
-                        ),
-                      );
-                    });
-                  });
-                  print("end");
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.logout),
-              )),
+          ElevatedButton(
+              onPressed: () async {
+                await AuthRepository().logout();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(
+                      title: RulesType.USER_VOLUNTEER,
+                    ),
+                  ),
+                );
+                print("end");
+              },
+              child: Text("Déconnexion")),
           SizedBox(
             height: 20,
           ),

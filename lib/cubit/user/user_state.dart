@@ -12,6 +12,12 @@ class ResponseUserState extends UserState {
   ResponseUserState({required this.statusCode});
 }
 
+class UserConnexionState extends UserState {
+  final String statusCode;
+
+  UserConnexionState({required this.statusCode});
+}
+
 class UserErrorState extends UserState {
   final String message;
 

@@ -25,7 +25,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     myController.dispose();
     super.dispose();
   }
@@ -160,6 +159,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => NavigationExample()));
+                      final cubit = context.read<UserCubit>();
+                      cubit.userConnexion(state.statusCode);
                     });
                     return Text("Connexion réussie");
                   } else if (state is UserErrorState) {
@@ -178,10 +179,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        AuthRepository()
-                            .authAdressPassword(
-                                _email.toString(), _password.toString())
-                            .then((value) => print(value));
+                        await AuthRepository().authAdressPassword(
+                            _email.toString(), _password.toString());
                         BlocProvider.of<UserCubit>(context).connexion();
                       } on FirebaseAuthException catch (e) {
                         showDialog(

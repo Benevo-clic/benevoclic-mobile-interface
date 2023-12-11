@@ -14,7 +14,8 @@ class CustomTextFormField extends StatelessWidget {
       required this.hintText,
       required this.obscureText,
       required this.message,
-      required this.icon});
+      required this.icon,
+      required BuildContext context});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/util/color.dart';
 
 import '../cubit/user/user_cubit.dart';
+import '../cubit/user/user_state.dart';
 import 'common/annonces/annonces.dart';
 import 'common/messages/messages.dart';
 import 'common/profiles/profil.dart';
@@ -20,9 +22,10 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       final cubit = context.read<UserCubit>();
-      print('initState 2' + cubit.state.toString());
+      UserModel user = await cubit.getUser();
+      cubit.changeState(UserConnexionState(userModel: user));
     });
   }
 

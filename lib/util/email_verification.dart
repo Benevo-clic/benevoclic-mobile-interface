@@ -6,6 +6,8 @@ class EmailVerification {
     email = emailParam;
   }
 
+  get getEmail => email;
+
   security() {
     if (email.isEmpty) {
       message = "Veuillez remplir ce champs avec un email";

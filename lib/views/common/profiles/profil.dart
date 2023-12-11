@@ -64,9 +64,7 @@ class ProfilPage extends StatelessWidget {
               text: "Suppression compte",
               icon: IconButton(
                 onPressed: () async {
-                  print('init');
                   await AuthRepository().deleteAccount();
-                  print("end");
                 },
                 icon: Icon(Icons.no_accounts_sharp),
               )),
@@ -84,7 +82,6 @@ class ProfilPage extends StatelessWidget {
                     ),
                   ),
                 );
-                print("end");
               },
               child: Text("Déconnexion")),
           SizedBox(
@@ -111,9 +108,7 @@ class LineProfil extends StatelessWidget {
             flex: 0,
             child: IconButton(
               onPressed: () async {
-                print('init');
                 await AuthRepository().logout();
-                print("end");
               },
               icon: icon,
             ),

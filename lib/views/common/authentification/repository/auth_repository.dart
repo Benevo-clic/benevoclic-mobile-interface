@@ -20,12 +20,13 @@ class AuthRepository {
 
   Future<void>? deleteAccount() => _auth.currentUser?.delete();
 
-  singInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<String?> signInWithGoogle() async {
+    try {
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser == null) {
-      print("La connexion Google a été annulée par l'utilisateur.");
-        return;
+      if (googleUser == null) {
+        print("La connexion Google a été annulée par l'utilisateur.");
+        return null;
       }
 
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -37,12 +38,18 @@ class AuthRepository {
       UserCredential userInfo =
           await FirebaseAuth.instance.signInWithCredential(credential);
       String? token = await userInfo.user?.getIdToken(true);
-    print("Token Google : $token");
-    if (token != null) {
-      globals.id = token;
+
+      if (token != null) {
+        globals.id = token;
+        return token; // Retourne le token si la connexion est réussie
       } else {
         print("Le token est null après la connexion Google.");
+        return null;
       }
+    } catch (e) {
+      throw Exception(
+          "Erreur de connexion Google : $e"); // Lance une exception en cas d'erreur
+    }
   }
 
   createAccount(email, password) async {

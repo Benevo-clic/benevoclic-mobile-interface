@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:namer_app/cubit/user/user_cubit.dart';
+import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../../util/color.dart';
@@ -15,174 +18,258 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/background1.png"),
-                  fit: BoxFit.cover)),
-        ),
-        SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 140,
-                child: SafeArea(
-                  child: Row(
+    return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
+      if (state is UserErrorState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.message),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }, builder: (context, state) {
+      return Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/background1.png"),
+                          fit: BoxFit.cover)),
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.arrow_circle_left_sharp,
-                            color: Color.fromRGBO(170, 77, 79, 1),
-                            size: MediaQuery.of(context).size.height * .04,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 140,
+                        child: SafeArea(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_circle_left_sharp,
+                                    color: Color.fromRGBO(170, 77, 79, 1),
+                                    size: MediaQuery.of(context).size.height *
+                                        .04,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/logo.png",
+                                  height: MediaQuery.of(context).size.height *
+                                      .04 *
+                                      2,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                NavigationNoIndentify()));
+                                  },
+                                  icon: Icon(Icons.cancel,
+                                      color: Color.fromRGBO(170, 77, 79, 1),
+                                      size: MediaQuery.of(context).size.height *
+                                          .04),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Image.asset(
-                          "assets/logo.png",
-                          height: MediaQuery.of(context).size.height * .04 * 2,
+                      Divider(
+                        color: Colors.grey.shade400,
+                        endIndent: MediaQuery.of(context).size.height * .04,
+                        indent: MediaQuery.of(context).size.height * .04,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Connexion",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * .06,
+                          color: Color.fromRGBO(235, 126, 26, 1),
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: IconButton(
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Connectez-vous en tant que ${title == RulesType.USER_ASSOCIATION ? 'association' : 'bénévole'}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * .03,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      FormulaireLogin(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 25, right: 5),
+                              // Ajustez selon vos besoins
+                              child: Divider(
+                                color: Colors.grey.shade400,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                          Text("OU"), // Texte à afficher au milieu
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5, right: 25),
+                              // Ajustez selon vos besoins
+                              child: Divider(
+                                color: Colors.grey.shade400,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OtherConnection(
+                                        context: context,
+                                        rulesType: title,
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FaIcon(FontAwesomeIcons.google),
+                                  // Icône Google
+                                  SizedBox(width: 10),
+
+                                  Text("Google"),
+                                  // Texte
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Divider(
+                              color: Colors.black,
+                              height: 100,
+                              indent: 12,
+                              endIndent: 5,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OtherConnection(
+                                          context: context, rulesType: title),
+                                    ),
+                                  );
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FaIcon(FontAwesomeIcons.squareFacebook),
+                                  SizedBox(width: 10),
+                                  Text("Facebook"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        width: MediaQuery.sizeOf(context).width * 0.60,
+                        padding: EdgeInsets.only(),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(orange),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      side: BorderSide(color: Colors.red)))),
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        NavigationNoIndentify()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Inscription()),
+                            );
                           },
-                          icon: Icon(Icons.cancel,
-                              color: Color.fromRGBO(170, 77, 79, 1),
-                              size: MediaQuery.of(context).size.height * .04),
+                          child: Text("Créer un compte",
+                              style: TextStyle(color: Colors.white)),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Divider(
-                color: Colors.grey.shade400,
-                endIndent: MediaQuery.of(context).size.height * .04,
-                indent: MediaQuery.of(context).size.height * .04,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Connexion",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * .06,
-                  color: Color.fromRGBO(235, 126, 26, 1),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Connectez-vous en tant que ${title == RulesType.USER_ASSOCIATION ? 'association' : 'bénévole'}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * .03,
-                  color: Colors.black87,
-                ),
-              ),
-              FormulaireLogin(),
-              Divider(
-                color: Colors.grey.shade500,
-                height: 20,
-                indent: 50,
-                endIndent: 50,
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.8,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtherConnection(
-                                context,
-                              ),
-                            ),
-                          );
-                        });
-                      },
-                      child: FaIcon(FontAwesomeIcons.google),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Divider(
-                      color: Colors.black,
-                      height: 90,
-                      indent: 12,
-                      endIndent: 5,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtherConnection(
-                                context,
-                              ),
-                            ),
-                          );
-                        });
-                      },
-                      child: FaIcon(FontAwesomeIcons.squareFacebook),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: MediaQuery.sizeOf(context).width * 0.60,
-                padding: EdgeInsets.only(),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(orange),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              side: BorderSide(color: Colors.red)))),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Inscription()),
-                    );
-                  },
-                  child: Text("Créer un compte",
-                      style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ],
+                if (state is UserLoadingState) _buildLoading(context, state),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      );
+    });
+  }
+
+  Widget _buildLoading(BuildContext context, UserLoadingState state) {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Fond semi-transparent noir
+      width: double.infinity, // Couvre toute la largeur
+      height: MediaQuery.of(context).size.height, // Couvre toute la hauteur
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

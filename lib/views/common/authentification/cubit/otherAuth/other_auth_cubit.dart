@@ -19,13 +19,15 @@ class OtherAuthCubit extends Cubit<OtherAuthState> {
   void googleAuth() {
     emit(OtherAuthLoadingState());
 
-    try {
-      _authRepository.singInWithGoogle().then((_) {
+    _authRepository.signInWithGoogle().then((token) {
+      if (token != null) {
         emit(GoogleAuthState());
-      });
-    } catch (e) {
+      } else {
+        emit(OtherAuthErrorState(message: "Connexion annulée ou échouée."));
+      }
+    }).catchError((e) {
       emit(OtherAuthErrorState(message: e.toString()));
-    }
+    });
   }
 
   void facebookAuth() {

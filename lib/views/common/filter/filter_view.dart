@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/filter/enum_tri.dart';
 import 'package:namer_app/views/common/filter/widget/radio_section.dart';
-
-
+import 'package:namer_app/views/common/filter/widget/slider_heures.dart';
 
 class FilterView extends StatefulWidget {
   @override
@@ -14,6 +13,13 @@ class FilterView extends StatefulWidget {
 
 class _FilterView extends State<FilterView> {
   Tri groupTri = Tri.recent;
+  double hour = 1;
+
+  changeHour(hourParam) {
+    setState(() {
+      hour = hourParam;
+    });
+  }
 
   changeFilter(filter) {
     setState(() {
@@ -39,8 +45,20 @@ class _FilterView extends State<FilterView> {
             content: RadioSection(
                 fct: (value) => changeFilter(value), tri: groupTri),
             title: "Filter",
-            fct: () {},
-          )
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          FilterItem(
+            title: "Durée de la mission",
+            content: SliderHoursState(
+              fct: (value) => changeHour(value),
+              currentValue: hour,
+            ),
+          ),SizedBox(
+            height: 15,
+          ),
+          
         ],
       ),
     );
@@ -50,26 +68,29 @@ class _FilterView extends State<FilterView> {
 class FilterItem extends StatelessWidget {
   final String title;
   final Widget content;
-  final fct;
 
-  const FilterItem(
-      {super.key,
-      required this.title,
-      required this.fct,
-      required this.content});
+  const FilterItem({super.key, required this.title, required this.content});
   @override
   Widget build(BuildContext context) {
     return Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(2),
+          color: Color.fromRGBO(200, 200, 200, 0.4),
+        ),
         width: MediaQuery.sizeOf(context).width * 0.8,
-        color: Colors.grey,
         child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title),
+                Text(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
                 content,
               ],
             )));
   }
 }
-

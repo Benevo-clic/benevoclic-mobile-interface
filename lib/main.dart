@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
+import 'package:namer_app/views/navigation_bar.dart';
 
 import 'cubit/user/user_state.dart';
 import 'views/home_page.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
               ),
               debugShowCheckedModeBanner: false,
-              home: HomePage(),
+              home: NavigationExample(),
             );
           },
         ));

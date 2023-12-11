@@ -6,7 +6,7 @@ class Button extends StatelessWidget {
   final Color color;
   final VoidCallback fct;
 
-  Button( 
+  Button(
       {super.key,
       required this.text,
       required this.color,
@@ -16,7 +16,8 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(backgroundColor)),
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(backgroundColor)),
         onPressed: fct,
         child: Text(
           text,

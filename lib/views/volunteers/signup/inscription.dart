@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/views/volunteers/signup/infos_inscription.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/user/user_state.dart';
 import '../../../type/rules_type.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../associtions/signup/infos_inscription.dart';
 import '../../common/authentification/repository/auth_repository.dart';
 
 class InscriptionDemarche extends StatelessWidget {
@@ -23,7 +23,6 @@ class InscriptionDemarche extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(state.message),
-            backgroundColor: Colors.red,
           ),
         );
       }
@@ -78,10 +77,9 @@ class InscriptionDemarche extends StatelessWidget {
                         height: 50,
                       ),
                       Center(
-                        child: TextButton(
+                        child: ElevatedButton(
                           onPressed: () {
                             if (AuthRepository().verifiedEmail() == true) {
-                              print("email verifié");
                               BlocProvider.of<UserCubit>(context)
                                   .createUserType(title, adress, mdp);
 
@@ -93,7 +91,7 @@ class InscriptionDemarche extends StatelessWidget {
                             } else {
                               final snackBar = SnackBar(
                                 content: const Text(
-                                    'Veuillez vérifier votre adresse mail'),
+                                    'Votre adresse mail n\'est encore pas vérifié, veuillez régader votre boite mail'),
                                 action: SnackBarAction(
                                   label: 'Annuler',
                                   onPressed: () {
@@ -107,7 +105,58 @@ class InscriptionDemarche extends StatelessWidget {
                           },
                           child: Text("J'ai vérifié mon adresse"),
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // Ajustez l'alignement selon vos besoins
+
+                          children: <Widget>[
+                            Text("Je n'ai pas reçu mon mail, "),
+                            TextButton(
+                              onPressed: () async {
+                                bool verify = await AuthRepository()
+                                    .sendEmailVerification();
+
+                                if (verify == false) {
+                                  final snackBar = SnackBar(
+                                    content: const Text(
+                                        'Votre adresse mail de vérification a été déja envoyé vérifiez votre boite mail'),
+                                    action: SnackBarAction(
+                                      label: 'Annuler',
+                                      onPressed: () {
+                                        // Some code to undo the change.
+                                      },
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                } else {
+                                  final snackBar = SnackBar(
+                                    content: const Text(
+                                        'Votre nouveau mail de vérification a été envoyé vérifiez votre boite mail'),
+                                    action: SnackBarAction(
+                                      label: 'Annuler',
+                                      onPressed: () {
+                                        // Some code to undo the change.
+                                      },
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                              child: Text(
+                                "renvoyez-moi",
+                                style: TextStyle(
+                                  decoration: TextDecoration
+                                      .underline, // Souligne le texte
+                                ),
+                              ),
+                            ),
+                          ])
                     ],
                   ),
                 ),

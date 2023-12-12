@@ -28,6 +28,8 @@ class UserDisconnectedState extends UserState {
   UserDisconnectedState({required this.statusCode});
 }
 
+class UserEmailVerificationState extends UserState {}
+
 class UserConnexionState extends UserState {
   final UserModel userModel;
 

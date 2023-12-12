@@ -35,9 +35,20 @@ class UserCubit extends Cubit<UserState> {
   Future<void> createUser(String email, String password) async {
     try {
       emit(UserLoadingState());
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 1));
       await _authRepository.createAccount(email, password);
-      emit(UserRegisterState());
+      emit(UserEmailVerificationState());
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> sendEmailVerification() async {
+    try {
+      emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 2));
+      await _authRepository.sendEmailVerification();
+      emit(UserEmailVerificationState());
     } catch (e) {
       emit(UserErrorState(message: e.toString()));
     }

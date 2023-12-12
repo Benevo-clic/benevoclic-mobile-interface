@@ -6,9 +6,7 @@ import 'package:namer_app/type/rules_type.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/user/user_state.dart';
 import '../../../error/error_message.dart';
-import '../../../util/email_verification.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
-import '../../common/authentification/repository/auth_repository.dart';
 import 'inscription.dart';
 
 class SignupForm extends StatefulWidget {
@@ -26,6 +24,7 @@ class _SignupFormState extends State<SignupForm> {
   @override
   void dispose() {
     super.dispose();
+    _formKey.currentState!.dispose();
   }
 
   @override
@@ -55,13 +54,16 @@ class _SignupFormState extends State<SignupForm> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is UserErrorState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.message),
-          ),
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ErrorMessage(
+                type: "Un problème est survenu lors de votre inscription",
+                message: "retour");
+          },
         );
       }
-      if (state is UserRegisterState) {
+      if (state is UserEmailVerificationState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
@@ -211,19 +213,9 @@ class _SignupFormState extends State<SignupForm> {
             ),
           ),
           if (state is UserInitialState) _buildInitialInput(),
-          if (state is UserErrorState) _buildError(),
         ],
       );
     });
-  }
-
-  Widget _buildError() {
-    return Container(
-      color: Colors.red,
-      child: Center(
-        child: Text('Erreur de connexion'),
-      ),
-    );
   }
 
   Widget _buildInitialInput() {
@@ -233,151 +225,3 @@ class _SignupFormState extends State<SignupForm> {
   }
 }
 
-class FormulaireInscription extends StatefulWidget {
-  const FormulaireInscription({super.key});
-
-  @override
-  State<FormulaireInscription> createState() => _FormulaireInscriptionState();
-}
-
-class _FormulaireInscriptionState extends State<FormulaireInscription> {
-  final myController = TextEditingController();
-
-  var _adress;
-  var _mdp;
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    myController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(243, 243, 243, 1),
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.deepOrange, width: 2)),
-      padding: EdgeInsets.all(25),
-      width: MediaQuery.of(context).size.width * .85,
-      child: Form(
-        key: _formKey,
-        child: Column(children: [
-          TextFormField(
-            validator: (value) {
-              var email = EmailVerification(value.toString());
-              if (email.security()) {
-                setState(() {
-                  _adress = value;
-                });
-                return null;
-              } else {
-                return email.message;
-              }
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              prefixIcon: Icon(Icons.account_circle),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-              hintText: 'Adresse mail ou numéro de téléphone',
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Veuillez rentrer un mot de passe";
-              } else {
-                setState(() {
-                  _mdp = value;
-                });
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              prefixIcon: Icon(Icons.key_rounded),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-              hintText: 'Créez votre mot de passe',
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            obscureText: true,
-            validator: (value) {
-              return null;
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              prefixIcon: Icon(Icons.key_rounded),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-              hintText: 'Confirmez votre mot de passe',
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            width: MediaQuery.sizeOf(context).width * 0.60,
-            padding: EdgeInsets.only(),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(150, 62, 96, 1),
-              ),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  try {
-                    AuthRepository().createAccount(_adress, _mdp);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InscriptionDemarche(
-                          adress: _adress.toString(),
-                          mdp: _mdp.toString(),
-                          title: RulesType.USER_VOLUNTEER,
-                        ),
-                      ),
-                    );
-                  } on FirebaseAuthException catch (_) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ErrorMessage(
-                              type: "inscription incorrect", message: "retour");
-                        });
-                  }
-                }
-              },
-              child: const Text("Inscription",
-                  style: TextStyle(color: Colors.white)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "Vous avez déjà un compte ?",
-              style: TextStyle(
-                  decoration: TextDecoration.underline, color: Colors.black),
-            ),
-          ),
-        ]),
-      ),
-    );
-  }
-}

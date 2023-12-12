@@ -18,12 +18,17 @@ class SignupVolunteer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is UserErrorState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.message),
-            backgroundColor: Colors.red,
+        final snackBar = SnackBar(
+          content: const Text(
+              'Votre email est déjà utilisé, veuillez vous connecter'),
+          action: SnackBarAction(
+            label: 'Annuler',
+            onPressed: () {
+              // Some code to undo the change.
+            },
           ),
         );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }, builder: (context, state) {
       return Stack(

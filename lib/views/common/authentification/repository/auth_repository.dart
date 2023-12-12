@@ -5,6 +5,7 @@ import 'package:namer_app/util/globals.dart' as globals;
 class AuthRepository {
   var _auth = FirebaseAuth.instance;
   Stream<User?> get userChanged => _auth.authStateChanges();
+  late UserCredential userCredential;
 
   authAdressPassword(email, password) async {
     UserCredential result = await _auth.signInWithEmailAndPassword(
@@ -51,11 +52,24 @@ class AuthRepository {
   }
 
   createAccount(email, password) async {
-    UserCredential user = await _auth.createUserWithEmailAndPassword(
+    userCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    print(user.user?.getIdToken(true));
+    print(userCredential.user?.getIdToken(true));
     _auth.currentUser?.sendEmailVerification();
+  }
+
+  Future<bool> sendEmailVerification() async {
+    print("Envoi de l'email de vérification...");
+    try {
+      await _auth.currentUser?.reload();
+      final user = _auth.currentUser;
+      await _auth.currentUser?.sendEmailVerification();
+      return true;
+    } catch (e) {
+      print("Erreur lors de l'envoi de l'email de vérification.");
+      return false;
+    }
   }
 
   Future<String?> token() async {

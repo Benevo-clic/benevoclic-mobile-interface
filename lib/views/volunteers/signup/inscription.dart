@@ -67,29 +67,47 @@ class InscriptionDemarche extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        'Connectez-vous en tant que ${title == RulesType.USER_ASSOCIATION ? 'association' : 'bénévole'}',
+                        'Vériiez votre adresse mail',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.width * .04,
                           color: Colors.black87,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          if (AuthRepository().verifiedEmail() == true) {
-                            print("email verifié");
-                            BlocProvider.of<UserCubit>(context)
-                                .createUserType(title, adress, mdp);
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InfosInscription()),
-                            );
-                          }
-                        },
-                        child: Text("J'ai vérifié mon adresse"),
+                      SizedBox(
+                        height: 50,
                       ),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            if (AuthRepository().verifiedEmail() == true) {
+                              print("email verifié");
+                              BlocProvider.of<UserCubit>(context)
+                                  .createUserType(title, adress, mdp);
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => InfosInscription()),
+                              );
+                            } else {
+                              final snackBar = SnackBar(
+                                content: const Text(
+                                    'Veuillez vérifier votre adresse mail'),
+                                action: SnackBarAction(
+                                  label: 'Annuler',
+                                  onPressed: () {
+                                    // Some code to undo the change.
+                                  },
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          },
+                          child: Text("J'ai vérifié mon adresse"),
+                        ),
+                      )
                     ],
                   ),
                 ),

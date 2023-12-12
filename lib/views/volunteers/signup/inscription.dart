@@ -22,7 +22,7 @@ class InscriptionDemarche extends StatelessWidget {
       if (state is UserErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(state.message),
+            content: Text("Erreur lors de l'inscription"),
           ),
         );
       }
@@ -78,8 +78,10 @@ class InscriptionDemarche extends StatelessWidget {
                       ),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (AuthRepository().verifiedEmail() == true) {
+                          onPressed: () async {
+                            bool? isEmailVerified =
+                                await AuthRepository().verifiedEmail();
+                            if (isEmailVerified ?? true) {
                               BlocProvider.of<UserCubit>(context)
                                   .createUserType(title, adress, mdp);
 
@@ -88,10 +90,12 @@ class InscriptionDemarche extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => InfosInscription()),
                               );
+
+                              // Pas nécessaire de mettre cette partie dans addPostFrameCallback
                             } else {
                               final snackBar = SnackBar(
                                 content: const Text(
-                                    'Votre adresse mail n\'est encore pas vérifié, veuillez régader votre boite mail'),
+                                    'Votre adresse mail n\'est encore pas vérifié, veuillez régader votre boite mail '),
                                 action: SnackBarAction(
                                   label: 'Annuler',
                                   onPressed: () {

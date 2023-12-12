@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 
-import '../../../cubit/user/user_cubit.dart';
-import '../../../cubit/user/user_state.dart';
-import '../../../models/user_model.dart';
+import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
@@ -30,17 +29,19 @@ class _InfosInscriptionState extends State<InfosInscription> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final cubit = context.read<UserCubit>();
-      UserModel user = await cubit.getUser();
-      cubit.changeState(UserConnexionState(userModel: user));
-    });
+    _initUser();
+  }
+
+  void _initUser() async {
+    final cubit = context.read<VolunteerCubit>();
+    cubit.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is UserErrorState) {
+    return BlocConsumer<VolunteerCubit, VolunteerState>(
+        listener: (context, state) {
+      if (state is VolunteerErrorState) {
         final snackBar = SnackBar(
           content: const Text(
               'Votre email est déjà utilisé, veuillez vous connecter'),
@@ -130,11 +131,6 @@ class _InfosInscriptionState extends State<InfosInscription> {
     });
   }
 
-  Widget _buildInitialInput() {
-    return const Center(
-      child: Text(''),
-    );
-  }
 
   Widget _infoVolunteer(BuildContext context, state) {
     return Stack(
@@ -201,7 +197,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         hintText: "Téléphone",
                         icon: Icons.phone,
                         keyboardType: TextInputType.phone,
-                        obscureText: true,
+                        obscureText: false,
                         onSaved: (value) {
                           _phone = value.toString();
                         },
@@ -222,7 +218,6 @@ class _InfosInscriptionState extends State<InfosInscription> {
             ],
           ),
         ),
-        if (state is UserInitialState) _buildInitialInput(),
       ],
     );
   }

@@ -62,6 +62,7 @@ class UserCubit extends Cubit<UserState> {
       await _authRepository.authAdressPassword(email, password);
 
       final users = await _userRepository.createUser(rulesType);
+
       emit(UserCreatedState(statusCode: users.toString()));
     } catch (e) {
       emit(UserErrorState(message: e.toString()));

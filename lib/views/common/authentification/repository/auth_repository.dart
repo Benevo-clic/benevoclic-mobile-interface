@@ -77,10 +77,10 @@ class AuthRepository {
     return val;
   }
 
-  bool? verifiedEmail() {
-    _auth.currentUser?.reload();
-
-    print(_auth.currentUser?.getIdToken(true));
-    return _auth.currentUser?.emailVerified;
+  Future<bool> verifiedEmail() async {
+    await _auth.currentUser
+        ?.reload(); // Attendre que les données de l'utilisateur soient rechargées
+    return _auth.currentUser?.emailVerified ??
+        false; // Retourner l'état de vérification de l'email
   }
 }

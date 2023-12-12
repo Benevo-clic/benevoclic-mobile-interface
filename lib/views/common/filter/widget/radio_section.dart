@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/filter/enum_tri.dart';
+import 'package:namer_app/views/common/filter/filter_view.dart';
 
 class RadioSection extends StatelessWidget {
   final Tri tri;
@@ -19,11 +20,12 @@ class RadioSection extends StatelessWidget {
   }
 }
 
+
 class RadioButton extends StatelessWidget {
-  final Tri tri;
+  final dynamic tri;
   final dynamic fct;
   final String name;
-  final Tri triValue;
+  final dynamic triValue;
 
   RadioButton(
       {super.key,

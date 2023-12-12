@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/filter/enum_tri.dart';
+import 'package:namer_app/views/common/filter/widget/check_box.dart';
 import 'package:namer_app/views/common/filter/widget/date_selection.dart';
 import 'package:namer_app/views/common/filter/widget/radio_section.dart';
 import 'package:namer_app/views/common/filter/widget/slider_heures.dart';
@@ -17,6 +18,17 @@ class _FilterView extends State<FilterView> {
   double hour = 1;
   TextEditingController controller = TextEditingController();
   DateTime date = DateTime.now();
+  List<Checked> valuesList = [
+    Checked("Avant 12:00", checked: false),
+    Checked("12:00 - 18:00", checked: false),
+    Checked("Après 18:00", checked: false),
+  ];
+
+  changeMissionTime(valuesListParam) {
+    setState(() {
+      //valuesList = valuesListParam;
+    });
+  }
 
   changeHour(hourParam) {
     setState(() {
@@ -38,7 +50,12 @@ class _FilterView extends State<FilterView> {
 
   @override
   Widget build(BuildContext context) {
-    print(groupTri);
+    print(valuesList[0].name);
+    print(valuesList[0].checked);
+    print(valuesList[1].name);
+    print(valuesList[1].checked);
+    print(valuesList[2].name);
+    print(valuesList[2].checked);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: orange,
@@ -48,7 +65,7 @@ class _FilterView extends State<FilterView> {
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
         children: [
           FilterItem(
             content: RadioSection(
@@ -56,7 +73,7 @@ class _FilterView extends State<FilterView> {
             title: "Filter",
           ),
           SizedBox(
-            height: 15,
+            height: 5,
           ),
           FilterItem(
             title: "Durée de la mission",
@@ -66,13 +83,22 @@ class _FilterView extends State<FilterView> {
             ),
           ),
           SizedBox(
-            height: 15,
+            height: 5,
           ),
           FilterItem(
               title: "Date de la mission",
               content: DateSelection(
                 controller: controller,
                 fct: changeDate,
+              )),
+          SizedBox(
+            height: 5,
+          ),
+          FilterItem(
+              title: "Heure de la mission",
+              content: CheckBoxWidget(
+                fct: changeMissionTime,
+                valuesList: valuesList,
               ))
         ],
       ),

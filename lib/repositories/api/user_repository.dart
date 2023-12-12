@@ -7,7 +7,7 @@ import '../../type/rules_type.dart';
 class UserRepository {
   final String url = "37.187.38.160:8080";
 
-  Future<dynamic> createUser(RulesType rulesType) async {
+  Future<UserModel> createUser(RulesType rulesType) async {
     String type = "";
     if (rulesType == RulesType.USER_VOLUNTEER) {
       type = "USER_VOLUNTEER";
@@ -22,8 +22,11 @@ class UserRepository {
         "rules": type
       }),
     );
+
+    UserModel user = await getUser();
+
     if (result.statusCode == 200) {
-      return result.statusCode;
+      return user;
     } else {
       throw Exception(result.statusMessage);
     }

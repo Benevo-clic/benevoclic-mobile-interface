@@ -43,14 +43,13 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         await AuthRepository()
             .authAdressPassword(_email.toString(), _password.toString());
         BlocProvider.of<UserCubit>(context).connexion();
-      } on FirebaseAuthException catch (e) {
-        showDialog(
+    } on FirebaseAuthException catch (_) {
+      showDialog(
           context: context,
           builder: (context) {
             return ErrorMessage(type: "login incorrect", message: "retour");
           },
         );
-        print(e.code);
       }
   }
 
@@ -65,7 +64,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         );
       }
       if (state is ResponseUserState) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => NavigationExample()));
           final cubit = context.read<UserCubit>();
@@ -107,7 +106,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           },
                           validator: (value) {
                             var regexp = RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                                r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                             if (value == null ||
                                 !regexp.hasMatch(value.toString())) {
                               return "Votre email n'est pas valide";
@@ -140,7 +139,16 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ErrorMessage(
+                            type: "cette fonctionalité arrive !!",
+                            message: "retour");
+                      },
+                    );
+                  },
                   child: Text(
                     "Mot de passe oublié ?",
                     style: TextStyle(
@@ -154,6 +162,9 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(170, 77, 79, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
                     onPressed: () async {
                       await _submit();

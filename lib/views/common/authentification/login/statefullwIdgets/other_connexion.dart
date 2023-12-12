@@ -40,7 +40,6 @@ class _OtherConnectionState extends State<OtherConnection> {
         }
       },
       builder: (context, state) {
-        print("state: ");
         if (state is GoogleAuthState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.push(context,
@@ -59,7 +58,9 @@ class _OtherConnectionState extends State<OtherConnection> {
                 MaterialPageRoute(
                     builder: (context) => LoginPage(
                           title: widget.rulesType,
-                        )));
+                ),
+              ),
+            );
           });
           return _buildError();
         }
@@ -79,7 +80,7 @@ Widget _buildLoading(BuildContext context, OtherAuthLoadingState state) {
 
 Widget _buildError() {
   return const Center(
-    child: Text('Error'),
+    child: CircularProgressIndicator(),
   );
 }
 

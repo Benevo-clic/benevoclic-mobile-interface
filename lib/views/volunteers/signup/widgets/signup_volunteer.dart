@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:namer_app/cubit/user/user_cubit.dart';
-import 'package:namer_app/cubit/user/user_state.dart';
-import 'package:namer_app/type/rules_type.dart';
 
-import '../../../../../widgets/auth_app_bar.dart';
-import '../../../../associtions/signup/signup_association.dart';
-import '../../../../volunteers/signup/widgets/signup_volunteer.dart';
-import '../statefullwIdgets/formulaire_connexion.dart';
-import '../statefullwIdgets/other_connexion.dart';
+import '../../../../cubit/user/user_cubit.dart';
+import '../../../../cubit/user/user_state.dart';
+import '../../../../type/rules_type.dart';
+import '../../../../widgets/auth_app_bar.dart';
+import '../../../common/authentification/login/statefullwIdgets/other_connexion.dart';
+import '../signup_form.dart';
 
-class LoginPage extends StatelessWidget {
-  final RulesType title;
+class SignupVolunteer extends StatelessWidget {
+  final String title;
 
-  LoginPage({super.key, required this.title});
+  const SignupVolunteer({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,7 @@ class LoginPage extends StatelessWidget {
                         height: 20,
                       ),
                       Text(
-                        "Connexion",
+                        "Inscription",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.width * .06,
@@ -67,14 +65,14 @@ class LoginPage extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        'Connectez-vous en tant que ${title == RulesType.USER_ASSOCIATION ? 'association' : 'bénévole'}',
+                        'Inscrivez-vous en tant que bénévole',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.width * .04,
                           color: Colors.black87,
                         ),
                       ),
-                      FormulaireLogin(),
+                      SignupForm(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -115,7 +113,7 @@ class LoginPage extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
                                         context: context,
-                                        rulesType: title,
+                                        rulesType: RulesType.USER_VOLUNTEER,
                                       ),
                                     ),
                                   );
@@ -154,7 +152,8 @@ class LoginPage extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
-                                          context: context, rulesType: title),
+                                          context: context,
+                                          rulesType: RulesType.USER_VOLUNTEER),
                                     ),
                                   );
                                 });
@@ -177,48 +176,6 @@ class LoginPage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 30,
-                      ),
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 0.60,
-                        padding: EdgeInsets.only(),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color.fromRGBO(243, 243, 243, 1)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                            ),
-                            elevation: MaterialStateProperty.all<double>(5),
-                          ),
-                          onPressed: () {
-                            if (title == RulesType.USER_ASSOCIATION) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignupAssociation(
-                                    title: "association",
-                                  ),
-                                ),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignupVolunteer(
-                                    title: "Bénévole",
-                                  ),
-                                ),
-                              );
-                            }
-                            BlocProvider.of<UserCubit>(context).formRegister();
-                          },
-                          child: Text("Créer un compte",
-                              style: TextStyle(color: Colors.black)),
-                        ),
                       ),
                     ],
                   ),

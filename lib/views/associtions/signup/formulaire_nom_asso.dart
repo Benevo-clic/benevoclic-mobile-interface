@@ -14,7 +14,8 @@ class FormNomAsso extends StatelessWidget {
       children: [
         Center(child: FormulaireAsso()),
       ],
-    ));
+      ),
+    );
   }
 }
 

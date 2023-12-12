@@ -20,6 +20,8 @@ class UserCreatedState extends UserState {
   UserCreatedState({required this.statusCode});
 }
 
+class UserRegisterState extends UserState {}
+
 class UserDisconnectedState extends UserState {
   final String statusCode;
 

@@ -4,15 +4,23 @@ import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../repositories/api/user_repository.dart';
+import '../../views/common/authentification/repository/auth_repository.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;
+  final AuthRepository _authRepository = AuthRepository();
 
-  UserCubit({required UserRepository userRepository})
+  UserCubit(
+      {required UserRepository userRepository,
+      required AuthRepository authRepository})
       : _userRepository = userRepository,
         super(UserInitialState());
 
   void formLogin() {
+    emit(UserInitialState());
+  }
+
+  void formRegister() {
     emit(UserInitialState());
   }
 
@@ -24,11 +32,26 @@ class UserCubit extends Cubit<UserState> {
     emit(UserConnexionState(userModel: userModel));
   }
 
-  Future<void> createUser(RulesType rulesType) async {
+  Future<void> createUser(String email, String password) async {
     try {
       emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 3));
+      await _authRepository.createAccount(email, password);
+      emit(UserRegisterState());
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> createUserType(
+      RulesType rulesType, String email, String password) async {
+    try {
+      emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 2));
+      await _authRepository.authAdressPassword(email, password);
+
       final users = await _userRepository.createUser(rulesType);
-      emit(UserCreatedState(statusCode: users));
+      emit(UserCreatedState(statusCode: users.toString()));
     } catch (e) {
       emit(UserErrorState(message: e.toString()));
     }

@@ -20,35 +20,33 @@ class AuthRepository {
 
   Future<void>? deleteAccount() => _auth.currentUser?.delete();
 
-  Future<String?> signInWithGoogle() async {
+  signInWithGoogle() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
     try {
-      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-      if (googleUser == null) {
-        print("La connexion Google a été annulée par l'utilisateur.");
-        return null;
-      }
+      if (googleUser != null) {
+        GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+        AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
-      UserCredential userInfo =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      String? token = await userInfo.user?.getIdToken(true);
+        UserCredential userInfo =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        String? token = await userInfo.user?.getIdToken(true);
 
-      if (token != null) {
-        globals.id = token;
-        return token; // Retourne le token si la connexion est réussie
-      } else {
-        print("Le token est null après la connexion Google.");
-        return null;
+        if (token != null) {
+          globals.id = token;
+          return token; // Retourne le token si la connexion est réussie
+        } else {
+          print("Le token est null après la connexion Google.");
+          return null;
+        }
       }
     } catch (e) {
-      throw Exception(
-          "Erreur de connexion Google : $e"); // Lance une exception en cas d'erreur
+      throw Exception("Connexion annulée ou échouée.");
     }
   }
 

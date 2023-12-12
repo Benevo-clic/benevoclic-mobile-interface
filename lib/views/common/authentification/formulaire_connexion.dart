@@ -6,7 +6,6 @@ import 'package:namer_app/views/common/authentification/widgets/customTextFormFi
 
 import '../../../cubit/user/user_cubit.dart';
 import '../../../error/error_message.dart';
-import '../../../util/email_verification.dart';
 import '../../navigation_bar.dart';
 import 'repository/auth_repository.dart';
 
@@ -34,29 +33,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       final cubit = context.read<UserCubit>();
       cubit.formLogin();
     });
-  }
-
-  String? verifEmail(String value) {
-    var email = EmailVerification(value);
-    if (email.security()) {
-      setState(() {
-        _email = value;
-      });
-      return _email;
-    } else {
-      return email.message;
-    }
-  }
-
-  String verifPassword(String value) {
-    if (value.isEmpty || value == null) {
-      return "Veuillez rentrer un mot de passe";
-    } else {
-      setState(() {
-        _password = value;
-      });
-      return _password;
-    }
   }
 
   Future<void> _submit() async {
@@ -134,7 +110,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                             if (value == null ||
                                 !regexp.hasMatch(value.toString())) {
-                              return "Veuillez rentrer un email valide";
+                              return "Votre email n'est pas valide";
                             }
                             return null;
                           },
@@ -154,7 +130,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                             var regex = RegExp(r"^.{8,}$");
                             if (value == null ||
                                 !regex.hasMatch(value.toString())) {
-                              return "Le mot de passe doit contenir au moins 8 caractères";
+                              return "Votre password n'est pas valide";
                             }
                             return null;
                           },

@@ -22,7 +22,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final cubit = context.read<UserCubit>();
       UserModel user = await cubit.getUser();
       cubit.changeState(UserConnexionState(userModel: user));

@@ -33,7 +33,7 @@ class _PublishItem2 extends State<PublishItem2> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime.now(),
                 lastDate: DateTime.now().add(Duration(days: 90)));
-            controller.text = formatDate(pickDate!);
+            controller.text = formatDate(pickDate);
             setState(() {
               date = pickDate;
             });

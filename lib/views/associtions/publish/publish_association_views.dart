@@ -86,8 +86,11 @@ class PublishAnnouncement extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-
-            Button(text: "Publier", color: Colors.black, fct:(){}, backgroundColor: Colors.grey),
+            Button(
+                text: "Publier",
+                color: Colors.black,
+                fct: () {},
+                backgroundColor: Colors.grey),
             SizedBox(
               height: 15,
             ),

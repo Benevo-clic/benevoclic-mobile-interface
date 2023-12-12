@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/filter/enum_tri.dart';
+import 'package:namer_app/views/common/filter/widget/date_selection.dart';
 import 'package:namer_app/views/common/filter/widget/radio_section.dart';
 import 'package:namer_app/views/common/filter/widget/slider_heures.dart';
 
@@ -14,6 +15,8 @@ class FilterView extends StatefulWidget {
 class _FilterView extends State<FilterView> {
   Tri groupTri = Tri.recent;
   double hour = 1;
+  TextEditingController controller = TextEditingController();
+  DateTime date = DateTime.now();
 
   changeHour(hourParam) {
     setState(() {
@@ -24,6 +27,12 @@ class _FilterView extends State<FilterView> {
   changeFilter(filter) {
     setState(() {
       groupTri = filter;
+    });
+  }
+
+  changeDate(dateParam) {
+    setState(() {
+      date = dateParam;
     });
   }
 
@@ -55,10 +64,16 @@ class _FilterView extends State<FilterView> {
               fct: (value) => changeHour(value),
               currentValue: hour,
             ),
-          ),SizedBox(
+          ),
+          SizedBox(
             height: 15,
           ),
-          
+          FilterItem(
+              title: "Date de la mission",
+              content: DateSelection(
+                controller: controller,
+                fct: changeDate,
+              ))
         ],
       ),
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/util/email_verification.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
-import 'package:namer_app/views/inscription.dart';
+import 'package:namer_app/views/common/authentification/signup/inscription.dart';
 
 class Inscription extends StatelessWidget {
   @override

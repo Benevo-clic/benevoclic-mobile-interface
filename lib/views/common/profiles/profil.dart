@@ -3,7 +3,7 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 
-import '../authentification/login.dart';
+import '../authentification/login/widgets/login.dart';
 import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
 

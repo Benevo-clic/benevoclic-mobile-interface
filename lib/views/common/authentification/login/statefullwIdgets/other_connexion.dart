@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/views/common/authentification/cubit/otherAuth/other_auth_cubit.dart';
-import 'package:namer_app/views/common/authentification/login.dart';
 
-import '../../../type/rules_type.dart';
-import '../../navigation_bar.dart';
-import 'cubit/otherAuth/other_auth_state.dart';
+import '../../../../../type/rules_type.dart';
+import '../../../../navigation_bar.dart';
+import '../../cubit/otherAuth/other_auth_state.dart';
+import '../widgets/login.dart';
 
 class OtherConnection extends StatefulWidget {
   final BuildContext context;

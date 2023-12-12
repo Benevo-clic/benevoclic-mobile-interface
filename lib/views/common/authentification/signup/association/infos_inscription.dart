@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/widgets/formulaire_nom_asso.dart';
+import 'package:namer_app/views/common/authentification/signup/association/formulaire_nom_asso.dart';
 
 class InfosInscription extends StatelessWidget {
   @override

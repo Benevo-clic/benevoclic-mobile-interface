@@ -5,11 +5,11 @@ import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
 
-import '../../../util/color.dart';
-import '../../inscription_page.dart';
-import '../../navigation_no_indentify.dart';
-import 'formulaire_connexion.dart';
-import 'other_connexion.dart';
+import '../../../../../util/color.dart';
+import '../../../../navigation_no_indentify.dart';
+import '../../signup/inscription_page.dart';
+import '../statefullwIdgets/formulaire_connexion.dart';
+import '../statefullwIdgets/other_connexion.dart';
 
 class LoginPage extends StatelessWidget {
   final RulesType title;

@@ -11,7 +11,9 @@ class FormNomAsso extends StatelessWidget {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [Center(child: FormulaireAsso())],
+      children: [
+        Center(child: FormulaireAsso()),
+      ],
     ));
   }
 }

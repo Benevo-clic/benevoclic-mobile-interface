@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
-import 'package:namer_app/views/common/authentification/widgets/customTextFormField_widget.dart';
+import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
-import '../../../cubit/user/user_cubit.dart';
-import '../../../error/error_message.dart';
-import '../../navigation_bar.dart';
-import 'repository/auth_repository.dart';
+import '../../../../../cubit/user/user_cubit.dart';
+import '../../../../../error/error_message.dart';
+import '../../../../navigation_bar.dart';
+import '../../repository/auth_repository.dart';
 
 class FormulaireLogin extends StatefulWidget {
   const FormulaireLogin({super.key});

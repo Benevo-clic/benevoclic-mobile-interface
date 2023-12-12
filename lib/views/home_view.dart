@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/widgets/background.dart';
 
-import 'common/authentification/authentification_common_view.dart';
 import 'common/authentification/cubit/typeAuth/auth_type_cubit.dart';
+import 'common/authentification/login/widgets/authentification_common_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});

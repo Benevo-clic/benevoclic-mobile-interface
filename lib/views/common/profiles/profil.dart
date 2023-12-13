@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 import '../../../repositories/firebase/auth.dart';
@@ -23,7 +24,7 @@ class ProfilPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ModifProfil()),
+                    MaterialPageRoute(builder: (context) => ParametersView()),
                   );
                 },
               )),

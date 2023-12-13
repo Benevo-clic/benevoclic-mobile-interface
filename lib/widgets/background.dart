@@ -10,9 +10,8 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.cover)),
+            image:
+                DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
         child: widget);
   }
 }

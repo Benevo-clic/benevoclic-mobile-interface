@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 
 import '../../../cubit/user/user_cubit.dart';
+import '../../../type/rules_type.dart';
 import '../authentification/login/widgets/login.dart';
 import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
@@ -28,7 +31,7 @@ class ProfilPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ModifProfil()),
+                    MaterialPageRoute(builder: (context) => ParametersView()),
                   );
                 },
                 ),

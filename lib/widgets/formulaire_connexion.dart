@@ -5,7 +5,6 @@ import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/error/error_message.dart';
 import 'package:namer_app/util/email_verification.dart';
 
-
 class FormulaireLogin extends StatefulWidget {
   const FormulaireLogin({super.key});
 

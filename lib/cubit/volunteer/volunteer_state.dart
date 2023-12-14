@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/volunteer_model.dart';
+
 @immutable
 abstract class VolunteerState {}
 
@@ -8,9 +10,9 @@ class VolunteerInitialState extends VolunteerState {}
 class VolunteerLoadingState extends VolunteerState {}
 
 class VolunteerCreatedState extends VolunteerState {
-  final String statusCode;
+  final Volunteer volunteerModel;
 
-  VolunteerCreatedState({required this.statusCode});
+  VolunteerCreatedState({required this.volunteerModel});
 }
 
 class VolunteerErrorState extends VolunteerState {
@@ -24,12 +26,14 @@ class VolunteerInfoState extends VolunteerState {
   final String firstName;
   final String birthDate;
   final String phoneNumber;
+  final String? bio;
 
   VolunteerInfoState({
     required this.lastName,
     required this.firstName,
     required this.birthDate,
     required this.phoneNumber,
+    this.bio,
   });
 }
 

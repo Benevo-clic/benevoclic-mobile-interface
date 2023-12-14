@@ -102,6 +102,7 @@ class _SignupFormState extends State<SignupForm> {
                           icon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                           obscureText: false,
+                          prefixIcons: true,
                           maxLine: 1,
                           onSaved: (value) {
                             _email = value.toString();
@@ -125,6 +126,7 @@ class _SignupFormState extends State<SignupForm> {
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
                           maxLine: 1,
+                          prefixIcons: true,
                           onSaved: (value) {
                             _password = value.toString();
                           },
@@ -149,6 +151,7 @@ class _SignupFormState extends State<SignupForm> {
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
                           maxLine: 1,
+                          prefixIcons: true,
                           onSaved: (value) {
                             _confirmPassword = value.toString();
                           },

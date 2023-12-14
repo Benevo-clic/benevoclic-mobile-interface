@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 
+import '../../models/volunteer_model.dart';
 import '../../repositories/api/volunteer_repository.dart';
 
 class VolunteerCubit extends Cubit<VolunteerState> {
@@ -16,5 +17,16 @@ class VolunteerCubit extends Cubit<VolunteerState> {
 
   void changeState(VolunteerState state) {
     emit(state);
+  }
+
+  Future<void> createVolunteer(Volunteer volunteer) async {
+    emit(VolunteerLoadingState());
+    try {
+      final result = await _volunteerRepository.createVolunteer(volunteer);
+      print("result: " + result.toString());
+      emit(VolunteerCreatedState(volunteerModel: volunteer));
+    } catch (e) {
+      emit(VolunteerErrorState(message: e.toString()));
+    }
   }
 }

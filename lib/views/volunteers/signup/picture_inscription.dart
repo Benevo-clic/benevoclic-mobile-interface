@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/views/volunteers/signup/picture_inscription.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../models/volunteer_model.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
-class BioInscription extends StatefulWidget {
+class PictureInscription extends StatefulWidget {
   final String firstName;
   final String lastName;
   final String birthDate;
   final String phoneNumber;
+  final String bio;
 
-  const BioInscription(
+  const PictureInscription(
       {super.key,
       required this.firstName,
       required this.lastName,
       required this.birthDate,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      required this.bio});
 
   @override
-  State<BioInscription> createState() => _BioInscriptionState();
+  State<PictureInscription> createState() => _PictureInscriptionState();
 }
 
-class _BioInscriptionState extends State<BioInscription> {
-  late String bio = "";
+class _PictureInscriptionState extends State<PictureInscription> {
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _descriptionController = TextEditingController();
@@ -58,22 +59,7 @@ class _BioInscriptionState extends State<BioInscription> {
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {
-      if (state is VolunteerInfoState) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PictureInscription(
-                firstName: widget.firstName,
-                lastName: widget.lastName,
-                birthDate: widget.birthDate,
-                phoneNumber: widget.phoneNumber,
-                bio: bio,
-              ),
-            ),
-          ); // ici mettre la page d'inscription
-        });
-      }
+      if (state is VolunteerInfoState) {}
 
       if (state is VolunteerErrorState) {
         final snackBar = SnackBar(
@@ -130,26 +116,30 @@ class _BioInscriptionState extends State<BioInscription> {
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Text(
-                          'Décrivez-vous en quelques mots pour que les autres utilisateurs puissent vous connaître',
+                          'Définissez votre photo de profil',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * .04,
                             color: Colors.black87,
                           ),
                         ),
                       ),
-                      _infoVolunteer(context, state),
+                      // _infoVolunteer(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
                             final cubit = context.read<VolunteerCubit>();
-                            cubit.changeState(VolunteerInfoState(
-                              birthDate: widget.birthDate,
+                            Volunteer volunteer = Volunteer(
                               firstName: widget.firstName,
                               lastName: widget.lastName,
-                              phoneNumber: widget.phoneNumber,
-                              bio: null,
-                            ));
+                              phone: widget.phoneNumber,
+                              birthDayDate: widget.birthDate,
+                              imageProfile: '',
+                              bio: widget.bio,
+                              email: '',
+                            );
+                            BlocProvider.of<VolunteerCubit>(context)
+                                .createVolunteer(volunteer);
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -178,19 +168,7 @@ class _BioInscriptionState extends State<BioInscription> {
                         width: MediaQuery.sizeOf(context).width * 0.60,
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              final cubit = context.read<VolunteerCubit>();
-                              cubit.changeState(VolunteerInfoState(
-                                birthDate: widget.birthDate,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
-                                phoneNumber: widget.phoneNumber,
-                                bio: bio,
-                              ));
-                            }
-                          },
+                          onPressed: () async {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
                             shape: RoundedRectangleBorder(
@@ -257,15 +235,10 @@ class _BioInscriptionState extends State<BioInscription> {
                           hintText:
                               "Entrez une description de vous jusqu'à 50 mots (facultatif)",
                           keyboardType: TextInputType.multiline,
-                          maxLine: 8,
+                          maxLine: 9,
                           obscureText: false,
                           prefixIcons: false,
-                          onSaved: (value) {
-                            _descriptionController.text = value.toString();
-                            setState(() {
-                              bio = _descriptionController.text;
-                            });
-                          },
+                          onSaved: (value) {},
                           validator: (value) {
                             if (value != null && !_isWordCountValid(value)) {
                               return "votre description ne doit pas dépasser 50 mots";

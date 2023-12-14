@@ -233,6 +233,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         icon: Icons.abc,
                         keyboardType: TextInputType.name,
                         obscureText: false,
+                        prefixIcons: true,
                         onSaved: (value) {
                           _lastName = value.toString();
                         },
@@ -255,6 +256,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         icon: Icons.abc,
                         keyboardType: TextInputType.name,
                         obscureText: false,
+                        prefixIcons: true,
                         maxLine: 1,
                         onSaved: (value) {
                           _firstName = value.toString();
@@ -278,6 +280,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         hintText: "Date de naissance",
                         icon: Icons.date_range,
                         obscureText: false,
+                        prefixIcons: true,
                         maxLine: 1,
                         keyboardType: TextInputType.none,
                         validator: (value) {

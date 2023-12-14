@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final void Function()? datepicker;
   final TextEditingController? controller;
   final int? maxLine;
+  final bool? prefixIcons;
 
   CustomTextFormField({
     required this.hintText,
@@ -21,6 +22,7 @@ class CustomTextFormField extends StatelessWidget {
     this.datepicker,
     this.controller,
     this.maxLine,
+    this.prefixIcons,
   });
 
   @override
@@ -37,10 +39,12 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           fillColor: Colors.white.withOpacity(0.5),
           filled: true,
-          prefixIcon: Icon(
-            icon,
-            color: Colors.black54,
-          ),
+          prefixIcon: prefixIcons == true
+              ? Icon(
+                  icon,
+                  color: Colors.black54,
+                )
+              : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide.none,

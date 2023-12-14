@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/util/showDialog.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/user/user_state.dart';
-import '../../../error/error_message.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import 'inscription.dart';
 
@@ -19,12 +20,12 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   late String _email;
   late String _password;
+  late String _confirmPassword;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
-    _formKey.currentState!.dispose();
   }
 
   @override
@@ -39,14 +40,14 @@ class _SignupFormState extends State<SignupForm> {
   Future<void> _submit() async {
     _formKey.currentState!.save();
     try {
-      BlocProvider.of<UserCubit>(context).createUser(_email, _password);
+      if (_password == _confirmPassword) {
+        BlocProvider.of<UserCubit>(context).createUser(_email, _password);
+      } else {
+        ShowDialog.show(
+            context, "Les mots de passe ne sont pas identiques", "retour");
+      }
     } on FirebaseAuthException catch (_) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return ErrorMessage(
-                type: "inscription incorrect", message: "retour");
-          });
+      ShowDialog.show(context, "inscription incorrect", "retour");
     }
   }
 
@@ -54,14 +55,8 @@ class _SignupFormState extends State<SignupForm> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is UserErrorState) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ErrorMessage(
-                type: "Un problème est survenu lors de votre inscription",
-                message: "retour");
-          },
-        );
+        ShowDialog.show(context,
+            "Un problème est survenu lors de votre inscription", "retour");
       }
       if (state is UserEmailVerificationState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -107,6 +102,7 @@ class _SignupFormState extends State<SignupForm> {
                           icon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                           obscureText: false,
+                          maxLine: 1,
                           onSaved: (value) {
                             _email = value.toString();
                           },
@@ -128,14 +124,18 @@ class _SignupFormState extends State<SignupForm> {
                           icon: Icons.lock,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
+                          maxLine: 1,
                           onSaved: (value) {
                             _password = value.toString();
                           },
                           validator: (value) {
                             var regex = RegExp(r"^.{8,}$");
-                            if (value == null ||
-                                !regex.hasMatch(value.toString())) {
+                            if (value == null) {
                               return "Votre password n'est pas valide";
+                            } else if (value.toString().contains(" ")) {
+                              return "Votre password ne doit pas contenir d'espace";
+                            } else if (!regex.hasMatch(value.toString())) {
+                              return "Votre password doit contenir au moins 8 caractères";
                             }
                             return null;
                           },
@@ -148,8 +148,9 @@ class _SignupFormState extends State<SignupForm> {
                           icon: Icons.lock,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
+                          maxLine: 1,
                           onSaved: (value) {
-                            _password = value.toString();
+                            _confirmPassword = value.toString();
                           },
                           validator: (value) {
                             var regex = RegExp(r"^.{8,}$");
@@ -167,6 +168,33 @@ class _SignupFormState extends State<SignupForm> {
                 SizedBox.fromSize(
                   size: const Size(0, 15),
                 ),
+                Padding(
+                    padding: const EdgeInsets.only(
+                        left: 33, right: 10, bottom: 10, top: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * .03,
+                          color: Colors.black87,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "En vous inscrivant, vous acceptez les "),
+                          TextSpan(
+                            text: "conditions générales d'utilisation",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                ShowDialog.show(context,
+                                    "cette fonctionalité arrive !!", "retour");
+                              },
+                          ),
+                        ],
+                      ),
+                    )),
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.60,
                   padding: EdgeInsets.only(),
@@ -186,14 +214,8 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 TextButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ErrorMessage(
-                            type: "cette fonctionalité arrive !!",
-                            message: "retour");
-                      },
-                    );
+                    ShowDialog.show(
+                        context, "cette fonctionalité arrive !!", "retour");
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

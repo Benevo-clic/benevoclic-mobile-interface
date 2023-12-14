@@ -49,7 +49,9 @@ class SignupVolunteer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AuthAppBar(),
+                      AuthAppBar(
+                        contexts: context,
+                      ),
                       Divider(
                         color: Colors.grey.shade400,
                         endIndent: MediaQuery.of(context).size.height * .04,

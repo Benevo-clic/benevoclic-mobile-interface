@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
       if (state is UserErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(state.message),
+            content: Text("Nous n'avons pas pu vous connecter"),
           ),
         );
       }
@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AuthAppBar(),
+                      AuthAppBar(contexts: context),
                       Divider(
                         color: Colors.grey.shade400,
                         endIndent: MediaQuery.of(context).size.height * .04,

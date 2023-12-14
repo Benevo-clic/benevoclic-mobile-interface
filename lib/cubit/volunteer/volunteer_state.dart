@@ -19,6 +19,20 @@ class VolunteerErrorState extends VolunteerState {
   VolunteerErrorState({required this.message});
 }
 
+class VolunteerInfoState extends VolunteerState {
+  final String lastName;
+  final String firstName;
+  final String birthDate;
+  final String phoneNumber;
+
+  VolunteerInfoState({
+    required this.lastName,
+    required this.firstName,
+    required this.birthDate,
+    required this.phoneNumber,
+  });
+}
+
 class VolunteerUpdateState extends VolunteerState {
   final String statusCode;
 

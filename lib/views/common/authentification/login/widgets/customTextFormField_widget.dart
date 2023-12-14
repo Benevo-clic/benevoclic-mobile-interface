@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String hintText;
-  final IconData icon;
-  final TextInputType keyboardType;
+  final IconData? icon;
+  final TextInputType? keyboardType;
   final bool obscureText;
-  final String? Function(String?) validator;
-  final void Function(String?) onSaved;
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  final void Function()? datepicker;
+  final TextEditingController? controller;
+  final int? maxLine;
 
   CustomTextFormField({
     required this.hintText,
-    required this.icon,
-    required this.keyboardType,
+    this.icon,
+    this.keyboardType,
     required this.obscureText,
     required this.validator,
-    required this.onSaved,
+    this.onSaved,
+    this.datepicker,
+    this.controller,
+    this.maxLine,
   });
 
   @override
@@ -22,8 +28,10 @@ class CustomTextFormField extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       child: TextFormField(
+        controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
+        maxLines: maxLine,
         onSaved: onSaved,
         validator: validator,
         decoration: InputDecoration(
@@ -40,10 +48,11 @@ class CustomTextFormField extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.black54),
           errorStyle: TextStyle(
-            color: Colors.blue,
+            color: Colors.red[300],
             overflow: TextOverflow.visible,
           ),
         ),
+        onTap: datepicker,
       ),
     );
   }

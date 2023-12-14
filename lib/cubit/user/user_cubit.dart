@@ -46,7 +46,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> sendEmailVerification() async {
     try {
       emit(UserLoadingState());
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       await _authRepository.sendEmailVerification();
       emit(UserEmailVerificationState());
     } catch (e) {
@@ -58,7 +58,7 @@ class UserCubit extends Cubit<UserState> {
       RulesType rulesType, String email, String password) async {
     try {
       emit(UserLoadingState());
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       await _authRepository.authAdressPassword(email, password);
 
       final users = await _userRepository.createUser(rulesType);
@@ -76,7 +76,7 @@ class UserCubit extends Cubit<UserState> {
   Future<void> connexion() async {
     try {
       emit(UserLoadingState());
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       final users = await _userRepository.connexion();
       emit(ResponseUserState(user: users));

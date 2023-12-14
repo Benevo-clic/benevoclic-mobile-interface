@@ -5,7 +5,7 @@ import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
-import '../../../../../error/error_message.dart';
+import '../../../../../util/showDialog.dart';
 import '../../../../navigation_bar.dart';
 import '../../repository/auth_repository.dart';
 
@@ -44,25 +44,13 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
             .authAdressPassword(_email.toString(), _password.toString());
         BlocProvider.of<UserCubit>(context).connexion();
     } on FirebaseAuthException catch (_) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return ErrorMessage(type: "login incorrect", message: "retour");
-          },
-        );
-      }
+      ShowDialog.show(context, "login incorrect", "retour");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is UserErrorState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.message),
-          ),
-        );
-      }
       if (state is ResponseUserState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(context,
@@ -101,6 +89,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           icon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                           obscureText: false,
+                          maxLine: 1,
                           onSaved: (value) {
                             _email = value.toString();
                           },
@@ -122,6 +111,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           icon: Icons.lock,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
+                          maxLine: 1,
                           onSaved: (value) {
                             _password = value.toString();
                           },
@@ -140,14 +130,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                 ),
                 TextButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ErrorMessage(
-                            type: "cette fonctionalité arrive !!",
-                            message: "retour");
-                      },
-                    );
+                    ShowDialog.show(
+                        context, "cette fonctionalité arrive !!", "retour");
                   },
                   child: Text(
                     "Mot de passe oublié ?",
@@ -180,7 +164,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
             ),
           ),
           if (state is UserInitialState) _buildInitialInput(),
-          if (state is UserErrorState) _buildError(),
         ],
       );
     });

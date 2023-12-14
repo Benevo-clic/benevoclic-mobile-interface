@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../views/navigation_no_indentify.dart';
 
 class AuthAppBar extends StatelessWidget {
-  const AuthAppBar({super.key});
+  const AuthAppBar({super.key, required this.contexts});
+
+  final BuildContext contexts;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(contexts).size.width,
         height: 140,
         child: Padding(
           padding: const EdgeInsets.only(top: 30),
@@ -21,12 +23,12 @@ class AuthAppBar extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10),
                       child: IconButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(contexts);
                         },
                         icon: Icon(
                           Icons.arrow_circle_left_sharp,
                           color: Color.fromRGBO(170, 77, 79, 1),
-                          size: MediaQuery.of(context).size.height * .05,
+                          size: MediaQuery.of(contexts).size.height * .05,
                         ),
                       ),
                     )),
@@ -44,14 +46,14 @@ class AuthAppBar extends StatelessWidget {
                       child: IconButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
+                              contexts,
                               MaterialPageRoute(
-                                  builder: (context) =>
+                                  builder: (contexts) =>
                                       NavigationNoIndentify()));
                         },
                         icon: Icon(Icons.cancel,
                             color: Color.fromRGBO(170, 77, 79, 1),
-                            size: MediaQuery.of(context).size.height * .05),
+                            size: MediaQuery.of(contexts).size.height * .05),
                       ),
                     ))
               ],

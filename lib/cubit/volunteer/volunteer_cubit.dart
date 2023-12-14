@@ -13,4 +13,8 @@ class VolunteerCubit extends Cubit<VolunteerState> {
   void initState() {
     emit(VolunteerInitialState());
   }
+
+  void changeState(VolunteerState state) {
+    emit(state);
+  }
 }

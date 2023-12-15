@@ -100,7 +100,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Container(

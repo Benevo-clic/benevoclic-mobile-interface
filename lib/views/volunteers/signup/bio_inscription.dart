@@ -103,7 +103,7 @@ class _BioInscriptionState extends State<BioInscription> {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Container(

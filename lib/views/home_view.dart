@@ -20,18 +20,20 @@ class HomeView extends StatelessWidget {
     return Background(
       image: "assets/background1.png",
       widget: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             reverse: true,
             child: SafeArea(
+            child: Container(
+              alignment: Alignment.center,
               child: Column(
                 children: [
                   SizedBox(height: 100),
                   Image.asset("assets/logo.png",
                       height: 150, alignment: Alignment.center),
                   SizedBox(height: 80),
-                  Text("Se connecter",
+                  Text("Je suis",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 15),
@@ -48,16 +50,16 @@ class HomeView extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  _signupSection(),
                 ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
   void _navigateToAuthentification(BuildContext context) {
-    print("navigate to authentification");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => AuthentificationView()));
@@ -85,18 +87,4 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _signupSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("Pas de compte ?"),
-        TextButton(
-          onPressed: () {},
-          child: Text("Inscris toi !",
-              style: TextStyle(
-                  decoration: TextDecoration.underline, color: Colors.black)),
-        )
-      ],
-    );
-  }
 }

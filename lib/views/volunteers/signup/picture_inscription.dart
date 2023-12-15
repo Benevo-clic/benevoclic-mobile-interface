@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../models/volunteer_model.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
 class PictureInscription extends StatefulWidget {
   final String firstName;
@@ -129,7 +129,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                           ),
                         ),
                       ),
-                      // _infoVolunteer(context, state),
+                      _pictureVolunteer(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
@@ -164,7 +164,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
                         child: Text(
-                            "Votre nom d’utilisateur sera visible sur votre profil. Vous pourrez le modifier quand vous le souhaitez.",
+                            "Votre photo de profile sera visible par les associations. Vous pourrez le modifier quand vous le souhaitez.",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .03,
                               color: Colors.black87,
@@ -183,7 +183,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             elevation: 5,
                           ),
                           child: Text(
-                            "Continuer",
+                            "Terminer",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .04,
                               color: Colors.black,
@@ -205,13 +205,15 @@ class _PictureInscriptionState extends State<PictureInscription> {
     });
   }
 
-  Widget _infoVolunteer(BuildContext context, state) {
+  Widget _pictureVolunteer(BuildContext context, state) {
+    double padding = MediaQuery.of(context).size.height * .009 / 4;
+
     return Stack(
       children: [
         SizedBox(
           height: 20,
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * .9,
           height: MediaQuery.of(context).size.height * .35,
           child: Card(
@@ -222,44 +224,9 @@ class _PictureInscriptionState extends State<PictureInscription> {
                 borderRadius: BorderRadius.circular(25),
                 side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
             color: Colors.white.withOpacity(0.8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _descriptionController,
-                          hintText:
-                              "Entrez une description de vous jusqu'à 50 mots (facultatif)",
-                          keyboardType: TextInputType.multiline,
-                          maxLine: 9,
-                          obscureText: false,
-                          prefixIcons: false,
-                          onSaved: (value) {},
-                          validator: (value) {
-                            if (value != null && !_isWordCountValid(value)) {
-                              return "votre description ne doit pas dépasser 50 mots";
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox.fromSize(
-                  size: const Size(0, 15),
-                ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.all(padding),
+              child: MyImagePicker(),
             ),
           ),
         )

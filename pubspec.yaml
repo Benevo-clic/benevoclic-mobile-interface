@@ -22,13 +22,16 @@ dependencies:
   flutter_map:
   flutter_secure_storage:
   font_awesome_flutter:
-  google_sign_in:
+  google_sign_in: 6.2.1
   mockito:
   provider:
   intl:
   json_annotation: ^4.8.1
   bloc:
   flutter_bloc:
+  image_picker:
+  image_cropper:
+  permission_handler:
 
 
 dependency_overrides:

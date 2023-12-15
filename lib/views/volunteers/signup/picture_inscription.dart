@@ -13,14 +13,20 @@ class PictureInscription extends StatefulWidget {
   final String birthDate;
   final String phoneNumber;
   final String bio;
+  final String address;
+  final String city;
+  final String zipcode;
 
-  const PictureInscription(
+  PictureInscription(
       {super.key,
       required this.firstName,
       required this.lastName,
       required this.birthDate,
       required this.phoneNumber,
-      required this.bio});
+      required this.bio,
+      required this.address,
+      required this.city,
+      required this.zipcode});
 
   @override
   State<PictureInscription> createState() => _PictureInscriptionState();

@@ -12,13 +12,19 @@ class BioInscription extends StatefulWidget {
   final String lastName;
   final String birthDate;
   final String phoneNumber;
+  final String zipCode;
+  final String address;
+  final String city;
 
   const BioInscription(
       {super.key,
       required this.firstName,
       required this.lastName,
       required this.birthDate,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      required this.zipCode,
+      required this.address,
+      required this.city});
 
   @override
   State<BioInscription> createState() => _BioInscriptionState();
@@ -58,6 +64,8 @@ class _BioInscriptionState extends State<BioInscription> {
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {
+      print("state $state");
+
       if (state is VolunteerInfoState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
@@ -68,6 +76,9 @@ class _BioInscriptionState extends State<BioInscription> {
                 lastName: widget.lastName,
                 birthDate: widget.birthDate,
                 phoneNumber: widget.phoneNumber,
+                zipcode: widget.zipCode,
+                address: widget.address,
+                city: widget.city,
                 bio: bio,
               ),
             ),
@@ -148,8 +159,12 @@ class _BioInscriptionState extends State<BioInscription> {
                               firstName: widget.firstName,
                               lastName: widget.lastName,
                               phoneNumber: widget.phoneNumber,
-                              bio: null,
-                            ));
+                                address: widget.address,
+                                city: widget.city,
+                                postalCode: widget.zipCode,
+                                bio: bio,
+                              ),
+                            );
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -188,7 +203,8 @@ class _BioInscriptionState extends State<BioInscription> {
                                 lastName: widget.lastName,
                                 phoneNumber: widget.phoneNumber,
                                 bio: bio,
-                              ));
+                                ),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -241,7 +257,8 @@ class _BioInscriptionState extends State<BioInscription> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 20, right: 20, bottom: 10),
                   child: Form(
                     key: _formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -257,7 +274,8 @@ class _BioInscriptionState extends State<BioInscription> {
                           hintText:
                               "Entrez une description de vous jusqu'à 50 mots (facultatif)",
                           keyboardType: TextInputType.multiline,
-                          maxLine: 8,
+                          maxLine:
+                              MediaQuery.of(context).size.height * 0.44 ~/ 50,
                           obscureText: false,
                           prefixIcons: false,
                           onSaved: (value) {

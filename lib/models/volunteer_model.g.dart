@@ -9,21 +9,20 @@ part of 'volunteer_model.dart';
 Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String?,
       phone: json['phone'] as String,
-      address: json['address'] as String,
-      city: json['city'] as String,
-      country: json['country'] as String,
-      postalCode: json['postalCode'] as String,
+      address: json['address'] as String?,
+      city: json['city'] as String?,
+      postalCode: json['postalCode'] as String?,
       birthDayDate: json['birthDayDate'] as String,
       imageProfile: json['imageProfile'] as String,
       bio: json['bio'] as String,
-      verified: json['verified'] as bool,
-      myAssociations: (json['myAssociations'] as List<dynamic>)
-          .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+      verified: json['verified'] as bool?,
+      myAssociations: (json['myAssociations'] as List<dynamic>?)
+          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      myAssociationsWaiting: (json['myAssociationsWaiting'] as List<dynamic>)
-          .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+      myAssociationsWaiting: (json['myAssociationsWaiting'] as List<dynamic>?)
+          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -34,7 +33,6 @@ Map<String, dynamic> _$VolunteerToJson(Volunteer instance) => <String, dynamic>{
       'phone': instance.phone,
       'address': instance.address,
       'city': instance.city,
-      'country': instance.country,
       'postalCode': instance.postalCode,
       'birthDayDate': instance.birthDayDate,
       'imageProfile': instance.imageProfile,

@@ -26,6 +26,9 @@ class VolunteerInfoState extends VolunteerState {
   final String firstName;
   final String birthDate;
   final String phoneNumber;
+  final String? address;
+  final String? city;
+  final String? postalCode;
   final String? bio;
 
   VolunteerInfoState({
@@ -34,6 +37,9 @@ class VolunteerInfoState extends VolunteerState {
     required this.birthDate,
     required this.phoneNumber,
     this.bio,
+    this.address,
+    this.city,
+    this.postalCode,
   });
 }
 

@@ -26,9 +26,6 @@ class Volunteer{
   @JsonKey(name: 'city')
   late final String? city;
 
-  @JsonKey(name: 'country')
-  late final String? country;
-
   @JsonKey(name: 'postalCode')
   late final String? postalCode;
 
@@ -57,7 +54,6 @@ class Volunteer{
       required this.phone,
       this.address,
       this.city,
-      this.country,
       this.postalCode,
       required this.birthDayDate,
       required this.imageProfile,

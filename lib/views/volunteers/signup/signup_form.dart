@@ -222,14 +222,27 @@ class _SignupFormState extends State<SignupForm> {
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "Vous avez déjà un compte ?",
-                        style: TextStyle(color: Colors.black),
+                      Flexible(
+                        child: Text(
+                          "Vous avez déjà un compte ? ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: MediaQuery.of(context).size.width * .03,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      Text(
-                        " Connectez-vous",
-                        style: TextStyle(color: Colors.blue),
+                      Flexible(
+                        child: Text(
+                          "Connectez-vous",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: MediaQuery.of(context).size.width * .03,
+                              color: Colors.blueAccent),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),

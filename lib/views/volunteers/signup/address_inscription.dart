@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
-import 'address_inscription.dart';
+import 'bio_inscription.dart';
 
-class InfosInscription extends StatefulWidget {
-  const InfosInscription({super.key});
+class AddressInscription extends StatefulWidget {
+  final String firstName;
+  final String lastName;
+  final String birthDate;
+  final String phoneNumber;
+
+  const AddressInscription(
+      {super.key,
+      required this.firstName,
+      required this.lastName,
+      required this.birthDate,
+      required this.phoneNumber});
 
   @override
-  State<InfosInscription> createState() => _InfosInscriptionState();
+  State<AddressInscription> createState() => _AddressInscriptionState();
 }
 
-class _InfosInscriptionState extends State<InfosInscription> {
-  late String _lastName;
-  late String _firstName;
-  late String _phone;
-  late String _birthDayDate;
+class _AddressInscriptionState extends State<AddressInscription> {
+  String _city = "";
+  String _zipCode = "";
+  String _address = "";
+
   DateTime currentDate = DateTime.now();
   TextEditingController dateController = TextEditingController();
 
@@ -42,27 +51,6 @@ class _InfosInscriptionState extends State<InfosInscription> {
     cubit.initState();
   }
 
-  Future<String> _selectDate(BuildContext context) async {
-    DateTime lastAllowedDate =
-        DateTime(currentDate.year - 18, currentDate.month, currentDate.day);
-    DateTime initialDate =
-        lastAllowedDate.isBefore(currentDate) ? lastAllowedDate : currentDate;
-
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(1900),
-      lastDate: lastAllowedDate,
-    );
-
-    if (selectedDate != null) {
-      dateController.text =
-          DateFormat('dd/MM/yyyy').format(selectedDate.toLocal()).split(' ')[0];
-      return dateController.text;
-    }
-    return currentDate.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
@@ -72,11 +60,14 @@ class _InfosInscriptionState extends State<InfosInscription> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddressInscription(
-                firstName: _firstName,
-                lastName: _lastName,
-                birthDate: _birthDayDate,
-                phoneNumber: _phone,
+              builder: (context) => BioInscription(
+                firstName: widget.firstName,
+                lastName: widget.lastName,
+                birthDate: widget.birthDate,
+                phoneNumber: widget.phoneNumber,
+                address: _address,
+                city: _city,
+                zipCode: _zipCode,
               ),
             ),
           ); // ici mettre la page d'inscription
@@ -138,7 +129,7 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         height: 10,
                       ),
                       Text(
-                        'Renseignez vos informations personnelles',
+                        'Renseignez votre adresse',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.width * .04,
@@ -146,11 +137,36 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         ),
                       ),
                       _infoVolunteer(context, state),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: TextButton(
+                          onPressed: () {
+                            final cubit = context.read<VolunteerCubit>();
+                            cubit.changeState(VolunteerInfoState(
+                              birthDate: widget.birthDate,
+                              firstName: widget.firstName,
+                              lastName: widget.lastName,
+                              phoneNumber: widget.phoneNumber,
+                              address: _address,
+                              city: _city,
+                              postalCode: _zipCode,
+                            ));
+                          },
+                          child: Text(
+                            "Ingnorer cette étape",
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.width * .04,
+                              color: Colors.black87,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ),
                       Container(
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
                         child: Text(
-                            "Votre nom d’utilisateur sera visible sur votre profil. Vous pourrez le modifier quand vous le souhaitez.",
+                            "Votre adresse ne sera pas visible par les autres utilisateurs de l'application mais nous permettra de vous proposer des missions proches de chez vous",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .03,
                               color: Colors.black87,
@@ -165,10 +181,13 @@ class _InfosInscriptionState extends State<InfosInscription> {
                               _formKey.currentState!.save();
                               final cubit = context.read<VolunteerCubit>();
                               cubit.changeState(VolunteerInfoState(
-                                birthDate: _birthDayDate,
-                                firstName: _firstName,
-                                lastName: _lastName,
-                                phoneNumber: _phone,
+                                birthDate: widget.birthDate,
+                                firstName: widget.firstName,
+                                lastName: widget.lastName,
+                                phoneNumber: widget.phoneNumber,
+                                address: _address,
+                                city: _city,
+                                postalCode: _zipCode,
                               ));
                             }
                           },
@@ -202,7 +221,6 @@ class _InfosInscriptionState extends State<InfosInscription> {
     });
   }
 
-
   Widget _infoVolunteer(BuildContext context, state) {
     return Stack(
       children: [
@@ -229,45 +247,23 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         height: 10,
                       ),
                       CustomTextFormField(
-                        hintText: "Nom",
-                        icon: Icons.abc,
-                        keyboardType: TextInputType.name,
+                        hintText: "Address",
+                        icon: Icons.location_on,
+                        keyboardType: TextInputType.streetAddress,
                         obscureText: false,
                         prefixIcons: true,
                         onSaved: (value) {
-                          _lastName = value.toString();
+                          _address = value.toString();
                         },
                         validator: (value) {
+                          var regex = RegExp(
+                              r"^\d+\s[a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ'\- ]+$");
                           if (value == null || value.isEmpty) {
-                            return "Votre nom n'est pas valide";
-                          } else if (RegExp(r'^[0-9]').hasMatch(value)) {
-                            return "Le nom ne doit pas commencer par un chiffre";
-                          } else if (value.length > 30) {
-                            return "Le nom ne doit pas dépasser 50 caractères";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "Prénom",
-                        icon: Icons.abc,
-                        keyboardType: TextInputType.name,
-                        obscureText: false,
-                        prefixIcons: true,
-                        maxLine: 1,
-                        onSaved: (value) {
-                          _firstName = value.toString();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Votre prénom n'est pas valide";
-                          } else if (RegExp(r'^[0-9]').hasMatch(value)) {
-                            return "Le prénom ne doit pas commencer par un chiffre";
+                            return "le champ ne doit pas être vide";
+                          } else if (!regex.hasMatch(value)) {
+                            return "Votre adresse n'est pas valide";
                           } else if (value.length > 50) {
-                            return "Le prénom ne doit pas dépasser 50 caractères";
+                            return "Votre adresse ne doit pas dépasser 50 caractères";
                           }
                           return null;
                         },
@@ -276,54 +272,45 @@ class _InfosInscriptionState extends State<InfosInscription> {
                         height: 10,
                       ),
                       CustomTextFormField(
-                        controller: dateController,
-                        hintText: "Date de naissance",
-                        icon: Icons.date_range,
+                        hintText: "Code postal",
+                        keyboardType: TextInputType.number,
+                        obscureText: false,
+                        prefixIcons: false,
+                        maxLine: 1,
+                        onSaved: (value) {
+                          _zipCode = value.toString();
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "le champ ne doit pas être vide";
+                          } else if (!RegExp(r'^\d{5}$').hasMatch(value)) {
+                            return "Votre code postal n'est pas valide";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        hintText: "City",
+                        keyboardType: TextInputType.text,
+                        icon: Icons.location_city,
                         obscureText: false,
                         prefixIcons: true,
                         maxLine: 1,
-                        keyboardType: TextInputType.none,
+                        onSaved: (value) {
+                          _city = value.toString();
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Votre date de naissance n'est pas valide";
+                            return "le champ ne doit pas être vide";
                           }
                           return null;
-                        },
-                        datepicker: () {
-                          _selectDate(context).then((value) {
-                            if (value == currentDate.toString()) {
-                              return ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("vous devez au moins avoir 18 ans"),
-                                ),
-                              );
-                            }
-                            setState(() {
-                              _birthDayDate = value.toString();
-                            });
-                          });
                         },
                       ),
                       SizedBox(
                         height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "Téléphone",
-                        icon: Icons.phone,
-                        keyboardType: TextInputType.phone,
-                        obscureText: false,
-                        onSaved: (value) {
-                          _phone = value.toString();
-                        },
-                        validator: (value) {
-                          var regex = RegExp(r"^(0|\+33|0033)[1-9][0-9]{8}$");
-                          if (value == null ||
-                              !regex.hasMatch(value.toString())) {
-                            return "Votre numéro de téléphone n'est pas valide";
-                          }
-                          return null;
-                        },
                       ),
                     ],
                   ),

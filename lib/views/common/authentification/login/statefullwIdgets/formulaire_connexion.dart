@@ -170,15 +170,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 }
 
-Widget _buildError() {
-  return Container(
-    color: Colors.red,
-    child: Center(
-      child: Text('Erreur de connexion'),
-    ),
-  );
-}
-
 Widget _buildInitialInput() {
   return const Center(
     child: Text(''),

@@ -8,6 +8,7 @@ part of 'volunteer_model.dart';
 
 Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       firstName: json['firstName'] as String,
+      id: json['id'] as String?,
       lastName: json['lastName'] as String,
       email: json['email'] as String?,
       phone: json['phone'] as String,
@@ -17,7 +18,6 @@ Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       birthDayDate: json['birthDayDate'] as String,
       imageProfile: json['imageProfile'] as String,
       bio: json['bio'] as String,
-      verified: json['verified'] as bool?,
       myAssociations: (json['myAssociations'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -27,6 +27,7 @@ Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
     );
 
 Map<String, dynamic> _$VolunteerToJson(Volunteer instance) => <String, dynamic>{
+      'id': instance.id,
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'email': instance.email,
@@ -37,7 +38,6 @@ Map<String, dynamic> _$VolunteerToJson(Volunteer instance) => <String, dynamic>{
       'birthDayDate': instance.birthDayDate,
       'imageProfile': instance.imageProfile,
       'bio': instance.bio,
-      'verified': instance.verified,
       'myAssociations': instance.myAssociations,
       'myAssociationsWaiting': instance.myAssociationsWaiting,
     };

@@ -1,12 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/response_model.dart';
-import 'package:namer_app/models/volunteer_model.dart';
 
 part 'association_model.g.dart';
 
 @JsonSerializable()
 class Association {
+  @JsonKey(name: 'id')
+  late final String id;
+
   @JsonKey(name: 'name')
   late final String name;
 

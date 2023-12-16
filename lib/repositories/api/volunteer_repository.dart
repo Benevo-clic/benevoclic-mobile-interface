@@ -9,12 +9,13 @@ class VolunteerRepository {
   final String url = "37.187.38.160:8080";
 
   Future<Volunteer> createVolunteer(Volunteer volunteer) async {
+    try {
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${globals.id}'
       };
-    var data = json.encode(volunteer.toJson());
-    var dio = Dio();
+      var data = json.encode(volunteer.toJson());
+      var dio = Dio();
       var response = await dio.request(
         'http://$url/api/v1/volunteers/createVolunteer',
         options: Options(
@@ -24,11 +25,15 @@ class VolunteerRepository {
         data: data,
       );
 
-    if (response.statusCode == 200) {
-      return Volunteer.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Volunteer.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
   }
 }
 

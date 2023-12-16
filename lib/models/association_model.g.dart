@@ -27,10 +27,11 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
       volunteers: (json['volunteers'] as List<dynamic>)
           .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+    )..id = json['id'] as String;
 
 Map<String, dynamic> _$AssociationToJson(Association instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'bio': instance.bio,
       'address': instance.address,

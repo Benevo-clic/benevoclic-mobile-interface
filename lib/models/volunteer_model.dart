@@ -7,6 +7,8 @@ part 'volunteer_model.g.dart';
 
 @JsonSerializable()
 class Volunteer{
+  @JsonKey(name: 'id')
+  late final String? id;
 
   @JsonKey(name: 'firstName')
   late final String firstName;
@@ -38,8 +40,6 @@ class Volunteer{
   @JsonKey(name: 'bio')
   late final String bio;
 
-  @JsonKey(name: 'verified')
-  late final bool? verified;
 
   @JsonKey(name: 'myAssociations')
   late final List<ResponseModel>? myAssociations;
@@ -49,6 +49,7 @@ class Volunteer{
 
   Volunteer(
       {required this.firstName,
+      this.id,
       required this.lastName,
       this.email,
       required this.phone,
@@ -58,7 +59,6 @@ class Volunteer{
       required this.birthDayDate,
       required this.imageProfile,
       required this.bio,
-      this.verified,
       this.myAssociations,
       this.myAssociationsWaiting});
 

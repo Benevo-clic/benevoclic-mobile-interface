@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/views/navigation_bar.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
@@ -33,15 +37,7 @@ class PictureInscription extends StatefulWidget {
 }
 
 class _PictureInscriptionState extends State<PictureInscription> {
-  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController _descriptionController = TextEditingController();
-
-  bool _isWordCountValid(String text) {
-    int wordCount =
-        text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
-    return wordCount <= 50;
-  }
+  Uint8List? _imageProfile;
 
   @override
   void dispose() {
@@ -65,12 +61,19 @@ class _PictureInscriptionState extends State<PictureInscription> {
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {
-      if (state is VolunteerInfoState) {}
+      if (state is VolunteerPictureState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Votre photo de profil a été mise à jour"),
+          ),
+        );
+        _imageProfile = state.imageProfile;
+      }
 
       if (state is VolunteerErrorState) {
         final snackBar = SnackBar(
           content: const Text(
-              'Votre email est déjà utilisé, veuillez vous connecter'),
+              'Une erreur est survenue lors de la création de votre compte'),
           action: SnackBarAction(
             label: 'Annuler',
             onPressed: () {
@@ -146,6 +149,17 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             );
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
+                            cubit.changeState(VolunteerCreatedState(
+                                volunteerModel: volunteer));
+
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NavigationExample(),
+                                ),
+                              );
+                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -174,7 +188,31 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         width: MediaQuery.sizeOf(context).width * 0.60,
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            final cubit = context.read<VolunteerCubit>();
+                            Volunteer volunteer = Volunteer(
+                              firstName: widget.firstName,
+                              lastName: widget.lastName,
+                              phone: widget.phoneNumber,
+                              birthDayDate: widget.birthDate,
+                              imageProfile: base64Encode(_imageProfile!),
+                              bio: widget.bio,
+                              email: '',
+                            );
+                            BlocProvider.of<VolunteerCubit>(context)
+                                .createVolunteer(volunteer);
+                            cubit.changeState(VolunteerCreatedState(
+                                volunteerModel: volunteer));
+
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NavigationExample(),
+                                ),
+                              );
+                            });
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
                             shape: RoundedRectangleBorder(
@@ -235,4 +273,3 @@ class _PictureInscriptionState extends State<PictureInscription> {
   }
 }
 
-// UserCreatedState

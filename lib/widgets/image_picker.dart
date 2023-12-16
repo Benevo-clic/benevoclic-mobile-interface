@@ -2,8 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../cubit/volunteer/volunteer_cubit.dart';
+import '../cubit/volunteer/volunteer_state.dart';
 
 class MyImagePicker extends StatefulWidget {
   final Uint8List? image;
@@ -126,6 +130,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
       () {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
+        BlocProvider.of<VolunteerCubit>(context)
+            .changeState(VolunteerPictureState(imageProfile: _image));
       },
     );
     Navigator.of(context).pop();

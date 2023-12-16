@@ -7,7 +7,7 @@ part of 'announcement_model.dart';
 // **************************************************************************
 
 Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
-      associationId: json['associationId'] as String,
+      idAssociation: json['idAssociation'] as String,
       dateEvent: json['dateEvent'] as String,
       datePublication: json['datePublication'] as String,
       description: json['description'] as String,
@@ -15,7 +15,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       image: json['image'] as String,
       location: json['location'] as String,
       nameAssociation: json['nameAssociation'] as String,
-      nameEvent: json['nameEvent'] as String,
+      labelEvent: json['labelEvent'] as String,
       nbHours: json['nbHours'] as int,
       nbPlaces: json['nbPlaces'] as int,
       nbPlacesTaken: json['nbPlacesTaken'] as int,
@@ -27,11 +27,12 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>)
           .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+    )..id = json['id'] as String;
 
 Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
     <String, dynamic>{
-      'associationId': instance.associationId,
+      'id': instance.id,
+      'idAssociation': instance.idAssociation,
       'dateEvent': instance.dateEvent,
       'datePublication': instance.datePublication,
       'description': instance.description,
@@ -39,7 +40,7 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'image': instance.image,
       'location': instance.location,
       'nameAssociation': instance.nameAssociation,
-      'nameEvent': instance.nameEvent,
+      'labelEvent': instance.labelEvent,
       'nbHours': instance.nbHours,
       'nbPlaces': instance.nbPlaces,
       'nbPlacesTaken': instance.nbPlacesTaken,

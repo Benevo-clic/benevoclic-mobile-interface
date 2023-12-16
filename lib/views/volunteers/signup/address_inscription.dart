@@ -147,9 +147,9 @@ class _AddressInscriptionState extends State<AddressInscription> {
                               firstName: widget.firstName,
                               lastName: widget.lastName,
                               phoneNumber: widget.phoneNumber,
-                              address: _address,
-                              city: _city,
-                              postalCode: _zipCode,
+                              address: "",
+                              city: "",
+                              postalCode: "",
                             ));
                           },
                           child: Text(

@@ -5,8 +5,11 @@ part 'announcement_model.g.dart';
 
 @JsonSerializable()
 class Announcement {
-  @JsonKey(name: 'associationId')
-  late final String associationId;
+  @JsonKey(name: 'id')
+  late final String id;
+
+  @JsonKey(name: 'idAssociation')
+  late final String idAssociation;
 
   @JsonKey(name: 'dateEvent')
   late final String dateEvent;
@@ -29,8 +32,8 @@ class Announcement {
   @JsonKey(name: 'nameAssociation')
   late final String nameAssociation;
 
-  @JsonKey(name: 'nameEvent')
-  late final String nameEvent;
+  @JsonKey(name: 'labelEvent')
+  late final String labelEvent;
 
   @JsonKey(name: 'nbHours')
   late final int nbHours;
@@ -53,8 +56,7 @@ class Announcement {
   @JsonKey(name: 'volunteersWaiting')
   late final List<ResponseModel> volunteersWaiting;
 
-  Announcement(
-      {required this.associationId,
+  Announcement({required this.idAssociation,
       required this.dateEvent,
       required this.datePublication,
       required this.description,
@@ -62,7 +64,7 @@ class Announcement {
       required this.image,
       required this.location,
       required this.nameAssociation,
-      required this.nameEvent,
+      required this.labelEvent,
       required this.nbHours,
       required this.nbPlaces,
       required this.nbPlacesTaken,

@@ -162,7 +162,7 @@ class _BioInscriptionState extends State<BioInscription> {
                                 address: widget.address,
                                 city: widget.city,
                                 postalCode: widget.zipCode,
-                                bio: bio,
+                                bio: "",
                               ),
                             );
                           },

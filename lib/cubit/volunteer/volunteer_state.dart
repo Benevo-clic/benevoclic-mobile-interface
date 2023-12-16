@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../../models/volunteer_model.dart';
@@ -15,11 +17,20 @@ class VolunteerCreatedState extends VolunteerState {
   VolunteerCreatedState({required this.volunteerModel});
 }
 
+class VolunteerSelectedState extends VolunteerState {}
+
 class VolunteerErrorState extends VolunteerState {
   final String message;
 
   VolunteerErrorState({required this.message});
 }
+
+class VolunteerPictureState extends VolunteerState {
+  final Uint8List? imageProfile;
+
+  VolunteerPictureState({required this.imageProfile});
+}
+
 
 class VolunteerInfoState extends VolunteerState {
   final String lastName;

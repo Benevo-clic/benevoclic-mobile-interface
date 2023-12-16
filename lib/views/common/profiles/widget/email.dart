@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
-class PopDialog extends StatefulWidget {
+class EmailDialog extends StatefulWidget {
   final String title;
 
-  final dynamic form;
-
-  PopDialog({required this.title, required this.form});
+  const EmailDialog({super.key, required this.title});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,7 +13,7 @@ class PopDialog extends StatefulWidget {
   }
 }
 
-class _PopDialog extends State<PopDialog> {
+class _PopDialog extends State<EmailDialog> {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -25,8 +23,7 @@ class _PopDialog extends State<PopDialog> {
         padding: const EdgeInsets.fromLTRB(0, 35, 0, 35),
         child: Column(
           children: [
-            TitleWithIcon(
-                title: widget.title, icon: Icon(Icons.admin_panel_settings)),
+            TitleWithIcon(title: widget.title, icon: Icon(Icons.mail)),
             Form(
               key: _formKey,
               child: Column(
@@ -37,18 +34,7 @@ class _PopDialog extends State<PopDialog> {
                   TextFormField(
                     decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: "Ancien mot de passe",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        )),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                        hintStyle: TextStyle(color: Colors.grey),
-                        hintText: "nouveau mot de passe",
+                        hintText: "E-mail",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                         )),
@@ -70,30 +56,5 @@ class _PopDialog extends State<PopDialog> {
         ),
       ),
     );
-  }
-}
-
-class FormWidget extends StatefulWidget {
-  final dynamic fct;
-  final List<Widget> input;
-
-  const FormWidget({super.key, this.fct, required this.input});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _FormWidget();
-  }
-}
-
-class _FormWidget extends State<FormWidget> {
-  var _key;
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-        key: _key,
-        child: Column(
-          children: widget.input,
-        ));
   }
 }

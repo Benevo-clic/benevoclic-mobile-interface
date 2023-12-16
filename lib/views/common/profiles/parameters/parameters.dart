@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/common/profiles/widget/email.dart';
 import 'package:namer_app/views/common/profiles/widget/modal.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -79,7 +80,17 @@ class ParametersView extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    ParameterLine(title: "E-mail", fct: () => {}),
+                    ParameterLine(
+                        title: "E-mail",
+                        fct: (context) => {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return EmailDialog(
+                                      title: "E-mail",
+                                    );
+                                  }),
+                            }),
                     SizedBox(
                       height: 15,
                     ),

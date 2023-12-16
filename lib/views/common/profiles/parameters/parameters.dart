@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/widget/email.dart';
 import 'package:namer_app/views/common/profiles/widget/modal.dart';
+import 'package:namer_app/views/common/profiles/widget/phone_number.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -76,7 +77,17 @@ class ParametersView extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    ParameterLine(title: "Numéro de téléphone", fct: () => {}),
+                    ParameterLine(
+                        title: "Numéro de téléphone",
+                        fct: (context) => {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) {
+                                    return PhoneDialog(
+                                      title: 'Numéro de téléphone',
+                                    );
+                                  }))
+                            }),
                     SizedBox(
                       height: 15,
                     ),

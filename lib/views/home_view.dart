@@ -7,7 +7,9 @@ import 'common/authentification/cubit/typeAuth/auth_type_cubit.dart';
 import 'common/authentification/login/widgets/authentification_common_widget.dart';
 
 class HomeView extends StatelessWidget {
-  HomeView({super.key});
+  String? title = "Je suis";
+
+  HomeView({super.key, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class HomeView extends StatelessWidget {
                   Image.asset("assets/logo.png",
                       height: 150, alignment: Alignment.center),
                   SizedBox(height: 80),
-                  Text("Je suis",
+                  Text(title ?? "Je suis",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 15),

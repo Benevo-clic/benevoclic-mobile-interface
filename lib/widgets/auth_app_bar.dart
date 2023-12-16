@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../views/navigation_no_indentify.dart';
 
@@ -25,13 +26,13 @@ class AuthAppBar extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(contexts);
                         },
-                        icon: Icon(
-                          Icons.arrow_circle_left_sharp,
-                          color: Color.fromRGBO(170, 77, 79, 1),
-                          size: MediaQuery.of(contexts).size.height * .05,
-                        ),
-                      ),
-                    )),
+                      icon: SvgPicture.asset(
+                        "assets/icons/arrow-left.svg",
+                        height: MediaQuery.of(contexts).size.height * .04,
+                      ), // Définissez la taille de l'icône
+                    ),
+                  ),
+                ),
                 Expanded(
                   flex: 1,
                   child: Image.asset(
@@ -51,11 +52,13 @@ class AuthAppBar extends StatelessWidget {
                                   builder: (contexts) =>
                                       NavigationNoIndentify()));
                         },
-                        icon: Icon(Icons.cancel,
-                            color: Color.fromRGBO(170, 77, 79, 1),
-                            size: MediaQuery.of(contexts).size.height * .05),
+                      icon: SvgPicture.asset(
+                        "assets/icons/cancel.svg",
+                        height: MediaQuery.of(contexts).size.height * .04,
                       ),
-                    ))
+                    ),
+                  ),
+                )
               ],
             ),
           ),

@@ -32,6 +32,7 @@ dependencies:
   image_picker:
   image_cropper:
   permission_handler:
+  flutter_svg:
 
 
 dependency_overrides:
@@ -60,3 +61,4 @@ flutter:
     - assets/background3.png
     - assets/background4.png
     - assets/annonce.png
+    - assets/icons/

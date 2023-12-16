@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
-
-import '../../../cubit/user/user_cubit.dart';
-import '../authentification/login/widgets/login.dart';
-import '../authentification/repository/auth_repository.dart';
+import '../../../repositories/firebase/auth.dart';
 
 class ProfilPage extends StatelessWidget {
   @override
@@ -23,16 +19,30 @@ class ProfilPage extends StatelessWidget {
             children: [
               Expanded(child: Text("")),
               Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ParametersView()),
-                  );
-                },
-                ),
-              ),
+                  child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.perm_contact_calendar_outlined),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ModifProfil()),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.settings),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ParametersView()),
+                      );
+                    },
+                  ),
+                ],
+              )),
             ],
           ),
           Image.asset("assets/logo.png", height: 200),
@@ -66,27 +76,26 @@ class ProfilPage extends StatelessWidget {
               text: "Suppression compte",
               icon: IconButton(
                 onPressed: () async {
-                  await AuthRepository().deleteAccount();
+                  print('init');
+                  await AuthService().deleteAccount();
+                  print("end");
                 },
                 icon: Icon(Icons.no_accounts_sharp),
               )),
-              SizedBox(
+          SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-              onPressed: () async {
-                await AuthRepository().logout();
-                BlocProvider.of<UserCubit>(context).disconnect();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(
-                      title: RulesType.USER_VOLUNTEER,
-                    ),
-                  ),
-                );
-              },
-              child: Text("Déconnexion")),
+          LineProfil(
+              text: "Suppression compte",
+              icon: IconButton(
+                onPressed: () async {
+                  print('init');
+                  //await AuthService().logout();
+                  print("end");
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.logout),
+              )),
           SizedBox(
             height: 20,
           ),
@@ -98,7 +107,7 @@ class ProfilPage extends StatelessWidget {
 
 class LineProfil extends StatelessWidget {
   final String text;
-  final icon;
+  final IconButton icon;
 
   const LineProfil({super.key, required this.text, required this.icon});
 
@@ -111,7 +120,9 @@ class LineProfil extends StatelessWidget {
             flex: 0,
             child: IconButton(
               onPressed: () async {
-                await AuthRepository().logout();
+                print('init');
+                await AuthService().logout();
+                print("end");
               },
               icon: icon,
             ),

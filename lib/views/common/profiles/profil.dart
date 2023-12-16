@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
@@ -18,14 +19,29 @@ class ProfilPage extends StatelessWidget {
             children: [
               Expanded(child: Text("")),
               Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ParametersView()),
-                  );
-                },
+                  child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.perm_contact_calendar_outlined),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ModifProfil()),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.settings),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ParametersView()),
+                      );
+                    },
+                  ),
+                ],
               )),
             ],
           ),
@@ -66,7 +82,7 @@ class ProfilPage extends StatelessWidget {
                 },
                 icon: Icon(Icons.no_accounts_sharp),
               )),
-              SizedBox(
+          SizedBox(
             height: 20,
           ),
           LineProfil(

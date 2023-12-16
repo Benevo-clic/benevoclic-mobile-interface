@@ -8,7 +8,6 @@ import 'package:namer_app/widgets/background.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../authentification/login/widgets/login.dart';
 import '../authentification/repository/auth_repository.dart';
-import 'modif_profil.dart';
 
 class ProfilPage extends StatelessWidget {
   @override

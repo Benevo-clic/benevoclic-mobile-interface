@@ -5,7 +5,7 @@ import 'package:namer_app/widgets/title_with_icon.dart';
 class PopDialog extends StatefulWidget {
   final String title;
 
-  final Form form;
+  final dynamic form;
 
   PopDialog({required this.title, required this.form});
 
@@ -75,8 +75,9 @@ class _PopDialog extends State<PopDialog> {
 
 class FormWidget extends StatefulWidget {
   final dynamic fct;
+  final List<Widget> input;
 
-  const FormWidget({super.key, this.fct});
+  const FormWidget({super.key, this.fct, required this.input});
 
   @override
   State<StatefulWidget> createState() {
@@ -92,7 +93,7 @@ class _FormWidget extends State<FormWidget> {
     return Form(
         key: _key,
         child: Column(
-          children: [],
+          children: widget.input,
         ));
   }
 }

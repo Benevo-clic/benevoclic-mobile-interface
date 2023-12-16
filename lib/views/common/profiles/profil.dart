@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 
+import '../../../cubit/user/user_cubit.dart';
 import '../authentification/login/widgets/login.dart';
 import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
@@ -74,6 +76,7 @@ class ProfilPage extends StatelessWidget {
           ElevatedButton(
               onPressed: () async {
                 await AuthRepository().logout();
+                BlocProvider.of<UserCubit>(context).disconnect();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

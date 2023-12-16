@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/util/phone_number_verification.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
-class PhoneDialog extends StatefulWidget {
-  const PhoneDialog({super.key});
+class PasswordDialog extends StatefulWidget {
+  PasswordDialog();
 
   @override
   State<StatefulWidget> createState() {
-    return _PopDialog();
+    return _PasswordDialog();
   }
 }
 
-class _PopDialog extends State<PhoneDialog> {
+class _PasswordDialog extends State<PasswordDialog> {
   final _formKey = GlobalKey<FormState>();
-
-  String? _phone;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         TitleWithIcon(
-            title: "Numéro de téléphone",
-            icon: Icon(Icons.phone_android_sharp)),
+            title: "password", icon: Icon(Icons.admin_panel_settings)),
         Form(
           key: _formKey,
           child: Column(
@@ -32,20 +28,20 @@ class _PopDialog extends State<PhoneDialog> {
                 height: 25,
               ),
               TextFormField(
-                validator: (value) {
-                  var phone = PhoneVerification(value.toString());
-                  if (phone.security()) {
-                    setState(() {
-                      _phone = value;
-                    });
-                    return null;
-                  } else {
-                    return phone.message;
-                  }
-                },
                 decoration: InputDecoration(
                     hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "Numéro de téléphone",
+                    hintText: "Ancien mot de passe",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey),
+                    hintText: "nouveau mot de passe",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                     )),
@@ -57,9 +53,7 @@ class _PopDialog extends State<PhoneDialog> {
                   text: "Sauvegarder",
                   color: Colors.black,
                   fct: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pop(context);
-                    }
+                    Navigator.pop(context);
                   },
                   backgroundColor: Colors.grey)
             ],

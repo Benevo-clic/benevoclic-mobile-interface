@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/views/common/profiles/widget/email.dart';
-import 'package:namer_app/views/common/profiles/widget/modal.dart';
+import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
+import 'package:namer_app/views/common/profiles/widget/email_dialog.dart';
+import 'package:namer_app/views/common/profiles/widget/password_dialog.dart';
+import 'package:namer_app/views/common/profiles/widget/personal_informations_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/phone_number.dart';
+import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:namer_app/widgets/title_with_icon.dart';
 
 class ParametersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: orange,
       ),
@@ -26,7 +29,13 @@ class ParametersView extends StatelessWidget {
                 content: Column(
                   children: [
                     ParameterLine(
-                        title: "Informations personnelles", fct: () => {}),
+                        title: "Informations personnelles", fct: (context) => {
+                          showDialog(context: context, builder: (context){
+                            return PopDialog(
+                              content: InformationDialog(),
+                            );
+                          })
+                        }),
                     Divider(
                       color: Colors.white,
                     ),
@@ -62,16 +71,7 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return PopDialog(
-                                      title: "Mot de passe",
-                                      form: Form(
-                                          child: Column(
-                                        children: [
-                                          TextFormField(),
-                                          TextFormField()
-                                        ],
-                                      )),
-                                    );
+                                    return PopDialog(content: PasswordDialog());
                                   })
                             }),
                     SizedBox(
@@ -83,9 +83,7 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: ((context) {
-                                    return PhoneDialog(
-                                      title: 'Numéro de téléphone',
-                                    );
+                                    return PopDialog(content: PhoneDialog());
                                   }))
                             }),
                     SizedBox(
@@ -97,9 +95,7 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return EmailDialog(
-                                      title: "E-mail",
-                                    );
+                                    return PopDialog(content: EmailDialog());
                                   }),
                             }),
                     SizedBox(
@@ -136,54 +132,6 @@ class ParametersView extends StatelessWidget {
               ),
             ],
           ))
-        ],
-      ),
-    );
-  }
-}
-
-class ParameterCard extends StatelessWidget {
-  final String title;
-  final Icon icon;
-  final dynamic content;
-
-  const ParameterCard(
-      {super.key, required this.title, this.content, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TitleWithIcon(
-          icon: icon,
-          title: title,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        content
-      ],
-    );
-  }
-}
-
-class ParameterLine extends StatelessWidget {
-  final dynamic fct;
-  final String title;
-
-  const ParameterLine({super.key, this.fct, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (() async {
-        await fct(context);
-      }),
-      child: Row(
-        children: [
-          Expanded(child: Text(title)),
-          Expanded(flex: 0, child: Icon(Icons.arrow_forward_ios_rounded)),
         ],
       ),
     );

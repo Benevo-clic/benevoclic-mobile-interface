@@ -3,7 +3,6 @@ import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 import '../../../repositories/firebase/auth.dart';
-import 'modif_profil.dart';
 
 class ProfilPage extends StatelessWidget {
   @override

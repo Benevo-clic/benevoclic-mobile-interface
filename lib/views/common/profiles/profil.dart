@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,13 +28,23 @@ class ProfileView extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text("")),
+              IconButton(
+                    icon: Icon(Icons.perm_contact_calendar_outlined),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ModifProfil()),
+                      );
+                    },
+                  ),
               Expanded(
                   child: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ModifProfil()),
+                    MaterialPageRoute(builder: (context) => ParametersView()),
                   );
                 },
                 ),

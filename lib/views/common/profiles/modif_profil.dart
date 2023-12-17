@@ -1,91 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/widgets/abstract_container.dart';
-import 'package:namer_app/widgets/button.dart';
+import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/title_with_icon.dart';
 
 class ModifProfil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: orange,
-      ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        appBar: AppBar(
+          backgroundColor: orange,
+        ),
+        body: ListView(
+          padding: EdgeInsets.all(25),
           children: [
-            Photo(),
-            BioModif(text: "fcefefef"),
-            SizedBox(
-              height: 15,
+            AbstractContainer2(
+              content: Column(
+                children: [
+                  TitleWithIcon(
+                      title: "Photo de profil", icon: Icon(Icons.photo)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Icon(
+                    Icons.photo_camera,
+                    size: MediaQuery.sizeOf(context).width * 0.75,
+                  )
+                ],
+              ),
             ),
-            InformationsModif(),
-            SizedBox(
-              height: 15,
+            Divider(
+              height: 25,
+              color: Colors.white,
             ),
-            Button(
-                text: "Enregistrer",
-                color: Colors.white,
-                fct: () => {},
-                backgroundColor: orange)
+            AbstractContainer2(
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleWithIcon(
+                      title: "Biographie",
+                      icon: Icon(Icons.settings_accessibility_outlined)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Text(
+                      "vrzipvjeakovjaoeviajefchbaivuoieafubvaoverevnzripvapvnapovjfabovuvoid")
+                ],
+              ),
+            ),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            AbstractContainer2(
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleWithIcon(
+                      title: "Informations", icon: Icon(Icons.location_city)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(
+                      text: "3 rue bis du blade, 59800 Lille",
+                      icon: Icon(Icons.location_on_outlined)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(text: "monsite@gmail.com", icon: Icon(Icons.mail)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(
+                      text: "06 50 50 50 50", icon: Icon(Icons.phone_android)),
+                ],
+              ),
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Photo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text("Photo de profil");
-  }
-}
-
-class BioModif extends StatelessWidget {
-  final String text;
-
-  BioModif({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-        content: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [Text("Bio"), SizedBox(height: 5), Text(text)],
-    ));
-  }
-}
-
-class InformationsModif extends StatelessWidget {
-  InformationsModif({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-        content: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Section(
-          text: "3 rue du general Leclrece",
-          icon: Icon(Icons.maps_home_work_outlined),
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        Section(
-          text: "+33062548",
-          icon: Icon(Icons.phone),
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        Section(
-          text: "monsite@gmail.com",
-          icon: Icon(Icons.mail),
-        )
-      ],
-    ));
+        ));
   }
 }
 

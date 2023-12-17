@@ -8,14 +8,15 @@ import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import 'address_inscription.dart';
 
-class InfosInscription extends StatefulWidget {
-  const InfosInscription({super.key});
+class InfosInscriptionVolunteer extends StatefulWidget {
+  const InfosInscriptionVolunteer({super.key});
 
   @override
-  State<InfosInscription> createState() => _InfosInscriptionState();
+  State<InfosInscriptionVolunteer> createState() =>
+      _InfosInscriptionVolunteerState();
 }
 
-class _InfosInscriptionState extends State<InfosInscription> {
+class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
   late String _lastName;
   late String _firstName;
   late String _phone;

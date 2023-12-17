@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/showDialog.dart';
 
-import '../../../cubit/user/user_cubit.dart';
-import '../../../cubit/user/user_state.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
-import 'inscription.dart';
+import '../cubit/user/user_cubit.dart';
+import '../cubit/user/user_state.dart';
+import '../views/common/authentification/login/widgets/customTextFormField_widget.dart';
+import 'inscription_volunteer_signup.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -54,10 +54,6 @@ class _SignupFormState extends State<SignupForm> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is UserErrorState) {
-        ShowDialog.show(context,
-            "Un problème est survenu lors de votre inscription", "retour");
-      }
       if (state is UserEmailVerificationState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(

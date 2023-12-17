@@ -41,3 +41,9 @@ class UserErrorState extends UserState {
 
   UserErrorState({required this.message});
 }
+
+class UserRegisterErrorState extends UserState {
+  final String message;
+
+  UserRegisterErrorState({required this.message});
+}

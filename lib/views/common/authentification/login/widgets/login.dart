@@ -198,18 +198,14 @@ class LoginPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignupAssociation(
-                                    title: "association",
-                                  ),
+                                  builder: (context) => SignupAssociation(),
                                 ),
                               );
                             } else {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignupVolunteer(
-                                    title: "Bénévole",
-                                  ),
+                                  builder: (context) => SignupVolunteer(),
                                 ),
                               );
                             }

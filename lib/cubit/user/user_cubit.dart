@@ -39,7 +39,7 @@ class UserCubit extends Cubit<UserState> {
       await _authRepository.createAccount(email, password);
       emit(UserEmailVerificationState());
     } catch (e) {
-      emit(UserErrorState(message: e.toString()));
+      emit(UserRegisterErrorState(message: e.toString()));
     }
   }
 
@@ -50,7 +50,7 @@ class UserCubit extends Cubit<UserState> {
       await _authRepository.sendEmailVerification();
       emit(UserEmailVerificationState());
     } catch (e) {
-      emit(UserErrorState(message: e.toString()));
+      emit(UserRegisterErrorState(message: e.toString()));
     }
   }
 

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/views/volunteers/signup/infos_inscription.dart';
 
-import '../../../cubit/user/user_cubit.dart';
-import '../../../cubit/user/user_state.dart';
-import '../../../type/rules_type.dart';
-import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/repository/auth_repository.dart';
+import '../cubit/user/user_cubit.dart';
+import '../cubit/user/user_state.dart';
+import '../type/rules_type.dart';
+import '../views/associtions/signup/inscription_assocition_signup.dart';
+import '../views/common/authentification/repository/auth_repository.dart';
+import 'auth_app_bar.dart';
 
 class InscriptionDemarche extends StatelessWidget {
   final String adress;
@@ -19,7 +20,7 @@ class InscriptionDemarche extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is UserErrorState) {
+      if (state is UserRegisterErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Erreur lors de l'inscription"),
@@ -68,7 +69,7 @@ class InscriptionDemarche extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        'Vériiez votre adresse mail',
+                        'Vérifiez votre adresse mail',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.width * .04,
@@ -83,17 +84,30 @@ class InscriptionDemarche extends StatelessWidget {
                           onPressed: () async {
                             bool? isEmailVerified =
                                 await AuthRepository().verifiedEmail();
-                            if (isEmailVerified ?? true) {
+                            if (isEmailVerified) {
                               BlocProvider.of<UserCubit>(context)
                                   .createUserType(title, adress, mdp);
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => InfosInscription()),
-                              );
-
-                              // Pas nécessaire de mettre cette partie dans addPostFrameCallback
+                              if (title == RulesType.USER_VOLUNTEER) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InfosInscriptionVolunteer()),
+                                  );
+                                });
+                              } else if (title == RulesType.USER_ASSOCIATION) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            InscriptionAssociation()),
+                                  ); // Pas nécessaire de mettre cette partie dans addPostFrameCallback
+                                });
+                              }
                             } else {
                               final snackBar = SnackBar(
                                 content: const Text(
@@ -186,3 +200,4 @@ class InscriptionDemarche extends StatelessWidget {
     );
   }
 }
+

@@ -203,7 +203,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                                 .createVolunteer(volunteer);
                             cubit.changeState(VolunteerCreatedState(
                                 volunteerModel: volunteer));
-
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.push(
                                 context,

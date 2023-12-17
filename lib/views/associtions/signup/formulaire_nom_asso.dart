@@ -9,11 +9,13 @@ class FormNomAsso extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Center(child: FormulaireAsso()),
-      ],
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: FormulaireAsso(),
+          ),
+        ],
       ),
     );
   }

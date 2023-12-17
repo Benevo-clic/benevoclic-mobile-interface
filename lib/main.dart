@@ -1,11 +1,21 @@
-import 'package:english_words/english_words.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
+import 'package:namer_app/cubit/user/user_cubit.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/repositories/api/user_repository.dart';
+import 'package:namer_app/repositories/api/volunteer_repository.dart';
+import 'package:namer_app/settings/cubit/setting_cubit.dart';
+import 'package:namer_app/settings/cubit/setting_state.dart';
+import 'package:namer_app/views/common/authentification/cubit/otherAuth/other_auth_cubit.dart';
+import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type_cubit.dart';
+import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 
-import 'home_page.dart';
+import 'views/home_view.dart';
 
 void main() async {
+  //Initialisation de firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -16,20 +26,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: home_page(),
-      ),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => UserCubit(
+                  userRepository: UserRepository(),
+                  authRepository: AuthRepository())),
+          BlocProvider(create: (context) => AnnouncementCubit()),
+          BlocProvider(create: (context) => SettingCubit()),
+          BlocProvider(create: (context) => AuthTypeCubit()),
+          BlocProvider(create: (context) => OtherAuthCubit(AuthRepository())),
+          BlocProvider(
+              create: (context) =>
+                  VolunteerCubit(volunteerRepository: VolunteerRepository()))
+        ],
+        child: BlocBuilder<SettingCubit, SettingState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Bénévoclic',
+              theme: state.themeData,
+              home: HomeView(),
+              debugShowCheckedModeBanner: false,
+            );
+          },
+        ));
   }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
 }

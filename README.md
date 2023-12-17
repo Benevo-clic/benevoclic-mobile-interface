@@ -12,16 +12,27 @@ Pour éviter les erreurs de path
 Effectuer la commande : flutter run 
 
 Compile le projet et l'exécute
- 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# Création de branches 
 
-A few resources to get you started if this is your first Flutter project:
+git checkout -b nomBranche
+git push origin nomdetabranch
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+# Elements techniques 
+
+
+## Authentification anonyme avec firebase
+
+Vidéo qui montre comment se passe l'authentification avec firebase
+  https://www.youtube.com/watch?v=gV8qlGkaZVE&t=662s
+
+
+## Authentification gmail:
+
+Commande pour entrer code encryptage nécessaire pour utiliser l'authentification gmail 
+  https://stackoverflow.com/questions/54557479/flutter-and-google-sign-in-plugin-platformexceptionsign-in-failed-com-google
+Video montrant pas à pas l'authentification gmail:  
+  https://www.youtube.com/watch?v=VCrXSFqdsoA

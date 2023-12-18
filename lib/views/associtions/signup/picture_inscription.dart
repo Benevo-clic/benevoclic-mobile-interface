@@ -203,8 +203,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               email: widget.email,
                               id: widget.id,
                             );
-                            print(association);
-                            print("+++++++++++++++++++++++++++" + association.id.toString());
                             BlocProvider.of<AssociationCubit>(context)
                                 .createAssociation(association);
                             WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -82,7 +82,6 @@ class AssociationRepository {
         return false;
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

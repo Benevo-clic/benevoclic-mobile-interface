@@ -1,7 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:namer_app/repositories/api/params.dart';
-import 'package:namer_app/repositories/api/request.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 
@@ -11,77 +8,7 @@ class Annonces extends StatefulWidget {
 }
 
 class _AnnoncesState extends State<Annonces> {
-  Future<void> response() async {
-    AssoParam p = AssoParam(
-        name: "",
-        address: "",
-        bio: "",
-        city: "",
-        country: "",
-        email: "",
-        imageProfile: "",
-        phone: "",
-        postalCode: "",
-        verified: false,
-        siret: '',
-        ads: [],
-        volunteersWaiting: []);
 
-    UserParam p2 = UserParam(
-      firstName: "string",
-      birthDayDate: "string",
-      myAssociations: [],
-      lastName: "string",
-      myAssociationsWaiting: [],
-      address: "string",
-      bio: "string",
-      city: "string",
-      country: "string",
-      email: "geoffreyherman1902998@gmail.com",
-      imageProfile: "string",
-      phone: "string",
-      postalCode: "string",
-      verified: false,
-    );
-
-    Ads p3 = Ads(
-        associationId: "string",
-        dateEvent: "string",
-        datePublication: "string",
-        description: "string",
-        full: false,
-        image: "string",
-        location: "string",
-        nameAssociation: "string",
-        nameEvent: "string",
-        nbHours: 5,
-        nbPlaces: 10,
-        nbPlacesTaken: 2,
-        tags: [],
-        type: "string",
-        volunteers: [],
-        volunteersWaiting: []);
-
-    //Response r = await createAds(p3.map());
-    Response r = await getAllAds();
-    //int r = await createUser(RulesType.USER_VOLUNTEER);
-    //await connexion();
-    //response r2 = await
-    //Response r = createAssociation;
-    print(r);
-  }
-
-  List<dynamic> result = [];
-  get() async {
-    Response r = await getAllAds();
-    print(r);
-    setState(() {
-      result = r.data;
-    });
-    print("api");
-    print(r.data);
-    return r;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +25,6 @@ class _AnnoncesState extends State<Annonces> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        get();
                       },
                       child: Text("API"),
                     ),
@@ -120,24 +46,6 @@ class _AnnoncesState extends State<Annonces> {
                 ),
               ),
             ),
-            Expanded(
-              child: ListView.separated(
-                  padding: EdgeInsets.all(20),
-                  itemCount: 2,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (result.isEmpty) {
-                      return Text("rien");
-                    } else {
-                      return ItemAnnonce(
-                        nameAsso: result[index]["nameAssociation"],
-                        nbHours: result[index]["nbHours"],
-                        nbPlaces: result[index]["nbPlaces"],
-                        nbPlacesTaken: result[index]["nbPlacesTaken"],
-                      );
-                    }
-                  },separatorBuilder: (BuildContext context, int index) => const Text(""),
-              )
-            )
           ],
         ),
       ),

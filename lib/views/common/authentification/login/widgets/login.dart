@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AuthAppBar(contexts: context),
+                      AuthAppBar(contexts: context, isLogin: true),
                       Divider(
                         color: Colors.grey.shade400,
                         endIndent: MediaQuery.of(context).size.height * .04,
@@ -198,18 +198,14 @@ class LoginPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignupAssociation(
-                                    title: "association",
-                                  ),
+                                  builder: (context) => SignupAssociation(),
                                 ),
                               );
                             } else {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignupVolunteer(
-                                    title: "Bénévole",
-                                  ),
+                                  builder: (context) => SignupVolunteer(),
                                 ),
                               );
                             }

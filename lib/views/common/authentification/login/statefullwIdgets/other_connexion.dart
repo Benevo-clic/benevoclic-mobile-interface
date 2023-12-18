@@ -34,7 +34,7 @@ class _OtherConnectionState extends State<OtherConnection> {
         if (state is OtherAuthErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message),
+              content: Text("Erreur lors de l'inscription"),
             ),
           );
         }
@@ -65,8 +65,7 @@ class _OtherConnectionState extends State<OtherConnection> {
           return _buildError();
         }
 
-        return Text(
-            'Unknown state: $state'); // Supposons que ceci est un widget
+        return Text('Unknown state: $state');
       },
     );
   }

@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
+import 'package:namer_app/views/associtions/signup/address_association_inscription.dart';
 
-import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
-import 'address_inscription.dart';
 
-class InfosInscriptionVolunteer extends StatefulWidget {
+class InscriptionAssociation extends StatefulWidget {
   final String id;
   final String email;
 
-  const InfosInscriptionVolunteer(
+  const InscriptionAssociation(
       {super.key, required this.id, required this.email});
 
   @override
-  State<InfosInscriptionVolunteer> createState() =>
-      _InfosInscriptionVolunteerState();
+  State<InscriptionAssociation> createState() => _InscriptionAssociationState();
 }
 
-class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
-  late String _lastName;
-  late String _firstName;
+class _InscriptionAssociationState extends State<InscriptionAssociation> {
+  late String _nameAssociation;
+  late String _typeAssociation;
   late String _phone;
-  late String _birthDayDate;
-  DateTime currentDate = DateTime.now();
-  TextEditingController dateController = TextEditingController();
 
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -42,67 +37,31 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
   }
 
   void _initUser() async {
-    final cubit = context.read<VolunteerCubit>();
+    final cubit = context.read<AssociationCubit>();
     cubit.initState();
-  }
-
-  Future<String> _selectDate(BuildContext context) async {
-    DateTime lastAllowedDate =
-        DateTime(currentDate.year - 18, currentDate.month, currentDate.day);
-    DateTime initialDate =
-        lastAllowedDate.isBefore(currentDate) ? lastAllowedDate : currentDate;
-
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(1900),
-      lastDate: lastAllowedDate,
-    );
-
-    if (selectedDate != null) {
-      dateController.text =
-          DateFormat('dd/MM/yyyy').format(selectedDate.toLocal()).split(' ')[0];
-      return dateController.text;
-    }
-    return currentDate.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-      if (state is VolunteerInfoState) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddressInscription(
-                firstName: _firstName,
-                lastName: _lastName,
-                birthDate: _birthDayDate,
-                phoneNumber: _phone,
-                email: widget.email,
-                id: widget.id,
+          if (state is AssociationInfoState) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AddressAssociationInscription(
+                      nameAssociation: state.name,
+                      typeAssociation: state.type,
+                      phoneNumber: state.phone,
+                      id: widget.id,
+                      email: widget.email,
+                    ),
               ),
-            ),
-          ); // ici mettre la page d'inscription
-        });
-      }
-
-      if (state is VolunteerErrorState) {
-        final snackBar = SnackBar(
-          content: const Text(
-              'Votre email est déjà utilisé, veuillez vous connecter'),
-          action: SnackBarAction(
-            label: 'Annuler',
-            onPressed: () {
-              // Some code to undo the change.
-            },
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }, builder: (context, state) {
+            );
+          }
+          if (state is AssociationErrorState) {}
+        }, builder: (context, state) {
       return Stack(
         children: [
           Scaffold(
@@ -126,8 +85,14 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                       ),
                       Divider(
                         color: Colors.grey.shade400,
-                        endIndent: MediaQuery.of(context).size.height * .04,
-                        indent: MediaQuery.of(context).size.height * .04,
+                        endIndent: MediaQuery
+                            .of(context)
+                            .size
+                            .height * .04,
+                        indent: MediaQuery
+                            .of(context)
+                            .size
+                            .height * .04,
                       ),
                       SizedBox(
                         height: 20,
@@ -136,7 +101,10 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                         "Inscription",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width * .06,
+                          fontSize: MediaQuery
+                              .of(context)
+                              .size
+                              .width * .06,
                           color: Color.fromRGBO(235, 126, 26, 1),
                         ),
                       ),
@@ -147,34 +115,43 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                         'Renseignez vos informations personnelles',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width * .04,
+                          fontSize: MediaQuery
+                              .of(context)
+                              .size
+                              .width * .04,
                           color: Colors.black87,
                         ),
                       ),
-                      _infoVolunteer(context, state),
+                      _infoAssociation(context, state),
                       Container(
-                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        width: MediaQuery
+                            .sizeOf(context)
+                            .width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
                         child: Text(
-                            "Votre nom d’utilisateur sera visible sur votre profil. Vous pourrez le modifier quand vous le souhaitez.",
+                            "Vos informations personnelles seront visibles que par les bénévoles",
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .03,
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * .03,
                               color: Colors.black87,
                             )),
                       ),
                       Container(
-                        width: MediaQuery.sizeOf(context).width * 0.60,
+                        width: MediaQuery
+                            .sizeOf(context)
+                            .width * 0.60,
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              final cubit = context.read<VolunteerCubit>();
-                              cubit.changeState(VolunteerInfoState(
-                                birthDate: _birthDayDate,
-                                firstName: _firstName,
-                                lastName: _lastName,
-                                phoneNumber: _phone,
+                              final cubit = context.read<AssociationCubit>();
+                              cubit.changeState(AssociationInfoState(
+                                name: _nameAssociation,
+                                phone: _phone,
+                                type: _typeAssociation,
                               ));
                             }
                           },
@@ -188,7 +165,10 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                           child: Text(
                             "Continuer",
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .04,
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * .04,
                               color: Colors.black,
                             ),
                           ),
@@ -208,8 +188,7 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
     });
   }
 
-
-  Widget _infoVolunteer(BuildContext context, state) {
+  Widget _infoAssociation(BuildContext context, state) {
     return Stack(
       children: [
         Card(
@@ -235,17 +214,17 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                         height: 10,
                       ),
                       CustomTextFormField(
-                        hintText: "Nom",
+                        hintText: "Nom de l'association",
                         icon: Icons.abc,
                         keyboardType: TextInputType.name,
                         obscureText: false,
                         prefixIcons: true,
                         onSaved: (value) {
-                          _lastName = value.toString();
+                          _nameAssociation = value.toString();
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Votre nom n'est pas valide";
+                            return "Le nom de votre association n'est pas valide";
                           } else if (RegExp(r'^[0-9]').hasMatch(value)) {
                             return "Le nom ne doit pas commencer par un chiffre";
                           } else if (value.length > 30) {
@@ -258,18 +237,18 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                         height: 10,
                       ),
                       CustomTextFormField(
-                        hintText: "Prénom",
+                        hintText: "Type d'association",
                         icon: Icons.abc,
                         keyboardType: TextInputType.name,
                         obscureText: false,
                         prefixIcons: true,
                         maxLine: 1,
                         onSaved: (value) {
-                          _firstName = value.toString();
+                          _typeAssociation = value.toString();
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Votre prénom n'est pas valide";
+                            return "Le type d'association n'est pas valide";
                           } else if (RegExp(r'^[0-9]').hasMatch(value)) {
                             return "Le prénom ne doit pas commencer par un chiffre";
                           } else if (value.length > 50) {
@@ -282,43 +261,11 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                         height: 10,
                       ),
                       CustomTextFormField(
-                        controller: dateController,
-                        hintText: "Date de naissance",
-                        icon: Icons.date_range,
-                        obscureText: false,
-                        prefixIcons: true,
-                        maxLine: 1,
-                        keyboardType: TextInputType.none,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Votre date de naissance n'est pas valide";
-                          }
-                          return null;
-                        },
-                        datepicker: () {
-                          _selectDate(context).then((value) {
-                            if (value == currentDate.toString()) {
-                              return ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("vous devez au moins avoir 18 ans"),
-                                ),
-                              );
-                            }
-                            setState(() {
-                              _birthDayDate = value.toString();
-                            });
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
                         hintText: "Téléphone",
                         icon: Icons.phone,
                         keyboardType: TextInputType.phone,
                         obscureText: false,
+                        prefixIcons: true,
                         onSaved: (value) {
                           _phone = value.toString();
                         },
@@ -345,5 +292,3 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
     );
   }
 }
-
-// UserCreatedState

@@ -7,65 +7,70 @@ part 'association_model.g.dart';
 @JsonSerializable()
 class Association {
   @JsonKey(name: 'id')
-  late final String id;
+  late final String? id;
 
   @JsonKey(name: 'name')
   late final String name;
 
   @JsonKey(name: 'bio')
-  late final String bio;
+  late final String? bio;
 
   @JsonKey(name: 'address')
-  late final String address;
+  late final String? address;
 
   @JsonKey(name: 'phone')
   late final String phone;
 
   @JsonKey(name: 'email')
-  late final String email;
+  late final String? email;
 
   @JsonKey(name: 'city')
-  late final String city;
+  late final String? city;
 
   @JsonKey(name: 'country')
-  late final String country;
+  late final String? country;
 
   @JsonKey(name: 'postalCode')
-  late final String postalCode;
+  late final String? postalCode;
 
   @JsonKey(name: 'imageProfile')
   late final String imageProfile;
 
   @JsonKey(name: 'verified')
-  late final bool verified;
+  late final bool? verified;
 
   @JsonKey(name: 'siret')
-  late final String siret;
+  late final String? siret;
 
-  @JsonKey(name: 'ads')
-  late final List<Announcement> announcement;
+  @JsonKey(name: 'announcement')
+  late final List<Announcement>? announcement;
+
+  @JsonKey(name: 'type')
+  late final String type;
 
   @JsonKey(name: 'volunteersWaiting')
-  late final List<ResponseModel> volunteersWaiting;
+  late final List<ResponseModel>? volunteersWaiting;
 
   @JsonKey(name: 'volunteers')
-  late final List<ResponseModel> volunteers;
+  late final List<ResponseModel>? volunteers;
 
   Association(
-      {required this.name,
-      required this.bio,
-      required this.address,
+      {this.id,
+      required this.name,
+      this.bio,
+      this.address,
       required this.phone,
-      required this.email,
-      required this.city,
-      required this.country,
-      required this.postalCode,
+      this.email,
+      this.city,
+      this.country,
+      this.postalCode,
       required this.imageProfile,
-      required this.verified,
-      required this.siret,
-      required this.announcement,
-      required this.volunteersWaiting,
-      required this.volunteers});
+      this.verified,
+      this.siret,
+      this.announcement,
+      required this.type,
+      this.volunteersWaiting,
+      this.volunteers});
 
   factory Association.fromJson(Map<String, dynamic> json) =>
       _$AssociationFromJson(json);

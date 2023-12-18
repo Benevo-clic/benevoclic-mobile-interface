@@ -31,7 +31,6 @@ class VolunteerRepository {
         throw Exception(response.statusMessage);
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

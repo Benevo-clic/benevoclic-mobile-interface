@@ -21,14 +21,10 @@ class VolunteerCubit extends Cubit<VolunteerState> {
 
   Future<void> createVolunteer(Volunteer volunteer) async {
     emit(VolunteerLoadingState());
-    print("create volunteer in cubit");
     try {
-      print(volunteer.toJson());
-      final result = await _volunteerRepository.createVolunteer(volunteer);
-      print("++++++++++++++++++++++++cubit+++++++++++" + result.firstName);
+      await _volunteerRepository.createVolunteer(volunteer);
       emit(VolunteerCreatedState(volunteerModel: volunteer));
     } catch (e) {
-      print("+++++++++++++++++++++++++++++++++++++" + e.toString());
       emit(VolunteerErrorState(message: e.toString()));
     }
   }

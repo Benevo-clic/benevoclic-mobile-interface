@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/views/volunteers/signup/picture_inscription.dart';
+import 'package:namer_app/views/associtions/signup/picture_inscription.dart';
 
+import '../../../cubit/association/association_state.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
-class BioInscription extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+class BioAssociationInscription extends StatefulWidget {
+  final String nameAssociation;
+  final String typeAssociation;
   final String phoneNumber;
   final String zipCode;
   final String address;
@@ -18,24 +19,22 @@ class BioInscription extends StatefulWidget {
   final String id;
   final String email;
 
-  const BioInscription(
+  const BioAssociationInscription(
       {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.birthDate,
-      required this.phoneNumber,
       required this.zipCode,
       required this.address,
       required this.city,
-      required this.id,
-      required this.email});
+      required this.nameAssociation,
+      required this.typeAssociation,
+      required this.phoneNumber, required this.id, required this.email});
 
   @override
-  State<BioInscription> createState() => _BioInscriptionState();
+  State<BioAssociationInscription> createState() =>
+      _BioAssociationInscriptionState();
 }
 
-class _BioInscriptionState extends State<BioInscription> {
-  late String bio = "";
+class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
+  late String _bio = "";
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _descriptionController = TextEditingController();
@@ -66,23 +65,21 @@ class _BioInscriptionState extends State<BioInscription> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-
-      if (state is VolunteerInfoState) {
+      if (state is AssociationInfoState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PictureInscription(
-                firstName: widget.firstName,
-                lastName: widget.lastName,
-                birthDate: widget.birthDate,
                 phoneNumber: widget.phoneNumber,
                 zipcode: widget.zipCode,
                 address: widget.address,
                 city: widget.city,
-                bio: bio,
+                bio: _bio,
+                nameAssociation: widget.nameAssociation,
+                typeAssociation: widget.typeAssociation,
                 id: widget.id,
                 email: widget.email,
               ),
@@ -153,17 +150,17 @@ class _BioInscriptionState extends State<BioInscription> {
                           ),
                         ),
                       ),
-                      _infoVolunteer(context, state),
+                      _infoAssociation(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            cubit.changeState(VolunteerInfoState(
-                              birthDate: widget.birthDate,
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phoneNumber: widget.phoneNumber,
+                            final cubit = context.read<AssociationCubit>();
+                            cubit.changeState(
+                              AssociationInfoState(
+                                name: widget.nameAssociation,
+                                type: widget.typeAssociation,
+                                phone: widget.phoneNumber,
                                 address: widget.address,
                                 city: widget.city,
                                 postalCode: widget.zipCode,
@@ -201,13 +198,16 @@ class _BioInscriptionState extends State<BioInscription> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              final cubit = context.read<VolunteerCubit>();
-                              cubit.changeState(VolunteerInfoState(
-                                birthDate: widget.birthDate,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
-                                phoneNumber: widget.phoneNumber,
-                                bio: bio,
+                              final cubit = context.read<AssociationCubit>();
+                              cubit.changeState(
+                                AssociationInfoState(
+                                  name: widget.nameAssociation,
+                                  type: widget.typeAssociation,
+                                  phone: widget.phoneNumber,
+                                  address: widget.address,
+                                  city: widget.city,
+                                  postalCode: widget.zipCode,
+                                  bio: _bio,
                                 ),
                               );
                             }
@@ -242,7 +242,7 @@ class _BioInscriptionState extends State<BioInscription> {
     });
   }
 
-  Widget _infoVolunteer(BuildContext context, state) {
+  Widget _infoAssociation(BuildContext context, state) {
     return Stack(
       children: [
         SizedBox(
@@ -286,7 +286,7 @@ class _BioInscriptionState extends State<BioInscription> {
                           onSaved: (value) {
                             _descriptionController.text = value.toString();
                             setState(() {
-                              bio = _descriptionController.text;
+                              _bio = _descriptionController.text;
                             });
                           },
                           validator: (value) {

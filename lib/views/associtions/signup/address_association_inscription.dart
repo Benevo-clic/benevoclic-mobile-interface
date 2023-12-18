@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 
-import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../cubit/association/association_state.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
-import 'bio_inscription.dart';
+import 'bio_association_inscription.dart';
 
-class AddressInscription extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+class AddressAssociationInscription extends StatefulWidget {
+  final String nameAssociation;
+  final String typeAssociation;
   final String phoneNumber;
   final String id;
   final String email;
 
-  const AddressInscription(
-      {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.birthDate,
-      required this.phoneNumber,
-      required this.id,
-      required this.email});
+  const AddressAssociationInscription({
+    super.key,
+    required this.nameAssociation,
+    required this.typeAssociation,
+    required this.phoneNumber,
+    required this.id,
+    required this.email,
+  });
 
   @override
-  State<AddressInscription> createState() => _AddressInscriptionState();
+  State<AddressAssociationInscription> createState() =>
+      _AddressAssociationInscriptionState();
 }
 
-class _AddressInscriptionState extends State<AddressInscription> {
+class _AddressAssociationInscriptionState
+    extends State<AddressAssociationInscription> {
   String _city = "";
   String _zipCode = "";
   String _address = "";
-
-  DateTime currentDate = DateTime.now();
-  TextEditingController dateController = TextEditingController();
 
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -50,23 +48,22 @@ class _AddressInscriptionState extends State<AddressInscription> {
   }
 
   void _initUser() async {
-    final cubit = context.read<VolunteerCubit>();
+    final cubit = context.read<AssociationCubit>();
     cubit.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-      if (state is VolunteerInfoState) {
+      if (state is AssociationInfoState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BioInscription(
-                firstName: widget.firstName,
-                lastName: widget.lastName,
-                birthDate: widget.birthDate,
+              builder: (context) => BioAssociationInscription(
+                nameAssociation: widget.nameAssociation,
+                typeAssociation: widget.typeAssociation,
                 phoneNumber: widget.phoneNumber,
                 address: _address,
                 city: _city,
@@ -75,22 +72,8 @@ class _AddressInscriptionState extends State<AddressInscription> {
                 email: widget.email,
               ),
             ),
-          ); // ici mettre la page d'inscription
+          );
         });
-      }
-
-      if (state is VolunteerErrorState) {
-        final snackBar = SnackBar(
-          content: const Text(
-              'Votre email est déjà utilisé, veuillez vous connecter'),
-          action: SnackBarAction(
-            label: 'Annuler',
-            onPressed: () {
-              // Some code to undo the change.
-            },
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }, builder: (context, state) {
       return Stack(
@@ -141,17 +124,16 @@ class _AddressInscriptionState extends State<AddressInscription> {
                           color: Colors.black87,
                         ),
                       ),
-                      _infoVolunteer(context, state),
+                      _infoAssociation(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            cubit.changeState(VolunteerInfoState(
-                              birthDate: widget.birthDate,
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phoneNumber: widget.phoneNumber,
+                            final cubit = context.read<AssociationCubit>();
+                            cubit.changeState(AssociationInfoState(
+                              name: widget.nameAssociation,
+                              type: widget.typeAssociation,
+                              phone: widget.phoneNumber,
                               address: "",
                               city: "",
                               postalCode: "",
@@ -184,12 +166,11 @@ class _AddressInscriptionState extends State<AddressInscription> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              final cubit = context.read<VolunteerCubit>();
-                              cubit.changeState(VolunteerInfoState(
-                                birthDate: widget.birthDate,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
-                                phoneNumber: widget.phoneNumber,
+                              final cubit = context.read<AssociationCubit>();
+                              cubit.changeState(AssociationInfoState(
+                                name: widget.nameAssociation,
+                                type: widget.typeAssociation,
+                                phone: widget.phoneNumber,
                                 address: _address,
                                 city: _city,
                                 postalCode: _zipCode,
@@ -226,7 +207,7 @@ class _AddressInscriptionState extends State<AddressInscription> {
     });
   }
 
-  Widget _infoVolunteer(BuildContext context, state) {
+  Widget _infoAssociation(BuildContext context, state) {
     return Stack(
       children: [
         Card(

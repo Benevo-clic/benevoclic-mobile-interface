@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -36,10 +37,12 @@ class UserCubit extends Cubit<UserState> {
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
-      await _authRepository.createAccount(email, password);
-      emit(UserEmailVerificationState());
+      User userCredential =
+          await _authRepository.createAccount(email, password);
+
+      emit(UserEmailVerificationState(user: userCredential));
     } catch (e) {
-      emit(UserErrorState(message: e.toString()));
+      emit(UserRegisterErrorState(message: e.toString()));
     }
   }
 
@@ -50,7 +53,7 @@ class UserCubit extends Cubit<UserState> {
       await _authRepository.sendEmailVerification();
       emit(UserEmailVerificationState());
     } catch (e) {
-      emit(UserErrorState(message: e.toString()));
+      emit(UserRegisterErrorState(message: e.toString()));
     }
   }
 

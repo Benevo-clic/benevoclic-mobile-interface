@@ -1,50 +1,46 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/views/volunteers/signup/picture_inscription.dart';
+import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/navigation_bar.dart';
+import 'package:namer_app/widgets/image_picker.dart';
 
-import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
+import '../navigation_association.dart';
 
-class BioInscription extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+class PictureInscription extends StatefulWidget {
+  final String nameAssociation;
+  final String typeAssociation;
   final String phoneNumber;
-  final String zipCode;
+  final String bio;
   final String address;
   final String city;
-  final String id;
+  final String zipcode;
   final String email;
+  final String id;
 
-  const BioInscription(
+  PictureInscription(
       {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.birthDate,
       required this.phoneNumber,
-      required this.zipCode,
+      required this.bio,
       required this.address,
       required this.city,
-      required this.id,
-      required this.email});
+      required this.zipcode,
+      required this.nameAssociation,
+      required this.typeAssociation, required this.email, required this.id});
 
   @override
-  State<BioInscription> createState() => _BioInscriptionState();
+  State<PictureInscription> createState() => _PictureInscriptionState();
 }
 
-class _BioInscriptionState extends State<BioInscription> {
-  late String bio = "";
-  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController _descriptionController = TextEditingController();
-
-  bool _isWordCountValid(String text) {
-    int wordCount =
-        text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
-    return wordCount <= 50;
-  }
+class _PictureInscriptionState extends State<PictureInscription> {
+  Uint8List? _imageProfile;
 
   @override
   void dispose() {
@@ -66,35 +62,21 @@ class _BioInscriptionState extends State<BioInscription> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-
-      if (state is VolunteerInfoState) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PictureInscription(
-                firstName: widget.firstName,
-                lastName: widget.lastName,
-                birthDate: widget.birthDate,
-                phoneNumber: widget.phoneNumber,
-                zipcode: widget.zipCode,
-                address: widget.address,
-                city: widget.city,
-                bio: bio,
-                id: widget.id,
-                email: widget.email,
-              ),
-            ),
-          ); // ici mettre la page d'inscription
-        });
+      if (state is AssociationPictureState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Votre photo de profil a été mise à jour"),
+          ),
+        );
+        _imageProfile = state.imageProfile;
       }
 
-      if (state is VolunteerErrorState) {
+      if (state is AssociationErrorState) {
         final snackBar = SnackBar(
           content: const Text(
-              'Une erreur est survenue lors de la création de votre compte, veuillez réessayer ultérieurement'),
+              'Une erreur est survenue lors de la création de votre compte'),
           action: SnackBarAction(
             label: 'Annuler',
             onPressed: () {
@@ -108,7 +90,7 @@ class _BioInscriptionState extends State<BioInscription> {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
                 Container(
@@ -146,30 +128,40 @@ class _BioInscriptionState extends State<BioInscription> {
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Text(
-                          'Décrivez-vous en quelques mots pour que les autres utilisateurs puissent vous connaître',
+                          'Définissez votre photo de profil',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * .04,
                             color: Colors.black87,
                           ),
                         ),
                       ),
-                      _infoVolunteer(context, state),
+                      _pictureAssociation(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            cubit.changeState(VolunteerInfoState(
-                              birthDate: widget.birthDate,
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phoneNumber: widget.phoneNumber,
-                                address: widget.address,
-                                city: widget.city,
-                                postalCode: widget.zipCode,
-                                bio: "",
-                              ),
+                            final cubit = context.read<AssociationCubit>();
+                            Association association = Association(
+                              name: widget.nameAssociation,
+                              type: widget.typeAssociation,
+                              phone: widget.phoneNumber,
+                              address: widget.address,
+                              city: widget.city,
+                              imageProfile: '',
+                              bio: widget.bio,
+                              email: widget.email,
+                              id: widget.id,
                             );
+                            BlocProvider.of<AssociationCubit>(context)
+                                .createAssociation(association);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NavigationExample(),
+                                ),
+                              );
+                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -188,7 +180,7 @@ class _BioInscriptionState extends State<BioInscription> {
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
                         child: Text(
-                            "Votre nom d’utilisateur sera visible sur votre profil. Vous pourrez le modifier quand vous le souhaitez.",
+                            "Votre photo de profile sera visible par les associations. Vous pourrez le modifier quand vous le souhaitez.",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .03,
                               color: Colors.black87,
@@ -199,18 +191,28 @@ class _BioInscriptionState extends State<BioInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              final cubit = context.read<VolunteerCubit>();
-                              cubit.changeState(VolunteerInfoState(
-                                birthDate: widget.birthDate,
-                                firstName: widget.firstName,
-                                lastName: widget.lastName,
-                                phoneNumber: widget.phoneNumber,
-                                bio: bio,
+                            final cubit = context.read<AssociationCubit>();
+                            Association association = Association(
+                              name: widget.nameAssociation,
+                              type: widget.typeAssociation,
+                              phone: widget.phoneNumber,
+                              address: widget.address,
+                              city: widget.city,
+                              imageProfile: base64Encode(_imageProfile!),
+                              bio: widget.bio,
+                              email: widget.email,
+                              id: widget.id,
+                            );
+                            BlocProvider.of<AssociationCubit>(context)
+                                .createAssociation(association);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NavigationAssociation(),
                                 ),
                               );
-                            }
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
@@ -220,7 +222,7 @@ class _BioInscriptionState extends State<BioInscription> {
                             elevation: 5,
                           ),
                           child: Text(
-                            "Continuer",
+                            "Terminer",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .04,
                               color: Colors.black,
@@ -242,13 +244,15 @@ class _BioInscriptionState extends State<BioInscription> {
     });
   }
 
-  Widget _infoVolunteer(BuildContext context, state) {
+  Widget _pictureAssociation(BuildContext context, state) {
+    double padding = MediaQuery.of(context).size.height * .009 / 4;
+
     return Stack(
       children: [
         SizedBox(
           height: 20,
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * .9,
           height: MediaQuery.of(context).size.height * .35,
           child: Card(
@@ -259,51 +263,9 @@ class _BioInscriptionState extends State<BioInscription> {
                 borderRadius: BorderRadius.circular(25),
                 side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
             color: Colors.white.withOpacity(0.8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, left: 20, right: 20, bottom: 10),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _descriptionController,
-                          hintText:
-                              "Entrez une description de vous jusqu'à 50 mots (facultatif)",
-                          keyboardType: TextInputType.multiline,
-                          maxLine:
-                              MediaQuery.of(context).size.height * 0.44 ~/ 50,
-                          obscureText: false,
-                          prefixIcons: false,
-                          onSaved: (value) {
-                            _descriptionController.text = value.toString();
-                            setState(() {
-                              bio = _descriptionController.text;
-                            });
-                          },
-                          validator: (value) {
-                            if (value != null && !_isWordCountValid(value)) {
-                              return "votre description ne doit pas dépasser 50 mots";
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox.fromSize(
-                  size: const Size(0, 15),
-                ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.all(padding),
+              child: MyImagePicker(rulesType: RulesType.USER_ASSOCIATION),
             ),
           ),
         )
@@ -311,5 +273,3 @@ class _BioInscriptionState extends State<BioInscription> {
     );
   }
 }
-
-// UserCreatedState

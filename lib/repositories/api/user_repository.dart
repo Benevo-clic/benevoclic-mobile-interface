@@ -58,7 +58,6 @@ class UserRepository {
         headers: headers,
       ),
     );
-    print(response.data);
     if (response.statusCode == 200) {
       return UserModel.fromJson(response.data);
     } else {

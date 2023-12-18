@@ -25,16 +25,27 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   Widget buildNavigationIcon(String assetName, int index, {double? size}) {
     final bool isSelected = index == currentPageIndex;
-    final Color iconColor = isSelected
-        ? Color.fromRGBO(55, 94, 232, 1)
-        : Color.fromRGBO(217, 217, 217,
-            1); // Couleurs pour l'état sélectionné/non sélectionné
 
-    return SvgPicture.asset(
-      assetName,
-      height: size ?? 24,
-      color: iconColor,
-    );
+    // Logique pour l'état sélectionné
+    if (isSelected) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            assetName,
+            height: size ?? 24,
+            color: Color.fromRGBO(55, 94, 232, 1),
+          ),
+        ],
+      );
+    } else {
+      return SvgPicture.asset(
+        assetName,
+        height: size ?? 24,
+      );
+    }
   }
 
   NavigationBar buildNavigationBar() {
@@ -45,7 +56,6 @@ class _NavigationExampleState extends State<NavigationExample> {
       onDestinationSelected: (index) =>
           setState(() => currentPageIndex = index),
       indicatorColor: Colors.transparent,
-      // Pas de ligne de sélection
       destinations: [
         NavigationDestination(
           icon: buildNavigationIcon('assets/icons/narbarannouncement.svg', 0),

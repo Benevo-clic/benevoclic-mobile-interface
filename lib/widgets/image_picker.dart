@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
@@ -58,7 +59,10 @@ class _MyImagePickerState extends State<MyImagePicker> {
                 onPressed: () {
                   showImagePickerOption(context);
                 },
-                icon: const Icon(Icons.add_a_photo),
+                icon: SvgPicture.asset(
+                  'assets/icons/Ellipse 116.svg',
+                  height: 20,
+                ),
               ),
             )
           ],

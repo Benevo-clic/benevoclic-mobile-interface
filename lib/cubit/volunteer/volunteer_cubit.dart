@@ -32,4 +32,15 @@ class VolunteerCubit extends Cubit<VolunteerState> {
       emit(VolunteerErrorState(message: e.toString()));
     }
   }
+
+  Future<void> getVolunteer(String email) async {
+    emit(VolunteerLoadingState());
+    print("create volunteer in cubit");
+    try {
+      final result = await _volunteerRepository.get(email);
+      print(result);
+    } catch (e) {
+      emit(VolunteerErrorState(message: e.toString()));
+    }
+  }
 }

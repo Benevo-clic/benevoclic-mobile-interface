@@ -11,6 +11,7 @@ class AuthentificationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocBuilder<AuthTypeCubit, AuthTypeState>(
       builder: (context, state) {
         if (state is AssociationLoginState) {
@@ -18,6 +19,7 @@ class AuthentificationView extends StatelessWidget {
             title: RulesType.USER_ASSOCIATION,
           );
         } else if (state is VolunteerLoginState) {
+          print(state);
           return LoginPage(
             title: RulesType.USER_VOLUNTEER,
           );

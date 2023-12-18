@@ -10,12 +10,12 @@ import '../views/common/authentification/repository/auth_repository.dart';
 import 'auth_app_bar.dart';
 
 class InscriptionDemarche extends StatelessWidget {
-  final String adress;
+  final String address;
   final String mdp;
   final RulesType title;
 
   InscriptionDemarche(
-      {required this.adress, required this.mdp, required this.title});
+      {required this.address, required this.mdp, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class InscriptionDemarche extends StatelessWidget {
                                 await AuthRepository().verifiedEmail();
                             if (isEmailVerified) {
                               BlocProvider.of<UserCubit>(context)
-                                  .createUserType(title, adress, mdp);
+                                  .createUserType(title, address, mdp);
                               if (title == RulesType.USER_VOLUNTEER) {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {

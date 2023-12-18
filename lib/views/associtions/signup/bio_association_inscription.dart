@@ -1,44 +1,47 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/navigation_bar.dart';
-import 'package:namer_app/widgets/image_picker.dart';
+import 'package:namer_app/views/associtions/signup/picture_inscription.dart';
 
+import '../../../cubit/association/association_state.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
-import '../../../models/volunteer_model.dart';
 import '../../../widgets/auth_app_bar.dart';
+import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
-class PictureInscription extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+class BioAssociationInscription extends StatefulWidget {
+  final String nameAssociation;
+  final String typeAssociation;
   final String phoneNumber;
-  final String bio;
+  final String zipCode;
   final String address;
   final String city;
-  final String zipcode;
 
-  PictureInscription(
+  const BioAssociationInscription(
       {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.birthDate,
-      required this.phoneNumber,
-      required this.bio,
+      required this.zipCode,
       required this.address,
       required this.city,
-      required this.zipcode});
+      required this.nameAssociation,
+      required this.typeAssociation,
+      required this.phoneNumber});
 
   @override
-  State<PictureInscription> createState() => _PictureInscriptionState();
+  State<BioAssociationInscription> createState() =>
+      _BioAssociationInscriptionState();
 }
 
-class _PictureInscriptionState extends State<PictureInscription> {
-  Uint8List? _imageProfile;
+class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
+  late String _bio = "";
+  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  TextEditingController _descriptionController = TextEditingController();
+
+  bool _isWordCountValid(String text) {
+    int wordCount =
+        text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
+    return wordCount <= 50;
+  }
 
   @override
   void dispose() {
@@ -60,21 +63,31 @@ class _PictureInscriptionState extends State<PictureInscription> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-      if (state is VolunteerPictureState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Votre photo de profil a été mise à jour"),
-          ),
-        );
-        _imageProfile = state.imageProfile;
+      if (state is AssociationInfoState) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PictureInscription(
+                phoneNumber: widget.phoneNumber,
+                zipcode: widget.zipCode,
+                address: widget.address,
+                city: widget.city,
+                bio: _bio,
+                nameAssociation: widget.nameAssociation,
+                typeAssociation: widget.typeAssociation,
+              ),
+            ),
+          ); // ici mettre la page d'inscription
+        });
       }
 
       if (state is VolunteerErrorState) {
         final snackBar = SnackBar(
           content: const Text(
-              'Une erreur est survenue lors de la création de votre compte'),
+              'Une erreur est survenue lors de la création de votre compte, veuillez réessayer ultérieurement'),
           action: SnackBarAction(
             label: 'Annuler',
             onPressed: () {
@@ -88,7 +101,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Container(
@@ -126,41 +139,30 @@ class _PictureInscriptionState extends State<PictureInscription> {
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: Text(
-                          'Définissez votre photo de profil',
+                          'Décrivez-vous en quelques mots pour que les autres utilisateurs puissent vous connaître',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * .04,
                             color: Colors.black87,
                           ),
                         ),
                       ),
-                      _pictureVolunteer(context, state),
+                      _infoAssociation(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            Volunteer volunteer = Volunteer(
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phone: widget.phoneNumber,
-                              birthDayDate: widget.birthDate,
-                              imageProfile: '',
-                              bio: widget.bio,
-                              email: '',
+                            final cubit = context.read<AssociationCubit>();
+                            cubit.changeState(
+                              AssociationInfoState(
+                                name: widget.nameAssociation,
+                                type: widget.typeAssociation,
+                                phone: widget.phoneNumber,
+                                address: widget.address,
+                                city: widget.city,
+                                postalCode: widget.zipCode,
+                                bio: "",
+                              ),
                             );
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
-
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
-                                ),
-                              );
-                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -179,7 +181,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
                         child: Text(
-                            "Votre photo de profile sera visible par les associations. Vous pourrez le modifier quand vous le souhaitez.",
+                            "Votre nom d’utilisateur sera visible sur votre profil. Vous pourrez le modifier quand vous le souhaitez.",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .03,
                               color: Colors.black87,
@@ -190,28 +192,21 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            final cubit = context.read<VolunteerCubit>();
-                            Volunteer volunteer = Volunteer(
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phone: widget.phoneNumber,
-                              birthDayDate: widget.birthDate,
-                              imageProfile: base64Encode(_imageProfile!),
-                              bio: widget.bio,
-                              email: '',
-                            );
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              final cubit = context.read<AssociationCubit>();
+                              cubit.changeState(
+                                AssociationInfoState(
+                                  name: widget.nameAssociation,
+                                  type: widget.typeAssociation,
+                                  phone: widget.phoneNumber,
+                                  address: widget.address,
+                                  city: widget.city,
+                                  postalCode: widget.zipCode,
+                                  bio: _bio,
                                 ),
                               );
-                            });
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
@@ -221,7 +216,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             elevation: 5,
                           ),
                           child: Text(
-                            "Terminer",
+                            "Continuer",
                             style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width * .04,
                               color: Colors.black,
@@ -243,15 +238,13 @@ class _PictureInscriptionState extends State<PictureInscription> {
     });
   }
 
-  Widget _pictureVolunteer(BuildContext context, state) {
-    double padding = MediaQuery.of(context).size.height * .009 / 4;
-
+  Widget _infoAssociation(BuildContext context, state) {
     return Stack(
       children: [
         SizedBox(
           height: 20,
         ),
-        SizedBox(
+        Container(
           width: MediaQuery.of(context).size.width * .9,
           height: MediaQuery.of(context).size.height * .35,
           child: Card(
@@ -262,9 +255,51 @@ class _PictureInscriptionState extends State<PictureInscription> {
                 borderRadius: BorderRadius.circular(25),
                 side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
             color: Colors.white.withOpacity(0.8),
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 20, right: 20, bottom: 10),
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextFormField(
+                          controller: _descriptionController,
+                          hintText:
+                              "Entrez une description de vous jusqu'à 50 mots (facultatif)",
+                          keyboardType: TextInputType.multiline,
+                          maxLine:
+                              MediaQuery.of(context).size.height * 0.44 ~/ 50,
+                          obscureText: false,
+                          prefixIcons: false,
+                          onSaved: (value) {
+                            _descriptionController.text = value.toString();
+                            setState(() {
+                              _bio = _descriptionController.text;
+                            });
+                          },
+                          validator: (value) {
+                            if (value != null && !_isWordCountValid(value)) {
+                              return "votre description ne doit pas dépasser 50 mots";
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox.fromSize(
+                  size: const Size(0, 15),
+                ),
+              ],
             ),
           ),
         )
@@ -273,3 +308,4 @@ class _PictureInscriptionState extends State<PictureInscription> {
   }
 }
 
+// UserCreatedState

@@ -89,6 +89,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           icon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                           obscureText: false,
+                          prefixIcons: true,
                           maxLine: 1,
                           onSaved: (value) {
                             _email = value.toString();
@@ -111,6 +112,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                           icon: Icons.lock,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: true,
+                          prefixIcons: true,
                           maxLine: 1,
                           onSaved: (value) {
                             _password = value.toString();

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
 
@@ -22,36 +24,43 @@ class AssociationErrorState extends AssociationState {
   AssociationErrorState({required this.message});
 }
 
-class AssociationPictureState extends AssociationState {}
 
 class AssociationInfoState extends AssociationState {
-  final String? name;
+  final String name;
   final String? bio;
   final String? address;
-  final String? phone;
-  final String? email;
+  final String phone;
   final String? city;
   final String? country;
   final String? postalCode;
-  final String? siret;
+  final String type;
 
   AssociationInfoState({
-    this.name,
+    required this.name,
     this.bio,
     this.address,
-    this.phone,
-    this.email,
+    required this.phone,
     this.city,
     this.country,
     this.postalCode,
-    this.siret,
+    required this.type,
   });
+}
+
+class AssociationPictureState extends AssociationState {
+  final Uint8List? imageProfile;
+
+  AssociationPictureState({required this.imageProfile});
 }
 
 class AssociationUpdateState extends AssociationState {}
 
 class AssociationDeleteState extends AssociationState {}
 
-class AssociationVerifyState extends AssociationState {}
+class AssociationVerifyState extends AssociationState {
+  final bool isVerified;
+
+  AssociationVerifyState({required this.isVerified});
+}
 
 class AssociationVerifyErrorState extends AssociationState {}

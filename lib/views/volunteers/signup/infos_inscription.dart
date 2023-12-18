@@ -29,7 +29,6 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
   @override
   void dispose() {
     super.dispose();
-    _formKey.currentState!.dispose();
   }
 
   @override

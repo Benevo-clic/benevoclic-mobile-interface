@@ -3,19 +3,20 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/navigation_bar.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
-import '../../../cubit/volunteer/volunteer_state.dart';
-import '../../../models/volunteer_model.dart';
 import '../../../widgets/auth_app_bar.dart';
+import '../navigation_association.dart';
 
 class PictureInscription extends StatefulWidget {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+  final String nameAssociation;
+  final String typeAssociation;
   final String phoneNumber;
   final String bio;
   final String address;
@@ -24,14 +25,13 @@ class PictureInscription extends StatefulWidget {
 
   PictureInscription(
       {super.key,
-      required this.firstName,
-      required this.lastName,
-      required this.birthDate,
       required this.phoneNumber,
       required this.bio,
       required this.address,
       required this.city,
-      required this.zipcode});
+      required this.zipcode,
+      required this.nameAssociation,
+      required this.typeAssociation});
 
   @override
   State<PictureInscription> createState() => _PictureInscriptionState();
@@ -60,9 +60,9 @@ class _PictureInscriptionState extends State<PictureInscription> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
-      if (state is VolunteerPictureState) {
+      if (state is AssociationPictureState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Votre photo de profil a été mise à jour"),
@@ -71,7 +71,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
         _imageProfile = state.imageProfile;
       }
 
-      if (state is VolunteerErrorState) {
+      if (state is AssociationErrorState) {
         final snackBar = SnackBar(
           content: const Text(
               'Une erreur est survenue lors de la création de votre compte'),
@@ -133,26 +133,24 @@ class _PictureInscriptionState extends State<PictureInscription> {
                           ),
                         ),
                       ),
-                      _pictureVolunteer(context, state),
+                      _pictureAssociation(context, state),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            Volunteer volunteer = Volunteer(
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
+                            final cubit = context.read<AssociationCubit>();
+                            Association association = Association(
+                              name: widget.nameAssociation,
+                              type: widget.typeAssociation,
                               phone: widget.phoneNumber,
-                              birthDayDate: widget.birthDate,
+                              address: widget.address,
+                              city: widget.city,
                               imageProfile: '',
                               bio: widget.bio,
                               email: '',
                             );
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
-
+                            BlocProvider.of<AssociationCubit>(context)
+                                .createAssociation(association);
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.push(
                                 context,
@@ -190,25 +188,24 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            final cubit = context.read<VolunteerCubit>();
-                            Volunteer volunteer = Volunteer(
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
+                            final cubit = context.read<AssociationCubit>();
+                            Association association = Association(
+                              name: widget.nameAssociation,
+                              type: widget.typeAssociation,
                               phone: widget.phoneNumber,
-                              birthDayDate: widget.birthDate,
+                              address: widget.address,
+                              city: widget.city,
                               imageProfile: base64Encode(_imageProfile!),
                               bio: widget.bio,
                               email: '',
                             );
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
+                            BlocProvider.of<AssociationCubit>(context)
+                                .createAssociation(association);
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
+                                  builder: (context) => NavigationAssociation(),
                                 ),
                               );
                             });
@@ -243,7 +240,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
     });
   }
 
-  Widget _pictureVolunteer(BuildContext context, state) {
+  Widget _pictureAssociation(BuildContext context, state) {
     double padding = MediaQuery.of(context).size.height * .009 / 4;
 
     return Stack(
@@ -264,7 +261,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
             color: Colors.white.withOpacity(0.8),
             child: Padding(
               padding: EdgeInsets.all(padding),
-              child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
+              child: MyImagePicker(rulesType: RulesType.USER_ASSOCIATION),
             ),
           ),
         )
@@ -272,4 +269,3 @@ class _PictureInscriptionState extends State<PictureInscription> {
     );
   }
 }
-

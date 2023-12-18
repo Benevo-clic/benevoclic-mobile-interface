@@ -5,14 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/type/rules_type.dart';
 
+import '../cubit/association/association_state.dart';
 import '../cubit/volunteer/volunteer_cubit.dart';
 import '../cubit/volunteer/volunteer_state.dart';
 
 class MyImagePicker extends StatefulWidget {
   final Uint8List? image;
+  final RulesType? rulesType;
 
-  const MyImagePicker({super.key, this.image});
+  const MyImagePicker({super.key, this.image, this.rulesType});
 
   @override
   State<MyImagePicker> createState() => _MyImagePickerState();
@@ -130,8 +134,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
       () {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
-        BlocProvider.of<VolunteerCubit>(context)
-            .changeState(VolunteerPictureState(imageProfile: _image));
+        if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+          BlocProvider.of<AssociationCubit>(context)
+              .changeState(AssociationPictureState(imageProfile: _image));
+        } else {
+          BlocProvider.of<VolunteerCubit>(context)
+              .changeState(VolunteerPictureState(imageProfile: _image));
+        }
       },
     );
     Navigator.of(context).pop();

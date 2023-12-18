@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/repositories/api/association_repository.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/repositories/api/volunteer_repository.dart';
 import 'package:namer_app/settings/cubit/setting_cubit.dart';
@@ -38,7 +40,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => OtherAuthCubit(AuthRepository())),
           BlocProvider(
               create: (context) =>
-                  VolunteerCubit(volunteerRepository: VolunteerRepository()))
+                  VolunteerCubit(volunteerRepository: VolunteerRepository())),
+          BlocProvider(
+              create: (context) => AssociationCubit(
+                  associationRepository: AssociationRepository())),
         ],
         child: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {

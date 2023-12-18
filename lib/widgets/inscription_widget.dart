@@ -64,7 +64,7 @@ class InscriptionWidget extends StatelessWidget {
                         color: Colors.black87,
                       ),
                     ),
-                    SignupForm(),
+                    SignupForm(rulesType: rulesType),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

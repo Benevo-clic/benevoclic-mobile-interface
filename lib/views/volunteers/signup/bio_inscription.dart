@@ -64,7 +64,6 @@ class _BioInscriptionState extends State<BioInscription> {
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {
-      print("state $state");
 
       if (state is VolunteerInfoState) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -89,7 +88,7 @@ class _BioInscriptionState extends State<BioInscription> {
       if (state is VolunteerErrorState) {
         final snackBar = SnackBar(
           content: const Text(
-              'Votre email est déjà utilisé, veuillez vous connecter'),
+              'Une erreur est survenue lors de la création de votre compte, veuillez réessayer ultérieurement'),
           action: SnackBarAction(
             label: 'Annuler',
             onPressed: () {

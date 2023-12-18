@@ -11,7 +11,9 @@ import '../views/common/authentification/login/widgets/customTextFormField_widge
 import 'inscription_volunteer_signup.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final RulesType rulesType;
+
+  const SignupForm({super.key, required this.rulesType});
 
   @override
   State<SignupForm> createState() => _SignupFormState();
@@ -60,9 +62,9 @@ class _SignupFormState extends State<SignupForm> {
             context,
             MaterialPageRoute(
               builder: (context) => InscriptionDemarche(
-                adress: _email.toString(),
+                address: _email.toString(),
                 mdp: _password.toString(),
-                title: RulesType.USER_VOLUNTEER,
+                title: widget.rulesType,
               ),
             ),
           ); // ici mettre la page d'inscription

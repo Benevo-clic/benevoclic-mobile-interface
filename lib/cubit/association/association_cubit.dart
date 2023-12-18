@@ -7,8 +7,9 @@ import 'association_state.dart';
 class AssociationCubit extends Cubit<AssociationState> {
   final AssociationRepository _associationRepository;
 
-  AssociationCubit(this._associationRepository)
-      : super(AssociationInitialState());
+  AssociationCubit({required AssociationRepository associationRepository})
+      : _associationRepository = associationRepository,
+        super(AssociationInitialState());
 
   void initState() {
     emit(AssociationInitialState());
@@ -18,22 +19,23 @@ class AssociationCubit extends Cubit<AssociationState> {
     emit(state);
   }
 
-  Future<void> verifySiretAssociation(String siret) async {
-    emit(AssociationLoadingState());
-    try {
-      await _associationRepository.verifySiretAssocition(siret);
-      emit(AssociationVerifyState());
-    } catch (e) {
-      emit(AssociationVerifyErrorState());
-    }
-  }
+  // Future<void> verifySiretAssociation(String siret) async {
+  //   emit(AssociationLoadingState());
+  //   try {
+  //     Future.delayed(const Duration(seconds: 3));
+  //     bool verify = await _associationRepository.verifySiretAssociation(siret);
+  //     print(verify);
+  //     emit(AssociationVerifyState(isVerified: verify));
+  //   } catch (e) {
+  //     emit(AssociationVerifyErrorState());
+  //   }
+  // }
 
   Future<void> createAssociation(Association association) async {
     emit(AssociationLoadingState());
     try {
-      final result =
-          await _associationRepository.createAssociation(association);
-      emit(AssociationCreatedState(associationModel: result));
+      await _associationRepository.createAssociation(association);
+      emit(AssociationCreatedState(associationModel: association));
     } catch (e) {
       emit(AssociationErrorState(message: e.toString()));
     }

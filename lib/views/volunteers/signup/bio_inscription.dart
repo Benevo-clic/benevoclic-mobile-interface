@@ -15,6 +15,8 @@ class BioInscription extends StatefulWidget {
   final String zipCode;
   final String address;
   final String city;
+  final String id;
+  final String email;
 
   const BioInscription(
       {super.key,
@@ -24,7 +26,9 @@ class BioInscription extends StatefulWidget {
       required this.phoneNumber,
       required this.zipCode,
       required this.address,
-      required this.city});
+      required this.city,
+      required this.id,
+      required this.email});
 
   @override
   State<BioInscription> createState() => _BioInscriptionState();
@@ -79,6 +83,8 @@ class _BioInscriptionState extends State<BioInscription> {
                 address: widget.address,
                 city: widget.city,
                 bio: bio,
+                id: widget.id,
+                email: widget.email,
               ),
             ),
           ); // ici mettre la page d'inscription

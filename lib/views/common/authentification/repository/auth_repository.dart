@@ -51,12 +51,13 @@ class AuthRepository {
     }
   }
 
-  createAccount(email, password) async {
+  Future<User> createAccount(email, password) async {
     userCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
 
     print(userCredential.user?.getIdToken(true));
     _auth.currentUser?.sendEmailVerification();
+    return _auth.currentUser!;
   }
 
   Future<bool> sendEmailVerification() async {

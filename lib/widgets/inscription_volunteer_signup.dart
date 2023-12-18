@@ -10,12 +10,16 @@ import '../views/common/authentification/repository/auth_repository.dart';
 import 'auth_app_bar.dart';
 
 class InscriptionDemarche extends StatelessWidget {
-  final String address;
   final String mdp;
   final RulesType title;
+  final String email;
+  final String id;
 
   InscriptionDemarche(
-      {required this.address, required this.mdp, required this.title});
+      {required this.mdp,
+      required this.title,
+      required this.email,
+      required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +90,7 @@ class InscriptionDemarche extends StatelessWidget {
                                 await AuthRepository().verifiedEmail();
                             if (isEmailVerified) {
                               BlocProvider.of<UserCubit>(context)
-                                  .createUserType(title, address, mdp);
+                                  .createUserType(title, email, mdp);
                               if (title == RulesType.USER_VOLUNTEER) {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
@@ -94,7 +98,11 @@ class InscriptionDemarche extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            InfosInscriptionVolunteer()),
+                                          InfosInscriptionVolunteer(
+                                        email: email,
+                                        id: id,
+                                      ),
+                                    ),
                                   );
                                 });
                               } else if (title == RulesType.USER_ASSOCIATION) {
@@ -104,7 +112,11 @@ class InscriptionDemarche extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            InscriptionAssociation()),
+                                          InscriptionAssociation(
+                                        email: email,
+                                        id: id,
+                                      ),
+                                    ),
                                   ); // Pas nécessaire de mettre cette partie dans addPostFrameCallback
                                 });
                               }

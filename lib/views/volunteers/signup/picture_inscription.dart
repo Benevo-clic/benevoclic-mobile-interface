@@ -21,6 +21,8 @@ class PictureInscription extends StatefulWidget {
   final String address;
   final String city;
   final String zipcode;
+  final String email;
+  final String id;
 
   PictureInscription(
       {super.key,
@@ -31,7 +33,9 @@ class PictureInscription extends StatefulWidget {
       required this.bio,
       required this.address,
       required this.city,
-      required this.zipcode});
+      required this.zipcode,
+      required this.email,
+      required this.id});
 
   @override
   State<PictureInscription> createState() => _PictureInscriptionState();
@@ -146,13 +150,14 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               birthDayDate: widget.birthDate,
                               imageProfile: '',
                               bio: widget.bio,
-                              email: '',
+                              email: widget.email,
+                              id: widget.id,
                             );
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
                             cubit.changeState(VolunteerCreatedState(
                                 volunteerModel: volunteer));
-
+                            print(volunteer.id);
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Navigator.push(
                                 context,
@@ -198,7 +203,8 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               birthDayDate: widget.birthDate,
                               imageProfile: base64Encode(_imageProfile!),
                               bio: widget.bio,
-                              email: '',
+                              email: widget.email,
+                              id: widget.id,
                             );
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);

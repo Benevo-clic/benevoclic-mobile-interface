@@ -12,13 +12,17 @@ class AddressInscription extends StatefulWidget {
   final String lastName;
   final String birthDate;
   final String phoneNumber;
+  final String id;
+  final String email;
 
   const AddressInscription(
       {super.key,
       required this.firstName,
       required this.lastName,
       required this.birthDate,
-      required this.phoneNumber});
+      required this.phoneNumber,
+      required this.id,
+      required this.email});
 
   @override
   State<AddressInscription> createState() => _AddressInscriptionState();
@@ -67,6 +71,8 @@ class _AddressInscriptionState extends State<AddressInscription> {
                 address: _address,
                 city: _city,
                 zipCode: _zipCode,
+                id: widget.id,
+                email: widget.email,
               ),
             ),
           ); // ici mettre la page d'inscription

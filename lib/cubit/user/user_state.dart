@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/user_model.dart';
 
@@ -28,7 +29,11 @@ class UserDisconnectedState extends UserState {
   UserDisconnectedState({required this.statusCode});
 }
 
-class UserEmailVerificationState extends UserState {}
+class UserEmailVerificationState extends UserState {
+  final User? user;
+
+  UserEmailVerificationState({this.user});
+}
 
 class UserConnexionState extends UserState {
   final UserModel userModel;

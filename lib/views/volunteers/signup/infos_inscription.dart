@@ -9,7 +9,11 @@ import '../../common/authentification/login/widgets/customTextFormField_widget.d
 import 'address_inscription.dart';
 
 class InfosInscriptionVolunteer extends StatefulWidget {
-  const InfosInscriptionVolunteer({super.key});
+  final String id;
+  final String email;
+
+  const InfosInscriptionVolunteer(
+      {super.key, required this.id, required this.email});
 
   @override
   State<InfosInscriptionVolunteer> createState() =>
@@ -77,6 +81,8 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
                 lastName: _lastName,
                 birthDate: _birthDayDate,
                 phoneNumber: _phone,
+                email: widget.email,
+                id: widget.id,
               ),
             ),
           ); // ici mettre la page d'inscription

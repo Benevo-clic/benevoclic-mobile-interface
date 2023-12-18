@@ -22,6 +22,8 @@ class PictureInscription extends StatefulWidget {
   final String address;
   final String city;
   final String zipcode;
+  final String email;
+  final String id;
 
   PictureInscription(
       {super.key,
@@ -31,7 +33,7 @@ class PictureInscription extends StatefulWidget {
       required this.city,
       required this.zipcode,
       required this.nameAssociation,
-      required this.typeAssociation});
+      required this.typeAssociation, required this.email, required this.id});
 
   @override
   State<PictureInscription> createState() => _PictureInscriptionState();
@@ -147,7 +149,8 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               city: widget.city,
                               imageProfile: '',
                               bio: widget.bio,
-                              email: '',
+                              email: widget.email,
+                              id: widget.id,
                             );
                             BlocProvider.of<AssociationCubit>(context)
                                 .createAssociation(association);
@@ -197,8 +200,11 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               city: widget.city,
                               imageProfile: base64Encode(_imageProfile!),
                               bio: widget.bio,
-                              email: '',
+                              email: widget.email,
+                              id: widget.id,
                             );
+                            print(association);
+                            print("+++++++++++++++++++++++++++" + association.id.toString());
                             BlocProvider.of<AssociationCubit>(context)
                                 .createAssociation(association);
                             WidgetsBinding.instance.addPostFrameCallback((_) {

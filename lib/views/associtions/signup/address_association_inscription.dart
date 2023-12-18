@@ -11,12 +11,16 @@ class AddressAssociationInscription extends StatefulWidget {
   final String nameAssociation;
   final String typeAssociation;
   final String phoneNumber;
+  final String id;
+  final String email;
 
   const AddressAssociationInscription({
     super.key,
     required this.nameAssociation,
     required this.typeAssociation,
     required this.phoneNumber,
+    required this.id,
+    required this.email,
   });
 
   @override
@@ -64,6 +68,8 @@ class _AddressAssociationInscriptionState
                 address: _address,
                 city: _city,
                 zipCode: _zipCode,
+                id: widget.id,
+                email: widget.email,
               ),
             ),
           );

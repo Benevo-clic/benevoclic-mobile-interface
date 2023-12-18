@@ -62,9 +62,10 @@ class _SignupFormState extends State<SignupForm> {
             context,
             MaterialPageRoute(
               builder: (context) => InscriptionDemarche(
-                address: _email.toString(),
+                id: state.user!.uid,
                 mdp: _password.toString(),
                 title: widget.rulesType,
+                email: _email.toString(),
               ),
             ),
           ); // ici mettre la page d'inscription

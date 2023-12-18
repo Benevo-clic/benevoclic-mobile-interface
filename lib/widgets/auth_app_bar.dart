@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/views/home_view.dart';
 
 import '../views/navigation_no_indentify.dart';
 
 class AuthAppBar extends StatelessWidget {
-  const AuthAppBar({super.key, required this.contexts});
+  final bool? isLogin;
+
+  const AuthAppBar({super.key, required this.contexts, this.isLogin});
 
   final BuildContext contexts;
 
@@ -24,8 +27,15 @@ class AuthAppBar extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10),
                       child: IconButton(
                         onPressed: () {
+                        if (isLogin != true) {
                           Navigator.pop(contexts);
-                        },
+                        } else {
+                          Navigator.push(
+                              contexts,
+                              MaterialPageRoute(
+                                  builder: (contexts) => HomeView()));
+                        }
+                      },
                       icon: SvgPicture.asset(
                         "assets/icons/arrow-left.svg",
                         height: MediaQuery.of(contexts).size.height * .04,

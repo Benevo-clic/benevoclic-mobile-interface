@@ -52,6 +52,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is ResponseUserState) {
+        print(
+            "++++++++++++++++++++++++++++++++++++++++responseUserState${state.user.isConnect}");
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => NavigationExample()));

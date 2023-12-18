@@ -17,11 +17,15 @@ class UserModel {
   @JsonKey(name: 'rule')
   final RuleModel rule;
 
+  @JsonKey(name: 'email')
+  final String? email;
+
   UserModel({
     required this.id,
     required this.isActif,
     required this.isConnect,
     required this.rule,
+    required this.email,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

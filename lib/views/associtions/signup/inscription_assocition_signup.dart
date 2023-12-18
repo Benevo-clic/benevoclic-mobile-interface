@@ -8,7 +8,11 @@ import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
 class InscriptionAssociation extends StatefulWidget {
-  const InscriptionAssociation({super.key});
+  final String id;
+  final String email;
+
+  const InscriptionAssociation(
+      {super.key, required this.id, required this.email});
 
   @override
   State<InscriptionAssociation> createState() => _InscriptionAssociationState();
@@ -50,6 +54,8 @@ class _InscriptionAssociationState extends State<InscriptionAssociation> {
                       nameAssociation: state.name,
                       typeAssociation: state.type,
                       phoneNumber: state.phone,
+                      id: widget.id,
+                      email: widget.email,
                     ),
               ),
             );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/util/color.dart';
 
+import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../widgets/build_navbar.dart';
 import '../common/annonces/annonces.dart';
@@ -31,7 +33,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       BuildNavigationModel(
           iconTitle: 'assets/icons/Menu.svg', label: 'Annonces'),
       BuildNavigationModel(
-          iconTitle: 'assets/icons/heart.svg', label: 'Favoris', size: 28),
+          iconTitle: 'assets/icons/heart.svg', label: 'Favoris', size: 20),
       BuildNavigationModel(
           iconTitle: 'assets/icons/chat.svg', label: 'Messages'),
       BuildNavigationModel(
@@ -39,18 +41,6 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
         label: 'Profil',
       ),
     ];
-  }
-
-  BuildNavBar buildNavigationBar() {
-    return BuildNavBar(
-      currentPageIndex: currentPageIndex,
-      buildNavigationModel: buildNavigationModel,
-      onPageChanged: (index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-    );
   }
 
   @override
@@ -61,11 +51,18 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
           border:
               Border(top: BorderSide(color: marron, width: 2)), // Votre style
         ),
-        child: buildNavigationBar(),
+        child: BuldNavBar(
+          buildNavigationModel: buildNavigationModel,
+        ),
       ),
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: pages,
+      body: BlocBuilder<PageCubit, int>(
+        builder: (context, currentPageIndex) {
+          final pages = [Annonces(), Annonces(), Messages(), ProfilPage()];
+          return IndexedStack(
+            index: currentPageIndex,
+            children: pages,
+          );
+        },
       ),
     );
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
 
+import '../../cubit/page/page_cubit.dart';
 import '../common/annonces/annonces.dart';
 import '../common/messages/messages.dart';
 import '../common/profiles/profil.dart';
@@ -61,17 +63,6 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     ),
   ];
 
-  BuildNavBar buildNavigationBar() {
-    return BuildNavBar(
-      currentPageIndex: currentPageIndex,
-      buildNavigationModel: buildNavigationModel,
-      onPageChanged: (index) {
-        setState(() {
-          currentPageIndex = index;
-        });
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +72,18 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           border:
               Border(top: BorderSide(color: marron, width: 2)), // Votre style
         ),
-        child: buildNavigationBar(),
+        child: BuldNavBar(
+          buildNavigationModel: buildNavigationModel,
+        ),
       ),
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: pages,
+      body: BlocBuilder<PageCubit, int>(
+        builder: (context, currentPageIndex) {
+          final pages = [Annonces(), Annonces(), Messages(), ProfilPage()];
+          return IndexedStack(
+            index: currentPageIndex,
+            children: pages,
+          );
+        },
       ),
     );
   }

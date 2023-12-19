@@ -10,7 +10,6 @@ import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../models/volunteer_model.dart';
-import '../../../util/showDialog.dart';
 import '../../../widgets/auth_app_bar.dart';
 
 class PictureInscription extends StatefulWidget {
@@ -166,6 +165,9 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             );
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
+                            BlocProvider.of<VolunteerCubit>(context)
+                                .changeState(VolunteerCreatedState(
+                                    volunteerModel: volunteer));
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -204,18 +206,17 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               email: widget.email,
                               id: widget.id,
                             );
-                            if (_imageProfile == null) {
-                              volunteer.imageProfile = '';
-                              ShowDialog.show(
-                                  context,
-                                  "Vous n'avez pas inserez de photo de profile",
-                                  "retour");
-                            } else {
+                            if (_imageProfile != null) {
                               volunteer.imageProfile =
                                   base64Encode(_imageProfile!);
+                            } else {
+                              volunteer.imageProfile = '';
                             }
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
+                            BlocProvider.of<VolunteerCubit>(context)
+                                .changeState(VolunteerCreatedState(
+                                    volunteerModel: volunteer));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/views/common/authentification/cubit/otherAuth/other_auth_cubit.dart';
 
 import '../../../../../type/rules_type.dart';
-import '../../../../navigation_bar.dart';
+import '../../../../volunteers/navigation_volunteer.dart';
 import '../../cubit/otherAuth/other_auth_state.dart';
 import '../widgets/login.dart';
 
@@ -43,7 +43,7 @@ class _OtherConnectionState extends State<OtherConnection> {
         if (state is GoogleAuthState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NavigationExample()));
+                MaterialPageRoute(builder: (context) => NavigationVolunteer()));
           });
           return _buildColumnWithData(context);
         }

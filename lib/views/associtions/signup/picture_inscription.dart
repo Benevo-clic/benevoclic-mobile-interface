@@ -8,7 +8,7 @@ import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/navigation_bar.dart';
+import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../widgets/auth_app_bar.dart';
@@ -158,7 +158,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
+                                  builder: (context) => NavigationVolunteer(),
                                 ),
                               );
                             });

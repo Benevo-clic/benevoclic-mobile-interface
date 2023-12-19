@@ -73,7 +73,9 @@ class LoginPage extends StatelessWidget {
                           color: Colors.black87,
                         ),
                       ),
-                      FormulaireLogin(),
+                      FormulaireLogin(
+                        rulesType: title,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

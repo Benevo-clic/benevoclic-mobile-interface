@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/navigation_bar.dart';
+import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
@@ -162,7 +162,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
+                                  builder: (context) => NavigationVolunteer(),
                                 ),
                               );
                             });
@@ -214,7 +214,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
+                                  builder: (context) => NavigationVolunteer(),
                                 ),
                               );
                             });

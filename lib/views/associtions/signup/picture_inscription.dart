@@ -8,7 +8,6 @@ import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../widgets/auth_app_bar.dart';
@@ -71,6 +70,18 @@ class _PictureInscriptionState extends State<PictureInscription> {
           ),
         );
         _imageProfile = state.imageProfile;
+        BlocProvider.of<AssociationCubit>(context).initState();
+      }
+
+      if (state is AssociationCreatedState) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigationAssociation(),
+            ),
+          );
+        });
       }
 
       if (state is AssociationErrorState) {
@@ -140,7 +151,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<AssociationCubit>();
                             Association association = Association(
                               name: widget.nameAssociation,
                               type: widget.typeAssociation,
@@ -151,17 +161,14 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,
+                              postalCode: widget.zipcode,
                             );
                             BlocProvider.of<AssociationCubit>(context)
                                 .createAssociation(association);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationVolunteer(),
-                                ),
-                              );
-                            });
+                            BlocProvider.of<AssociationCubit>(context)
+                                .changeState(AssociationCreatedState(
+                                    associationModel: association));
+                            print(state);
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -191,28 +198,28 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            final cubit = context.read<AssociationCubit>();
                             Association association = Association(
                               name: widget.nameAssociation,
                               type: widget.typeAssociation,
                               phone: widget.phoneNumber,
                               address: widget.address,
                               city: widget.city,
-                              imageProfile: base64Encode(_imageProfile!),
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,
                             );
+                            if (_imageProfile != null) {
+                              association.imageProfile =
+                                  base64Encode(_imageProfile!);
+                            } else {
+                              association.imageProfile = '';
+                            }
+
                             BlocProvider.of<AssociationCubit>(context)
                                 .createAssociation(association);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationAssociation(),
-                                ),
-                              );
-                            });
+                            BlocProvider.of<AssociationCubit>(context)
+                                .changeState(AssociationCreatedState(
+                                    associationModel: association));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,

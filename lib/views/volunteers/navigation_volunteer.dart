@@ -33,7 +33,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       BuildNavigationModel(
           iconTitle: 'assets/icons/Menu.svg', label: 'Annonces'),
       BuildNavigationModel(
-          iconTitle: 'assets/icons/heart.svg', label: 'Favoris', size: 20),
+          iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
       BuildNavigationModel(
           iconTitle: 'assets/icons/chat.svg', label: 'Messages'),
       BuildNavigationModel(

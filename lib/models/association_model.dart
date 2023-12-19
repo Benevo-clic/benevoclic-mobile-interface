@@ -27,20 +27,17 @@ class Association {
   @JsonKey(name: 'city')
   late final String? city;
 
-  @JsonKey(name: 'country')
-  late final String? country;
 
   @JsonKey(name: 'postalCode')
   late final String? postalCode;
 
   @JsonKey(name: 'imageProfile')
-  late final String imageProfile;
+  String? imageProfile =
+      'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png';
 
   @JsonKey(name: 'verified')
   late final bool? verified;
 
-  @JsonKey(name: 'siret')
-  late final String? siret;
 
   @JsonKey(name: 'announcement')
   late final List<Announcement>? announcement;
@@ -62,11 +59,9 @@ class Association {
       required this.phone,
       this.email,
       this.city,
-      this.country,
       this.postalCode,
-      required this.imageProfile,
+      this.imageProfile,
       this.verified,
-      this.siret,
       this.announcement,
       required this.type,
       this.volunteersWaiting,

@@ -25,6 +25,7 @@ class VolunteerCubit extends Cubit<VolunteerState> {
       await _volunteerRepository.createVolunteer(volunteer);
       emit(VolunteerCreatedState(volunteerModel: volunteer));
     } catch (e) {
+      print(e.toString());
       emit(VolunteerErrorState(message: e.toString()));
     }
   }

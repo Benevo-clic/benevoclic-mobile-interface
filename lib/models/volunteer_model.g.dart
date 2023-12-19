@@ -16,8 +16,8 @@ Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       city: json['city'] as String?,
       postalCode: json['postalCode'] as String?,
       birthDayDate: json['birthDayDate'] as String,
-      imageProfile: json['imageProfile'] as String,
-      bio: json['bio'] as String,
+      imageProfile: json['imageProfile'] as String?,
+      bio: json['bio'] as String?,
       myAssociations: (json['myAssociations'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),

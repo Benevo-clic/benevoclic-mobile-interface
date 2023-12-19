@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/widgets/build_navbar.dart';
 
+import '../../cubit/page/page_cubit.dart';
 import '../common/annonces/annonces.dart';
 import '../common/messages/messages.dart';
 import '../common/profiles/profil.dart';
@@ -25,48 +29,40 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
 
   Widget buildNavigationIcon(String assetName, int index, {double? size}) {
     final bool isSelected = index == currentPageIndex;
-    final Color iconColor = isSelected
-        ? Color.fromRGBO(55, 94, 232, 1)
-        : Color.fromRGBO(217, 217, 217,
-            1); // Couleurs pour l'état sélectionné/non sélectionné
 
-    return SvgPicture.asset(
-      assetName,
-      height: size ?? 24,
-      color: iconColor,
-    );
+    // Logique pour l'état sélectionné
+    if (isSelected) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            assetName,
+            height: size ?? 24,
+            color: Color.fromRGBO(55, 94, 232, 1),
+          ),
+        ],
+      );
+    } else {
+      return SvgPicture.asset(
+        assetName,
+        height: size ?? 24,
+      );
+    }
   }
 
-  NavigationBar buildNavigationBar() {
-    return NavigationBar(
-      backgroundColor: Color.fromRGBO(255, 153, 85, 1),
-      // Fond transparent
-      selectedIndex: currentPageIndex,
-      onDestinationSelected: (index) =>
-          setState(() => currentPageIndex = index),
-      indicatorColor: Colors.transparent,
-      // Pas de ligne de sélection
-      destinations: [
-        NavigationDestination(
-          icon: buildNavigationIcon('assets/icons/narbarannouncement.svg', 0),
-          label: 'Annonces',
-        ),
-        NavigationDestination(
-          icon: buildNavigationIcon('assets/icons/heart.svg', 1),
-          label: 'Favoris',
-        ),
-        NavigationDestination(
-          icon: buildNavigationIcon('assets/icons/chat.svg', 2),
-          label: 'Messages',
-        ),
-        NavigationDestination(
-          icon: buildNavigationIcon('assets/icons/profile.svg', 3),
-          label: 'Profil',
-        ),
-        // Répétez pour les autres éléments...
-      ],
-    );
-  }
+  List<BuildNavigationModel> buildNavigationModel = [
+    BuildNavigationModel(iconTitle: 'assets/icons/Menu.svg', label: 'Annonces'),
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/Chat_alt.svg', label: 'Publier', size: 45),
+    BuildNavigationModel(iconTitle: 'assets/icons/chat.svg', label: 'Messages'),
+    BuildNavigationModel(
+      iconTitle: 'assets/icons/profile.svg',
+      label: 'Profil',
+    ),
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +72,18 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           border:
               Border(top: BorderSide(color: marron, width: 2)), // Votre style
         ),
-        child: buildNavigationBar(),
+        child: BuldNavBar(
+          buildNavigationModel: buildNavigationModel,
+        ),
       ),
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: pages,
+      body: BlocBuilder<PageCubit, int>(
+        builder: (context, currentPageIndex) {
+          final pages = [Annonces(), Annonces(), Messages(), ProfilPage()];
+          return IndexedStack(
+            index: currentPageIndex,
+            children: pages,
+          );
+        },
       ),
     );
   }

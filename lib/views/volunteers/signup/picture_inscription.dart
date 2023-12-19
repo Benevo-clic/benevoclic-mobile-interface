@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/navigation_bar.dart';
+import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/image_picker.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../models/volunteer_model.dart';
+import '../../../util/showDialog.dart';
 import '../../../widgets/auth_app_bar.dart';
 
 class PictureInscription extends StatefulWidget {
@@ -73,6 +74,17 @@ class _PictureInscriptionState extends State<PictureInscription> {
           ),
         );
         _imageProfile = state.imageProfile;
+        BlocProvider.of<VolunteerCubit>(context).initState();
+      }
+      if (state is VolunteerCreatedState) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigationVolunteer(),
+            ),
+          );
+        });
       }
 
       if (state is VolunteerErrorState) {
@@ -142,7 +154,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
                             Volunteer volunteer = Volunteer(
                               firstName: widget.firstName,
                               lastName: widget.lastName,
@@ -155,17 +166,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             );
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
-                            print(volunteer.id);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
-                                ),
-                              );
-                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -195,29 +195,27 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            final cubit = context.read<VolunteerCubit>();
                             Volunteer volunteer = Volunteer(
                               firstName: widget.firstName,
                               lastName: widget.lastName,
                               phone: widget.phoneNumber,
                               birthDayDate: widget.birthDate,
-                              imageProfile: base64Encode(_imageProfile!),
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,
                             );
+                            if (_imageProfile == null) {
+                              volunteer.imageProfile = '';
+                              ShowDialog.show(
+                                  context,
+                                  "Vous n'avez pas inserez de photo de profile",
+                                  "retour");
+                            } else {
+                              volunteer.imageProfile =
+                                  base64Encode(_imageProfile!);
+                            }
                             BlocProvider.of<VolunteerCubit>(context)
                                 .createVolunteer(volunteer);
-                            cubit.changeState(VolunteerCreatedState(
-                                volunteerModel: volunteer));
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NavigationExample(),
-                                ),
-                              );
-                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,

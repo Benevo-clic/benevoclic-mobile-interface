@@ -41,6 +41,7 @@ class AssociationRepository {
       };
       var data = json.encode(association.toJson());
       var dio = Dio();
+
       var response = await dio.request(
         'http://$url/api/v1/associations/createAssociation',
         options: Options(
@@ -49,6 +50,7 @@ class AssociationRepository {
         ),
         data: data,
       );
+
       if (response.statusCode == 200) {
         return Association.fromJson(response.data);
       } else {

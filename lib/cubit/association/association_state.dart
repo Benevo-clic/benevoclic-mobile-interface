@@ -31,7 +31,6 @@ class AssociationInfoState extends AssociationState {
   final String? address;
   final String phone;
   final String? city;
-  final String? country;
   final String? postalCode;
   final String type;
 
@@ -41,7 +40,6 @@ class AssociationInfoState extends AssociationState {
     this.address,
     required this.phone,
     this.city,
-    this.country,
     this.postalCode,
     required this.type,
   });

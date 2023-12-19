@@ -2,15 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
 import '../../../../../util/showDialog.dart';
-import '../../../../navigation_bar.dart';
+import '../../../../associtions/navigation_association.dart';
+import '../../../../volunteers/navigation_volunteer.dart';
 import '../../repository/auth_repository.dart';
 
 class FormulaireLogin extends StatefulWidget {
-  const FormulaireLogin({super.key});
+  final RulesType rulesType;
+
+  const FormulaireLogin({super.key, required this.rulesType});
 
   @override
   State<FormulaireLogin> createState() => _FormulaireLoginState();
@@ -52,14 +56,23 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is ResponseUserState) {
-        print(
-            "++++++++++++++++++++++++++++++++++++++++responseUserState${state.user.isConnect}");
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => NavigationExample()));
-          final cubit = context.read<UserCubit>();
-          cubit.userConnexion(state.user);
-        });
+        if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavigationAssociation()));
+            final cubit = context.read<UserCubit>();
+            cubit.userConnexion(state.user);
+          });
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NavigationVolunteer()));
+            final cubit = context.read<UserCubit>();
+            cubit.userConnexion(state.user);
+          });
+        }
       }
     }, builder: (context, state) {
       return Stack(

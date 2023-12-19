@@ -20,19 +20,29 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),
   ];
-
   Widget buildNavigationIcon(String assetName, int index, {double? size}) {
     final bool isSelected = index == currentPageIndex;
-    final Color iconColor = isSelected
-        ? Color.fromRGBO(55, 94, 232, 1)
-        : Color.fromRGBO(217, 217, 217,
-            1); // Couleurs pour l'état sélectionné/non sélectionné
 
-    return SvgPicture.asset(
-      assetName,
-      height: size ?? 24,
-      color: iconColor,
-    );
+    // Logique pour l'état sélectionné
+    if (isSelected) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            assetName,
+            height: size ?? 24,
+            color: Color.fromRGBO(55, 94, 232, 1),
+          ),
+        ],
+      );
+    } else {
+      return SvgPicture.asset(
+        assetName,
+        height: size ?? 24,
+      );
+    }
   }
 
   NavigationBar buildNavigationBar() {
@@ -43,7 +53,6 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
       onDestinationSelected: (index) =>
           setState(() => currentPageIndex = index),
       indicatorColor: Colors.transparent,
-      // Pas de ligne de sélection
       destinations: [
         NavigationDestination(
           icon: buildNavigationIcon('assets/icons/narbarannouncement.svg', 0),
@@ -72,7 +81,7 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border:
-              Border(top: BorderSide(color: marron, width: 2)), // Votre style
+              Border(top: BorderSide(color: marron, width: 1)), // Votre style
         ),
         child: buildNavigationBar(),
       ),

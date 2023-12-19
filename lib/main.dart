@@ -14,6 +14,7 @@ import 'package:namer_app/views/common/authentification/cubit/otherAuth/other_au
 import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type_cubit.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 
+import 'cubit/page/page_cubit.dart';
 import 'views/home_view.dart';
 
 void main() async {
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => AssociationCubit(
                   associationRepository: AssociationRepository())),
+          BlocProvider(
+            create: (context) => PageCubit(),
+          ),
         ],
         child: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {

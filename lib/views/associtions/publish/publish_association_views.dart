@@ -24,15 +24,35 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   String? _dateEvent;
   String? _nbHours;
   String? _nbPlaces;
+  String? _description;
+  String? _title;
+  String? _type;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DateTime currentDate = DateTime.now();
   TextEditingController dateController = TextEditingController();
 
-  final TextEditingController _textEditingController = TextEditingController();
+  // Déclaration des TextEditingController
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _dateEventController = TextEditingController();
+  final TextEditingController _nbHoursController = TextEditingController();
+  final TextEditingController _nbPlacesController = TextEditingController();
+  final TextEditingController _typeController =
+      TextEditingController(); // Si nécessaire
 
-  TextEditingController _descriptionController = TextEditingController();
+  @override
+  void dispose() {
+    // Dispose des contrôleurs
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _dateEventController.dispose();
+    _nbHoursController.dispose();
+    _nbPlacesController.dispose();
+    _typeController.dispose();
+    super.dispose();
+  }
 
   bool _isWordCountValid(String text) {
     int wordCount =
@@ -153,6 +173,12 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: ElevatedButton(
                         onPressed: () {
+                          print(_titleController.text);
+                          print(_typeController.text);
+                          print(_dateEventController.text);
+                          print(_nbHoursController.text);
+                          print(_nbPlacesController.text);
+                          print(_descriptionController.text);
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             // BlocProvider.of<AnnouncementCubit>(context)
@@ -219,6 +245,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomTextFormField(
+                          controller: _titleController,
                           hintText: "Titre de l'annonce",
                           icon: Icons.abc,
                           keyboardType: TextInputType.name,
@@ -271,9 +298,17 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                                 );
                               }).toList(),
                               onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedOption = newValue;
-                                });
+                                if (newValue == 'Autre') {
+                                  setState(() {
+                                    selectedOption = newValue;
+                                    _typeController.text = "";
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedOption = newValue;
+                                    _typeController.text = newValue.toString();
+                                  });
+                                }
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -287,6 +322,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                         ),
                         if (selectedOption == 'Autre')
                           CustomTextFormField(
+                            controller: _typeController,
                             hintText: "Autre type d'annonce",
                             icon: Icons.abc,
                             keyboardType: TextInputType.name,
@@ -309,7 +345,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                             height: 10,
                           ),
                         CustomTextFormField(
-                          controller: dateController,
+                          controller: _dateEventController,
                           hintText: "Date et heure de l'événement",
                           icon: Icons.date_range,
                           obscureText: false,
@@ -334,7 +370,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                                 );
                               }
                               setState(() {
-                                _dateEvent = value.toString();
+                                _dateEventController.text = value.toString();
                               });
                             });
                           },
@@ -343,13 +379,13 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           height: 10,
                         ),
                         CustomTextFormField(
+                          controller: _nbHoursController,
                           hintText: "Nombre d'heures",
                           icon: Icons.timer,
                           keyboardType: TextInputType.number,
                           obscureText: false,
                           prefixIcons: true,
                           onSaved: (value) {
-                            _nbPlaces = value.toString();
                           },
                           validator: (value) {
                             var regex = RegExp(r"^(1|2[0-4])$");
@@ -367,13 +403,13 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           height: 10,
                         ),
                         CustomTextFormField(
+                          controller: _nbPlacesController,
                           hintText: "Nombre de bénévoles",
                           icon: Icons.people_outline_outlined,
                           keyboardType: TextInputType.number,
                           obscureText: false,
                           prefixIcons: true,
                           onSaved: (value) {
-                            _nbHours = value.toString();
                           },
                           validator: (value) {
                             if (value == null) {
@@ -395,7 +431,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           obscureText: false,
                           prefixIcons: false,
                           onSaved: (value) {
-                            _descriptionController.text = value.toString();
                           },
                           validator: (value) {
                             if (value != null && !_isWordCountValid(value)) {
@@ -425,29 +460,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           ),
         )
       ],
-    );
-  }
-}
-
-class PublishItem2 extends StatefulWidget {
-  final String content;
-
-  const PublishItem2({super.key, required this.content});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _PublishItem2();
-  }
-}
-
-class _PublishItem2 extends State<PublishItem2> {
-  DateTime? date;
-  final controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [],
     );
   }
 }

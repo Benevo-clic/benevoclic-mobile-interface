@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/util/globals.dart' as globals;
+import 'package:namer_app/views/associtions/publish/widgets/location_form_autocomplete_widget.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../widgets/app_bar_back_widget.dart';
@@ -21,17 +23,12 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   List<String> announcementType = globals.announcementType;
   String? selectedItem = globals.announcementType[0];
   String? selectedOption;
-  String? _dateEvent;
-  String? _nbHours;
-  String? _nbPlaces;
-  String? _description;
-  String? _title;
-  String? _type;
+  LocationModel? location;
+  FocusNode? focusNode;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DateTime currentDate = DateTime.now();
-  TextEditingController dateController = TextEditingController();
 
   // Déclaration des TextEditingController
   final TextEditingController _titleController = TextEditingController();
@@ -51,7 +48,27 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     _nbHoursController.dispose();
     _nbPlacesController.dispose();
     _typeController.dispose();
+    focusNode!.dispose();
+
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    location = LocationModel(
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    );
+    focusNode = FocusNode();
+    focusNode?.addListener(() async {
+      if (focusNode!.hasFocus) {
+        var location = await ShowInputAutocomplete(context);
+      } else {
+        print("Lost focus+++++++++++++++++++++");
+      }
+    });
   }
 
   bool _isWordCountValid(String text) {
@@ -104,9 +121,9 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           selectedTime.minute,
         );
 
-        dateController.text =
+        _dateEventController.text =
             DateFormat('dd/MM/yyyy HH:mm').format(finalDateTime);
-        return dateController.text;
+        return _dateEventController.text;
       } else {
         return "Heure non valide. Veuillez sélectionner une heure future.";
       }
@@ -411,6 +428,24 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           prefixIcons: true,
                           onSaved: (value) {
                           },
+                          validator: (value) {
+                            if (value == null) {
+                              return "Le nombre d'heures n'est pas valide";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        CustomTextFormField(
+                          focusNode: focusNode,
+                          hintText: "Adresse de l'événement",
+                          icon: Icons.location_on,
+                          keyboardType: TextInputType.streetAddress,
+                          obscureText: false,
+                          prefixIcons: true,
+                          onSaved: (value) {},
                           validator: (value) {
                             if (value == null) {
                               return "Le nombre d'heures n'est pas valide";

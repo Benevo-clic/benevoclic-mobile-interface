@@ -29,6 +29,8 @@ class UserDisconnectedState extends UserState {
   UserDisconnectedState({required this.statusCode});
 }
 
+class UserRoleNotMatched extends UserState {}
+
 class UserEmailVerificationState extends UserState {
   final User? user;
 

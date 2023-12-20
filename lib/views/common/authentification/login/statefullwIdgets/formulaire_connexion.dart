@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
+import 'package:namer_app/models/user_model.dart';
+import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
@@ -25,28 +27,19 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   late String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final cubit = context.read<UserCubit>();
-      cubit.formLogin();
-    });
-  }
-
   Future<void> _submit() async {
       _formKey.currentState!.save();
-      print(_email);
-      print(_password);
       try {
         await AuthRepository()
             .authAdressPassword(_email.toString(), _password.toString());
+      UserModel userModel = await UserRepository().getUserByEmail(_email);
+      if (userModel.rule.rulesType == widget.rulesType) {
         BlocProvider.of<UserCubit>(context).connexion();
+      } else {
+        ShowDialog.show(context, "Rôle non autorisé",
+            "Votre rôle ne vous permet pas de vous connecter ici.");
+        BlocProvider.of<UserCubit>(context).userRoleNotMatched();
+      }
     } on FirebaseAuthException catch (_) {
       ShowDialog.show(context, "login incorrect", "retour");
     }
@@ -55,24 +48,11 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      if (state is ResponseUserState) {
-        if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NavigationAssociation()));
-            final cubit = context.read<UserCubit>();
-            cubit.userConnexion(state.user);
-          });
-        } else {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NavigationVolunteer()));
-            final cubit = context.read<UserCubit>();
-            cubit.userConnexion(state.user);
-          });
-        }
+      if (state is ResponseUserState &&
+          state.user.rule.rulesType == widget.rulesType) {
+        _navigateToNextPage(context, state.user.rule.rulesType);
+      } else if (state is UserErrorState) {
+        ShowDialog.show(context, "Erreur de connexion", "retour");
       }
     }, builder: (context, state) {
       return Stack(
@@ -185,6 +165,14 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       );
     });
   }
+}
+
+void _navigateToNextPage(BuildContext context, RulesType rulesType) {
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+    return rulesType == RulesType.USER_ASSOCIATION
+        ? NavigationAssociation()
+        : NavigationVolunteer();
+  }));
 }
 
 Widget _buildInitialInput() {

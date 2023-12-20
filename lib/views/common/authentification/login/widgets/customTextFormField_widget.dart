@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final int? maxLine;
   final bool? prefixIcons;
+  final FocusNode? focusNode;
 
   CustomTextFormField({
     required this.hintText,
@@ -23,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
     this.controller,
     this.maxLine,
     this.prefixIcons,
+    this.focusNode,
   });
 
   @override
@@ -30,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       child: TextFormField(
+        focusNode: focusNode ?? null,
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,

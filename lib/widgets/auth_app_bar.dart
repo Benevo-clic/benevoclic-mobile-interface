@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/views/home_view.dart';
 
+import '../cubit/user/user_cubit.dart';
 import '../views/navigation_no_indentify.dart';
 
 class AuthAppBar extends StatelessWidget {
@@ -29,12 +31,12 @@ class AuthAppBar extends StatelessWidget {
                         onPressed: () {
                         if (isLogin != true) {
                           Navigator.pop(contexts);
-                        } else {
-                          Navigator.push(
-                              contexts,
-                              MaterialPageRoute(
-                                  builder: (contexts) => HomeView()));
                         }
+                        Navigator.push(
+                            contexts,
+                            MaterialPageRoute(
+                                builder: (contexts) => HomeView()));
+                        BlocProvider.of<UserCubit>(context).formLogin();
                       },
                       icon: SvgPicture.asset(
                         "assets/icons/arrow-left.svg",

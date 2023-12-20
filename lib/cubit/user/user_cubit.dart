@@ -29,6 +29,10 @@ class UserCubit extends Cubit<UserState> {
     emit(userState);
   }
 
+  void userRoleNotMatched() {
+    emit(UserRoleNotMatched());
+  }
+
   void userConnexion(UserModel userModel) {
     emit(UserConnexionState(userModel: userModel));
   }

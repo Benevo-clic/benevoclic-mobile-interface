@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:namer_app/models/response_model.dart';
 
+import 'location_model.dart';
+
 part 'announcement_model.g.dart';
 
 @JsonSerializable()
@@ -27,7 +29,7 @@ class Announcement {
   late final String image;
 
   @JsonKey(name: 'location')
-  late final String location;
+  late final LocationModel location;
 
   @JsonKey(name: 'nameAssociation')
   late final String nameAssociation;

@@ -13,7 +13,8 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       description: json['description'] as String,
       full: json['full'] as bool,
       image: json['image'] as String,
-      location: json['location'] as String,
+      location:
+          LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       nameAssociation: json['nameAssociation'] as String,
       labelEvent: json['labelEvent'] as String,
       nbHours: json['nbHours'] as int,

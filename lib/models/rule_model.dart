@@ -1,11 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../type/rules_type.dart';
+
 part 'rule_model.g.dart';
 
 @JsonSerializable()
 class RuleModel {
   @JsonKey(name: 'rulesType')
-  String rulesType;
+  RulesType rulesType;
 
   RuleModel({
     required this.rulesType,

@@ -41,7 +41,6 @@ class HomeView extends StatelessWidget {
                   SizedBox(height: 15),
                   _loginButton(context, "Association", Colors.deepOrange, () {
                     context.read<AuthTypeCubit>().loginAsAssociation();
-                    print("Association");
                     _navigateToAuthentification(context);
                   }),
                   SizedBox(height: 20),

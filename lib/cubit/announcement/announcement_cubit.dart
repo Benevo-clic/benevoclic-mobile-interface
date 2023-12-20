@@ -9,4 +9,16 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     emit(AnnouncementLoadingState());
     await Future.delayed(const Duration(seconds: 2));
   }
+
+  void selectOption(String value) {
+    emit(value as AnnouncementState);
+  }
+
+  void selectAnnouncementType(String type) {
+    if (type == 'Autre') {
+      emit(CustomAnnouncementTypeState(""));
+    } else {
+      emit(AnnouncementInitialState());
+    }
+  }
 }

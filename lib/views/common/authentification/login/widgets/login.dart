@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Container(

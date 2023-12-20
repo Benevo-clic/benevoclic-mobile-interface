@@ -14,6 +14,7 @@ import 'package:namer_app/views/common/authentification/cubit/otherAuth/other_au
 import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type_cubit.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 
+import 'cubit/dropdown/dropdown_cubit.dart';
 import 'cubit/page/page_cubit.dart';
 import 'views/home_view.dart';
 
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => PageCubit(),
           ),
+          BlocProvider(create: (context) => DropdownCubit())
         ],
         child: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {

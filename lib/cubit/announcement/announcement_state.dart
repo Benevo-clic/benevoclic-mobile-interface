@@ -27,6 +27,12 @@ class AnnouncementSelectedState extends AnnouncementLoadedState {
       {required super.announcements, required this.announcement});
 }
 
+class CustomAnnouncementTypeState extends AnnouncementState {
+  final String customType;
+
+  CustomAnnouncementTypeState(this.customType);
+}
+
 class AnnouncementErrorState extends AnnouncementState {
   final String message;
 

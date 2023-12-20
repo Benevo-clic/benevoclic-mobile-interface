@@ -7,8 +7,9 @@ import '../models/buildNavigation_model.dart';
 
 class BuldNavBar extends StatelessWidget {
   final List<BuildNavigationModel>? buildNavigationModel;
+  final Function(int)? onItemTapped;
 
-  BuldNavBar({super.key, this.buildNavigationModel});
+  BuldNavBar({super.key, this.buildNavigationModel, this.onItemTapped});
 
   Widget buildNavigationIcon(String assetName, int index, bool isSelected) {
     double? iconSize = buildNavigationModel![index].size;
@@ -28,7 +29,11 @@ class BuldNavBar extends StatelessWidget {
           backgroundColor: Color.fromRGBO(255, 153, 85, 1),
           selectedIndex: currentPageIndex,
           onDestinationSelected: (index) {
-            context.read<PageCubit>().setPage(index);
+            if (onItemTapped != null) {
+              onItemTapped!(index);
+            } else {
+              context.read<PageCubit>().setPage(index);
+            }
           },
           indicatorColor: Colors.transparent,
           destinations: List.generate(buildNavigationModel!.length, (index) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
 
 import '../../cubit/page/page_cubit.dart';
@@ -22,15 +23,20 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
 
   final List<Widget> pages = [
     Annonces(),
-    Annonces(),
+    PublishAnnouncement(),
     Messages(),
     ProfilPage(),
   ];
 
+  void navigateToPublishPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PublishAnnouncement()),
+    );
+  }
+
   Widget buildNavigationIcon(String assetName, int index, {double? size}) {
     final bool isSelected = index == currentPageIndex;
 
-    // Logique pour l'état sélectionné
     if (isSelected) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,11 +80,17 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
         ),
         child: BuldNavBar(
           buildNavigationModel: buildNavigationModel,
+          onItemTapped: (index) {
+            if (index == 1) {
+              navigateToPublishPage();
+            } else {
+              context.read<PageCubit>().setPage(index);
+            }
+          },
         ),
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          final pages = [Annonces(), Annonces(), Messages(), ProfilPage()];
           return IndexedStack(
             index: currentPageIndex,
             children: pages,

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +10,9 @@ import 'package:namer_app/util/globals.dart' as globals;
 import 'package:namer_app/views/associtions/publish/widgets/location_form_autocomplete_widget.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
+import '../../../models/announcement_model.dart';
 import '../../../widgets/app_bar_back_widget.dart';
+import '../../../widgets/image_picker_announcement.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 
 class PublishAnnouncement extends StatefulWidget {
@@ -25,10 +30,14 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   String? selectedOption;
   LocationModel? location;
   FocusNode? focusNode;
+  Uint8List? _imageCover;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _addressFocusNode = FocusNode();
+  final TextEditingController _addressController = TextEditingController();
 
   DateTime currentDate = DateTime.now();
+  bool _isCreatingAnnouncement = false;
 
   // Déclaration des TextEditingController
   final TextEditingController _titleController = TextEditingController();
@@ -48,8 +57,9 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     _nbHoursController.dispose();
     _nbPlacesController.dispose();
     _typeController.dispose();
-    focusNode!.dispose();
-
+    _addressFocusNode.dispose();
+    _addressController.dispose();
+    _formKey.currentState?.dispose();
     super.dispose();
   }
 
@@ -61,14 +71,16 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       latitude: 0,
       longitude: 0,
     );
-    focusNode = FocusNode();
-    focusNode?.addListener(() async {
-      if (focusNode!.hasFocus) {
-        var location = await ShowInputAutocomplete(context);
-      } else {
-        print("Lost focus+++++++++++++++++++++");
+    _addressFocusNode.addListener(_handleAddressFocusChange);
+  }
+
+  void _handleAddressFocusChange() async {
+    if (_addressFocusNode.hasFocus) {
+      LocationModel? selectedLocation = await ShowInputAutocomplete(context);
+      if (selectedLocation != null) {
+        _addressController.text = selectedLocation.address;
       }
-    });
+    }
   }
 
   bool _isWordCountValid(String text) {
@@ -91,7 +103,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
 
     if (selectedDate != null) {
       TimeOfDay initialTime = TimeOfDay.now();
-      // Si la date sélectionnée est aujourd'hui, l'heure initiale est l'heure actuelle, sinon minuit.
       if (selectedDate.day != currentDate.day ||
           selectedDate.month != currentDate.month ||
           selectedDate.year != currentDate.year) {
@@ -131,9 +142,64 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     return currentDate.toString();
   }
 
+  void _onPublishButtonPressed(AnnouncementState state) {
+    if (_isCreatingAnnouncement) {
+      return;
+    }
+    _isCreatingAnnouncement = true;
+    Announcement announcement = Announcement(
+      description: _descriptionController.text,
+      dateEvent: _dateEventController.text,
+      nbHours: int.parse(_nbHoursController.text),
+      nbPlaces: int.parse(_nbPlacesController.text),
+      type: _typeController.text,
+      datePublication: DateTime.now().toString(),
+      location: LocationModel(
+        address: _addressController.text,
+        latitude: 0,
+        longitude: 0,
+      ),
+      labelEvent: _titleController.text,
+    );
+    if (_imageCover != null) {
+      announcement.image = base64Encode(_imageCover!);
+    } else {
+      announcement.image = '';
+    }
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      BlocProvider.of<AnnouncementCubit>(context)
+          .createAnnouncement(announcement);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnnouncementCubit, AnnouncementState>(
+    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
+      listener: (context, state) {
+        if (state is AnnouncementCreatedState && !_isCreatingAnnouncement) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("L'annonce a été créée avec succès"),
+            ),
+          );
+          Navigator.pop(context);
+          _isCreatingAnnouncement = false;
+        }
+
+        if (state is AnnouncementUploadedPictureState) {
+          _imageCover = state.image;
+        }
+
+        if (state is AnnouncementErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  "Une erreur s'est produite lors de la création de l'annonce"),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return Stack(
           children: [
@@ -189,22 +255,9 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: ElevatedButton(
-                        onPressed: () {
-                          print(_titleController.text);
-                          print(_typeController.text);
-                          print(_dateEventController.text);
-                          print(_nbHoursController.text);
-                          print(_nbPlacesController.text);
-                          print(_descriptionController.text);
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            // BlocProvider.of<AnnouncementCubit>(context)
-                            //     .createAnnouncement(
-                            //         _descriptionController.text);
-                          }
-                        },
+                        onPressed: () => _onPublishButtonPressed(state),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.grey.shade400,
+                          backgroundColor: Colors.grey.shade400,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(05),
                           ),
@@ -261,6 +314,22 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * .8,
+                          height: MediaQuery.of(context).size.height * .3,
+                          child: Card(
+                            margin: const EdgeInsets.all(5),
+                            shadowColor: Colors.white,
+                            elevation: 10,
+                            color: Colors.white,
+                            child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: ImagePickerAnnouncement()),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         CustomTextFormField(
                           controller: _titleController,
                           hintText: "Titre de l'annonce",
@@ -285,7 +354,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.12,
+                          height: MediaQuery.of(context).size.height * 0.085,
                           child: SingleChildScrollView(
                             child: DropdownButtonFormField<String>(
                               isExpanded: true,
@@ -405,7 +474,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           onSaved: (value) {
                           },
                           validator: (value) {
-                            var regex = RegExp(r"^(1|2[0-4])$");
+                            var regex = RegExp(r"^(1[0-9]|2[0-4]|[1-9])$");
                             if (value == null ||
                                 !regex.hasMatch(value.toString())) {
                               return "Le nombre d'heures n'est pas valide";
@@ -438,21 +507,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                         SizedBox(
                           height: 10,
                         ),
-                        CustomTextFormField(
-                          focusNode: focusNode,
-                          hintText: "Adresse de l'événement",
-                          icon: Icons.location_on,
-                          keyboardType: TextInputType.streetAddress,
-                          obscureText: false,
-                          prefixIcons: true,
-                          onSaved: (value) {},
-                          validator: (value) {
-                            if (value == null) {
-                              return "Le nombre d'heures n'est pas valide";
-                            }
-                            return null;
-                          },
-                        ),
+                        _buildAddressField(),
                         SizedBox(
                           height: 10,
                         ),
@@ -495,6 +550,34 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildAddressField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: TextFormField(
+        controller: _addressController,
+        keyboardType: TextInputType.streetAddress,
+        decoration: InputDecoration(
+          fillColor: Colors.white.withOpacity(0.5),
+          filled: true,
+          prefixIcon: Icon(
+            Icons.location_on,
+            color: Colors.black54,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide.none,
+          ),
+          hintText: "Adresse de l'événement",
+          hintStyle: TextStyle(color: Colors.black54),
+          errorStyle: TextStyle(
+            color: Colors.red[300],
+            overflow: TextOverflow.visible,
+          ),
+        ),
+      ),
     );
   }
 }

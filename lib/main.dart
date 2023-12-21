@@ -5,6 +5,7 @@ import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/repositories/api/Announcement_repository.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/repositories/api/volunteer_repository.dart';
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
               create: (context) => UserCubit(
                   userRepository: UserRepository(),
                   authRepository: AuthRepository())),
-          BlocProvider(create: (context) => AnnouncementCubit()),
+          BlocProvider(
+              create: (context) => AnnouncementCubit(
+                  announcementRepository: AnnouncementRepository())),
           BlocProvider(create: (context) => SettingCubit()),
           BlocProvider(create: (context) => AuthTypeCubit()),
           BlocProvider(create: (context) => OtherAuthCubit(AuthRepository())),

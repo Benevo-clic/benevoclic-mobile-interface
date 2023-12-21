@@ -7,28 +7,29 @@ part of 'announcement_model.dart';
 // **************************************************************************
 
 Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
-      idAssociation: json['idAssociation'] as String,
+      id: json['id'] as String?,
+      idAssociation: json['idAssociation'] as String?,
       dateEvent: json['dateEvent'] as String,
       datePublication: json['datePublication'] as String,
       description: json['description'] as String,
-      full: json['full'] as bool,
-      image: json['image'] as String,
+      full: json['full'] as bool?,
+      image: json['image'] as String? ?? 'https://via.placeholder.com/150',
       location:
           LocationModel.fromJson(json['location'] as Map<String, dynamic>),
-      nameAssociation: json['nameAssociation'] as String,
+      nameAssociation: json['nameAssociation'] as String?,
       labelEvent: json['labelEvent'] as String,
       nbHours: json['nbHours'] as int,
       nbPlaces: json['nbPlaces'] as int,
-      nbPlacesTaken: json['nbPlacesTaken'] as int,
-      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+      nbPlacesTaken: json['nbPlacesTaken'] as int?,
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       type: json['type'] as String,
-      volunteers: (json['volunteers'] as List<dynamic>)
-          .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+      volunteers: (json['volunteers'] as List<dynamic>?)
+          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>)
-          .map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+      volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
+          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-    )..id = json['id'] as String;
+    );
 
 Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
     <String, dynamic>{

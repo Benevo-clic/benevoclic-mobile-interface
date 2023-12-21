@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
-import 'package:namer_app/widgets/image_picker.dart';
+import 'package:namer_app/widgets/image_picker_profile.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../models/volunteer_model.dart';

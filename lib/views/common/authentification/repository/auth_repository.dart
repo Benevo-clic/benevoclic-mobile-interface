@@ -84,4 +84,13 @@ class AuthRepository {
     return _auth.currentUser?.emailVerified ??
         false; // Retourner l'état de vérification de l'email
   }
+
+  Future<User> getCurrentUser() async {
+    User? user = await _auth.currentUser;
+    if (user != null) {
+      globals.id = (await user.getIdToken())!;
+      print("Token : ${globals.id}");
+    }
+    return user!;
+  }
 }

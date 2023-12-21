@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
@@ -65,23 +68,28 @@ class UserRepository {
     }
   }
 
-  Future<UserModel> getUserByEmail(String email) async {
-    var headers = {
-      'Authorization': 'Bearer ${globals.id}',
-      'email': email,
-    };
-    var dio = Dio();
-    var response = await dio.request(
-      'http://$url/api/v1/users/getUserByEmail',
-      options: Options(
-        method: 'GET',
-        headers: headers,
-      ),
-    );
-    if (response.statusCode == 200) {
-      return UserModel.fromJson(response.data);
-    } else {
-      throw Exception(response.statusMessage);
+  Future<dynamic> getUserByEmail(String email) async {
+    try {
+      var headers = {
+        'Authorization': 'Bearer ${globals.id}',
+        'email': email,
+      };
+      var dio = Dio();
+      var response = await dio.request(
+        'http://$url/api/v1/users/getUserByEmail',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      if (response.statusCode == 200) {
+        return UserModel.fromJson(response.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } catch (e) {
+      log(e.toString());
+      return;
     }
   }
 
@@ -94,6 +102,21 @@ class UserRepository {
 
     if (result.statusCode == 200) {
       return 200;
+    } else {
+      throw Exception(result.statusMessage);
+    }
+  }
+
+  Future<UserModel> updateUser(UserModel user) async {
+    var data = json.encode(user.toJson());
+    Response result = await Dio().put(
+      "http://$url/api/v1/users/update",
+      data: data,
+      options: Options(
+          headers: {"Authorization": "Bearer ${globals.id}", "accept": "*/*"}),
+    );
+    if (result.statusCode == 200) {
+      return UserModel.fromJson(result.data);
     } else {
       throw Exception(result.statusMessage);
     }

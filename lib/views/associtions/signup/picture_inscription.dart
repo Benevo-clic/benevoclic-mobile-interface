@@ -10,6 +10,8 @@ import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 
+import '../../../models/user_model.dart';
+import '../../../repositories/api/user_repository.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../navigation_association.dart';
 
@@ -150,7 +152,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Association association = Association(
                               name: widget.nameAssociation,
                               type: widget.typeAssociation,
@@ -163,12 +165,28 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               id: widget.id,
                               postalCode: widget.zipcode,
                             );
-                            BlocProvider.of<AssociationCubit>(context)
-                                .createAssociation(association);
-                            BlocProvider.of<AssociationCubit>(context)
-                                .changeState(AssociationCreatedState(
-                                    associationModel: association));
-                            print(state);
+                            UserModel userModel = await UserRepository()
+                                .getUserByEmail(widget.email);
+                            UserModel userModel2 = UserModel.fromJson({
+                              "id": userModel.id,
+                              "email": userModel.email,
+                              "isConnect": true,
+                              "isVerified": true,
+                              "isActif": true,
+                              "rule": {
+                                "id": userModel.id,
+                                "rulesType": "USER_ASSOCIATION"
+                              }
+                            });
+                            UserRepository()
+                                .updateUser(userModel2)
+                                .then((value) {
+                              BlocProvider.of<AssociationCubit>(context)
+                                  .createAssociation(association);
+                              BlocProvider.of<AssociationCubit>(context)
+                                  .changeState(AssociationCreatedState(
+                                  associationModel: association));
+                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -215,11 +233,29 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               association.imageProfile = '';
                             }
 
-                            BlocProvider.of<AssociationCubit>(context)
-                                .createAssociation(association);
-                            BlocProvider.of<AssociationCubit>(context)
-                                .changeState(AssociationCreatedState(
-                                    associationModel: association));
+                            UserModel userModel = await UserRepository()
+                                .getUserByEmail(widget.email);
+                            UserModel userModel2 = UserModel.fromJson({
+                              "id": userModel.id,
+                              "email": userModel.email,
+                              "isConnect": true,
+                              "isVerified": true,
+                              "isActif": true,
+                              "rule": {
+                                "id": userModel.id,
+                                "rulesType": "USER_ASSOCIATION"
+                              }
+                            });
+                            UserRepository()
+                                .updateUser(userModel2)
+                                .then((value) {
+                              BlocProvider.of<AssociationCubit>(context)
+                                  .createAssociation(association);
+                              BlocProvider.of<AssociationCubit>(context)
+                                  .changeState(AssociationCreatedState(
+                                      associationModel: association));
+                            });
+
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,

@@ -9,8 +9,11 @@ import 'package:namer_app/views/common/authentification/login/widgets/customText
 
 import '../../../../../cubit/user/user_cubit.dart';
 import '../../../../../util/showDialog.dart';
+import '../../../../../widgets/inscription_signup.dart';
 import '../../../../associtions/navigation_association.dart';
+import '../../../../associtions/signup/inscription_assocition_signup.dart';
 import '../../../../volunteers/navigation_volunteer.dart';
+import '../../../../volunteers/signup/infos_inscription.dart';
 import '../../repository/auth_repository.dart';
 
 class FormulaireLogin extends StatefulWidget {
@@ -32,13 +35,70 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       try {
         await AuthRepository()
             .authAdressPassword(_email.toString(), _password.toString());
-      UserModel userModel = await UserRepository().getUserByEmail(_email);
-      if (userModel.rule.rulesType == widget.rulesType) {
-        BlocProvider.of<UserCubit>(context).connexion();
+
+      User user = FirebaseAuth.instance.currentUser!;
+
+      if (user.emailVerified == false) {
+        ShowDialogYesNo.show(
+          context,
+          "Votre email n'est pas vérifié",
+          "Voulez-vous recevoir un email de vérification ?",
+          () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InscriptionDemarche(
+                  email: _email,
+                  mdp: _password,
+                  title: widget.rulesType,
+                  id: user.uid,
+                ),
+              ),
+            );
+          },
+        );
       } else {
-        ShowDialog.show(context, "Rôle non autorisé",
-            "Votre rôle ne vous permet pas de vous connecter ici.");
-        BlocProvider.of<UserCubit>(context).userRoleNotMatched();
+        UserModel userModel = await UserRepository().getUserByEmail(_email);
+        if (userModel.isConnect) {
+          ShowDialog.show(context, "Vous êtes déjà connecté", "retour");
+        } else if (!userModel.isActif) {
+          ShowDialogYesNo.show(
+            context,
+            "Votre compte n'est pas actif",
+            "Vous voulez activer votre compte ?",
+            () async {
+              if (userModel.rule.rulesType == RulesType.USER_ASSOCIATION) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InscriptionAssociation(
+                      email: _email,
+                      id: user.uid,
+                    ),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InfosInscriptionVolunteer(
+                      email: _email,
+                      id: user.uid,
+                    ),
+                  ),
+                );
+              }
+            },
+          );
+        } else if (!userModel.isConnect &&
+            (userModel.rule.rulesType == widget.rulesType)) {
+          BlocProvider.of<UserCubit>(context).connexion();
+          SnackBar snackBar = SnackBar(
+            content: Text("Connexion réussi"),
+            backgroundColor: Colors.green,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       }
     } on FirebaseAuthException catch (_) {
       ShowDialog.show(context, "login incorrect", "retour");

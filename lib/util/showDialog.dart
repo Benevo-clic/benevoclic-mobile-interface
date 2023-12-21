@@ -12,3 +12,30 @@ class ShowDialog {
     );
   }
 }
+
+class ShowDialogYesNo {
+  static void show(
+      BuildContext context, String title, String message, VoidCallback onYes) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                onYes();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

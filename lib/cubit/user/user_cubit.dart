@@ -76,6 +76,21 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future<UserModel> getUserByEmail(String email) async {
+    return await _userRepository.getUserByEmail(email);
+  }
+
+  Future<void> updateUser(UserModel user) async {
+    try {
+      emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 1));
+      final users = await _userRepository.updateUser(user);
+      emit(UserUpdateState(userModel: users));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
   Future<UserModel> getUser() async {
     return await _userRepository.getUser();
   }

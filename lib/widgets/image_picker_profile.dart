@@ -119,6 +119,32 @@ class _MyImagePickerState extends State<MyImagePicker> {
                     ),
                   ),
                 ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      _image = null;
+                      if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+                        BlocProvider.of<AssociationCubit>(context).changeState(
+                            AssociationPictureState(imageProfile: _image));
+                      } else {
+                        BlocProvider.of<VolunteerCubit>(context).changeState(
+                            VolunteerPictureState(imageProfile: _image));
+                      }
+                      Navigator.of(context).pop();
+                    },
+                    child: const SizedBox(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            size: 70,
+                          ),
+                          Text("Supprimer")
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

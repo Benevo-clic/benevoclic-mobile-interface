@@ -8,7 +8,7 @@ import 'package:namer_app/util/showDialog.dart';
 import '../cubit/user/user_cubit.dart';
 import '../cubit/user/user_state.dart';
 import '../views/common/authentification/login/widgets/customTextFormField_widget.dart';
-import 'inscription_volunteer_signup.dart';
+import 'inscription_signup.dart';
 
 class SignupForm extends StatefulWidget {
   final RulesType rulesType;

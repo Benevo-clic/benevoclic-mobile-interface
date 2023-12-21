@@ -7,11 +7,18 @@ class PopDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SimpleDialog(
-          title: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 35, 0, 35),
-              child: content)),
+    return Center(
+      child: SingleChildScrollView(
+        child: SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.95,
+            child: Container(
+              width: MediaQuery.sizeOf(context).width * 0.95,
+              child: SimpleDialog(
+                  title: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 35, 0, 35),
+                      child: content)),
+            )),
+      ),
     );
   }
 }

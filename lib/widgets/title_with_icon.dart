@@ -16,7 +16,7 @@ class TitleWithIcon extends StatelessWidget {
         Expanded(
             child: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         )),
       ],
     );

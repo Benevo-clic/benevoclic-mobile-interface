@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
@@ -21,7 +22,17 @@ class ProfileView extends StatelessWidget {
     return SingleChildScrollView(
       child: Background(
         image: "assets/background4.png",
-        widget: Column(children: [
+        widget: /*BlocConsumer<UserCubit, UserState>(
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            print(state);
+            return Container();
+          },
+        )
+        */
+        Column(children: [
           SizedBox(
             height: 50,
           ),

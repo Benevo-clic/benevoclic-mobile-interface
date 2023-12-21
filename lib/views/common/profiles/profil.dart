@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/user_model.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
+import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
@@ -11,100 +17,136 @@ import '../../../cubit/user/user_cubit.dart';
 import '../../../repositories/auth_repository.dart';
 import '../authentification/login/widgets/login.dart';
 import 'modif_profil.dart';
+import '../authentification/repository/auth_repository.dart';
 
 class ProfileView extends StatelessWidget {
   final RulesType title;
 
   ProfileView({required this.title});
 
+  getUser(BuildContext context) async {
+  user = await context.read<UserCubit>().getUser();
+  volunteer = await context.read<VolunteerCubit>().getVolunteer(user!.id);
+  name = volunteer!.lastName;
+  await context.read<VolunteerCubit>().volunteerState(volunteer!);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Background(
+    getUser(context);
+    return Scaffold(
+      body: Background(
         image: "assets/background4.png",
-        widget: /*BlocConsumer<UserCubit, UserState>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
-          builder: (context, state) {
-            print(state);
-            return Container();
-          },
-        )
-        */
-        Column(children: [
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            children: [
-              Expanded(child: Text("")),
-              IconButton(
-                    icon: Icon(Icons.perm_contact_calendar_outlined),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ModifProfil()),
-                      );
-                    },
-                  ),
-              Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ParametersView()),
-                  );
-                },
-                ),
-              ),
-            ],
-          ),
-          Image.asset("assets/logo.png", height: 200),
-          Text("Corentin ", style: TextStyle()),
-          SizedBox(
-            height: 20,
-          ),
-          Bio(text: "oui"),
-          SizedBox(
-            height: 20,
-          ),
-          LineProfil(
-              text: "Historique de missions",
-              icon: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.map_rounded),
-              )),
-          SizedBox(
-            height: 20,
-          ),
-          LineProfil(
-              text: "Paramètres",
-              icon: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.settings),
-              )),
-          SizedBox(
-            height: 20,
-          ),
-          LineProfil(
-              text: "Suppression compte",
-              icon: IconButton(
-                onPressed: () async {
-                  await AuthRepository().deleteAccount();
-                },
-                icon: Icon(Icons.no_accounts_sharp),
-              )),
-              SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
+        widget: BlocConsumer<VolunteerCubit, VolunteerState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              print(state);
+              if (state is VolunteerInfo) {
+                Volunteer volunteer = state.getInfo();
+
+                return list(context, volunteer.lastName, volunteer.bio);
+              } else {
+                return Text("");
+              }
+            }),
+      ),
+    );
+  }
+}
+
+class LineProfil extends StatelessWidget {
+  final String text;
+  final icon;
+
+  const LineProfil({super.key, required this.text, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return AbstractContainer(
+      content: Row(
+        children: [
+          Expanded(
+            flex: 0,
+            child: IconButton(
               onPressed: () async {
-                BlocProvider.of<UserCubit>(context)
-                    .disconnect()
-                    .then((_) async => await AuthRepository().signOut());
+                await AuthRepository().logout();
+              },
+              icon: icon,
+            ),
+          ),
+          Expanded(child: Text(text)),
+        ],
+      ),
+    );
+  }
+}
+
+class Bio extends StatelessWidget {
+  final String text;
+
+  Bio({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return AbstractContainer(
+        content: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text("Bio"),
+        SizedBox(height: 5),
+        Text(
+            text)
+      ],
+    ));
+  }
+}
+
+list(BuildContext context, name, bio) {
+  return ListView(
+    padding: EdgeInsets.all(25),
+    children: [
+      Image.asset("assets/logo.png", height: 200),
+      Text(name, style: TextStyle()),
+      SizedBox(
+        height: 20,
+      ),
+      Bio(text: bio),
+      SizedBox(
+        height: 20,
+      ),
+      LineProfil(
+          text: "Historique de missions",
+          icon: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.map_rounded),
+          )),
+      SizedBox(
+        height: 20,
+      ),
+      LineProfil(
+          text: "Paramètres",
+          icon: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.settings),
+          )),
+      SizedBox(
+        height: 20,
+      ),
+      LineProfil(
+          text: "Suppression compte",
+          icon: IconButton(
+            onPressed: () async {
+              await AuthRepository().deleteAccount();
+            },
+            icon: Icon(Icons.no_accounts_sharp),
+          )),
+      SizedBox(
+        height: 20,
+      ),
+      ElevatedButton(
+          onPressed: () async {
+
+            BlocProvider.of<UserCubit>(context).disconnect().then((_) async => await AuthRepository().signOut());
 
                 await AuthRepository().signOut();
                 String owner = title == RulesType.USER_VOLUNTEER
@@ -113,20 +155,18 @@ class ProfileView extends StatelessWidget {
                 final SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 preferences.setBool(owner, false);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(
-                      title: title,
-                    ),
-                  ),
-                );
-              },
-              child: Text("Déconnexion")),
-          SizedBox(
-            height: 20,
-          ),
-        ]),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(
+                  title: title,
+                ),
+              ),
+            );
+          },
+          child: Text("Déconnexion")),
+      SizedBox(
+        height: 20,
       ),
     );
   }

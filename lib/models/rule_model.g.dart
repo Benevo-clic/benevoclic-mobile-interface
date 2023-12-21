@@ -7,9 +7,15 @@ part of 'rule_model.dart';
 // **************************************************************************
 
 RuleModel _$RuleModelFromJson(Map<String, dynamic> json) => RuleModel(
-      rulesType: json['rulesType'] as String,
+      rulesType: $enumDecode(_$RulesTypeEnumMap, json['rulesType']),
     );
 
 Map<String, dynamic> _$RuleModelToJson(RuleModel instance) => <String, dynamic>{
-      'rulesType': instance.rulesType,
+      'rulesType': _$RulesTypeEnumMap[instance.rulesType]!,
     };
+
+const _$RulesTypeEnumMap = {
+  RulesType.USER_ASSOCIATION: 'USER_ASSOCIATION',
+  RulesType.USER_VOLUNTEER: 'USER_VOLUNTEER',
+  RulesType.NONE: 'NONE',
+};

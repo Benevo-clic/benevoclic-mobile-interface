@@ -11,6 +11,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       isActif: json['isActif'] as bool,
       isConnect: json['isConnect'] as bool,
       rule: RuleModel.fromJson(json['rule'] as Map<String, dynamic>),
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'isActif': instance.isActif,
       'isConnect': instance.isConnect,
       'rule': instance.rule,
+      'email': instance.email,
     };

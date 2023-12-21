@@ -18,6 +18,10 @@ class ResponseUserState extends UserState {
 
   ResponseUserState({required this.user});
 
+  getUser(){
+    return user;
+  }
+
   @override
   List<Object?> get props => [user];
 }

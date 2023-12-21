@@ -46,5 +46,31 @@ class VolunteerRepository {
       throw Exception(e);
     }
   }
-}
 
+  Future<Volunteer> getVolunteer(String id) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${globals.id}',
+        'id': id
+      };
+      var dio = Dio();
+      var response = await dio.request(
+        'http://$url/api/v1/volunteers/volunteerId',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+        return Volunteer.fromJson(response.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+}

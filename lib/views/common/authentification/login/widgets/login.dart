@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
       return Stack(
         children: [
           Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               children: [
                 Container(
@@ -197,13 +197,16 @@ class LoginPage extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (title == RulesType.USER_ASSOCIATION) {
+                              print("association");
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SignupAssociation(),
                                 ),
                               );
-                            } else {
+                            }
+                            if (title == RulesType.USER_VOLUNTEER) {
+                              print("volunteer");
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

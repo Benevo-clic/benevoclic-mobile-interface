@@ -57,7 +57,7 @@ class InscriptionWidget extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      'Inscrivez-vous en tant que association',
+                      'Inscrivez-vous en tant que ${rulesType == RulesType.USER_ASSOCIATION ? "Association" : "Bénévole"}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.of(context).size.width * .04,

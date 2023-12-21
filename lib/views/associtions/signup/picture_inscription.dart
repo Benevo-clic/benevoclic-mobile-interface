@@ -8,7 +8,7 @@ import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/widgets/image_picker.dart';
+import 'package:namer_app/widgets/image_picker_profile.dart';
 
 import '../../../widgets/auth_app_bar.dart';
 import '../navigation_association.dart';

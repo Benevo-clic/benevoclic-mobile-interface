@@ -1,15 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:namer_app/models/response_model.dart';
 
+import 'location_model.dart';
+
 part 'announcement_model.g.dart';
 
 @JsonSerializable()
 class Announcement {
   @JsonKey(name: 'id')
-  late final String id;
+  final String? id;
 
   @JsonKey(name: 'idAssociation')
-  late final String idAssociation;
+  final String? idAssociation;
 
   @JsonKey(name: 'dateEvent')
   late final String dateEvent;
@@ -21,16 +23,16 @@ class Announcement {
   late final String description;
 
   @JsonKey(name: 'full')
-  late final bool full;
+  final bool? full;
 
-  @JsonKey(name: 'image')
-  late final String image;
+  @JsonKey(name: 'image', defaultValue: 'https://via.placeholder.com/150')
+  String? image;
 
   @JsonKey(name: 'location')
-  late final String location;
+  late final LocationModel location;
 
   @JsonKey(name: 'nameAssociation')
-  late final String nameAssociation;
+  final String? nameAssociation;
 
   @JsonKey(name: 'labelEvent')
   late final String labelEvent;
@@ -42,36 +44,38 @@ class Announcement {
   late final int nbPlaces;
 
   @JsonKey(name: 'nbPlacesTaken')
-  late final int nbPlacesTaken;
+  final int? nbPlacesTaken;
 
   @JsonKey(name: 'tags')
-  late final List<String> tags;
+  final List<String>? tags;
 
   @JsonKey(name: 'type')
   late final String type;
 
   @JsonKey(name: 'volunteers')
-  late final List<ResponseModel> volunteers;
+  final List<ResponseModel>? volunteers;
 
   @JsonKey(name: 'volunteersWaiting')
-  late final List<ResponseModel> volunteersWaiting;
+  final List<ResponseModel>? volunteersWaiting;
 
-  Announcement({required this.idAssociation,
+  Announcement(
+      {this.id,
+      this.idAssociation,
       required this.dateEvent,
       required this.datePublication,
       required this.description,
-      required this.full,
-      required this.image,
+      this.full,
+      this.image,
       required this.location,
-      required this.nameAssociation,
+      this.nameAssociation,
       required this.labelEvent,
       required this.nbHours,
       required this.nbPlaces,
-      required this.nbPlacesTaken,
-      required this.tags,
+      this.nbPlacesTaken,
+      this.tags,
       required this.type,
-      required this.volunteers,
-      required this.volunteersWaiting});
+      this.volunteers,
+      this.volunteersWaiting});
 
   factory Announcement.fromJson(Map<String, dynamic> json) =>
       _$AnnouncementFromJson(json);

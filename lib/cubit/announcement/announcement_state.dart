@@ -1,4 +1,4 @@
-
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -20,11 +20,29 @@ class AnnouncementLoadedState extends AnnouncementState {
   AnnouncementLoadedState({required this.announcements});
 }
 
+class AnnouncementUploadedPictureState extends AnnouncementState {
+  final Uint8List? image;
+
+  AnnouncementUploadedPictureState({required this.image});
+}
+
+class AnnouncementCreatedState extends AnnouncementState {
+  final Announcement announcement;
+
+  AnnouncementCreatedState({required this.announcement});
+}
+
 class AnnouncementSelectedState extends AnnouncementLoadedState {
   final Announcement announcement;
 
   AnnouncementSelectedState(
       {required super.announcements, required this.announcement});
+}
+
+class CustomAnnouncementTypeState extends AnnouncementState {
+  final String customType;
+
+  CustomAnnouncementTypeState(this.customType);
 }
 
 class AnnouncementErrorState extends AnnouncementState {

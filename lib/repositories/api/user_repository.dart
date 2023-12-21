@@ -65,6 +65,26 @@ class UserRepository {
     }
   }
 
+  Future<UserModel> getUserByEmail(String email) async {
+    var headers = {
+      'Authorization': 'Bearer ${globals.id}',
+      'email': email,
+    };
+    var dio = Dio();
+    var response = await dio.request(
+      'http://$url/api/v1/users/getUserByEmail',
+      options: Options(
+        method: 'GET',
+        headers: headers,
+      ),
+    );
+    if (response.statusCode == 200) {
+      return UserModel.fromJson(response.data);
+    } else {
+      throw Exception(response.statusMessage);
+    }
+  }
+
   Future<int> disconnect() async {
     Response result = await Dio().post(
       "http://$url/api/v1/users/disconnect",

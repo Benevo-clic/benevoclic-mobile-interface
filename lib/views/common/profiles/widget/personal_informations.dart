@@ -17,6 +17,35 @@ class InformationDialog extends StatefulWidget {
 class _InformationDialog extends State<InformationDialog> {
   final _formKey = GlobalKey<FormState>();
 
+  String _firstName = "";
+  String _lastName = "";
+  String _address = "";
+  String _phone = "";
+
+  changeFirstName(value) {
+    setState(() {
+      _firstName = value;
+    });
+  }
+
+  changeLastName(value) {
+    setState(() {
+      _lastName = value;
+    });
+  }
+
+  changeAddress(value) {
+    setState(() {
+      _address = value;
+    });
+  }
+
+  changePhone(value) {
+    setState(() {
+      _phone = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
@@ -34,23 +63,26 @@ class _InformationDialog extends State<InformationDialog> {
                   SizedBox(
                     height: 25,
                   ),
-                  InputField(title: "${state.volunteer!.lastName}"),
+                  InputField(
+                      title: state.volunteer!.lastName, fct: changeLastName),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "${state.volunteer!.firstName}"),
+                  InputField(
+                      title: state.volunteer!.firstName, fct: changeFirstName),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "${state.volunteer!.birthDayDate}"),
+                  InputField(title: state.volunteer!.birthDayDate, fct: print),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "${state.volunteer!.phone}"),
+                  InputField(title: state.volunteer!.phone, fct: changePhone),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "${state.volunteer!.address}"),
+                  InputField(
+                      title: "${state.volunteer!.address}", fct: changeAddress),
                   SizedBox(
                     height: 10,
                   ),
@@ -59,7 +91,11 @@ class _InformationDialog extends State<InformationDialog> {
                       color: Colors.black,
                       fct: () {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.pop(context);
+                          print(_firstName);
+                          print(_lastName);
+                          print(_phone);
+                          print(_address);
+                          //Navigator.pop(context);
                         }
                       },
                       backgroundColor: Colors.grey)
@@ -75,14 +111,19 @@ class _InformationDialog extends State<InformationDialog> {
 
 class InputField extends StatelessWidget {
   final String title;
+  final dynamic fct;
 
-  const InputField({super.key, required this.title});
+  InputField({super.key, required this.title, required this.fct});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: title,
-      validator: (value) {},
+      onSaved: (value) {},
+      validator: (value) {
+        fct(value.toString());
+        return null;
+      },
       decoration: InputDecoration(
           hintStyle: TextStyle(color: Colors.grey),
           hintText: title,

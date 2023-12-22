@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/button.dart';
+import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 class ModifProfil extends StatelessWidget {
@@ -22,7 +24,13 @@ class ModifProfil extends StatelessWidget {
               Volunteer volunteer = state.getInfo();
               return listview(context, volunteer);
             } else {
-              return Text("");
+              return listview(
+                  context,
+                  Volunteer(
+                      firstName: "firstName",
+                      lastName: "lastName",
+                      phone: "phone",
+                      birthDayDate: "birthDayDate"));
             }
           },
         ));
@@ -30,129 +38,150 @@ class ModifProfil extends StatelessWidget {
 }
 
 listview(BuildContext context, Volunteer volunteer) {
-  String? _bio;
+  String _email = "";
+  String _bio = "";
+  String _phone = "";
+  String _address = "";
+
+  final _formKey = GlobalKey<FormState>();
   return ListView(padding: EdgeInsets.all(25), children: [
     Form(
+        key: _formKey,
         child: Column(
-      children: [
-        AbstractContainer2(
-          content: Column(
-            children: [
-              TitleWithIcon(title: "Photo de profil", icon: Icon(Icons.photo)),
-              Divider(
-                height: 25,
-                color: Colors.white,
+          children: [
+            Stack(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * .9,
+                  height: MediaQuery.of(context).size.height * .35,
+                  child: Card(
+                    margin: const EdgeInsets.all(5),
+                    shadowColor: Colors.grey,
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        side:
+                            BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
+                    color: Colors.white.withOpacity(0.8),
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            AbstractContainer2(
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleWithIcon(
+                      title: "Biographie",
+                      icon: Icon(Icons.account_box_rounded)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  TextFormField(
+                    initialValue: volunteer.bio,
+                    onSaved: (value) {
+                      _bio = value.toString();
+                    },
+                    validator: (value) {
+                      _bio = value.toString();
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: "${volunteer.bio}",
+                        border: UnderlineInputBorder()),
+                  ),
+                ],
               ),
-              Icon(
-                Icons.photo_camera,
-                size: MediaQuery.sizeOf(context).width * 0.75,
-              )
-            ],
-          ),
-        ),
-        Divider(
-          height: 25,
-          color: Colors.white,
-        ),
-        AbstractContainer2(
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TitleWithIcon(
-                  title: "Biographie", icon: Icon(Icons.account_box_rounded)),
-              Divider(
-                height: 25,
-                color: Colors.white,
+            ),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            AbstractContainer2(
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleWithIcon(
+                      title: "Informations", icon: Icon(Icons.location_city)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  TextFormField(
+                    initialValue: volunteer.address,
+                    onSaved: (value) {
+                      _address = value.toString();
+                    },
+                    validator: (value) {
+                      _address = value.toString();
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.location_on_outlined),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: volunteer.address,
+                        border: UnderlineInputBorder()),
+                  ),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  TextFormField(
+                    initialValue: volunteer.email,
+                    onSaved: (value) {
+                      _email = value.toString();
+                    },
+                    validator: (value) {
+                      _email = value.toString();
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.mail),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: "${volunteer.email}",
+                        border: UnderlineInputBorder()),
+                  ),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  TextFormField(
+                    initialValue: volunteer.phone,
+                    onSaved: (value) {
+                      _phone = value.toString();
+                    },
+                    validator: (value) {
+                      _phone = value.toString();
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.phone_android),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: volunteer.phone,
+                        border: UnderlineInputBorder()),
+                  ),
+                ],
               ),
-              TextFormField(
-                initialValue: volunteer.bio,
-                onSaved: (value) {
-                  _bio = value.toString();
-                },
-                validator: (value) {
-                  _bio = value;
-                },
-                decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "${volunteer?.bio}",
-                    border: UnderlineInputBorder()),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          height: 25,
-          color: Colors.white,
-        ),
-        AbstractContainer2(
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TitleWithIcon(
-                  title: "Informations", icon: Icon(Icons.location_city)),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              TextFormField(
-                initialValue: volunteer.lastName,
-                onSaved: (value) {
-                  _bio = value.toString();
-                },
-                validator: (value) {
-                  _bio = value;
-                },
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.location_on_outlined),
-                    hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "${volunteer?.bio}",
-                    border: UnderlineInputBorder()),
-              ),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              TextFormField(
-                initialValue: volunteer.email,
-                onSaved: (value) {
-                  _bio = value.toString();
-                },
-                validator: (value) {
-                  _bio = value;
-                },
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.mail),
-                    hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "${volunteer?.bio}",
-                    border: UnderlineInputBorder()),
-              ),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              TextFormField(
-                initialValue: volunteer.phone,
-                onSaved: (value) {
-                  _bio = value.toString();
-                },
-                validator: (value) {
-                  _bio = value;
-                },
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.phone_android),
-                    hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "${volunteer?.phone}",
-                    border: UnderlineInputBorder()),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          height: 25,
-          color: Colors.white,
-        ),
-      ],
-    )),
+            ),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+          ],
+        )),
     Divider(
       height: 25,
       color: Colors.white,
@@ -160,37 +189,15 @@ listview(BuildContext context, Volunteer volunteer) {
     Button(
       backgroundColor: marron,
       color: Colors.white,
-      fct: () {},
+      fct: () {
+        if (_formKey.currentState!.validate()) {
+          print(_email);
+          print(_bio);
+          print(_phone);
+          print(_address);
+        }
+      },
       text: "Modifier",
     ),
   ]);
-}
-
-class InputTextWithIcon extends StatelessWidget {
-  final String bio;
-
-  const InputTextWithIcon({super.key, required this.bio});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer2(
-      content: Row(children: [
-        Icon(Icons.abc),
-        SizedBox(
-          width: 25,
-        ),
-        Flexible(
-          child: TextFormField(
-            initialValue: bio,
-            decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.grey),
-                hintText: bio,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                )),
-          ),
-        )
-      ]),
-    );
-  }
 }

@@ -22,12 +22,12 @@ class _PopDialog extends State<EmailDialog> {
   UserModel? user;
   Volunteer? volunteer;
   String? email;
-  late String? _email;
+  String? _email;
 
   getEmail() async {
     User user = FirebaseAuth.instance.currentUser!;
     email = user.email!;
-    //volunteer = await context.read<VolunteerCubit>().getVolunteer(user.email!);
+    _email = email;
   }
 
   @override
@@ -72,8 +72,6 @@ class _PopDialog extends State<EmailDialog> {
                       color: Colors.black,
                       fct: () async {
                         print(_email);
-                        volunteer?.email = _email;
-                        print(volunteer?.email!);
                         //await context.read<VolunteerCubit>().updateVolunteer(volunteer!);
                         Navigator.pop(context);
                       },

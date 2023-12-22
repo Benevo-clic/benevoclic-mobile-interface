@@ -65,7 +65,8 @@ class _PopDialog extends State<PhoneDialog> {
                       color: Colors.black,
                       fct: () {
                         if (_formKey.currentState!.validate()) {
-                          Navigator.pop(context);
+                          print(_phone);
+                          //Navigator.pop(context);
                         }
                       },
                       backgroundColor: Colors.grey)

@@ -8,9 +8,13 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
+import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
+import '../../../../../widgets/inscription_signup.dart';
 import '../../../../associtions/navigation_association.dart';
+import '../../../../associtions/signup/inscription_assocition_signup.dart';
 import '../../../../volunteers/navigation_volunteer.dart';
+import '../../../../volunteers/signup/infos_inscription.dart';
 import '../../repository/auth_repository.dart';
 
 class FormulaireLogin extends StatefulWidget {
@@ -27,27 +31,104 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   late String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
+  }
+
   Future<void> _submit() async {
       _formKey.currentState!.save();
       try {
         await AuthRepository()
             .authAdressPassword(_email.toString(), _password.toString());
-      UserModel userModel = await UserRepository().getUserByEmail(_email);
-      if (userModel.rule.rulesType == widget.rulesType) {
-        BlocProvider.of<UserCubit>(context).connexion();
+
+      User user = FirebaseAuth.instance.currentUser!;
+
+      if (user.emailVerified == false) {
+        ShowDialogYesNo.show(
+          context,
+          "Votre email n'est pas vérifié",
+          "Voulez-vous recevoir un email de vérification ?",
+          () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InscriptionDemarche(
+                  email: _email,
+                  mdp: _password,
+                  title: widget.rulesType,
+                  id: user.uid,
+                ),
+              ),
+            );
+          },
+        );
       } else {
-        ShowDialog.show(context, "Rôle non autorisé",
-            "Votre rôle ne vous permet pas de vous connecter ici.");
-        BlocProvider.of<UserCubit>(context).userRoleNotMatched();
+        UserModel userModel = await UserRepository().getUserByEmail(_email);
+
+        if (userModel.isConnect) {
+          ShowDialogYesNo.show(
+            context,
+            "Vous êtes déjà connecté",
+            "Voulez être redirigé vers votre page d'accueil ?",
+            () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return userModel.rule.rulesType == RulesType.USER_ASSOCIATION
+                    ? NavigationAssociation()
+                    : NavigationVolunteer();
+              }));
+            },
+          );
+        } else if (!userModel.isActif) {
+          ShowDialogYesNo.show(
+            context,
+            "Votre compte n'est pas actif",
+            "Vous voulez activer votre compte ?",
+            () async {
+              if (userModel.rule.rulesType == RulesType.USER_ASSOCIATION) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InscriptionAssociation(
+                      email: _email,
+                      id: user.uid,
+                    ),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InfosInscriptionVolunteer(
+                      email: _email,
+                      id: user.uid,
+                    ),
+                  ),
+                );
+              }
+            },
+          );
+        } else if (!userModel.isConnect &&
+            (userModel.rule.rulesType == widget.rulesType)) {
+          BlocProvider.of<UserCubit>(context).connexion();
+          SnackBar snackBar = SnackBar(
+            content: Text("Connexion réussi"),
+            backgroundColor: Colors.green,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       }
-    } on FirebaseAuthException catch (_) {
-      ShowDialog.show(context, "login incorrect", "retour");
+    } on FirebaseAuthException catch (e) {
+      ErrorFirebase.errorCheck(e.code, context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
+      print(state);
       if (state is ResponseUserState &&
           state.user.rule.rulesType == widget.rulesType) {
         _navigateToNextPage(context, state.user.rule.rulesType);
@@ -160,7 +241,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
               ],
             ),
           ),
-          if (state is UserInitialState) _buildInitialInput(),
         ],
       );
     });
@@ -173,11 +253,6 @@ void _navigateToNextPage(BuildContext context, RulesType rulesType) {
         ? NavigationAssociation()
         : NavigationVolunteer();
   }));
-}
 
-Widget _buildInitialInput() {
-  return const Center(
-    child: Text(''),
-  );
+  BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }
-

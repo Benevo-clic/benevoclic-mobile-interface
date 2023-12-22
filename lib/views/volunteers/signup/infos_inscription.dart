@@ -39,6 +39,10 @@ class _InfosInscriptionVolunteerState extends State<InfosInscriptionVolunteer> {
   void initState() {
     super.initState();
     _initUser();
+    _birthDayDate = currentDate.toString();
+    _firstName = "";
+    _lastName = "";
+    _phone = "";
   }
 
   void _initUser() async {

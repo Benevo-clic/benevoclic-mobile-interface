@@ -9,10 +9,10 @@ class UserModel {
   final String id;
 
   @JsonKey(name: 'isActif')
-  final bool isActif;
+  late final bool isActif;
 
   @JsonKey(name: 'isConnect')
-  final bool isConnect;
+  late final bool isConnect;
 
   @JsonKey(name: 'rule')
   final RuleModel rule;
@@ -20,7 +20,10 @@ class UserModel {
   @JsonKey(name: 'email')
   final String? email;
 
-  UserModel({
+  @JsonKey(name: 'isVerified')
+  final bool isVerified;
+
+  UserModel(this.isVerified, {
     required this.id,
     required this.isActif,
     required this.isConnect,

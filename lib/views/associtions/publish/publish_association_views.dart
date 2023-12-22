@@ -14,6 +14,7 @@ import '../../../models/announcement_model.dart';
 import '../../../widgets/app_bar_back_widget.dart';
 import '../../../widgets/image_picker_announcement.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
+import '../navigation_association.dart';
 
 class PublishAnnouncement extends StatefulWidget {
   PublishAnnouncement({super.key});
@@ -38,6 +39,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
 
   DateTime currentDate = DateTime.now();
   bool _isCreatingAnnouncement = false;
+  bool _hasShownCreationMessage = false;
 
   // Déclaration des TextEditingController
   final TextEditingController _titleController = TextEditingController();
@@ -72,6 +74,8 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       longitude: 0,
     );
     _addressFocusNode.addListener(_handleAddressFocusChange);
+    BlocProvider.of<AnnouncementCubit>(context)
+        .changeState(AnnouncementInitialState());
   }
 
   void _handleAddressFocusChange() async {
@@ -100,6 +104,13 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       firstDate: firstAllowedDate,
       lastDate: lastAllowedDate,
     );
+
+    @override
+    void dispose() {
+      _isCreatingAnnouncement = false;
+      _hasShownCreationMessage = false;
+      super.dispose();
+    }
 
     if (selectedDate != null) {
       TimeOfDay initialTime = TimeOfDay.now();
@@ -143,33 +154,45 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   }
 
   void _onPublishButtonPressed(AnnouncementState state) {
-    if (_isCreatingAnnouncement) {
-      return;
-    }
-    _isCreatingAnnouncement = true;
-    Announcement announcement = Announcement(
-      description: _descriptionController.text,
-      dateEvent: _dateEventController.text,
-      nbHours: int.parse(_nbHoursController.text),
-      nbPlaces: int.parse(_nbPlacesController.text),
-      type: _typeController.text,
-      datePublication: DateTime.now().toString(),
-      location: LocationModel(
-        address: _addressController.text,
-        latitude: 0,
-        longitude: 0,
-      ),
-      labelEvent: _titleController.text,
-    );
-    if (_imageCover != null) {
-      announcement.image = base64Encode(_imageCover!);
-    } else {
-      announcement.image = '';
-    }
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      BlocProvider.of<AnnouncementCubit>(context)
-          .createAnnouncement(announcement);
+    try {
+      if (_isCreatingAnnouncement) {
+        return;
+      }
+      _isCreatingAnnouncement = true;
+      Announcement announcement = Announcement(
+        description: _descriptionController.text,
+        dateEvent: _dateEventController.text,
+        nbHours: int.parse(_nbHoursController.text),
+        nbPlaces: int.parse(_nbPlacesController.text),
+        type: _typeController.text,
+        datePublication: DateTime.now().toString(),
+        location: LocationModel(
+          address: _addressController.text,
+          latitude: 0,
+          longitude: 0,
+        ),
+        labelEvent: _titleController.text,
+      );
+      if (_imageCover != null) {
+        announcement.image = base64Encode(_imageCover!);
+      } else {
+        announcement.image = '';
+      }
+      print(_formKey.currentState!.validate());
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        BlocProvider.of<AnnouncementCubit>(context)
+            .createAnnouncement(announcement);
+      } else {
+        setState(() {
+          _isCreatingAnnouncement = false;
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        _isCreatingAnnouncement = false;
+      });
     }
   }
 
@@ -177,14 +200,27 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   Widget build(BuildContext context) {
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
       listener: (context, state) {
-        if (state is AnnouncementCreatedState && !_isCreatingAnnouncement) {
+        if (state is AnnouncementCreatedState &&
+            !_isCreatingAnnouncement &&
+            !_hasShownCreationMessage) {
+          _isCreatingAnnouncement = false;
+          _hasShownCreationMessage = true;
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("L'annonce a été créée avec succès"),
+              backgroundColor: Colors.green,
             ),
           );
-          Navigator.pop(context);
-          _isCreatingAnnouncement = false;
+
+          Navigator.of(context)
+              .pushReplacement(
+            MaterialPageRoute(builder: (context) => NavigationAssociation()),
+          )
+              .then((_) {
+            _isCreatingAnnouncement = false;
+            _hasShownCreationMessage = false;
+          });
         }
 
         if (state is AnnouncementUploadedPictureState) {
@@ -498,8 +534,10 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           onSaved: (value) {
                           },
                           validator: (value) {
-                            if (value == null) {
-                              return "Le nombre d'heures n'est pas valide";
+                            RegExp regex = RegExp(r'^\d+$');
+                            if (!regex.hasMatch(value.toString()) ||
+                                value == null) {
+                              return "Le nombre de bénévoles n'est pas valide";
                             }
                             return null;
                           },

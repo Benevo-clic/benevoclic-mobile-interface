@@ -88,6 +88,7 @@ class InscriptionDemarche extends StatelessWidget {
                           onPressed: () async {
                             bool? isEmailVerified =
                                 await AuthRepository().verifiedEmail();
+
                             if (isEmailVerified) {
                               BlocProvider.of<UserCubit>(context)
                                   .createUserType(title, email, mdp);

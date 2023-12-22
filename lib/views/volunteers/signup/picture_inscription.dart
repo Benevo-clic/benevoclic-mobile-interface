@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../models/user_model.dart';
 import '../../../models/volunteer_model.dart';
+import '../../../repositories/api/user_repository.dart';
 import '../../../widgets/auth_app_bar.dart';
+import '../navigation_volunteer.dart';
 
 class PictureInscription extends StatefulWidget {
   final String firstName;
@@ -152,7 +154,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Volunteer volunteer = Volunteer(
                               firstName: widget.firstName,
                               lastName: widget.lastName,
@@ -163,11 +165,28 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               email: widget.email,
                               id: widget.id,
                             );
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .changeState(VolunteerCreatedState(
-                                    volunteerModel: volunteer));
+                            UserModel userModel = await UserRepository()
+                                .getUserByEmail(widget.email);
+                            UserModel userModel2 = UserModel.fromJson({
+                              "id": userModel.id,
+                              "email": userModel.email,
+                              "isConnect": true,
+                              "isVerified": true,
+                              "isActif": true,
+                              "rule": {
+                                "id": userModel.id,
+                                "rulesType": "USER_VOLUNTEER"
+                              }
+                            });
+                            UserRepository()
+                                .updateUser(userModel2)
+                                .then((value) {
+                              BlocProvider.of<VolunteerCubit>(context)
+                                  .createVolunteer(volunteer);
+                              BlocProvider.of<VolunteerCubit>(context)
+                                  .changeState(VolunteerCreatedState(
+                                      volunteerModel: volunteer));
+                            });
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -212,11 +231,28 @@ class _PictureInscriptionState extends State<PictureInscription> {
                             } else {
                               volunteer.imageProfile = '';
                             }
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .createVolunteer(volunteer);
-                            BlocProvider.of<VolunteerCubit>(context)
-                                .changeState(VolunteerCreatedState(
-                                    volunteerModel: volunteer));
+                            UserModel userModel = await UserRepository()
+                                .getUserByEmail(widget.email);
+                            UserModel userModel2 = UserModel.fromJson({
+                              "id": userModel.id,
+                              "email": userModel.email,
+                              "isConnect": true,
+                              "isVerified": true,
+                              "isActif": true,
+                              "rule": {
+                                "id": userModel.id,
+                                "rulesType": "USER_VOLUNTEER"
+                              }
+                            });
+                            UserRepository()
+                                .updateUser(userModel2)
+                                .then((value) {
+                              BlocProvider.of<VolunteerCubit>(context)
+                                  .createVolunteer(volunteer);
+                              BlocProvider.of<VolunteerCubit>(context)
+                                  .changeState(VolunteerCreatedState(
+                                      volunteerModel: volunteer));
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,

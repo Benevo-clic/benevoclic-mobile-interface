@@ -61,7 +61,19 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       } else {
         UserModel userModel = await UserRepository().getUserByEmail(_email);
         if (userModel.isConnect) {
-          ShowDialog.show(context, "Vous êtes déjà connecté", "retour");
+          ShowDialogYesNo.show(
+            context,
+            "Vous êtes déjà connecté",
+            "Voulez être redirigé vers votre page d'accueil ?",
+            () async {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return userModel.rule.rulesType == RulesType.USER_ASSOCIATION
+                    ? NavigationAssociation()
+                    : NavigationVolunteer();
+              }));
+            },
+          );
         } else if (!userModel.isActif) {
           ShowDialogYesNo.show(
             context,

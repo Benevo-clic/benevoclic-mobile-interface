@@ -29,8 +29,8 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
 
   void createAnnouncement(Announcement announcement) async {
     emit(AnnouncementLoadingState());
-    Future.delayed(const Duration(seconds: 2));
     try {
+      print('Announcement to create: $announcement');
       Announcement announcementCreated =
           await _announcementRepository.createAnnouncement(announcement);
       print("Announcement created");

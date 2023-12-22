@@ -26,7 +26,7 @@ void main() async {
   //Initialisation de firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(AuthWrapper());
+  runApp(MyApp());
 }
 
 class AuthWrapper extends StatefulWidget {
@@ -40,13 +40,15 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    _authSubscription =
-        FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeView()),
-        );
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _authSubscription =
+          FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => HomeView()),
+          );
+        }
+      });
     });
   }
 

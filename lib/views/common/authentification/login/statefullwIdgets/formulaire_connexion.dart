@@ -31,6 +31,12 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   late String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
+  }
+
   Future<void> _submit() async {
       _formKey.currentState!.save();
       try {
@@ -60,6 +66,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         );
       } else {
         UserModel userModel = await UserRepository().getUserByEmail(_email);
+
         if (userModel.isConnect) {
           ShowDialogYesNo.show(
             context,
@@ -121,6 +128,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
+      print(state);
       if (state is ResponseUserState &&
           state.user.rule.rulesType == widget.rulesType) {
         _navigateToNextPage(context, state.user.rule.rulesType);
@@ -233,7 +241,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
               ],
             ),
           ),
-          if (state is UserInitialState) _buildInitialInput(),
         ],
       );
     });
@@ -246,11 +253,6 @@ void _navigateToNextPage(BuildContext context, RulesType rulesType) {
         ? NavigationAssociation()
         : NavigationVolunteer();
   }));
-}
 
-Widget _buildInitialInput() {
-  return const Center(
-    child: Text(''),
-  );
+  BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }
-

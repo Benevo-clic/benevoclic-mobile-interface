@@ -180,7 +180,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       }
       print(_formKey.currentState!.validate());
       if (_formKey.currentState!.validate()) {
-        print("Form is valid");
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
             .createAnnouncement(announcement);
@@ -204,7 +203,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         if (state is AnnouncementCreatedState &&
             !_isCreatingAnnouncement &&
             !_hasShownCreationMessage) {
-          print("Announcement created");
           _isCreatingAnnouncement = false;
           _hasShownCreationMessage = true;
 

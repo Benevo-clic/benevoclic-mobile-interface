@@ -91,10 +91,6 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<UserModel> getUser() async {
-    return await _userRepository.getUser();
-  }
-
   Future<void> connexion() async {
     try {
       emit(UserLoadingState());

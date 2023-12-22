@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../models/volunteer_model.dart';
@@ -30,6 +31,12 @@ class VolunteerRepository {
       } else {
         throw Exception(response.statusMessage);
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        await FirebaseAuth.instance.signOut();
+        throw Exception('Session expirée. Utilisateur déconnecté.');
+      }
+      throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
       throw Exception(e);
     }

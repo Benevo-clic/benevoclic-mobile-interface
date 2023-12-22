@@ -7,6 +7,7 @@ part of 'user_model.dart';
 // **************************************************************************
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+      json['isVerified'] as bool,
       id: json['id'] as String,
       isActif: json['isActif'] as bool,
       isConnect: json['isConnect'] as bool,
@@ -20,4 +21,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'isConnect': instance.isConnect,
       'rule': instance.rule,
       'email': instance.email,
+      'isVerified': instance.isVerified,
     };

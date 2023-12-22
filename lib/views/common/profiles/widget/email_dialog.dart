@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
@@ -24,10 +24,8 @@ class _PopDialog extends State<EmailDialog> {
   late String? _email;
 
   getEmail() async {
-    user = await context.read<UserCubit>().getUser();
-    volunteer = await context.read<VolunteerCubit>().getVolunteer(user!.id);
-    email = volunteer!.email;
-    await context.read<VolunteerCubit>().volunteerState(volunteer!);
+    User user = FirebaseAuth.instance.currentUser!;
+    volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
   }
 
   @override

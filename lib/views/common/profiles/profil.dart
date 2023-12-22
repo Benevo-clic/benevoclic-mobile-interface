@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/user_model.dart';
@@ -25,8 +25,8 @@ class ProfileView extends StatelessWidget {
   ProfileView({required this.title});
 
   getUser(BuildContext context) async {
-  user = await context.read<UserCubit>().getUser();
-  volunteer = await context.read<VolunteerCubit>().getVolunteer(user!.id);
+  User user = FirebaseAuth.instance.currentUser!;
+  volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
   name = volunteer!.lastName;
   await context.read<VolunteerCubit>().volunteerState(volunteer!);
   }

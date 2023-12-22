@@ -22,12 +22,18 @@ class AnnouncementRepository {
         'Authorization': 'Bearer $token'
       };
       var data = json.encode(announcement.toJson());
+      print("++++++++++++++++++0+++++");
+
+      print(data);
+      print("++++++++++++++++++1+++++");
 
       var response = await _dio.post(
         'http://${globals.url}/api/v1/announcement/createAnnouncement',
         options: Options(headers: headers),
         data: data,
       );
+      print("+++++++++++++2++++++++++");
+      print(Announcement.fromJson(response.data).toJson());
 
       if (response.statusCode == 200) {
         return Announcement.fromJson(response.data);

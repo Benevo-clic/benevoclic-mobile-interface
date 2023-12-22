@@ -184,6 +184,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       }
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
+        print(announcement.toJson());
         BlocProvider.of<AnnouncementCubit>(context)
             .createAnnouncement(announcement);
       } else {

@@ -8,7 +8,7 @@ import 'package:namer_app/views/associtions/publish/publish_association_views.da
 import 'package:namer_app/widgets/build_navbar.dart';
 
 import '../../cubit/page/page_cubit.dart';
-import '../common/annonces/annonces.dart';
+import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import '../common/profiles/profil.dart';
 
@@ -23,7 +23,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
   int currentPageIndex = 0;
 
   final List<Widget> pages = [
-    Annonces(),
+    AnnouncementCommon(),
     PublishAnnouncement(),
     Messages(),
     ProfileView(title: RulesType.USER_ASSOCIATION),

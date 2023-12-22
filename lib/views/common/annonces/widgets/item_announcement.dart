@@ -1,39 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/util/color.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
 
-class Annonces extends StatefulWidget {
-  @override
-  State<Annonces> createState() => _AnnoncesState();
-}
+import '../../../../util/color.dart';
+import '../../../../widgets/abstract_container2.dart';
 
-class _AnnoncesState extends State<Annonces> {
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Annonce"),
-      ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ItemAnnonce extends StatelessWidget {
+class ItemAnnouncement extends StatelessWidget {
   String nameAsso;
   int nbHours;
   int nbPlaces;
   int nbPlacesTaken;
 
-  ItemAnnonce(
+  ItemAnnouncement(
       {required this.nameAsso,
       required this.nbHours,
       required this.nbPlaces,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -66,8 +67,15 @@ class _PopDialog extends State<PhoneDialog> {
                       fct: () {
                         if (_formKey.currentState!.validate()) {
                           print(_phone);
-                          //Navigator.pop(context);
+                          Volunteer volunteer = Volunteer(
+                              firstName: state.volunteer!.firstName,
+                              lastName: state.volunteer!.lastName,
+                              phone: _phone.toString(),
+                              birthDayDate: state.volunteer!.birthDayDate);
+                          BlocProvider.of<VolunteerCubit>(context)
+                              .updateVolunteer(volunteer);
                         }
+                        Navigator.pop(context);
                       },
                       backgroundColor: Colors.grey)
                 ],

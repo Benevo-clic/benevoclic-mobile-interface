@@ -15,8 +15,9 @@ class ModifProfil extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: orange,
-        ),
+            iconTheme: IconThemeData(color: Colors.white, size: 45),
+            backgroundColor: orange,
+            actions: []),
         body: BlocConsumer<VolunteerCubit, VolunteerState>(
           listener: (context, state) {},
           builder: (context, state) {

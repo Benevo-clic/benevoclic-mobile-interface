@@ -43,14 +43,38 @@ class ProfileView extends StatelessWidget {
           print(state);
           if (state is VolunteerInfo) {
             Volunteer volunteer = state.getInfo();
-
             return Scaffold(
                 backgroundColor: Colors.transparent,
                 resizeToAvoidBottomInset: false,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.mode),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModifProfil()),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.settings),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ParametersView()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
                 body: SingleChildScrollView(
-                    child: affichageVolunteer(context, volunteer)));
+                    child:affichageVolunteer(context, volunteer)));
           } else {
-            return Text("");
+            return Scaffold(body: Text(""));
           }
         });
   }
@@ -99,6 +123,119 @@ class Bio extends StatelessWidget {
 }
 
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
+  String bio = "";
+   if(volunteer.bio != null) bio = volunteer.bio!;
+
+  return Center(
+    child: Column(
+      children: [
+        Image.asset("assets/logo.png", height: 200),
+        SizedBox(
+          height: 10,
+        ),
+        AbstractContainer2(
+          content: Column(
+            children: [
+              Text(
+                "${volunteer.firstName}  ${volunteer.lastName}",
+                style: TextStyle(),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                "${volunteer.myAssociations?.length} associations",
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Bio(text: bio),
+        SizedBox(
+          height: 20,
+        ),
+        AbstractContainer2(
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleWithIcon(
+                  title: "Informations", icon: Icon(Icons.location_city)),
+              Divider(
+                height: 25,
+                color: Colors.white,
+              ),
+              Section(
+                  text: volunteer.birthDayDate,
+                  icon: Icon(Icons.location_on_outlined)),
+              Divider(
+                height: 25,
+                color: Colors.white,
+              ),
+              Section(text: volunteer.birthDayDate, icon: Icon(Icons.mail)),
+              Divider(
+                height: 25,
+                color: Colors.white,
+              ),
+              Section(text: volunteer.phone, icon: Icon(Icons.phone_android)),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        LineProfil(
+            text: "Historique de missions",
+            icon: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.map_rounded),
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        LineProfil(
+            text: "Paramètres",
+            icon: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.settings),
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        LineProfil(
+            text: "Suppression compte",
+            icon: IconButton(
+              onPressed: () async {
+                await AuthRepository().deleteAccount();
+              },
+              icon: Icon(Icons.no_accounts_sharp),
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        ElevatedButton(
+            onPressed: () async {
+              await AuthRepository().logout();
+              BlocProvider.of<UserCubit>(context).disconnect();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(
+                    title: RulesType.USER_VOLUNTEER,
+                  ),
+                ),
+              );
+            },
+            child: Text("Déconnexion")),
+        SizedBox(
+          height: 20,
+        ),
+      ],
+    ),
+  );
   return Column(
     children: [
       SizedBox(

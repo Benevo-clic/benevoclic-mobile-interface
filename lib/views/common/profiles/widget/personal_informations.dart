@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -21,6 +22,7 @@ class _InformationDialog extends State<InformationDialog> {
   String _lastName = "";
   String _address = "";
   String _phone = "";
+  String _birth = "";
 
   changeFirstName(value) {
     setState(() {
@@ -43,6 +45,12 @@ class _InformationDialog extends State<InformationDialog> {
   changePhone(value) {
     setState(() {
       _phone = value;
+    });
+  }
+
+  changeBirthDate(value) {
+    setState(() {
+      _birth = value;
     });
   }
 
@@ -73,7 +81,7 @@ class _InformationDialog extends State<InformationDialog> {
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: state.volunteer!.birthDayDate, fct: print),
+                  InputField(title: state.volunteer!.birthDayDate, fct: changeBirthDate),
                   SizedBox(
                     height: 10,
                   ),
@@ -95,7 +103,16 @@ class _InformationDialog extends State<InformationDialog> {
                           print(_lastName);
                           print(_phone);
                           print(_address);
-                          //Navigator.pop(context);
+                          Volunteer volunteer = Volunteer(
+                              firstName: _firstName,
+                              lastName: _lastName,
+                              phone: _phone,
+                              birthDayDate: _birth);
+                          BlocProvider.of<VolunteerCubit>(context)
+                              .updateVolunteer(volunteer);
+                          BlocProvider.of<VolunteerCubit>(context)
+                              .volunteerState(volunteer);   
+                          Navigator.pop(context);
                         }
                       },
                       backgroundColor: Colors.grey)

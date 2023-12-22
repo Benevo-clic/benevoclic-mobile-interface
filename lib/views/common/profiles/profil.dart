@@ -44,7 +44,7 @@ class ProfileView extends StatelessWidget {
               if (state is VolunteerInfo) {
                 Volunteer volunteer = state.getInfo();
 
-                return list(context, volunteer.lastName, volunteer.bio);
+                return affichageVolunteer(context, volunteer);
               } else {
                 return Text("");
               }
@@ -101,16 +101,44 @@ class Bio extends StatelessWidget {
   }
 }
 
-list(BuildContext context, name, bio) {
+affichageVolunteer(BuildContext context, Volunteer volunteer) {
   return ListView(
     padding: EdgeInsets.all(25),
     children: [
+      SizedBox(
+            height: 50,
+          ),
+          Row(
+            children: [
+              Expanded(child: Text("")),
+              IconButton(
+                icon: Icon(Icons.perm_contact_calendar_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ModifProfil()),
+                  );
+                },
+              ),
+              Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ParametersView()),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
       Image.asset("assets/logo.png", height: 200),
-      Text(name, style: TextStyle()),
+      Text(volunteer.firstName, style: TextStyle()),
       SizedBox(
         height: 20,
       ),
-      Bio(text: bio),
+      Bio(text: volunteer.bio!),
       SizedBox(
         height: 20,
       ),

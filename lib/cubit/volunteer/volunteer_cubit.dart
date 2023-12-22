@@ -30,13 +30,15 @@ class VolunteerCubit extends Cubit<VolunteerState> {
   }
 
   Future<Volunteer> getVolunteer(String id) async {
-    //emit(VolunteerLoadingState());
-
     Volunteer volunteer = await _volunteerRepository.getVolunteer(id);
     return volunteer;
   }
 
-  Future<void> volunteerState(Volunteer volunteer)async{
+  Future<void> updateVolunteer(Volunteer volunteer) async {
+    await _volunteerRepository.updateVolunteer(volunteer);
+  }
+
+  Future<void> volunteerState(Volunteer volunteer) async {
     emit(VolunteerInfo(volunteer: volunteer));
   }
 }

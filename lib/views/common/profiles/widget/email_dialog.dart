@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/user/user_cubit.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/user_model.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -12,7 +17,18 @@ class EmailDialog extends StatefulWidget {
 }
 
 class _PopDialog extends State<EmailDialog> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  UserModel? user;
+  Volunteer? volunteer;
+  String? email;
+  late String? _email;
+
+  getEmail() async {
+    user = await context.read<UserCubit>().getUser();
+    volunteer = await context.read<VolunteerCubit>().getVolunteer(user!.id);
+    email = volunteer!.email;
+    await context.read<VolunteerCubit>().volunteerState(volunteer!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +36,7 @@ class _PopDialog extends State<EmailDialog> {
       children: [
         TitleWithIcon(title: "E-mail", icon: Icon(Icons.mail)),
         Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Column(
             children: [
@@ -27,9 +44,15 @@ class _PopDialog extends State<EmailDialog> {
                 height: 25,
               ),
               TextFormField(
+                onSaved: (value) {
+                  _email = value.toString();
+                },
+                validator: (value) {
+                  _email = value;
+                },
                 decoration: InputDecoration(
                     hintStyle: TextStyle(color: Colors.grey),
-                    hintText: "E-mail",
+                    hintText: "E-mail : ${volunteer?.email}",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                     )),
@@ -40,7 +63,11 @@ class _PopDialog extends State<EmailDialog> {
               Button(
                   text: "Sauvegarder",
                   color: Colors.black,
-                  fct: () {
+                  fct: () async {
+                    print(_email);
+                    volunteer?.email = _email;
+                    print(volunteer?.email!);
+                    //await context.read<VolunteerCubit>().updateVolunteer(volunteer!);
                     Navigator.pop(context);
                   },
                   backgroundColor: Colors.grey)

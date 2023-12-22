@@ -7,6 +7,11 @@ import '../../models/volunteer_model.dart';
 
 @immutable
 abstract class VolunteerState extends Equatable {
+  Volunteer? volunteer;
+
+  getVolunteer(){
+    return volunteer;
+  }
   @override
   List<Object?> get props => [];
 }

@@ -29,13 +29,16 @@ class ParametersView extends StatelessWidget {
                 content: Column(
                   children: [
                     ParameterLine(
-                        title: "Informations personnelles", fct: (context) => {
-                          showDialog(context: context, builder: (context){
-                            return PopDialog(
-                              content: InformationDialog(),
-                            );
-                          })
-                        }),
+                        title: "Informations personnelles",
+                        fct: (context) => {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return PopDialog(
+                                      content: InformationDialog(),
+                                    );
+                                  })
+                            }),
                     Divider(
                       color: Colors.white,
                     ),

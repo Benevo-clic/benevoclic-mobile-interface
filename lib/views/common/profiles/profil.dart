@@ -9,9 +9,12 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
+import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
+import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:namer_app/widgets/title_with_icon.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 import '../../../repositories/auth_repository.dart';
@@ -34,23 +37,22 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getUser(context);
-    return Scaffold(
-      body: Background(
-        image: "assets/background4.png",
-        widget: BlocConsumer<VolunteerCubit, VolunteerState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              print(state);
-              if (state is VolunteerInfo) {
-                Volunteer volunteer = state.getInfo();
+    return BlocConsumer<VolunteerCubit, VolunteerState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          print(state);
+          if (state is VolunteerInfo) {
+            Volunteer volunteer = state.getInfo();
 
-                return affichageVolunteer(context, volunteer);
-              } else {
-                return Text("");
-              }
-            }),
-      ),
-    );
+            return Scaffold(
+                backgroundColor: Colors.transparent,
+                resizeToAvoidBottomInset: false,
+                body: SingleChildScrollView(
+                    child: affichageVolunteer(context, volunteer)));
+          } else {
+            return Text("");
+          }
+        });
   }
 }
 
@@ -91,54 +93,97 @@ class Bio extends StatelessWidget {
     return AbstractContainer(
         content: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text("Bio"),
-        SizedBox(height: 5),
-        Text(
-            text)
-      ],
+      children: [Text("Bio"), SizedBox(height: 5), Text(text)],
     ));
   }
 }
 
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
-  return ListView(
-    padding: EdgeInsets.all(25),
+  return Column(
     children: [
       SizedBox(
-            height: 50,
+        height: 50,
+      ),
+      Row(
+        children: [
+          Expanded(child: Text("")),
+          IconButton(
+            icon: Icon(Icons.perm_contact_calendar_outlined),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ModifProfil()),
+              );
+            },
           ),
-          Row(
-            children: [
-              Expanded(child: Text("")),
-              IconButton(
-                icon: Icon(Icons.perm_contact_calendar_outlined),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ModifProfil()),
-                  );
-                },
-              ),
-              Expanded(
-                child: IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ParametersView()),
-                    );
-                  },
-                ),
-              ),
-            ],
+          Expanded(
+            child: IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ParametersView()),
+                );
+              },
+            ),
           ),
+        ],
+      ),
       Image.asset("assets/logo.png", height: 200),
-      Text(volunteer.firstName, style: TextStyle()),
+      SizedBox(
+        height: 10,
+      ),
+      AbstractContainer2(
+        content: Column(
+          children: [
+            Text(
+              "${volunteer.firstName}  ${volunteer.lastName}",
+              style: TextStyle(),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "${volunteer.myAssociations!.length} associations",
+              style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
       SizedBox(
         height: 20,
       ),
       Bio(text: volunteer.bio!),
+      SizedBox(
+        height: 20,
+      ),
+      AbstractContainer2(
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleWithIcon(
+                title: "Informations", icon: Icon(Icons.location_city)),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            Section(
+                text: volunteer.birthDayDate,
+                icon: Icon(Icons.location_on_outlined)),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            Section(text: volunteer.birthDayDate, icon: Icon(Icons.mail)),
+            Divider(
+              height: 25,
+              color: Colors.white,
+            ),
+            Section(text: volunteer.phone, icon: Icon(Icons.phone_android)),
+          ],
+        ),
+      ),
       SizedBox(
         height: 20,
       ),

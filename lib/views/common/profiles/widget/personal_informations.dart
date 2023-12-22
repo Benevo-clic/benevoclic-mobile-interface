@@ -17,8 +17,6 @@ class InformationDialog extends StatefulWidget {
 class _InformationDialog extends State<InformationDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _phone;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
@@ -36,25 +34,23 @@ class _InformationDialog extends State<InformationDialog> {
                   SizedBox(
                     height: 25,
                   ),
-                  InputField(title: "Nom : ${state.volunteer!.lastName}"),
+                  InputField(title: "${state.volunteer!.lastName}"),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "Prenom : ${state.volunteer!.firstName}"),
+                  InputField(title: "${state.volunteer!.firstName}"),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(
-                      title:
-                          "Date naissance : ${state.volunteer!.birthDayDate}"),
+                  InputField(title: "${state.volunteer!.birthDayDate}"),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "Téléphone : ${state.volunteer!.phone}"),
+                  InputField(title: "${state.volunteer!.phone}"),
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: "Adresse : ${state.volunteer!.address}"),
+                  InputField(title: "${state.volunteer!.address}"),
                   SizedBox(
                     height: 10,
                   ),
@@ -63,7 +59,6 @@ class _InformationDialog extends State<InformationDialog> {
                       color: Colors.black,
                       fct: () {
                         if (_formKey.currentState!.validate()) {
-                          
                           Navigator.pop(context);
                         }
                       },
@@ -86,6 +81,7 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: title,
       validator: (value) {},
       decoration: InputDecoration(
           hintStyle: TextStyle(color: Colors.grey),

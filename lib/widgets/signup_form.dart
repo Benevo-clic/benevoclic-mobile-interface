@@ -3,7 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/util/errorFirebase.dart';
 import 'package:namer_app/util/showDialog.dart';
+import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 
 import '../cubit/user/user_cubit.dart';
 import '../cubit/user/user_state.dart';
@@ -49,7 +51,7 @@ class _SignupFormState extends State<SignupForm> {
             context, "Les mots de passe ne sont pas identiques", "retour");
       }
     } on FirebaseAuthException catch (_) {
-      ShowDialog.show(context, "inscription incorrect", "retour");
+      ErrorFirebase.errorCheck(_.code, context);
     }
   }
 
@@ -216,8 +218,25 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 TextButton(
                   onPressed: () {
-                    ShowDialog.show(
-                        context, "cette fonctionalité arrive !!", "retour");
+                    if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(
+                            title: RulesType.USER_ASSOCIATION,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(
+                            title: RulesType.USER_VOLUNTEER,
+                          ),
+                        ),
+                      );
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

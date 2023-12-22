@@ -8,6 +8,7 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
+import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
 import '../../../../../widgets/inscription_signup.dart';
 import '../../../../associtions/navigation_association.dart';
@@ -100,8 +101,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       }
-    } on FirebaseAuthException catch (_) {
-      ShowDialog.show(context, "login incorrect", "retour");
+    } on FirebaseAuthException catch (e) {
+      ErrorFirebase.errorCheck(e.code, context);
     }
   }
 

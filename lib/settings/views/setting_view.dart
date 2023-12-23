@@ -2,7 +2,6 @@
 
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +20,6 @@ class SettingView extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: (){
-                  print(context.read<SettingCubit>().state);
                  return context.read<SettingCubit>().changeTheme();
                 },
                 child: Text('Change Theme'),

@@ -5,7 +5,7 @@ import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../repositories/api/user_repository.dart';
-import '../../views/common/authentification/repository/auth_repository.dart';
+import '../../repositories/auth_repository.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;
@@ -41,10 +41,10 @@ class UserCubit extends Cubit<UserState> {
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
-      User userCredential =
-          await _authRepository.createAccount(email, password);
+      UserCredential userCredential =
+          await _authRepository.createAccountWithEmailPassword(email, password);
 
-      emit(UserEmailVerificationState(user: userCredential));
+      emit(UserEmailVerificationState(user: userCredential.user));
     } catch (e) {
       emit(UserRegisterErrorState(message: e.toString()));
     }
@@ -66,7 +66,7 @@ class UserCubit extends Cubit<UserState> {
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
-      await _authRepository.authAdressPassword(email, password);
+      await _authRepository.signInWithEmailAndPassword(email, password);
 
       final users = await _userRepository.createUser(rulesType);
 

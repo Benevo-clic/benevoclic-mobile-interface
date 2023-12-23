@@ -19,18 +19,6 @@ class AssociationCubit extends Cubit<AssociationState> {
     emit(state);
   }
 
-  // Future<void> verifySiretAssociation(String siret) async {
-  //   emit(AssociationLoadingState());
-  //   try {
-  //     Future.delayed(const Duration(seconds: 3));
-  //     bool verify = await _associationRepository.verifySiretAssociation(siret);
-  //     print(verify);
-  //     emit(AssociationVerifyState(isVerified: verify));
-  //   } catch (e) {
-  //     emit(AssociationVerifyErrorState());
-  //   }
-  // }
-
   Future<void> createAssociation(Association association) async {
     emit(AssociationLoadingState());
     try {

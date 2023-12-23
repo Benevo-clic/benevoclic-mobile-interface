@@ -65,7 +65,6 @@ class ItemAnnonce extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.favorite_border),
                 onPressed: () {
-                  print("favorite");
                 },
                 color: marron,
               ),

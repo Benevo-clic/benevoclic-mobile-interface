@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../models/user_model.dart';
@@ -57,6 +58,10 @@ class _PictureInscriptionState extends State<PictureInscription> {
     _initUser();
   }
 
+  _saveLogin() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+  }
+
   void _initUser() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<VolunteerCubit>();
@@ -67,7 +72,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
-        listener: (context, state) {
+        listener: (context, state) async {
       if (state is VolunteerPictureState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -78,6 +83,9 @@ class _PictureInscriptionState extends State<PictureInscription> {
         BlocProvider.of<VolunteerCubit>(context).initState();
       }
       if (state is VolunteerCreatedState) {
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        preferences.setBool('Volunteer', true);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
@@ -25,7 +26,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     Annonces(),
     PublishAnnouncement(),
     Messages(),
-    ProfilPage(),
+    ProfileView(title: RulesType.USER_ASSOCIATION),
   ];
 
   void navigateToPublishPage() {

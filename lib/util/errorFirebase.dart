@@ -3,7 +3,6 @@ import 'package:namer_app/util/showDialog.dart';
 
 class ErrorFirebase implements Exception {
   static void errorCheck(String code, BuildContext context) {
-    print(code);
     if (code == "invalid-email") {
       ShowDialog.show(
           context, "Email incorrect", "L'adresse e-mail est mal formatée.");

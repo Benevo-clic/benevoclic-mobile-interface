@@ -3,13 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/background.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
+import '../../../repositories/auth_repository.dart';
 import '../authentification/login/widgets/login.dart';
-import '../authentification/repository/auth_repository.dart';
 import 'modif_profil.dart';
 
-class ProfilPage extends StatelessWidget {
+class ProfileView extends StatelessWidget {
+  final RulesType title;
+
+  ProfileView({required this.title});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -75,13 +80,22 @@ class ProfilPage extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () async {
-                await AuthRepository().logout();
-                BlocProvider.of<UserCubit>(context).disconnect();
+                BlocProvider.of<UserCubit>(context)
+                    .disconnect()
+                    .then((_) async => await AuthRepository().signOut());
+
+                await AuthRepository().signOut();
+                String owner = title == RulesType.USER_VOLUNTEER
+                    ? 'Volunteer'
+                    : "Association";
+                final SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                preferences.setBool(owner, false);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => LoginPage(
-                      title: RulesType.USER_VOLUNTEER,
+                      title: title,
                     ),
                   ),
                 );
@@ -111,7 +125,7 @@ class LineProfil extends StatelessWidget {
             flex: 0,
             child: IconButton(
               onPressed: () async {
-                await AuthRepository().logout();
+                await AuthRepository().signOut();
               },
               icon: icon,
             ),

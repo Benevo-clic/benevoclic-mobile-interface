@@ -4,9 +4,9 @@ import 'package:namer_app/views/volunteers/signup/infos_inscription.dart';
 
 import '../cubit/user/user_cubit.dart';
 import '../cubit/user/user_state.dart';
+import '../repositories/auth_repository.dart';
 import '../type/rules_type.dart';
 import '../views/associtions/signup/inscription_assocition_signup.dart';
-import '../views/common/authentification/repository/auth_repository.dart';
 import 'auth_app_bar.dart';
 
 class InscriptionDemarche extends StatelessWidget {

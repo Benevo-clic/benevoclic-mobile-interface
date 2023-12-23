@@ -14,15 +14,16 @@ dependencies:
   english_words:
   firebase_auth:
   firebase_core:
-  firebase_messaging:
+  firebase_messaging: ^14.7.9
   flutter:
     sdk: flutter
+  shared_preferences: ^2.2.2
   flutter_application_1:
   flutter_launcher_icons:
   flutter_map:
   flutter_secure_storage:
   font_awesome_flutter:
-  google_sign_in: 6.2.1
+  google_sign_in:
   mockito:
   provider:
   intl:

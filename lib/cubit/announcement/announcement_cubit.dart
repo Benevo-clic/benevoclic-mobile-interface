@@ -30,13 +30,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   void createAnnouncement(Announcement announcement) async {
     emit(AnnouncementLoadingState());
     try {
-      print('Announcement to create: $announcement');
       Announcement announcementCreated =
           await _announcementRepository.createAnnouncement(announcement);
-      print("Announcement created");
       emit(AnnouncementCreatedState(announcement: announcementCreated));
     } catch (e) {
-      print(e.toString());
       emit(AnnouncementErrorState(message: e.toString()));
     }
   }

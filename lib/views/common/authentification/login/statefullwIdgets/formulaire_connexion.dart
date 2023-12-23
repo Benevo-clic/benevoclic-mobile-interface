@@ -6,8 +6,10 @@ import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
+import '../../../../../repositories/auth_repository.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
 import '../../../../../widgets/inscription_signup.dart';
@@ -15,7 +17,6 @@ import '../../../../associtions/navigation_association.dart';
 import '../../../../associtions/signup/inscription_assocition_signup.dart';
 import '../../../../volunteers/navigation_volunteer.dart';
 import '../../../../volunteers/signup/infos_inscription.dart';
-import '../../repository/auth_repository.dart';
 
 class FormulaireLogin extends StatefulWidget {
   final RulesType rulesType;
@@ -38,14 +39,15 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 
   Future<void> _submit() async {
-      _formKey.currentState!.save();
-      try {
-        await AuthRepository()
-            .authAdressPassword(_email.toString(), _password.toString());
+    _formKey.currentState!.save();
+    try {
+      await AuthRepository()
+          .signInWithEmailAndPassword(_email.toString(), _password.toString());
 
-      User user = FirebaseAuth.instance.currentUser!;
+      User? user = await AuthRepository().getCurrentUser();
+      bool isEmailVerified = await AuthRepository().isEmailVerified();
 
-      if (user.emailVerified == false) {
+      if (isEmailVerified == false) {
         ShowDialogYesNo.show(
           context,
           "Votre email n'est pas vérifié",
@@ -58,7 +60,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   email: _email,
                   mdp: _password,
                   title: widget.rulesType,
-                  id: user.uid,
+                  id: user!.uid,
                 ),
               ),
             );
@@ -67,21 +69,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       } else {
         UserModel userModel = await UserRepository().getUserByEmail(_email);
 
-        if (userModel.isConnect) {
-          ShowDialogYesNo.show(
-            context,
-            "Vous êtes déjà connecté",
-            "Voulez être redirigé vers votre page d'accueil ?",
-            () async {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return userModel.rule.rulesType == RulesType.USER_ASSOCIATION
-                    ? NavigationAssociation()
-                    : NavigationVolunteer();
-              }));
-            },
-          );
-        } else if (!userModel.isActif) {
+        if (!userModel.isActif) {
           ShowDialogYesNo.show(
             context,
             "Votre compte n'est pas actif",
@@ -93,7 +81,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   MaterialPageRoute(
                     builder: (context) => InscriptionAssociation(
                       email: _email,
-                      id: user.uid,
+                      id: user!.uid,
                     ),
                   ),
                 );
@@ -103,7 +91,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                   MaterialPageRoute(
                     builder: (context) => InfosInscriptionVolunteer(
                       email: _email,
-                      id: user.uid,
+                      id: user!.uid,
                     ),
                   ),
                 );
@@ -124,6 +112,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
       ErrorFirebase.errorCheck(e.code, context);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +236,15 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 }
 
-void _navigateToNextPage(BuildContext context, RulesType rulesType) {
+Future<void> _navigateToNextPage(
+    BuildContext context, RulesType rulesType) async {
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  if (rulesType == RulesType.USER_ASSOCIATION) {
+    preferences.setBool('Association', true);
+  } else if (rulesType == RulesType.USER_VOLUNTEER) {
+    preferences.setBool('Volunteer', true);
+  }
+
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
     return rulesType == RulesType.USER_ASSOCIATION
         ? NavigationAssociation()

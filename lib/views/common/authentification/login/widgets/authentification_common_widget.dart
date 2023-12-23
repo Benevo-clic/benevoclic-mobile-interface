@@ -13,7 +13,6 @@ class AuthentificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthTypeCubit, AuthTypeState>(
       builder: (context, state) {
-        print(state);
         if (state is AssociationLoginState) {
           return LoginPage(
             title: RulesType.USER_ASSOCIATION,

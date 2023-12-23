@@ -1,63 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/views/associtions/navigation_association.dart';
+import 'package:namer_app/views/volunteers/navigation_volunteer.dart';
 import 'package:namer_app/widgets/background.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/authentification/cubit/typeAuth/auth_type_cubit.dart';
 import 'common/authentification/login/widgets/authentification_common_widget.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   String? title = "Je suis";
 
   HomeView({super.key, this.title});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  bool voluntter = false;
+  bool association = false;
+  bool isLoading = true;
+
+  late SharedPreferences preferences;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    preferences = await SharedPreferences.getInstance();
+    voluntter = preferences.getBool('Volunteer')!;
+    association = preferences.getBool('Association')!;
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //permet de ne pas changer l'orientation du telephone
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
-    return Background(
-      image: "assets/background1.png",
-      widget: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.transparent,
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (voluntter) {
+      return NavigationVolunteer();
+    } else if (association) {
+      return NavigationAssociation();
+    } else {
+      return Background(
+        image: "assets/background1.png",
+        widget: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             reverse: true,
             child: SafeArea(
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  SizedBox(height: 100),
-                  Image.asset("assets/logo.png",
-                      height: 150, alignment: Alignment.center),
-                  SizedBox(height: 80),
-                  Text(title ?? "Je suis",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(height: 15),
-                  _loginButton(context, "Association", Colors.deepOrange, () {
-                    context.read<AuthTypeCubit>().loginAsAssociation();
-                    _navigateToAuthentification(context);
-                  }),
-                  SizedBox(height: 20),
-                  _loginButton(context, "Bénévole", Colors.pink.shade900, () {
-                    context.read<AuthTypeCubit>().loginAsVolunteer();
-                    _navigateToAuthentification(context);
-                  }),
-                  SizedBox(
-                    height: 30,
-                  ),
-                ],
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    SizedBox(height: 100),
+                    Image.asset("assets/logo.png",
+                        height: 150, alignment: Alignment.center),
+                    SizedBox(height: 80),
+                    Text(widget.title ?? "Je suis",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                    SizedBox(height: 15),
+                    _loginButton(context, "Association", Colors.deepOrange, () {
+                      context.read<AuthTypeCubit>().loginAsAssociation();
+                      _navigateToAuthentification(context);
+                    }),
+                    SizedBox(height: 20),
+                    _loginButton(context, "Bénévole", Colors.pink.shade900, () {
+                      context.read<AuthTypeCubit>().loginAsVolunteer();
+                      _navigateToAuthentification(context);
+                    }),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void _navigateToAuthentification(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 
 import '../../cubit/page/page_cubit.dart';
@@ -19,12 +20,6 @@ class NavigationVolunteer extends StatefulWidget {
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
   late List<BuildNavigationModel> buildNavigationModel;
-  final List<Widget> pages = [
-    Annonces(),
-    Annonces(),
-    Messages(),
-    ProfilPage(),
-  ];
 
   @override
   void initState() {
@@ -57,7 +52,12 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          final pages = [Annonces(), Annonces(), Messages(), ProfilPage()];
+          final pages = [
+            Annonces(),
+            Annonces(),
+            Messages(),
+            ProfileView(title: RulesType.USER_VOLUNTEER)
+          ];
           return IndexedStack(
             index: currentPageIndex,
             children: pages,

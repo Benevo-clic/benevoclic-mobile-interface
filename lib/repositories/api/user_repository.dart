@@ -6,22 +6,31 @@ import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../models/user_model.dart';
 import '../../type/rules_type.dart';
+import '../../util/token_service.dart';
 
 class UserRepository {
-  final String url = "37.187.38.160:8080";
+  final TokenService _tokenService = TokenService();
+
+  String _mapRulesTypeToString(RulesType rulesType) {
+    switch (rulesType) {
+      case RulesType.USER_VOLUNTEER:
+        return "USER_VOLUNTEER";
+      case RulesType.USER_ASSOCIATION:
+        return "USER_ASSOCIATION";
+      default:
+        return "UNKNOWN";
+    }
+  }
 
   Future<UserModel> createUser(RulesType rulesType) async {
+    await _tokenService.refreshTokenIfNeeded();
+    String type = _mapRulesTypeToString(rulesType);
     try {
-      String type = "";
-      if (rulesType == RulesType.USER_VOLUNTEER) {
-        type = "USER_VOLUNTEER";
-      } else if (rulesType == RulesType.USER_ASSOCIATION) {
-        type = "USER_ASSOCIATION";
-      }
+      String? token = await _tokenService.getToken();
       Response result = await Dio().post(
-        "http://$url/api/v1/users/create",
+        "http://${globals.url}/api/v1/users/create",
         options: Options(headers: {
-          "Authorization": "Bearer ${globals.id}",
+          "Authorization": "Bearer $token",
           "accept": "*/*",
           "rules": type
         }),
@@ -34,8 +43,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -44,13 +56,15 @@ class UserRepository {
   }
 
   Future<UserModel> connexion() async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       Response result = await Dio().post(
-        "http://$url/api/v1/users/connect",
-        options: Options(headers: {
-          "Authorization": "Bearer ${globals.id}",
-          "accept": "*/*"
-        }),
+        "http://${globals.url}/api/v1/users/connect",
+        options: Options(
+            headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
       );
 
       if (result.statusCode == 200) {
@@ -60,8 +74,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -76,14 +93,18 @@ class UserRepository {
   }
 
   Future<dynamic> getUserByEmail(String email) async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       var headers = {
-        'Authorization': 'Bearer ${globals.id}',
+        'Authorization': 'Bearer $token',
         'email': email,
       };
       var dio = Dio();
       var response = await dio.request(
-        'http://$url/api/v1/users/getUserByEmail',
+        'http://${globals.url}/api/v1/users/getUserByEmail',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -96,8 +117,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -106,13 +130,15 @@ class UserRepository {
   }
 
   Future<int> disconnect() async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       Response result = await Dio().post(
-        "http://$url/api/v1/users/disconnect",
-        options: Options(headers: {
-          "Authorization": "Bearer ${globals.id}",
-          "accept": "*/*"
-        }),
+        "http://${globals.url}/api/v1/users/disconnect",
+        options: Options(
+            headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
       );
 
       if (result.statusCode == 200) {
@@ -122,8 +148,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -132,15 +161,19 @@ class UserRepository {
   }
 
   Future<UserModel> updateUser(UserModel user) async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       var headers = {
-        'Authorization': 'Bearer ${globals.id}',
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json'
       };
       var data = json.encode(user.toJson());
       var dio = Dio();
       var response = await dio.request(
-        'http://$url/api/v1/users/update',
+        'http://${globals.url}/api/v1/users/update',
         options: Options(
           method: 'PUT',
           headers: headers,
@@ -154,8 +187,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -164,13 +200,15 @@ class UserRepository {
   }
 
   Future<int> deleteUser() async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       Response result = await Dio().delete(
-        "http://$url/api/v1/users/delete",
-        options: Options(headers: {
-          "Authorization": "Bearer ${globals.id}",
-          "accept": "*/*"
-        }),
+        "http://${globals.url}/api/v1/users/delete",
+        options: Options(
+            headers: {"Authorization": "Bearer $token", "accept": "*/*"}),
       );
 
       if (result.statusCode == 200) {
@@ -180,8 +218,11 @@ class UserRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        await FirebaseAuth.instance.signOut();
-        throw Exception('Session expirée. Utilisateur déconnecté.');
+        bool refreshed = await _tokenService.tryRefreshToken();
+        if (!refreshed) {
+          await FirebaseAuth.instance.signOut();
+          throw Exception('Session expirée. Utilisateur déconnecté.');
+        }
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {

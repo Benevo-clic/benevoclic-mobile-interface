@@ -5,20 +5,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../models/volunteer_model.dart';
+import '../../util/token_service.dart';
 
 class VolunteerRepository {
-  final String url = "37.187.38.160:8080";
+  final TokenService _tokenService = TokenService();
 
   Future<Volunteer> createVolunteer(Volunteer volunteer) async {
+    await _tokenService.refreshTokenIfNeeded();
+
     try {
+      String? token = await _tokenService.getToken();
+
       var headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${globals.id}'
+        'Authorization': 'Bearer $token'
       };
       var data = json.encode(volunteer.toJson());
       var dio = Dio();
       var response = await dio.request(
-        'http://$url/api/v1/volunteers/createVolunteer',
+        'http://${globals.url}/api/v1/volunteers/createVolunteer',
         options: Options(
           method: 'POST',
           headers: headers,

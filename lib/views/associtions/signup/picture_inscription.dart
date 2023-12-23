@@ -9,6 +9,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/user_model.dart';
 import '../../../repositories/api/user_repository.dart';
@@ -64,7 +65,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AssociationCubit, AssociationState>(
-        listener: (context, state) {
+        listener: (context, state) async {
       if (state is AssociationPictureState) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -76,6 +77,8 @@ class _PictureInscriptionState extends State<PictureInscription> {
       }
 
       if (state is AssociationCreatedState) {
+        final SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setBool('Association', true);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,

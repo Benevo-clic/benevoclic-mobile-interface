@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../../repository/auth_repository.dart';
+import '../../../../../repositories/auth_repository.dart';
 import 'other_auth_state.dart';
 
 class OtherAuthCubit extends Cubit<OtherAuthState> {
@@ -16,18 +16,14 @@ class OtherAuthCubit extends Cubit<OtherAuthState> {
     emit(OtherAuthErrorState(message: message));
   }
 
-  void googleAuth() {
+  Future<void> googleAuth() async {
     emit(OtherAuthLoadingState());
-
-    _authRepository.signInWithGoogle().then((token) {
-      if (token != null) {
-        emit(GoogleAuthState());
-      } else {
-        emit(OtherAuthErrorState(message: "Connexion annulée ou échouée."));
-      }
-    }).catchError((e) {
+    try {
+      await _authRepository.signInWithGoogle();
+      emit(OtherAuthLoadedState());
+    } catch (e) {
       emit(OtherAuthErrorState(message: e.toString()));
-    });
+    }
   }
 
   void facebookAuth() {

@@ -28,7 +28,6 @@ class _LocationFormAutocompleteState extends State<LocationFormAutocomplete> {
   Future<void> _searchAddress(String query) async {
     if (_debounce.isActive) _debounce.cancel();
     _debounce = Timer(Duration(seconds: 1), () {
-      print("Recherche de $query");
     });
   }
 

@@ -40,6 +40,8 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   DateTime currentDate = DateTime.now();
   bool _isCreatingAnnouncement = false;
   bool _hasShownCreationMessage = false;
+  late String _datePublication;
+  late String _dateEvent;
 
   // Déclaration des TextEditingController
   final TextEditingController _titleController = TextEditingController();
@@ -76,6 +78,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     _addressFocusNode.addListener(_handleAddressFocusChange);
     BlocProvider.of<AnnouncementCubit>(context)
         .changeState(AnnouncementInitialState());
+    _datePublication = currentDate.toString();
   }
 
   void _handleAddressFocusChange() async {
@@ -161,11 +164,12 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       _isCreatingAnnouncement = true;
       Announcement announcement = Announcement(
         description: _descriptionController.text,
-        dateEvent: _dateEventController.text,
+        dateEvent: _dateEvent,
         nbHours: int.parse(_nbHoursController.text),
         nbPlaces: int.parse(_nbPlacesController.text),
         type: _typeController.text,
-        datePublication: DateTime.now().toString(),
+        datePublication:
+            DateFormat('dd/MM/yyyy').format(DateTime.now()).split(' ')[0],
         location: LocationModel(
           address: _addressController.text,
           latitude: 0,
@@ -178,7 +182,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       } else {
         announcement.image = '';
       }
-      print(_formKey.currentState!.validate());
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
@@ -189,7 +192,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         });
       }
     } catch (e) {
-      print(e.toString());
       setState(() {
         _isCreatingAnnouncement = false;
       });
@@ -492,7 +494,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                                 );
                               }
                               setState(() {
-                                _dateEventController.text = value.toString();
+                                _dateEvent = value.toString();
                               });
                             });
                           },

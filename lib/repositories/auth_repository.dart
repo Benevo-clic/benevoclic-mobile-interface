@@ -22,7 +22,7 @@ class AuthRepository {
     tokenService.saveTokenAndExpirationDate(token, expiryDate);
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -35,6 +35,8 @@ class AuthRepository {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       await _updateTokenAndExpirationDate(userCredential);
+
+      return userCredential;
     } else {
       throw Exception("Connexion annulée ou échouée.");
     }

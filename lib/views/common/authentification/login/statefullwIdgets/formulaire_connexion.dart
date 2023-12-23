@@ -117,7 +117,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
-      print(state);
       if (state is ResponseUserState &&
           state.user.rule.rulesType == widget.rulesType) {
         _navigateToNextPage(context, state.user.rule.rulesType);

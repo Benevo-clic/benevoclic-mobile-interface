@@ -10,16 +10,24 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const Icon(Icons.chevron_left),
+        title: const Text('Paris'),
+        actions: const [Icon(Icons.more_vert)],
+      ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ItemAnnouncement(
-                nameAsso: "Association 1",
-                nbHours: 2,
-                nbPlaces: 5,
-                nbPlacesTaken: 2),
-          ],
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return ItemAnnouncement(
+                  nameAsso: "Association 2",
+                  nbHours: 2,
+                  nbPlaces: 5,
+                  nbPlacesTaken: 2);
+            },
+            itemCount: 300,
+          ),
         ),
       ),
     );

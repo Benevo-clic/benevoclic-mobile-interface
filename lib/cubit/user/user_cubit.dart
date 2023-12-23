@@ -50,6 +50,17 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future<void> googleAuth() async {
+    emit(UserLoadingState());
+    try {
+      UserCredential userCredential = await _authRepository.signInWithGoogle();
+      emit(UserEmailVerificationState(user: userCredential.user));
+    } catch (e) {
+      print("++++++++++++++++++++++++++++++");
+      emit(UserRegisterErrorState(message: e.toString()));
+    }
+  }
+
   Future<void> sendEmailVerification() async {
     try {
       emit(UserLoadingState());
@@ -61,13 +72,23 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future<void> createUserOtherConnexion(RulesType rulesType) async {
+    try {
+      emit(UserLoadingState());
+      await Future.delayed(const Duration(seconds: 1));
+      final users = await _userRepository.createUser(rulesType);
+      emit(UserCreatedState(statusCode: users.toString()));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
   Future<void> createUserType(
       RulesType rulesType, String email, String password) async {
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
       await _authRepository.signInWithEmailAndPassword(email, password);
-
       final users = await _userRepository.createUser(rulesType);
 
       emit(UserCreatedState(statusCode: users.toString()));

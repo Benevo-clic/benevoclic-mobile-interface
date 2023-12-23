@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 abstract class OtherAuthState {}
 
 class OtherAuthInitialState extends OtherAuthState {}
@@ -8,7 +10,12 @@ class OtherAuthErrorState extends OtherAuthState {
   OtherAuthErrorState({required this.message});
 }
 
-class OtherAuthLoadedState extends OtherAuthState {}
+class OtherAuthLoadedState extends OtherAuthState {
+  UserCredential userCredential;
+
+  OtherAuthLoadedState({required this.userCredential});
+
+}
 
 class GoogleAuthState extends OtherAuthState {}
 

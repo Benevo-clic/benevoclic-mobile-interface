@@ -15,7 +15,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
             MediaQuery.of(context).size.height * 0.15), // Hauteur personnalisée
-        child: AppBarSearch(),
+        child: AppBarSearch(
+          contexts: context,
+          label: 'Annonces',
+        ),
       ),
       resizeToAvoidBottomInset: true,
       body: Center(

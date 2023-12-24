@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
@@ -70,11 +71,15 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               title: 'Bénévoclic',
-              theme: state.themeData,
-              home: HomeView(),
-              debugShowCheckedModeBanner: false,
-            );
-          },
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              textTheme: GoogleFonts.latoTextTheme(),
+            ),
+            home: HomeView(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }

@@ -35,6 +35,7 @@ dependencies:
   image_cropper:
   permission_handler:
   flutter_svg:
+  google_fonts: ^6.1.0
 
 
 dependency_overrides:

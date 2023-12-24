@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement.dart';
 
 import '../../../widgets/app_bar_search.dart';
@@ -9,6 +11,26 @@ class AnnouncementCommon extends StatefulWidget {
 }
 
 class _AnnouncementCommonState extends State<AnnouncementCommon> {
+  final Announcement announcement = Announcement(
+    dateEvent: '13/10/2021 12:00',
+    datePublication: '3',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+        'Sed non risus. Suspendisse lectus tortor, dignissim sit amet, '
+        'adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. '
+        'Maecenas ligula massa, varius a, semper congue, euismod non, mi. '
+        'Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, '
+        'non fermentum diam nisl sit amet erat.',
+    location:
+        LocationModel(address: '3 rue bis blabla', latitude: 0, longitude: 0),
+    labelEvent: 'Distruibution de repas',
+    nbHours: 3,
+    nbPlaces: 20,
+    type: 'type',
+    image: 'https://via.placeholder.com/150',
+    idAssociation: 'idAssociation',
+    nameAssociation: 'nameAssociation',
+    nbPlacesTaken: 2,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +44,14 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       ),
       resizeToAvoidBottomInset: true,
       body: Center(
-        child: Container(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return ItemAnnouncement(
-                  nameAsso: "Association 2",
-                  nbHours: 2,
-                  nbPlaces: 5,
-                  nbPlacesTaken: 2);
-            },
-            itemCount: 300,
-          ),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return ItemAnnouncement(
+              announcement: announcement,
+              isSelected: true,
+            );
+          },
+          itemCount: 300,
         ),
       ),
     );

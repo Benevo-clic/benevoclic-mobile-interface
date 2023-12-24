@@ -33,8 +33,13 @@ class _HomeViewState extends State<HomeView> {
 
   _loadData() async {
     preferences = await SharedPreferences.getInstance();
-    voluntter = preferences.getBool('Volunteer')!;
-    association = preferences.getBool('Association')!;
+    if (preferences.getBool('Volunteer') != null) {
+      voluntter = preferences.getBool('Volunteer')!;
+    }
+
+    if (preferences.getBool('Association') != null) {
+      association = preferences.getBool('Association')!;
+    }
     setState(() {
       isLoading = false;
     });

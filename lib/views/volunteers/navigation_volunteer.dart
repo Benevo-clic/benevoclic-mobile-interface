@@ -6,7 +6,7 @@ import 'package:namer_app/util/color.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../widgets/build_navbar.dart';
-import '../common/annonces/annonces.dart';
+import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import '../common/profiles/profil.dart';
 
@@ -53,8 +53,8 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           final pages = [
-            Annonces(),
-            Annonces(),
+            AnnouncementCommon(),
+            AnnouncementCommon(),
             Messages(),
             ProfileView(title: RulesType.USER_VOLUNTEER)
           ];

@@ -23,12 +23,12 @@ class AnnouncementRepository {
       };
       var data = json.encode(announcement.toJson());
 
+
       var response = await _dio.post(
         'http://${globals.url}/api/v1/announcement/createAnnouncement',
         options: Options(headers: headers),
         data: data,
       );
-
       if (response.statusCode == 200) {
         return Announcement.fromJson(response.data);
       } else {

@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/home_view.dart';
 
-import 'common/annonces/annonces.dart';
+import 'common/annonces/announcement_common.dart';
 
 class NavigationNoIndentify extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
   int currentPageIndex = 0;
 
   final List<Widget> pages = [
-    Annonces(),
+    AnnouncementCommon(),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),

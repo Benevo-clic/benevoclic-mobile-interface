@@ -37,6 +37,12 @@ class UserEmailVerificationState extends UserState {
   UserEmailVerificationState({this.user});
 }
 
+class UserEmailGoggleVerificationState extends UserState {
+  final User? user;
+
+  UserEmailGoggleVerificationState({this.user});
+}
+
 class UserConnexionState extends UserState {
   final UserModel userModel;
 

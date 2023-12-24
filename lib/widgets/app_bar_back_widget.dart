@@ -8,9 +8,11 @@ class AppBarBackWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(contexts).size.width;
+    double height = MediaQuery.of(contexts).size.height;
     return Container(
-      width: MediaQuery.of(contexts).size.width,
-      height: 140,
+      width: width,
+      height: height * .15,
       decoration: BoxDecoration(
         color: Color.fromRGBO(255, 153, 85, 1),
         boxShadow: [
@@ -23,7 +25,7 @@ class AppBarBackWidget extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.only(top: 10),
         child: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

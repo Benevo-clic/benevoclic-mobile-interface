@@ -36,14 +36,24 @@ class _ImagePickerAnnouncementState extends State<ImagePickerAnnouncement> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var orientation = MediaQuery.of(context).orientation;
+    double bottomPosition = orientation == Orientation.portrait ? 10 : 20;
+    double rightPosition = orientation == Orientation.portrait ? 10 : 20;
+
+    if (widget.image != null) {
+      _image = widget.image;
+    }
+
     return SizedBox(
       child: Center(
         child: Stack(
           children: [
             _image != null
                 ? Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: MediaQuery.of(context).size.height * .3,
+                    width: width * .8,
+                    height: height * .3,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: MemoryImage(_image!),
@@ -63,8 +73,8 @@ class _ImagePickerAnnouncementState extends State<ImagePickerAnnouncement> {
                     ),
                   ),
             Positioned(
-                bottom: 190, // Ajustez la position selon vos besoins
-                right: -0, // Ajustez la position selon vos besoins
+                bottom: bottomPosition,
+                right: rightPosition,
                 child: IconButton(
                   onPressed: () {
                     showImagePickerOption(context);

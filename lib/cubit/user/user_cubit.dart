@@ -54,9 +54,8 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoadingState());
     try {
       UserCredential userCredential = await _authRepository.signInWithGoogle();
-      emit(UserEmailVerificationState(user: userCredential.user));
+      emit(UserEmailGoggleVerificationState(user: userCredential.user));
     } catch (e) {
-      print("++++++++++++++++++++++++++++++");
       emit(UserRegisterErrorState(message: e.toString()));
     }
   }

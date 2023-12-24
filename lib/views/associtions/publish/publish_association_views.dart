@@ -40,7 +40,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   DateTime currentDate = DateTime.now();
   bool _isCreatingAnnouncement = false;
   bool _hasShownCreationMessage = false;
-  late String _datePublication;
   late String _dateEvent;
 
   // Déclaration des TextEditingController
@@ -78,7 +77,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     _addressFocusNode.addListener(_handleAddressFocusChange);
     BlocProvider.of<AnnouncementCubit>(context)
         .changeState(AnnouncementInitialState());
-    _datePublication = currentDate.toString();
   }
 
   void _handleAddressFocusChange() async {
@@ -201,6 +199,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
       listener: (context, state) {
         if (state is AnnouncementCreatedState &&
@@ -243,7 +242,13 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         return Stack(
           children: [
             Scaffold(
-              resizeToAvoidBottomInset: false,
+              resizeToAvoidBottomInset: true,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(
+                    MediaQuery.of(context).size.height *
+                        0.15), // Hauteur personnalisée
+                child: AppBarBackWidget(contexts: context),
+              ),
               body: Stack(
                 children: [
                   SingleChildScrollView(
@@ -252,30 +257,27 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AppBarBackWidget(contexts: context),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: width * 0.05),
                           child: Text(
                             'Commençons par l\'essentiel',
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .05,
+                              fontSize: width * 0.05,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: width * 0.05),
                           child: Text(
                             'Une bonne description c’est le meilleur moyen pour que vos futurs bénévoles voient votre annonce.',
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .03,
+                              fontSize: width * 0.04,
                               color: Colors.black,
                             ),
                           ),
@@ -285,35 +287,16 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                     ),
                   ),
                   Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: Color.fromRGBO(235, 126, 26, 1),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: ElevatedButton(
-                        onPressed: () => _onPublishButtonPressed(state),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade400,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(05),
-                          ),
-                          fixedSize: Size(
-                            MediaQuery.of(context).size.width * 0.1,
-                            MediaQuery.of(context).size.height * 0.03,
-                          ),
-                        ),
-                        child: Text('Publier',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .05,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ) // GoogleFonts.roboto(
-                            //   textStyle: TextStyle(  ),
-                            ),
+                    bottom: 20,
+                    right: 20,
+                    child: ElevatedButton(
+                      onPressed: () => _onPublishButtonPressed(state),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromRGBO(235, 126, 26, 1),
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(20),
                       ),
+                      child: Icon(Icons.publish_rounded),
                     ),
                   ),
                 ],
@@ -326,277 +309,258 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   }
 
   Widget _infoAnnouncement(BuildContext context, state) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 1.8,
-          height: MediaQuery.of(context).size.height * 15,
-          child: Card(
-            margin: const EdgeInsets.all(20),
-            shadowColor: Colors.grey,
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-                side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-            color: Colors.white.withOpacity(0.8),
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        shadowColor: Colors.grey,
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+            side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
+        color: Colors.white.withOpacity(0.8),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .8,
-                          height: MediaQuery.of(context).size.height * .3,
-                          child: Card(
-                            margin: const EdgeInsets.all(5),
-                            shadowColor: Colors.white,
-                            elevation: 10,
-                            color: Colors.white,
-                            child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: ImagePickerAnnouncement()),
+                SizedBox(
+                  width: width * .8,
+                  height: height * .25,
+                  child: Card(
+                    margin: const EdgeInsets.all(5),
+                    shadowColor: Colors.white,
+                    elevation: 10,
+                    color: Colors.white,
+                    child: Padding(
+                        padding: EdgeInsets.all(05),
+                        child: ImagePickerAnnouncement()),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
+                  controller: _titleController,
+                  hintText: "Titre de l'annonce",
+                  icon: Icons.abc,
+                  keyboardType: TextInputType.name,
+                  obscureText: false,
+                  prefixIcons: true,
+                  onSaved: (value) {},
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Le nom de votre association n'est pas valide";
+                    } else if (RegExp(r'^[0-9]').hasMatch(value)) {
+                      return "Le nom ne doit pas commencer par un chiffre";
+                    } else if (value.length > 30) {
+                      return "Le nom ne doit pas dépasser 50 caractères";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: width * 0.8,
+                  height: height * 0.12,
+                  child: SingleChildScrollView(
+                    child: DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white.withOpacity(0.5),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintText: "Type de l'annonce",
+                        hintStyle: TextStyle(color: Colors.black54),
+                        errorStyle: TextStyle(
+                          color: Colors.red[300],
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                      items: announcementType.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            maxLines: 1,
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _titleController,
-                          hintText: "Titre de l'annonce",
-                          icon: Icons.abc,
-                          keyboardType: TextInputType.name,
-                          obscureText: false,
-                          prefixIcons: true,
-                          onSaved: (value) {},
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Le nom de votre association n'est pas valide";
-                            } else if (RegExp(r'^[0-9]').hasMatch(value)) {
-                              return "Le nom ne doit pas commencer par un chiffre";
-                            } else if (value.length > 30) {
-                              return "Le nom ne doit pas dépasser 50 caractères";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.085,
-                          child: SingleChildScrollView(
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white.withOpacity(0.5),
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                                hintText: "Type de l'annonce",
-                                hintStyle: TextStyle(color: Colors.black54),
-                                errorStyle: TextStyle(
-                                  color: Colors.red[300],
-                                  overflow: TextOverflow.visible,
-                                ),
-                              ),
-                              items: announcementType.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    overflow: TextOverflow.fade,
-                                    softWrap: false,
-                                    maxLines: 1,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                if (newValue == 'Autre') {
-                                  setState(() {
-                                    selectedOption = newValue;
-                                    _typeController.text = "";
-                                  });
-                                } else {
-                                  setState(() {
-                                    selectedOption = newValue;
-                                    _typeController.text = newValue.toString();
-                                  });
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Le type d'association n'est pas valide";
-                                }
-                                // Add other validations as needed
-                                return null;
-                              },
-                            ),
-                          ),
-                        ),
-                        if (selectedOption == 'Autre')
-                          CustomTextFormField(
-                            controller: _typeController,
-                            hintText: "Autre type d'annonce",
-                            icon: Icons.abc,
-                            keyboardType: TextInputType.name,
-                            obscureText: false,
-                            prefixIcons: true,
-                            onSaved: (value) {},
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Le nom de votre association n'est pas valide";
-                              } else if (RegExp(r'^[0-9]').hasMatch(value)) {
-                                return "Le nom ne doit pas commencer par un chiffre";
-                              } else if (value.length > 30) {
-                                return "Le nom ne doit pas dépasser 50 caractères";
-                              }
-                              return null;
-                            },
-                          ),
-                        if (selectedOption == 'Autre')
-                          SizedBox(
-                            height: 10,
-                          ),
-                        CustomTextFormField(
-                          controller: _dateEventController,
-                          hintText: "Date et heure de l'événement",
-                          icon: Icons.date_range,
-                          obscureText: false,
-                          prefixIcons: true,
-                          maxLine: 1,
-                          keyboardType: TextInputType.none,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "La date de l'événement n'est pas valide";
-                            }
-                            return null;
-                          },
-                          datepicker: () {
-                            _selectDate(context).then((value) {
-                              if (value == currentDate.toString()) {
-                                return ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        "La date de l'événement ne peut pas être inférieure à la date actuelle"),
-                                  ),
-                                );
-                              }
-                              setState(() {
-                                _dateEvent = value.toString();
-                              });
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _nbHoursController,
-                          hintText: "Nombre d'heures",
-                          icon: Icons.timer,
-                          keyboardType: TextInputType.number,
-                          obscureText: false,
-                          prefixIcons: true,
-                          onSaved: (value) {
-                          },
-                          validator: (value) {
-                            var regex = RegExp(r"^(1[0-9]|2[0-4]|[1-9])$");
-                            if (value == null ||
-                                !regex.hasMatch(value.toString())) {
-                              return "Le nombre d'heures n'est pas valide";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _nbPlacesController,
-                          hintText: "Nombre de bénévoles",
-                          icon: Icons.people_outline_outlined,
-                          keyboardType: TextInputType.number,
-                          obscureText: false,
-                          prefixIcons: true,
-                          onSaved: (value) {
-                          },
-                          validator: (value) {
-                            RegExp regex = RegExp(r'^\d+$');
-                            if (!regex.hasMatch(value.toString()) ||
-                                value == null) {
-                              return "Le nombre de bénévoles n'est pas valide";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        _buildAddressField(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _descriptionController,
-                          hintText:
-                              "Description de l'annonce (50 mots maximum)",
-                          keyboardType: TextInputType.multiline,
-                          maxLine:
-                              MediaQuery.of(context).size.height * 0.44 ~/ 50,
-                          obscureText: false,
-                          prefixIcons: false,
-                          onSaved: (value) {
-                          },
-                          validator: (value) {
-                            if (value != null && !_isWordCountValid(value)) {
-                              return "votre description ne doit pas dépasser 50 mots";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        if (newValue == 'Autre') {
+                          setState(() {
+                            selectedOption = newValue;
+                            _typeController.text = "";
+                          });
+                        } else {
+                          setState(() {
+                            selectedOption = newValue;
+                            _typeController.text = newValue.toString();
+                          });
+                        }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Le type d'association n'est pas valide";
+                        }
+                        // Add other validations as needed
+                        return null;
+                      },
                     ),
                   ),
                 ),
-                SizedBox.fromSize(
-                  size: const Size(0, 15),
+                if (selectedOption == 'Autre')
+                  CustomTextFormField(
+                    controller: _typeController,
+                    hintText: "Autre type d'annonce",
+                    icon: Icons.abc,
+                    keyboardType: TextInputType.name,
+                    obscureText: false,
+                    prefixIcons: true,
+                    onSaved: (value) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Le nom de votre association n'est pas valide";
+                      } else if (RegExp(r'^[0-9]').hasMatch(value)) {
+                        return "Le nom ne doit pas commencer par un chiffre";
+                      } else if (value.length > 30) {
+                        return "Le nom ne doit pas dépasser 50 caractères";
+                      }
+                      return null;
+                    },
+                  ),
+                if (selectedOption == 'Autre')
+                  SizedBox(
+                    height: 10,
+                  ),
+                CustomTextFormField(
+                  controller: _dateEventController,
+                  hintText: "Date et heure de l'événement",
+                  icon: Icons.date_range,
+                  obscureText: false,
+                  prefixIcons: true,
+                  maxLine: 1,
+                  keyboardType: TextInputType.none,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "La date de l'événement n'est pas valide";
+                    }
+                    return null;
+                  },
+                  datepicker: () {
+                    _selectDate(context).then((value) {
+                      if (value == currentDate.toString()) {
+                        return ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "La date de l'événement ne peut pas être inférieure à la date actuelle"),
+                          ),
+                        );
+                      }
+                      setState(() {
+                        _dateEvent = value.toString();
+                      });
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
+                  controller: _nbHoursController,
+                  hintText: "Nombre d'heures",
+                  icon: Icons.timer,
+                  keyboardType: TextInputType.number,
+                  obscureText: false,
+                  prefixIcons: true,
+                  onSaved: (value) {},
+                  validator: (value) {
+                    var regex = RegExp(r"^(1[0-9]|2[0-4]|[1-9])$");
+                    if (value == null || !regex.hasMatch(value.toString())) {
+                      return "Le nombre d'heures n'est pas valide";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
+                  controller: _nbPlacesController,
+                  hintText: "Nombre de bénévoles",
+                  icon: Icons.people_outline_outlined,
+                  keyboardType: TextInputType.number,
+                  obscureText: false,
+                  prefixIcons: true,
+                  onSaved: (value) {},
+                  validator: (value) {
+                    RegExp regex = RegExp(r'^\d+$');
+                    if (!regex.hasMatch(value.toString()) || value == null) {
+                      return "Le nombre de bénévoles n'est pas valide";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildAddressField(),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
+                  controller: _descriptionController,
+                  hintText: "Description de l'annonce (50 mots maximum)",
+                  keyboardType: TextInputType.multiline,
+                  maxLine: height * 0.44 ~/ 50,
+                  obscureText: false,
+                  prefixIcons: false,
+                  onSaved: (value) {},
+                  validator: (value) {
+                    if (value != null && !_isWordCountValid(value)) {
+                      return "votre description ne doit pas dépasser 50 mots";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 10,
                 ),
               ],
             ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 
   Widget _buildAddressField() {
+    double width = MediaQuery.of(context).size.width;
+
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: width * 0.8,
       child: TextFormField(
         controller: _addressController,
         keyboardType: TextInputType.streetAddress,

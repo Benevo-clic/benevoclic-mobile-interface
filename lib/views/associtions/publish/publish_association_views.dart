@@ -11,7 +11,7 @@ import 'package:namer_app/views/associtions/publish/widgets/location_form_autoco
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
-import '../../../widgets/app_bar_back_widget.dart';
+import '../../../widgets/app_bar_widget.dart';
 import '../../../widgets/image_picker_announcement.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import '../navigation_association.dart';
@@ -185,10 +185,15 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         print(announcement.toJson());
         BlocProvider.of<AnnouncementCubit>(context)
             .createAnnouncement(announcement);
-      } else {
-        setState(() {
-          _isCreatingAnnouncement = false;
-        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("L'annonce a été créée avec succès"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => NavigationAssociation()),
+        );
       }
     } catch (e) {
       setState(() {
@@ -202,29 +207,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     double width = MediaQuery.of(context).size.width;
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
       listener: (context, state) {
-        if (state is AnnouncementCreatedState &&
-            !_isCreatingAnnouncement &&
-            !_hasShownCreationMessage) {
-          _isCreatingAnnouncement = false;
-          _hasShownCreationMessage = true;
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("L'annonce a été créée avec succès"),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          Navigator.of(context)
-              .pushReplacement(
-            MaterialPageRoute(builder: (context) => NavigationAssociation()),
-          )
-              .then((_) {
-            _isCreatingAnnouncement = false;
-            _hasShownCreationMessage = false;
-          });
-        }
-
         if (state is AnnouncementUploadedPictureState) {
           _imageCover = state.image;
         }
@@ -247,7 +229,8 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                 preferredSize: Size.fromHeight(
                     MediaQuery.of(context).size.height *
                         0.15), // Hauteur personnalisée
-                child: AppBarBackWidget(contexts: context),
+                child: AppBarWidget(
+                    contexts: context, label: 'Publier une annonce'),
               ),
               body: Stack(
                 children: [

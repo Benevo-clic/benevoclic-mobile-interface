@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,28 +26,38 @@ class BuldNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PageCubit, int>(
       builder: (context, currentPageIndex) {
-        return NavigationBar(
-          backgroundColor: Color.fromRGBO(255, 153, 85, 1),
-          selectedIndex: currentPageIndex,
-          onDestinationSelected: (index) {
+        return CurvedNavigationBar(
+          backgroundColor: Colors.transparent,
+          buttonBackgroundColor: Color.fromRGBO(255, 153, 85, 1),
+          color: Color.fromRGBO(255, 153, 85, 1),
+          height: 60,
+          index: currentPageIndex,
+          onTap: (index) {
             if (onItemTapped != null) {
               onItemTapped!(index);
             } else {
               context.read<PageCubit>().setPage(index);
             }
           },
-          indicatorColor: Colors.transparent,
-          destinations: List.generate(buildNavigationModel!.length, (index) {
-            return NavigationDestination(
-              icon: buildNavigationIcon(
-                buildNavigationModel![index].iconTitle,
-                index,
-                index == currentPageIndex,
-              ),
-              label: buildNavigationModel![index].label,
-              tooltip: buildNavigationModel![index].label,
+          items: buildNavigationModel!.map((e) {
+            return buildNavigationIcon(
+              e.iconTitle,
+              buildNavigationModel!.indexOf(e),
+              buildNavigationModel!.indexOf(e) == currentPageIndex,
             );
-          }),
+          }).toList(),
+
+          // items: List.generate(buildNavigationModel!.length, (index) {
+          //   return NavigationDestination(
+          //     icon: buildNavigationIcon(
+          //       buildNavigationModel![index].iconTitle,
+          //       index,
+          //       index == currentPageIndex,
+          //     ),
+          //     label: buildNavigationModel![index].label,
+          //     tooltip: buildNavigationModel![index].label,
+          //   );
+          // }),
         );
       },
     );

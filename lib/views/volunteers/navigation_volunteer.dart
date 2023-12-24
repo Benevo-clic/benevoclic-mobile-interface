@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/util/color.dart';
 
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
@@ -26,11 +25,11 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     super.initState();
     buildNavigationModel = [
       BuildNavigationModel(
-          iconTitle: 'assets/icons/Menu.svg', label: 'Annonces'),
+          iconTitle: 'assets/icons/Menu.svg', label: 'Annonces', size: 30),
       BuildNavigationModel(
           iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
       BuildNavigationModel(
-          iconTitle: 'assets/icons/chat.svg', label: 'Messages'),
+          iconTitle: 'assets/icons/chat.svg', label: 'Messages', size: 30),
       BuildNavigationModel(
         iconTitle: 'assets/icons/profile.svg',
         label: 'Profil',
@@ -41,14 +40,8 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: marron, width: 2)), // Votre style
-        ),
-        child: BuldNavBar(
-          buildNavigationModel: buildNavigationModel,
-        ),
+      bottomNavigationBar: BuldNavBar(
+        buildNavigationModel: buildNavigationModel,
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {

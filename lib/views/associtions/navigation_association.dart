@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
 
@@ -60,35 +59,24 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
-    BuildNavigationModel(iconTitle: 'assets/icons/Menu.svg', label: 'Annonces'),
     BuildNavigationModel(
-        iconTitle: 'assets/icons/Chat_alt.svg', label: 'Publier', size: 45),
+      iconTitle: 'assets/icons/Menu.svg',
+      label: 'Annonces',
+      size: 41,
+    ),
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/Chat_alt.svg', label: 'Publier', size: 41),
     BuildNavigationModel(iconTitle: 'assets/icons/chat.svg', label: 'Messages'),
     BuildNavigationModel(
-      iconTitle: 'assets/icons/profile.svg',
-      label: 'Profil',
-    ),
+      iconTitle: 'assets/icons/profile.svg', label: 'Profil', size: 41),
   ];
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: marron, width: 2)), // Votre style
-        ),
-        child: BuldNavBar(
-          buildNavigationModel: buildNavigationModel,
-          onItemTapped: (index) {
-            if (index == 1) {
-              navigateToPublishPage();
-            } else {
-              context.read<PageCubit>().setPage(index);
-            }
-          },
-        ),
+      bottomNavigationBar: BuldNavBar(
+        buildNavigationModel: buildNavigationModel,
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {

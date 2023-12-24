@@ -1,36 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 
+import '../../../widgets/app_bar_widget.dart';
 import 'widgets/detail_messages.dart';
 
 class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(
+            MediaQuery.of(context).size.height * 0.15), // Hauteur personnalisée
+        child: AppBarWidget(contexts: context, label: 'Messages'),
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 170,
-              child: Container(
-                color: orange,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Center(
-                            child: Image.asset(
-                      "assets/logo.png",
-                      height: 70,
-                    ))),
-                    Expanded(child: Center(child: SearchBar())),
-                    Expanded(
-                        child: Center(child: Icon(Icons.manage_search_sharp))),
-                  ],
-                ),
-              ),
-            ),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(20),

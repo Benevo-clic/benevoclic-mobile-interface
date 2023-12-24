@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -78,12 +79,35 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border:
-              Border(top: BorderSide(color: marron, width: 1)), // Votre style
-        ),
-        child: buildNavigationBar(),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.transparent,
+        buttonBackgroundColor: Color.fromRGBO(255, 153, 85, 1),
+        color: marron,
+        height: 60,
+        index: currentPageIndex,
+        items: <Widget>[
+          SvgPicture.asset('assets/icons/narbarannouncement.svg',
+              height: 24,
+              color: currentPageIndex == 0
+                  ? Color.fromRGBO(55, 94, 232, 1)
+                  : Colors.white),
+          SvgPicture.asset('assets/icons/heart.svg',
+              height: 24,
+              color: currentPageIndex == 1
+                  ? Color.fromRGBO(55, 94, 232, 1)
+                  : Colors.white),
+          SvgPicture.asset('assets/icons/chat.svg',
+              height: 24,
+              color: currentPageIndex == 2
+                  ? Color.fromRGBO(55, 94, 232, 1)
+                  : Colors.white),
+          SvgPicture.asset('assets/icons/profile.svg',
+              height: 24,
+              color: currentPageIndex == 3
+                  ? Color.fromRGBO(55, 94, 232, 1)
+                  : Colors.white),
+        ],
+        onTap: (index) => setState(() => currentPageIndex = index),
       ),
       body: IndexedStack(
         index: currentPageIndex,

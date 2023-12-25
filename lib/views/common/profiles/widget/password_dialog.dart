@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -15,6 +16,8 @@ class PasswordDialog extends StatefulWidget {
 
 class _PasswordDialog extends State<PasswordDialog> {
   final _formKey = GlobalKey<FormState>();
+
+  String? _mdp;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,13 @@ class _PasswordDialog extends State<PasswordDialog> {
                 height: 10,
               ),
               TextFormField(
+                validator: (value) {
+                  if (value == null) {
+                    return "Aucun mot de passe entré";
+                  }
+                  _mdp = value;
+                  return null;
+                },
                 decoration: InputDecoration(
                     hintStyle: TextStyle(color: Colors.grey),
                     hintText: "nouveau mot de passe",
@@ -51,13 +61,17 @@ class _PasswordDialog extends State<PasswordDialog> {
               SizedBox(
                 height: 10,
               ),
-              Button(
-                  text: "Sauvegarder",
-                  color: Colors.black,
-                  fct: () {
-                    Navigator.pop(context);
+              ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (_mdp!.length >= 8) {
+                        print(_mdp);
+                        AuthRepository().changePassword(_mdp.toString());
+                        Navigator.pop(context);
+                      }
+                    }
                   },
-                  backgroundColor: Colors.grey)
+                  child: Text("changer mot de passe"))
             ],
           ),
         ),

@@ -74,8 +74,9 @@ class _PopDialog extends State<PhoneDialog> {
                               birthDayDate: state.volunteer!.birthDayDate);
                           BlocProvider.of<VolunteerCubit>(context)
                               .updateVolunteer(volunteer);
+                              Navigator.pop(context);
                         }
-                        Navigator.pop(context);
+                        
                       },
                       backgroundColor: Colors.grey)
                 ],

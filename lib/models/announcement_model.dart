@@ -11,7 +11,7 @@ class Announcement {
   final String? id;
 
   @JsonKey(name: 'idAssociation')
-  final String? idAssociation;
+  final String idAssociation;
 
   @JsonKey(name: 'dateEvent')
   late final String dateEvent;
@@ -60,7 +60,7 @@ class Announcement {
 
   Announcement(
       {this.id,
-      this.idAssociation,
+      required this.idAssociation,
       required this.dateEvent,
       required this.datePublication,
       required this.description,

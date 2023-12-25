@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {
             return MaterialApp(
-              title: 'Bénévoclic',
+            title: 'Bénévoclic',
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,

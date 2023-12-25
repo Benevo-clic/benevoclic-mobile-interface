@@ -6,6 +6,7 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
 
+import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
@@ -27,6 +28,16 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     Messages(),
     ProfileView(title: RulesType.USER_ASSOCIATION),
   ];
+
+  void onPageChanged(int newIndex) {
+    if (newIndex == 0) {
+      BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+      print("AnnouncementCommon page is now visible");
+    } else if (newIndex == 1) {
+      print("PublishAnnouncement page is now visible");
+    }
+    // Et ainsi de suite pour les autres pages...
+  }
 
   void navigateToPublishPage() {
     Navigator.of(context).push(
@@ -80,6 +91,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
+          onPageChanged(currentPageIndex);
           return IndexedStack(
             index: currentPageIndex,
             children: pages,

@@ -8,7 +8,7 @@ part of 'announcement_model.dart';
 
 Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       id: json['id'] as String?,
-      idAssociation: json['idAssociation'] as String?,
+      idAssociation: json['idAssociation'] as String,
       dateEvent: json['dateEvent'] as String,
       datePublication: json['datePublication'] as String,
       description: json['description'] as String,

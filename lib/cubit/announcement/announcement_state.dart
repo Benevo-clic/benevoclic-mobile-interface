@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:namer_app/models/association_model.dart';
 
 import '../../models/announcement_model.dart';
 
@@ -18,6 +19,12 @@ class AnnouncementLoadedState extends AnnouncementState {
   final List<Announcement> announcements;
 
   AnnouncementLoadedState({required this.announcements});
+}
+
+class AnnouncementLoadedStateWithoutAnnouncements extends AnnouncementState {
+  final Association association;
+
+  AnnouncementLoadedStateWithoutAnnouncements({required this.association});
 }
 
 class AnnouncementUploadedPictureState extends AnnouncementState {

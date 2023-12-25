@@ -187,18 +187,28 @@ listview(BuildContext context, Volunteer volunteer) {
       height: 25,
       color: Colors.white,
     ),
-    Button(
-      backgroundColor: marron,
-      color: Colors.white,
-      fct: () {
-        if (_formKey.currentState!.validate()) {
-          print(_email);
-          print(_bio);
-          print(_phone);
-          print(_address);
-        }
-      },
-      text: "Modifier",
-    ),
+    ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            print(_email);
+            print(_bio);
+            print(_phone);
+            print(_address);
+            Volunteer volunteerUpdate = Volunteer(
+                              firstName: volunteer.firstName,
+                              lastName: volunteer.lastName,
+                              phone: volunteer.phone,
+                              birthDayDate: volunteer.birthDayDate, address: _address, bio: _bio,  city: volunteer.city, email: volunteer.email, imageProfile: volunteer.imageProfile, postalCode: volunteer.postalCode);
+
+            BlocProvider.of<VolunteerCubit>(context)
+                              .updateVolunteer(volunteerUpdate);
+                          BlocProvider.of<VolunteerCubit>(context)
+                              .volunteerState(volunteerUpdate);   
+                          Navigator.pop(context);
+          } else {
+            print("erreur");
+          }
+        },
+        child: Text("Modifier"))
   ]);
 }

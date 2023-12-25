@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:namer_app/util/password_verification.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -45,8 +46,10 @@ class _PasswordDialog extends State<PasswordDialog> {
               ),
               TextFormField(
                 validator: (value) {
-                  if (value == null) {
-                    return "Aucun mot de passe entré";
+                  
+                  PasswordVerification password = PasswordVerification(value!);
+                  if (!password.security()) {
+                    return password.message;
                   }
                   _mdp = value;
                   return null;

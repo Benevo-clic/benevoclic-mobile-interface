@@ -1,17 +1,51 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../../../../models/announcement_model.dart';
+import '../../../../models/association_model.dart';
+import '../../../../repositories/api/Announcement_repository.dart';
 
-class ItemAnnouncement extends StatelessWidget {
+class ItemAnnouncement extends StatefulWidget {
   final Announcement announcement;
   final bool isSelected;
 
-  ItemAnnouncement({required this.announcement, required this.isSelected});
+  ItemAnnouncement(
+      {super.key, required this.announcement, required this.isSelected});
+
+  @override
+  State<ItemAnnouncement> createState() => _ItemAnnouncementState();
+}
+
+class _ItemAnnouncementState extends State<ItemAnnouncement> {
+  Association? _association;
+
+  @override
+  void initState() {
+    super.initState();
+
+    someAsyncInitMethod();
+  }
+
+  void someAsyncInitMethod() async {
+    _association = await getAssociation(widget.announcement.id ?? '');
+    setState(() {});
+  }
+
+  Future<Association> getAssociation(String idAssociation) async {
+    Association association =
+        await AnnouncementRepository().getAssociationById(idAssociation);
+    return association;
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height * .26;
+    if (_association == null) {
+      return Text('');
+    }
+
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -40,10 +74,9 @@ class ItemAnnouncement extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: NetworkImage(
-                          announcement.image ??
-                              'https://via.placeholder.com/150',
-                        ),
+                        backgroundImage: Image.memory(
+                                base64.decode(_association!.imageProfile ?? ''))
+                            .image,
                       ),
                       SizedBox(
                         width: 10,
@@ -52,14 +85,14 @@ class ItemAnnouncement extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${announcement.nameAssociation}',
+                            _association?.name ?? 'Association',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            'il y\'a ${announcement.datePublication} jours',
+                            'il y\'a ${widget.announcement.datePublication} jours',
                             style: TextStyle(
                               fontSize: 12,
                             ),
@@ -94,7 +127,7 @@ class ItemAnnouncement extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: announcement.location.address,
+                        text: widget.announcement.location.address,
                         size: 11,
                       ),
                     ],
@@ -108,7 +141,7 @@ class ItemAnnouncement extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: announcement.dateEvent,
+                        text: widget.announcement.dateEvent,
                         size: 11,
                       ),
                     ],
@@ -122,7 +155,7 @@ class ItemAnnouncement extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: '${announcement.nbHours} heures',
+                        text: '${widget.announcement.nbHours} heures',
                         size: 11,
                       ),
                       InformationAnnonce(
@@ -132,14 +165,14 @@ class ItemAnnouncement extends StatelessWidget {
                           size: 16,
                         ),
                         text:
-                            '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
+                            '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
                       ),
                     ],
                   ),
                 ],
               ),
               Text(
-                announcement.labelEvent,
+                widget.announcement.labelEvent,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -151,7 +184,7 @@ class ItemAnnouncement extends StatelessWidget {
                 indent: width * .06,
               ),
               Text(
-                announcement.description,
+                widget.announcement.description,
                 style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.ellipsis,

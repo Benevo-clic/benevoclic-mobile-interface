@@ -38,8 +38,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   final TextEditingController _addressController = TextEditingController();
 
   DateTime currentDate = DateTime.now();
-  bool _isCreatingAnnouncement = false;
-  bool _hasShownCreationMessage = false;
   late String _dateEvent;
 
   // Déclaration des TextEditingController
@@ -108,8 +106,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
 
     @override
     void dispose() {
-      _isCreatingAnnouncement = false;
-      _hasShownCreationMessage = false;
       super.dispose();
     }
 
@@ -156,10 +152,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
 
   void _onPublishButtonPressed(AnnouncementState state) {
     try {
-      if (_isCreatingAnnouncement) {
-        return;
-      }
-      _isCreatingAnnouncement = true;
       Announcement announcement = Announcement(
         description: _descriptionController.text,
         dateEvent: _dateEvent,
@@ -174,12 +166,16 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           longitude: 0,
         ),
         labelEvent: _titleController.text,
+        idAssociation: "615f1e9b1a560d0016a6b0a5",
       );
+      print(_imageCover);
       if (_imageCover != null) {
         announcement.image = base64Encode(_imageCover!);
       } else {
-        announcement.image = '';
+        announcement.image = "https://via.placeholder.com/150";
       }
+      print(announcement.image);
+      print(_formKey.currentState!.validate());
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         print(announcement.toJson());
@@ -196,8 +192,14 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         );
       }
     } catch (e) {
+      print(e);
       setState(() {
-        _isCreatingAnnouncement = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "Une erreur s'est produite lors de la création de l'annonce"),
+          ),
+        );
       });
     }
   }

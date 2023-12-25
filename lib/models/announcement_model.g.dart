@@ -26,6 +26,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       volunteers: (json['volunteers'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      imageProfileAssociation: json['imageProfileAssociation'] as String,
       volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -42,6 +43,7 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'image': instance.image,
       'location': instance.location,
       'nameAssociation': instance.nameAssociation,
+      'imageProfileAssociation': instance.imageProfileAssociation,
       'labelEvent': instance.labelEvent,
       'nbHours': instance.nbHours,
       'nbPlaces': instance.nbPlaces,

@@ -34,6 +34,9 @@ class Announcement {
   @JsonKey(name: 'nameAssociation')
   final String? nameAssociation;
 
+  @JsonKey(name: 'imageProfileAssociation')
+  final String imageProfileAssociation;
+
   @JsonKey(name: 'labelEvent')
   late final String labelEvent;
 
@@ -75,6 +78,7 @@ class Announcement {
       this.tags,
       required this.type,
       this.volunteers,
+      required this.imageProfileAssociation,
       this.volunteersWaiting});
 
   factory Announcement.fromJson(Map<String, dynamic> json) =>

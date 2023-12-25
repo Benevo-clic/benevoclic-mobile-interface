@@ -60,7 +60,7 @@ class AnnouncementRepository {
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-        'idAssociation': idAssociation
+        'associationId': idAssociation
       };
 
       var response = await _dio.get(
@@ -84,7 +84,7 @@ class AnnouncementRepository {
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
       }
-      throw Exception('Erreur Dio : ${e.message}');
+      return [];
     } catch (e) {
       throw Exception(e);
     }
@@ -92,6 +92,7 @@ class AnnouncementRepository {
 
   Future<Association> getAssociationById(String idAssociation) async {
     await _tokenService.refreshTokenIfNeeded();
+    Future.delayed(Duration(seconds: 2));
 
     try {
       String? token = await _tokenService.getToken();

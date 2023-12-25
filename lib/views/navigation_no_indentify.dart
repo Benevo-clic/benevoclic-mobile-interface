@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/home_view.dart';
 
@@ -16,7 +17,7 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
   int currentPageIndex = 0;
 
   final List<Widget> pages = [
-    AnnouncementCommon(),
+    AnnouncementCommon(rulesType: RulesType.USER_VOLUNTEER),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),

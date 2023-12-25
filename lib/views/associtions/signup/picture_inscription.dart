@@ -79,6 +79,8 @@ class _PictureInscriptionState extends State<PictureInscription> {
       if (state is AssociationCreatedState) {
         final SharedPreferences preferences = await SharedPreferences.getInstance();
         preferences.setBool('Association', true);
+        preferences.setString('idAssociation', widget.id);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,

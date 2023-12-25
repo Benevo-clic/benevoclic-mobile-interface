@@ -56,7 +56,7 @@ class _OtherConnectionState extends State<OtherConnection> {
             backgroundColor: Colors.green,
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          _navigateToNextPage(context, widget.rulesType);
+          _navigateToNextPage(context, widget.rulesType, user.id!);
         } else if (!user.isActif) {
           final cubit = context.read<UserCubit>();
           cubit.createUserOtherConnexion(widget.rulesType);
@@ -131,13 +131,15 @@ class _OtherConnectionState extends State<OtherConnection> {
   }
 }
 
-Future<void> _navigateToNextPage(
-    BuildContext context, RulesType rulesType) async {
+Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
+    String id) async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   if (rulesType == RulesType.USER_ASSOCIATION) {
     preferences.setBool('Association', true);
+    preferences.setString('idAssociation', id);
   } else if (rulesType == RulesType.USER_VOLUNTEER) {
     preferences.setBool('Volunteer', true);
+    preferences.setString('idVolunteer', id);
   }
 
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {

@@ -3,48 +3,31 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../../models/announcement_model.dart';
-import '../../../../models/association_model.dart';
-import '../../../../repositories/api/Announcement_repository.dart';
 
-class ItemAnnouncement extends StatefulWidget {
+class ItemAnnouncementAssociation extends StatefulWidget {
   final Announcement announcement;
-  final bool isSelected;
 
-  ItemAnnouncement(
-      {super.key, required this.announcement, required this.isSelected});
+  const ItemAnnouncementAssociation({super.key, required this.announcement});
 
   @override
-  State<ItemAnnouncement> createState() => _ItemAnnouncementState();
+  State<ItemAnnouncementAssociation> createState() =>
+      _ItemAnnouncementAssociationState();
 }
 
-class _ItemAnnouncementState extends State<ItemAnnouncement> {
-  Association? _association;
+class _ItemAnnouncementAssociationState
+    extends State<ItemAnnouncementAssociation> {
+  late String imageProfileAssociation;
 
   @override
   void initState() {
     super.initState();
-
-    someAsyncInitMethod();
-  }
-
-  void someAsyncInitMethod() async {
-    _association = await getAssociation(widget.announcement.id ?? '');
-    setState(() {});
-  }
-
-  Future<Association> getAssociation(String idAssociation) async {
-    Association association =
-        await AnnouncementRepository().getAssociationById(idAssociation);
-    return association;
+    imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height * .26;
-    if (_association == null) {
-      return Text('');
-    }
 
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -74,9 +57,9 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: Image.memory(
-                                base64.decode(_association!.imageProfile ?? ''))
-                            .image,
+                        backgroundImage:
+                            Image.memory(base64.decode(imageProfileAssociation))
+                                .image,
                       ),
                       SizedBox(
                         width: 10,
@@ -85,7 +68,8 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _association?.name ?? 'Association',
+                            widget.announcement.nameAssociation ??
+                                'Association',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -104,7 +88,7 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
                   IconButton(
                     onPressed: () => print('favoris'),
                     icon: Icon(
-                      Icons.favorite_border,
+                      Icons.more_horiz,
                       color: Colors.red,
                     ),
                   ),

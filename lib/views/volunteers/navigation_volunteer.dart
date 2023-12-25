@@ -46,8 +46,10 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           final pages = [
-            AnnouncementCommon(),
-            AnnouncementCommon(),
+            AnnouncementCommon(rulesType: RulesType.USER_VOLUNTEER),
+            AnnouncementCommon(
+              rulesType: RulesType.USER_VOLUNTEER,
+            ),
             Messages(),
             ProfileView(title: RulesType.USER_VOLUNTEER)
           ];

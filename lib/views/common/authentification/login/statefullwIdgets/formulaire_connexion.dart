@@ -119,7 +119,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
       if (state is ResponseUserState &&
           state.user.rule.rulesType == widget.rulesType) {
-        _navigateToNextPage(context, state.user.rule.rulesType);
+        _navigateToNextPage(context, state.user.rule.rulesType, state.user.id);
       } else if (state is UserErrorState) {
         ShowDialog.show(context, "Erreur de connexion", "retour");
       }
@@ -235,13 +235,15 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 }
 
-Future<void> _navigateToNextPage(
-    BuildContext context, RulesType rulesType) async {
+Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
+    id) async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   if (rulesType == RulesType.USER_ASSOCIATION) {
     preferences.setBool('Association', true);
+    preferences.setString('idAssociation', id);
   } else if (rulesType == RulesType.USER_VOLUNTEER) {
     preferences.setBool('Volunteer', true);
+    preferences.setString('idVolunteer', id);
   }
 
   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {

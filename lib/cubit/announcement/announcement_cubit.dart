@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/Announcement_repository.dart';
 
 import 'announcement_state.dart';
@@ -37,13 +36,12 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
 
   void getAllAnnouncementByAssociation(String idAssociation) async {
     emit(AnnouncementLoadingState());
+    Future.delayed(Duration(seconds: 2));
     try {
       List<Announcement> announcements = await _announcementRepository
           .getAnnouncementByAssociation(idAssociation);
-      Association association =
-          await _announcementRepository.getAssociationById(idAssociation);
       emit(AnnouncementLoadedStateWithoutAnnouncements(
-          association: association));
+          announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
     }

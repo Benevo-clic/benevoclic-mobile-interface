@@ -5,6 +5,7 @@ import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
 import 'package:namer_app/widgets/build_navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
@@ -23,20 +24,21 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
   int currentPageIndex = 0;
 
   final List<Widget> pages = [
-    AnnouncementCommon(),
+    AnnouncementCommon(rulesType: RulesType.USER_ASSOCIATION),
     PublishAnnouncement(),
     Messages(),
     ProfileView(title: RulesType.USER_ASSOCIATION),
   ];
 
-  void onPageChanged(int newIndex) {
+  Future<void> onPageChanged(int newIndex) async {
     if (newIndex == 0) {
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      String idAssociation = preferences.getString('idAssociation')!;
       BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-      print("AnnouncementCommon page is now visible");
-    } else if (newIndex == 1) {
-      print("PublishAnnouncement page is now visible");
+      BlocProvider.of<AnnouncementCubit>(context)
+          .getAllAnnouncementByAssociation(idAssociation);
     }
-    // Et ainsi de suite pour les autres pages...
   }
 
   void navigateToPublishPage() {

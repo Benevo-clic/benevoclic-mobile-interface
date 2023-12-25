@@ -1,35 +1,31 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
 import '../../../../models/association_model.dart';
 import '../../../../repositories/api/Announcement_repository.dart';
 
-class ItemAnnouncement extends StatefulWidget {
+class ItemAnnouncementVolunteer extends StatefulWidget {
   final Announcement announcement;
   final bool isSelected;
 
-  ItemAnnouncement(
+  ItemAnnouncementVolunteer(
       {super.key, required this.announcement, required this.isSelected});
 
   @override
-  State<ItemAnnouncement> createState() => _ItemAnnouncementState();
+  State<ItemAnnouncementVolunteer> createState() =>
+      _ItemAnnouncementVolunteerState();
 }
 
-class _ItemAnnouncementState extends State<ItemAnnouncement> {
-  Association? _association;
+class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
+  String imageProfileAssociation = '';
 
   @override
   void initState() {
     super.initState();
-
-    someAsyncInitMethod();
-  }
-
-  void someAsyncInitMethod() async {
-    _association = await getAssociation(widget.announcement.id ?? '');
-    setState(() {});
+    imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
   Future<Association> getAssociation(String idAssociation) async {
@@ -41,10 +37,6 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height * .26;
-    if (_association == null) {
-      return Text('');
-    }
 
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -74,9 +66,9 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: Image.memory(
-                                base64.decode(_association!.imageProfile ?? ''))
-                            .image,
+                        backgroundImage:
+                            Image.memory(base64.decode(imageProfileAssociation))
+                                .image,
                       ),
                       SizedBox(
                         width: 10,
@@ -85,14 +77,16 @@ class _ItemAnnouncementState extends State<ItemAnnouncement> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _association?.name ?? 'Association',
+                            widget.announcement.nameAssociation ??
+                                'Association',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            'il y\'a ${widget.announcement.datePublication} jours',
+                            ManageDate.describeRelativeDateTime(
+                                widget.announcement.datePublication),
                             style: TextStyle(
                               fontSize: 12,
                             ),

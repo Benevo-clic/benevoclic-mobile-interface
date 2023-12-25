@@ -86,6 +86,8 @@ class _PictureInscriptionState extends State<PictureInscription> {
         final SharedPreferences preferences =
             await SharedPreferences.getInstance();
         preferences.setBool('Volunteer', true);
+        preferences.setString('idVolunteer', state.volunteerModel.id!);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,

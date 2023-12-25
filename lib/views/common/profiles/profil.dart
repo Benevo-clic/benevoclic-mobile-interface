@@ -10,6 +10,7 @@ import 'package:namer_app/views/common/authentification/login/widgets/login.dart
 import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
+import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/background.dart';
@@ -190,7 +191,10 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
         LineProfil(
             text: "Historique de missions",
             icon: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+          MaterialPageRoute(builder: (context) => AssociationsSub()));
+              },
               icon: Icon(Icons.map_rounded),
             )),
         SizedBox(

@@ -2,43 +2,34 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/page/page_cubit.dart';
 
 import '../../../../cubit/announcement/announcement_cubit.dart';
 import '../../../../models/announcement_model.dart';
 import '../../../../util/manage_date.dart';
 
-class ItemAnnouncementAssociation extends StatelessWidget {
+class ItemAnnouncementAssociation extends StatefulWidget {
   final Announcement announcement;
 
-  ItemAnnouncementAssociation({super.key, required this.announcement});
+  const ItemAnnouncementAssociation({super.key, required this.announcement});
 
-  late bool isVisible;
-  late bool full;
+  @override
+  State<ItemAnnouncementAssociation> createState() =>
+      _ItemAnnouncementAssociationState();
+}
 
-  ImageProvider _getImageProvider(String? imageString) {
-    if (isBase64(imageString)) {
-      return MemoryImage(base64.decode(imageString!));
-    } else {
-      return NetworkImage(imageString!);
-    }
-  }
+class _ItemAnnouncementAssociationState
+    extends State<ItemAnnouncementAssociation> {
+  late String imageProfileAssociation;
 
-  bool isBase64(String? str) {
-    if (str == null) return false;
-    try {
-      base64.decode(str);
-      return true;
-    } catch (e) {
-      return false;
-    }
+  @override
+  void initState() {
+    super.initState();
+    imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    String? imageProfileAssociation = announcement.imageProfileAssociation ??
-        'https://via.placeholder.com/150';
 
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -53,147 +44,144 @@ class ItemAnnouncementAssociation extends StatelessWidget {
             offset: Offset(0, 6),
           ),
         ],
-        color: !announcement.isVisible! || announcement.full!
-            ? Colors.grey[700]
-            : Colors.grey[100],
+        color: Colors.grey[100],
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.red, width: 1),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage:
-                              _getImageProvider(imageProfileAssociation),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              announcement.nameAssociation,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              ManageDate.describeRelativeDateTime(
-                                  announcement.datePublication),
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        showImagePickerOption(context);
-                      },
-                      icon: Icon(
-                        Icons.more_horiz,
-                        color: Colors.red,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            Image.memory(base64.decode(imageProfileAssociation))
+                                .image,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InformationAnnouncement(
-                          icon: Icon(
-                            Icons.location_on,
-                            color: Colors.black,
-                            size: 16,
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.announcement.nameAssociation ??
+                                'Association',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          text: announcement.location.address,
-                          size: 11,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InformationAnnouncement(
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: Colors.black,
-                            size: 16,
+                          Text(
+                            ManageDate.describeRelativeDateTime(
+                                widget.announcement.datePublication),
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
-                          text: announcement.dateEvent,
-                          size: 11,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InformationAnnouncement(
-                          icon: Icon(
-                            Icons.access_time,
-                            color: Colors.black,
-                            size: 16,
-                          ),
-                          text: '${announcement.nbHours} heures',
-                          size: 11,
-                        ),
-                        InformationAnnouncement(
-                          icon: Icon(
-                            Icons.person,
-                            color: Colors.black,
-                            size: 16,
-                          ),
-                          text:
-                              '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Text(
-                  announcement.labelEvent,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                  endIndent: width * .06,
-                  indent: width * .06,
-                ),
-                Text(
-                  announcement.description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    overflow: TextOverflow.ellipsis,
+                  IconButton(
+                    onPressed: () {
+                      showImagePickerOption(context);
+                    },
+                    icon: Icon(
+                      Icons.more_horiz,
+                      color: Colors.red,
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InformationAnnonce(
+                        icon: Icon(
+                          Icons.location_on,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                        text: widget.announcement.location.address,
+                        size: 11,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InformationAnnonce(
+                        icon: Icon(
+                          Icons.calendar_month,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                        text: widget.announcement.dateEvent,
+                        size: 11,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InformationAnnonce(
+                        icon: Icon(
+                          Icons.access_time,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                        text: '${widget.announcement.nbHours} heures',
+                        size: 11,
+                      ),
+                      InformationAnnonce(
+                        icon: Icon(
+                          Icons.person,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                        text:
+                            '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                widget.announcement.labelEvent,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              Divider(
+                color: Colors.black,
+                endIndent: width * .06,
+                indent: width * .06,
+              ),
+              Text(
+                widget.announcement.description,
+                style: TextStyle(
+                  fontSize: 14,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -224,7 +212,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              String id = announcement.id!;
+                              String id = widget.announcement.id!;
                               BlocProvider.of<AnnouncementCubit>(context)
                                   .deleteAnnouncement(id);
                               Navigator.pop(context);
@@ -234,7 +222,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                                 children: [
                                   Icon(
                                     Icons.delete,
-                                    size: 20,
+                                    size: 24,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Supprimer l'annonce")
@@ -245,18 +233,13 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {
-                              BlocProvider.of<PageCubit>(context).setPage(1);
-                              BlocProvider.of<AnnouncementCubit>(context)
-                                  .setAnnouncementUpdating(announcement);
-                              Navigator.pop(context);
-                            },
+                            onTap: () {},
                             child: const SizedBox(
                               child: Row(
                                 children: [
                                   Icon(
                                     Icons.edit,
-                                    size: 20,
+                                    size: 24,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Modifier l'annonce")
@@ -268,10 +251,6 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              String id = announcement.id!;
-                              bool isVisible = announcement.isVisible!;
-                              BlocProvider.of<AnnouncementCubit>(context)
-                                  .hiddenAnnouncement(id, !isVisible);
                               Navigator.pop(context);
                             },
                             child: const SizedBox(
@@ -279,7 +258,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                                 children: [
                                   Icon(
                                     Icons.visibility_off,
-                                    size: 20,
+                                    size: 24,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Masquer l'annonce")
@@ -297,12 +276,12 @@ class ItemAnnouncementAssociation extends StatelessWidget {
   }
 }
 
-class InformationAnnouncement extends StatelessWidget {
+class InformationAnnonce extends StatelessWidget {
   final Icon icon;
   final String text;
   double? size;
 
-  InformationAnnouncement({required this.icon, required this.text, this.size});
+  InformationAnnonce({required this.icon, required this.text, this.size});
 
   @override
   Widget build(BuildContext context) {

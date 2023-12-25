@@ -54,6 +54,12 @@ class DeleteAnnouncementState extends AnnouncementState {
   List<Object?> get props => [announcement];
 }
 
+class DeleteAnnouncementState extends AnnouncementState {
+  final Announcement announcement;
+
+  DeleteAnnouncementState({required this.announcement});
+}
+
 class AnnouncementLoadedStateWithoutAnnouncements extends AnnouncementState {
   final List<Announcement> announcements;
 

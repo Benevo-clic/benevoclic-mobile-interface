@@ -42,15 +42,15 @@ class ParametersView extends StatelessWidget {
                     Divider(
                       color: Colors.white,
                     ),
-                    ParameterLine(title: "Notifications", fct: () => {}),
+                    ParameterLine(title: "Notifications", fct: (value) => {}),
                     Divider(
                       color: Colors.white,
                     ),
-                    ParameterLine(title: "Langue", fct: () => {}),
+                    ParameterLine(title: "Langue", fct: (value) => {}),
                     Divider(
                       color: Colors.white,
                     ),
-                    ParameterLine(title: "Détail Profil", fct: () => {}),
+                    ParameterLine(title: "Détail Profil", fct: (value) => {}),
                   ],
                 ),
               ),
@@ -104,7 +104,7 @@ class ParametersView extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    ParameterLine(title: "Sécurité de compte", fct: () => {}),
+                    ParameterLine(title: "Sécurité de compte", fct: (value) => {}),
                   ],
                 ),
               ),
@@ -122,11 +122,11 @@ class ParametersView extends StatelessWidget {
                 icon: Icon(Icons.question_mark_outlined),
                 content: Column(
                   children: [
-                    ParameterLine(title: "Informations légales", fct: () => {}),
+                    ParameterLine(title: "Informations légales", fct: (value) => {}),
                     SizedBox(
                       height: 15,
                     ),
-                    ParameterLine(title: "Me déconnecter", fct: () => {}),
+                    ParameterLine(title: "Me déconnecter", fct: (value) => {}),
                     SizedBox(
                       height: 15,
                     ),

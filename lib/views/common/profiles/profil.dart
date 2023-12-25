@@ -169,7 +169,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 color: Colors.white,
               ),
               Section(
-                  text: volunteer.birthDayDate,
+                  text: volunteer.address!,
                   icon: Icon(Icons.location_on_outlined)),
               Divider(
                 height: 25,

@@ -35,15 +35,10 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       final SharedPreferences preferences =
           await SharedPreferences.getInstance();
       String idAssociation = preferences.getString('idAssociation')!;
-      print("idAssociation: $idAssociation");
       BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);
-      print("AnnouncementCommon page is now visible");
-    } else if (newIndex == 1) {
-      print("PublishAnnouncement page is now index 1 visible");
     }
-    // Et ainsi de suite pour les autres pages...
   }
 
   void navigateToPublishPage() {

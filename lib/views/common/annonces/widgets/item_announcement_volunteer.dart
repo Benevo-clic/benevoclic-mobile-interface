@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
 import '../../../../models/association_model.dart';
@@ -36,7 +37,6 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height * .26;
 
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -85,7 +85,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                             ),
                           ),
                           Text(
-                            'il y\'a ${widget.announcement.datePublication} jours',
+                            ManageDate.describeRelativeDateTime(
+                                widget.announcement.datePublication),
                             style: TextStyle(
                               fontSize: 12,
                             ),

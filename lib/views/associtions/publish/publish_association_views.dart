@@ -104,11 +104,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       lastDate: lastAllowedDate,
     );
 
-    @override
-    void dispose() {
-      super.dispose();
-    }
-
     if (selectedDate != null) {
       TimeOfDay initialTime = TimeOfDay.now();
       if (selectedDate.day != currentDate.day ||
@@ -158,8 +153,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         nbHours: int.parse(_nbHoursController.text),
         nbPlaces: int.parse(_nbPlacesController.text),
         type: _typeController.text,
-        datePublication:
-            DateFormat('dd/MM/yyyy').format(DateTime.now()).split(' ')[0],
+        datePublication: DateFormat('dd/MM/yyyy H:mm:s').format(DateTime.now()),
         location: LocationModel(
           address: _addressController.text,
           latitude: 0,
@@ -170,7 +164,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         nameAssociation: "Association",
         imageProfileAssociation: "https://via.placeholder.com/150",
       );
-      print(_imageCover);
       if (_imageCover != null) {
         announcement.image = base64Encode(_imageCover!);
       } else {
@@ -178,7 +171,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       }
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        print(announcement.toJson());
         BlocProvider.of<AnnouncementCubit>(context)
             .createAnnouncement(announcement);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -192,7 +184,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         );
       }
     } catch (e) {
-      print(e);
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

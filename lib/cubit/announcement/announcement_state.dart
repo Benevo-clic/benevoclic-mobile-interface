@@ -20,6 +20,12 @@ class AnnouncementLoadedState extends AnnouncementState {
   AnnouncementLoadedState({required this.announcements});
 }
 
+class DeleteAnnouncementState extends AnnouncementState {
+  final Announcement announcement;
+
+  DeleteAnnouncementState({required this.announcement});
+}
+
 class AnnouncementLoadedStateWithoutAnnouncements extends AnnouncementState {
   final List<Announcement> announcements;
 

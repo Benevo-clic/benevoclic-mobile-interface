@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../cubit/announcement/announcement_cubit.dart';
 import '../../../../models/announcement_model.dart';
 import '../../../../util/manage_date.dart';
 
@@ -87,7 +89,9 @@ class _ItemAnnouncementAssociationState
                     ],
                   ),
                   IconButton(
-                    onPressed: () => print('favoris'),
+                    onPressed: () {
+                      showImagePickerOption(context);
+                    },
                     icon: Icon(
                       Icons.more_horiz,
                       color: Colors.red,
@@ -179,6 +183,95 @@ class _ItemAnnouncementAssociationState
           ),
         ],
       ),
+    );
+  }
+
+  void showImagePickerOption(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Color.fromRGBO(255, 153, 85, 1),
+      context: context,
+      builder: (builder) {
+        return Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 4.5,
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black, width: 1),
+                    ),
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              String id = widget.announcement.id!;
+                              BlocProvider.of<AnnouncementCubit>(context)
+                                  .deleteAnnouncement(id);
+                              Navigator.pop(context);
+                            },
+                            child: const SizedBox(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    size: 24,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("Supprimer l'annonce")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {},
+                            child: const SizedBox(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.edit,
+                                    size: 24,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("Modifier l'annonce")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const SizedBox(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.visibility_off,
+                                    size: 24,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text("Masquer l'annonce")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ))),
+        );
+      },
     );
   }
 }

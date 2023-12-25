@@ -47,6 +47,17 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
+  void deleteAnnouncement(String id) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcement =
+          await _announcementRepository.deleteOneAnnouncement(id);
+      emit(DeleteAnnouncementState(announcement: announcement));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void getAllAnnouncements() async {
     emit(AnnouncementLoadingState());
     try {

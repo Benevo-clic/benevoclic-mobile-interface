@@ -90,4 +90,31 @@ class AssociationRepository {
       throw Exception(e);
     }
   }
+
+  Future<Association> getAssociation(String id) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${globals.id}',
+        'id': id
+      };
+      var dio = Dio();
+      var response = await dio.request(
+        'http://$url/api/v1/associations/associationId',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+        return Association.fromJson(response.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

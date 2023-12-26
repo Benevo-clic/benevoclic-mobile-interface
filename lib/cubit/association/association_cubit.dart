@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:namer_app/util/globals.dart';
 
 import '../../models/association_model.dart';
 import '../../repositories/api/association_repository.dart';
 import 'association_state.dart';
+import 'package:namer_app/util/globals.dart' as globals;
 
 class AssociationCubit extends Cubit<AssociationState> {
   final AssociationRepository _associationRepository;
@@ -45,4 +48,12 @@ class AssociationCubit extends Cubit<AssociationState> {
       emit(AssociationErrorState(message: e.toString()));
     }
   }
+
+  Future<Association> getAssociation(String id) async {
+    Association association = await _associationRepository.getAssociation(id);
+    return association;
+  }
+
+
+  
 }

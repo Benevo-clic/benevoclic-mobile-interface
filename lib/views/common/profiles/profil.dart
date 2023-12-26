@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -35,10 +37,18 @@ class ProfileView extends StatelessWidget {
   await context.read<VolunteerCubit>().volunteerState(volunteer!);
   }
 
+  getAssociation(BuildContext context)async {
+    User user = FirebaseAuth.instance.currentUser!;
+    Association association =  await context.read<AssociationCubit>().getAssociation(user.uid);
+    print(association);
+  }
+
   @override
   Widget build(BuildContext context) {
-    getUser(context);
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
+    getAssociation(context);
+    //getUser(context);
+    return Text(
+        ""); /*BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {},
         builder: (context, state) {
           print(state);
@@ -77,7 +87,7 @@ class ProfileView extends StatelessWidget {
           } else {
             return Scaffold(body: Text(""));
           }
-        });
+        });*/
   }
 }
 
@@ -125,7 +135,7 @@ class Bio extends StatelessWidget {
 
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
   String bio = "";
-   if(volunteer.bio != null) bio = volunteer.bio!;
+  if (volunteer.bio != null) bio = volunteer.bio!;
 
   return Center(
     child: Column(
@@ -193,7 +203,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
             icon: IconButton(
               onPressed: () {
                 Navigator.push(context,
-          MaterialPageRoute(builder: (context) => AssociationsSub()));
+                    MaterialPageRoute(builder: (context) => AssociationsSub()));
               },
               icon: Icon(Icons.map_rounded),
             )),

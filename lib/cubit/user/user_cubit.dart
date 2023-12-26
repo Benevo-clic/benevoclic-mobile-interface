@@ -1,3 +1,5 @@
+
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
@@ -10,9 +12,10 @@ import '../../repositories/auth_repository.dart';
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;
   final AuthRepository _authRepository = AuthRepository();
+  UserModel? userModel;
 
-  UserCubit(
-      {required UserRepository userRepository,
+  UserCubit({ this.userModel,
+      required UserRepository userRepository,
       required AuthRepository authRepository})
       : _userRepository = userRepository,
         super(UserInitialState());
@@ -37,6 +40,7 @@ class UserCubit extends Cubit<UserState> {
     if (state is UserConnexionState) {
       return;
     }
+    userModel = userModel;
     emit(UserConnexionState(userModel: userModel));
   }
 

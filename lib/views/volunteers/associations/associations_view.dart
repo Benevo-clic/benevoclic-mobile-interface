@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:namer_app/widgets/button.dart';
 
 class AssociationsSub extends StatelessWidget {
   final List assos = ["asso1", "asso2"];
@@ -25,7 +24,9 @@ class AssociationsSub extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          SearchBar(),
+          SearchBar(
+            leading: Icon(Icons.search, color: Colors.black),
+          ),
           SizedBox(
             height: 15,
           ),

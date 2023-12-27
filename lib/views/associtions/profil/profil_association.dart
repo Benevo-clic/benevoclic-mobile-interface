@@ -2,12 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
-import 'package:namer_app/cubit/association/association_state.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/user_model.dart';
-import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
@@ -29,7 +27,6 @@ class ProfilPageAssociation extends StatelessWidget {
     user = context.read<UserCubit>().user!;
     if (user!.rule.rulesType == RulesType.USER_ASSOCIATION) {
       getAssociation(context);
-      
     }
   }
 
@@ -46,12 +43,13 @@ class ProfilPageAssociation extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        appBar: getAppBarProfil(context),
-        body: SingleChildScrollView(child: affichageAssociation(context, association!)));
+        appBar: getAppBarProfil(context, association),
+        body: SingleChildScrollView(
+            child: affichageAssociation(context, association!)));
   }
 }
 
-AppBar getAppBarProfil(BuildContext context) {
+AppBar getAppBarProfil(BuildContext context, association) {
   return AppBar(
     automaticallyImplyLeading: false,
     actions: [
@@ -60,7 +58,10 @@ AppBar getAppBarProfil(BuildContext context) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ModifProfil()),
+            MaterialPageRoute(
+                builder: (context) => ModifProfilAsso(
+                      association: association!,
+                    )),
           );
         },
       ),
@@ -168,7 +169,6 @@ affichageAssociation(BuildContext context, Association association) {
               Section(
                   text: association.address!,
                   icon: Icon(Icons.location_on_outlined)),
-              
               Divider(
                 height: 25,
                 color: Colors.white,

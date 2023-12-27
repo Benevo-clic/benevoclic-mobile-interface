@@ -6,6 +6,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 import 'package:namer_app/views/common/profiles/modif_profil.dart';

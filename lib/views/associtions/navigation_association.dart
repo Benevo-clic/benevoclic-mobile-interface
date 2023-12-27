@@ -84,7 +84,6 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       iconTitle: 'assets/icons/profile.svg', label: 'Profil', size: 41),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/page/page_cubit.dart';
 
 import '../../../../cubit/announcement/announcement_cubit.dart';
 import '../../../../models/announcement_model.dart';
@@ -222,7 +223,7 @@ class _ItemAnnouncementAssociationState
                                 children: [
                                   Icon(
                                     Icons.delete,
-                                    size: 24,
+                                    size: 20,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Supprimer l'annonce")
@@ -233,13 +234,18 @@ class _ItemAnnouncementAssociationState
                         ),
                         Expanded(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              BlocProvider.of<PageCubit>(context).setPage(1);
+                              BlocProvider.of<AnnouncementCubit>(context)
+                                  .setAnnouncementUpdating(widget.announcement);
+                              Navigator.pop(context);
+                            },
                             child: const SizedBox(
                               child: Row(
                                 children: [
                                   Icon(
                                     Icons.edit,
-                                    size: 24,
+                                    size: 20,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Modifier l'annonce")
@@ -258,7 +264,7 @@ class _ItemAnnouncementAssociationState
                                 children: [
                                   Icon(
                                     Icons.visibility_off,
-                                    size: 24,
+                                    size: 20,
                                   ),
                                   SizedBox(width: 8),
                                   Text("Masquer l'annonce")

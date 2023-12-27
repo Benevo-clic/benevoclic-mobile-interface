@@ -56,7 +56,7 @@ class _OtherConnectionState extends State<OtherConnection> {
             backgroundColor: Colors.green,
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          _navigateToNextPage(context, widget.rulesType, user.id!);
+          _navigateToNextPage(context, widget.rulesType, user.id);
         } else if (!user.isActif) {
           final cubit = context.read<UserCubit>();
           cubit.createUserOtherConnexion(widget.rulesType);
@@ -122,7 +122,6 @@ class _OtherConnectionState extends State<OtherConnection> {
         }
       },
       builder: (context, state) {
-        print(state);
         return const Center(
           child: CircularProgressIndicator(),
         );

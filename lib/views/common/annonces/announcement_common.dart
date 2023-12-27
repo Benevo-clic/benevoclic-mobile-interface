@@ -45,14 +45,13 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       if (state is DeleteAnnouncementState) {
         SnackBar snackBar = SnackBar(
           content: Text('Annonce supprimée'),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 1),
           backgroundColor: Colors.green,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         final SharedPreferences preferences =
             await SharedPreferences.getInstance();
         String idAssociation = preferences.getString('idAssociation')!;
-
         BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
         BlocProvider.of<AnnouncementCubit>(context)
             .getAllAnnouncementByAssociation(idAssociation);

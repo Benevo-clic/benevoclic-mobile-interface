@@ -15,6 +15,33 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     emit(value as AnnouncementState);
   }
 
+  void setAnnouncement(Announcement announcement) {
+    emit(AnnouncementSelectedState(
+        announcements: [], announcement: announcement));
+  }
+
+  void setAnnouncementUpdating(Announcement announcement) {
+    var currentState = state;
+    if (currentState is AnnouncementUpdatingState &&
+        currentState.announcement == announcement &&
+        currentState.isUpdating == true) {
+      return;
+    }
+    emit(AnnouncementUpdatingState(
+        announcement: announcement, isUpdating: true));
+  }
+
+  void updateAnnouncement(String id, Announcement announcement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcementUpdated =
+          await _announcementRepository.updateAnnouncement(id, announcement);
+      emit(AnnouncementCreatedState(announcement: announcementUpdated));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void selectAnnouncementType(String type) {
     if (type == 'Autre') {
       emit(CustomAnnouncementTypeState(""));
@@ -35,8 +62,12 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   void getAllAnnouncementByAssociation(String idAssociation) async {
+    if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+      emit(AnnouncementLoadedStateWithoutAnnouncements(announcements: []));
+    }
+
     emit(AnnouncementLoadingState());
-    Future.delayed(Duration(seconds: 2));
+
     try {
       List<Announcement> announcements = await _announcementRepository
           .getAnnouncementByAssociation(idAssociation);
@@ -48,6 +79,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   void deleteAnnouncement(String id) async {
+    if (state is DeleteAnnouncementState) {
+      emit(AnnouncementLoadedState(announcements: []));
+    }
+
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement =
@@ -63,7 +98,6 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     try {
       List<Announcement> announcements =
           await _announcementRepository.getAnnouncements();
-
       emit(AnnouncementLoadedState(announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));

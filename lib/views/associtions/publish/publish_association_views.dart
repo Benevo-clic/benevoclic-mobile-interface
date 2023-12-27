@@ -17,7 +17,9 @@ import '../../common/authentification/login/widgets/customTextFormField_widget.d
 import '../navigation_association.dart';
 
 class PublishAnnouncement extends StatefulWidget {
-  PublishAnnouncement({super.key});
+  bool? isEditing = false;
+
+  PublishAnnouncement({super.key, this.isEditing});
 
   @override
   State<StatefulWidget> createState() {
@@ -32,10 +34,16 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   LocationModel? location;
   FocusNode? focusNode;
   Uint8List? _imageCover;
+  late String _idAnnouncement;
+  late String _idAssociation;
+  late bool _isStateError = false;
+  late bool _isVisibility = true;
+  late String _datePublication;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _addressFocusNode = FocusNode();
   final TextEditingController _addressController = TextEditingController();
+  final int _nbPlacesTaken = 0;
 
   DateTime currentDate = DateTime.now();
   late String _dateEvent;
@@ -145,34 +153,18 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     return currentDate.toString();
   }
 
-  void _onPublishButtonPressed(AnnouncementState state) {
+  void updateAnnouncement(String id, Announcement announcement) {
     try {
-      Announcement announcement = Announcement(
-        description: _descriptionController.text,
-        dateEvent: _dateEvent,
-        nbHours: int.parse(_nbHoursController.text),
-        nbPlaces: int.parse(_nbPlacesController.text),
-        type: _typeController.text,
-        datePublication: DateFormat('dd/MM/yyyy H:mm:s').format(DateTime.now()),
-        location: LocationModel(
-          address: _addressController.text,
-          latitude: 0,
-          longitude: 0,
-        ),
-        labelEvent: _titleController.text,
-        idAssociation: "615f1e9b1a560d0016a6b0a5",
-        nameAssociation: "Association",
-        imageProfileAssociation: "https://via.placeholder.com/150",
-      );
       if (_imageCover != null) {
         announcement.image = base64Encode(_imageCover!);
       } else {
         announcement.image = "https://via.placeholder.com/150";
       }
+
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
-            .createAnnouncement(announcement);
+            .updateAnnouncement(id, announcement);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("L'annonce a été créée avec succès"),
@@ -195,6 +187,58 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     }
   }
 
+  void _onPublishButtonPressed(AnnouncementState state) {
+    try {
+      Announcement announcement = Announcement(
+        description: _descriptionController.text,
+        dateEvent: _dateEvent,
+        nbHours: int.parse(_nbHoursController.text),
+        nbPlaces: int.parse(_nbPlacesController.text),
+        type: _typeController.text,
+        datePublication: DateFormat('dd/MM/yyyy H:mm:s').format(DateTime.now()),
+        location: LocationModel(
+          address: _addressController.text,
+          latitude: 0,
+          longitude: 0,
+        ),
+        labelEvent: _titleController.text,
+        idAssociation: "615f1e9b1a560d0016a6b0a5",
+        nameAssociation: "Association",
+        imageProfileAssociation: "https://via.placeholder.com/150",
+      );
+
+      if (_imageCover != null) {
+        announcement.image = base64Encode(_imageCover!);
+      } else {
+        announcement.image = "https://via.placeholder.com/150";
+      }
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        BlocProvider.of<AnnouncementCubit>(context)
+            .createAnnouncement(announcement);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("L'annonce a été créée avec succès"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => NavigationAssociation()),
+        );
+      }
+    } catch (e) {
+      if (!_isStateError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "Une erreur s'est produite lors de la création de l'annonce"),
+          ),
+        );
+        _isStateError = true;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -203,14 +247,43 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         if (state is AnnouncementUploadedPictureState) {
           _imageCover = state.image;
         }
+        if (state is AnnouncementUpdatingState) {
+          _descriptionController.text = state.announcement.description;
+          _dateEventController.text = state.announcement.dateEvent;
+          _nbHoursController.text = state.announcement.nbHours.toString();
+          _nbPlacesController.text = state.announcement.nbPlaces.toString();
+          _typeController.text = state.announcement.type;
+          _titleController.text = state.announcement.labelEvent;
+          _addressController.text = state.announcement.location.address;
+
+          setState(() {
+            selectedOption = 'Autre';
+            _nbPlacesTaken == state.announcement.nbPlacesTaken;
+            _idAnnouncement = state.announcement.id!;
+            widget.isEditing = state.isUpdating;
+            _idAssociation = state.announcement.idAssociation;
+            _isVisibility = state.announcement.isVisible!;
+            _datePublication = state.announcement.datePublication;
+          });
+
+          if (state.announcement.image != null &&
+              state.announcement.image != "https://via.placeholder.com/150") {
+            _imageCover = base64Decode(state.announcement.image!);
+          } else {
+            _imageCover = null;
+          }
+        }
 
         if (state is AnnouncementErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  "Une erreur s'est produite lors de la création de l'annoncesss"),
-            ),
-          );
+          if (!_isStateError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    "Une erreur s'est produite lors de la création de l'annonce"),
+              ),
+            );
+            _isStateError = true;
+          }
         }
       },
       builder: (context, state) {
@@ -262,19 +335,83 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: ElevatedButton(
-                      onPressed: () => _onPublishButtonPressed(state),
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromRGBO(235, 126, 26, 1),
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
+                  if (widget.isEditing == null || widget.isEditing == false)
+                    Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          _onPublishButtonPressed(state),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromRGBO(235, 126, 26, 1),
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(20),
+                        ),
+                        child: Icon(Icons.publish_rounded),
                       ),
-                      child: Icon(Icons.publish_rounded),
                     ),
-                  ),
+                  if (widget.isEditing == true)
+                    Stack(
+                      children: [
+                        Positioned(
+                          bottom: 20,
+                          right: 20,
+                          child: ElevatedButton(
+                            onPressed: () => {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        NavigationAssociation()),
+                              )
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromRGBO(235, 126, 26, 1),
+                              shape: CircleBorder(),
+                              padding: EdgeInsets.all(20),
+                            ),
+                            child: Icon(Icons.cancel_outlined),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 90,
+                          right: 20,
+                          child: ElevatedButton(
+                            onPressed: () => {
+                              updateAnnouncement(
+                                _idAnnouncement,
+                                Announcement(
+                                  dateEvent: _dateEventController.text,
+                                  idAssociation: _idAssociation,
+                                  type: _typeController.text,
+                                  datePublication: _datePublication,
+                                  location: LocationModel(
+                                    address: _addressController.text,
+                                    latitude: 0,
+                                    longitude: 0,
+                                  ),
+                                  description: _descriptionController.text,
+                                  labelEvent: _titleController.text,
+                                  nbHours: int.parse(_nbHoursController.text),
+                                  nbPlaces: int.parse(_nbPlacesController.text),
+                                  imageProfileAssociation:
+                                      "https://via.placeholder.com/150",
+                                  nameAssociation: 'Association',
+                                  nbPlacesTaken: _nbPlacesTaken,
+                                  isVisible: _isVisibility,
+                                ),
+                              ),
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromRGBO(235, 126, 26, 1),
+                              shape: CircleBorder(),
+                              padding: EdgeInsets.all(20),
+                            ),
+                            child: Icon(Icons.update_outlined),
+                          ),
+                        ),
+                      ],
+                    )
                 ],
               ),
             ),
@@ -316,7 +453,8 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                     color: Colors.white,
                     child: Padding(
                         padding: EdgeInsets.all(05),
-                        child: ImagePickerAnnouncement()),
+                      child: ImagePickerAnnouncement(),
+                    ),
                   ),
                 ),
                 SizedBox(

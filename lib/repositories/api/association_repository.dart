@@ -100,7 +100,7 @@ class AssociationRepository {
       };
       var dio = Dio();
       var response = await dio.request(
-        'http://$url/api/v1/associations/associationId',
+        'http://$url/api/v1/associations/association',
         options: Options(
           method: 'GET',
           headers: headers,

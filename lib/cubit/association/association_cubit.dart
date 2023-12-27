@@ -53,7 +53,4 @@ class AssociationCubit extends Cubit<AssociationState> {
     Association association = await _associationRepository.getAssociation(id);
     return association;
   }
-
-
-  
 }

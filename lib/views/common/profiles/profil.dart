@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
-import 'package:namer_app/views/common/profiles/modif_profil.dart';
-import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
@@ -38,13 +35,16 @@ class ProfileView extends StatelessWidget {
   }
 
   getAssociation(BuildContext context)async {
+    //print(context.read<UserCubit>().state);
+    //print(context.read<UserCubit>().user);
     User user = FirebaseAuth.instance.currentUser!;
     Association association =  await context.read<AssociationCubit>().getAssociation(user.uid);
-    print(association);
+    //print(association);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<UserCubit>().user!.rule.rulesType);
     getAssociation(context);
     //getUser(context);
     return Text(

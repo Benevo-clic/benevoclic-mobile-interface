@@ -68,7 +68,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         );
       } else {
         UserModel userModel = await UserRepository().getUserByEmail(_email);
-
+        BlocProvider.of<UserCubit>(context).connexion(userModel);
         if (!userModel.isActif) {
           ShowDialogYesNo.show(
             context,
@@ -100,7 +100,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
           );
         } else if (!userModel.isConnect &&
             (userModel.rule.rulesType == widget.rulesType)) {
-          BlocProvider.of<UserCubit>(context).connexion();
+          BlocProvider.of<UserCubit>(context).connexion(userModel);
           SnackBar snackBar = SnackBar(
             content: Text("Connexion réussi"),
             backgroundColor: Colors.green,

@@ -12,9 +12,9 @@ import '../../repositories/auth_repository.dart';
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;
   final AuthRepository _authRepository = AuthRepository();
-  UserModel? userModel;
+  UserModel? user;
 
-  UserCubit({ this.userModel,
+  UserCubit({ this.user,
       required UserRepository userRepository,
       required AuthRepository authRepository})
       : _userRepository = userRepository,
@@ -37,6 +37,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void userConnexion(UserModel userModel) {
+    user = userModel;
     if (state is UserConnexionState) {
       return;
     }
@@ -128,14 +129,14 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> connexion() async {
+  Future<void> connexion(userModel) async {
     if (state is ResponseUserState) {
       return;
     }
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
-
+      user = userModel;
       final users = await _userRepository.connexion();
       emit(ResponseUserState(user: users));
     } catch (e) {

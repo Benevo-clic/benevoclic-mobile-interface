@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../widgets/build_navbar.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
-import '../common/profiles/profil.dart';
 
 class NavigationVolunteer extends StatefulWidget {
   const NavigationVolunteer({super.key});

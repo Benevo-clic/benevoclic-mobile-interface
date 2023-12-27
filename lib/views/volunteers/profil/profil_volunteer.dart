@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
+import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
+import 'package:namer_app/views/common/profiles/modif_profil.dart';
+import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
@@ -22,10 +24,10 @@ import '../authentification/login/widgets/login.dart';
 import 'modif_profil.dart';
 import '../authentification/repository/auth_repository.dart';
 
-class ProfileView extends StatelessWidget {
-  final RulesType title;
-
-  ProfileView({required this.title});
+class ProfilPageVolunteer extends StatelessWidget {
+  UserModel? user;
+  Volunteer? volunteer;
+  dynamic name = "corentin";
 
   getUser(BuildContext context) async {
   User user = FirebaseAuth.instance.currentUser!;
@@ -34,21 +36,12 @@ class ProfileView extends StatelessWidget {
   await context.read<VolunteerCubit>().volunteerState(volunteer!);
   }
 
-  getAssociation(BuildContext context)async {
-    //print(context.read<UserCubit>().state);
-    //print(context.read<UserCubit>().user);
-    User user = FirebaseAuth.instance.currentUser!;
-    Association association =  await context.read<AssociationCubit>().getAssociation(user.uid);
-    //print(association);
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(context.read<UserCubit>().user!.rule.rulesType);
-    getAssociation(context);
-    //getUser(context);
-    return Text(
-        ""); /*BlocConsumer<VolunteerCubit, VolunteerState>(
+    print("non");
+    getUser(context);
+    //print(volunteer!.address);
+    return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {},
         builder: (context, state) {
           print(state);
@@ -57,38 +50,40 @@ class ProfileView extends StatelessWidget {
             return Scaffold(
                 backgroundColor: Colors.transparent,
                 resizeToAvoidBottomInset: false,
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  actions: [
-                    IconButton(
-                      icon: Icon(Icons.mode),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModifProfil()),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.settings),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ParametersView()),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                appBar: getAppBarProfil(context),
                 body: SingleChildScrollView(
-                    child:affichageVolunteer(context, volunteer)));
+                    child: affichageVolunteer(context, volunteer)));
           } else {
-            return Scaffold(body: Text(""));
+            return Scaffold(body: Text("oui"));
           }
-        });*/
+        });
   }
+}
+
+AppBar getAppBarProfil(BuildContext context) {
+  return AppBar(
+    automaticallyImplyLeading: false,
+    actions: [
+      IconButton(
+        icon: Icon(Icons.mode),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ModifProfil()),
+          );
+        },
+      ),
+      IconButton(
+        icon: Icon(Icons.settings),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ParametersView()),
+          );
+        },
+      ),
+    ],
+  );
 }
 
 class LineProfil extends StatelessWidget {

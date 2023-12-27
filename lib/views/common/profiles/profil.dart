@@ -28,14 +28,14 @@ class ProfileView extends StatelessWidget {
             children: [
               Expanded(child: Text("")),
               Expanded(
-                  child: IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ModifProfil()),
-                  );
-                },
+                child: IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ModifProfil()),
+                    );
+                  },
                 ),
               ),
             ],
@@ -75,7 +75,7 @@ class ProfileView extends StatelessWidget {
                 },
                 icon: Icon(Icons.no_accounts_sharp),
               )),
-              SizedBox(
+          SizedBox(
             height: 20,
           ),
           ElevatedButton(

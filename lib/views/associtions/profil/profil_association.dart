@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
@@ -21,31 +20,17 @@ import 'package:namer_app/widgets/title_with_icon.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../common/authentification/repository/auth_repository.dart';
 
-class ProfilPage extends StatelessWidget {
+class ProfilPageAssociation extends StatelessWidget {
   UserModel? user;
-  Volunteer? volunteer;
   Association? association;
   dynamic name = "corentin";
 
-  Widget getUserType(BuildContext context) {
+  getUserType(BuildContext context) {
     user = context.read<UserCubit>().user!;
     if (user!.rule.rulesType == RulesType.USER_ASSOCIATION) {
       getAssociation(context);
-      return BlocConsumer<AssociationCubit, AssociationState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Text(association!.name);
-          });
-    } else {
-      return Text('');
+      
     }
-  }
-
-  getUser(BuildContext context) async {
-    User user = FirebaseAuth.instance.currentUser!;
-    volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
-    name = volunteer!.lastName;
-    await context.read<VolunteerCubit>().volunteerState(volunteer!);
   }
 
   getAssociation(BuildContext context) async {
@@ -56,31 +41,13 @@ class ProfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("oui");
-    return getUserType(context);
-    /*return BlocConsumer<AssociationCubit, AssociationState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return Text("oui");
-        });*/
-    //getAssociation(context);
-    //getUser(context);
-    /*return BlocConsumer<VolunteerCubit, VolunteerState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          print(state);
-          if (state is VolunteerInfo) {
-            Volunteer volunteer = state.getInfo();
-            return Scaffold(
-                backgroundColor: Colors.transparent,
-                resizeToAvoidBottomInset: false,
-                appBar: getAppBarProfil(context),
-                body: SingleChildScrollView(
-                    child: affichageVolunteer(context, volunteer)));
-          } else {
-            return Scaffold(body: Text(""));
-          }
-        });*/
+    getUserType(context);
+
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: false,
+        appBar: getAppBarProfil(context),
+        body: SingleChildScrollView(child: affichageAssociation(context, association!)));
   }
 }
 
@@ -152,9 +119,9 @@ class Bio extends StatelessWidget {
   }
 }
 
-affichageVolunteer(BuildContext context, Volunteer volunteer) {
+affichageAssociation(BuildContext context, Association association) {
   String bio = "";
-  if (volunteer.bio != null) bio = volunteer.bio!;
+  if (association.bio != null) bio = association.bio!;
 
   return Center(
     child: Column(
@@ -167,12 +134,12 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
           content: Column(
             children: [
               Text(
-                "${volunteer.firstName}  ${volunteer.lastName}",
+                "${association.name}",
                 style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
               Text(
-                "${volunteer.myAssociations?.length} associations",
+                "${association.volunteers?.length} associations",
                 style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold),
@@ -199,18 +166,14 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 color: Colors.white,
               ),
               Section(
-                  text: volunteer.address!,
+                  text: association.address!,
                   icon: Icon(Icons.location_on_outlined)),
+              
               Divider(
                 height: 25,
                 color: Colors.white,
               ),
-              Section(text: volunteer.birthDayDate, icon: Icon(Icons.mail)),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              Section(text: volunteer.phone, icon: Icon(Icons.phone_android)),
+              Section(text: association.phone, icon: Icon(Icons.phone_android)),
             ],
           ),
         ),

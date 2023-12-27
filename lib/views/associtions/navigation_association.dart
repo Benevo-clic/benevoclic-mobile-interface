@@ -11,7 +11,7 @@ import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
-import '../common/profiles/profil.dart';
+import 'profil/profil_association.dart';
 
 class NavigationAssociation extends StatefulWidget {
   const NavigationAssociation({super.key});
@@ -27,7 +27,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     AnnouncementCommon(rulesType: RulesType.USER_ASSOCIATION),
     PublishAnnouncement(),
     Messages(),
-    ProfileView(title: RulesType.USER_ASSOCIATION),
+    ProfilPageAssociation(),
   ];
 
   Future<void> onPageChanged(int newIndex) async {

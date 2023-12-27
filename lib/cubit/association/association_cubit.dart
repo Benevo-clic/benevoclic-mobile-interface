@@ -53,4 +53,8 @@ class AssociationCubit extends Cubit<AssociationState> {
     Association association = await _associationRepository.getAssociation(id);
     return association;
   }
+
+  Future<void> updateAssociation(Association association) async {
+    await _associationRepository.updateAssociation(association);
+  }
 }

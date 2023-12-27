@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
-import 'package:namer_app/cubit/association/association_state.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 class ModifProfilAsso extends StatelessWidget {
@@ -29,41 +23,19 @@ class ModifProfilAsso extends StatelessWidget {
 }
 
 listview(BuildContext context, Association association) {
-  String _email = "";
-  String _bio = "";
-  String _phone = "";
-  String _address = "";
+  String email = "";
+  String bio = "";
+  String phone = "";
+  String address = "";
 
-  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   return ListView(padding: EdgeInsets.all(25), children: [
     Form(
-        key: _formKey,
+        key: formKey,
         child: Column(
           children: [
-            Stack(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * .9,
-                  height: MediaQuery.of(context).size.height * .35,
-                  child: Card(
-                    margin: const EdgeInsets.all(5),
-                    shadowColor: Colors.grey,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        side:
-                            BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-                    color: Colors.white.withOpacity(0.8),
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
-                    ),
-                  ),
-                )
-              ],
+            SizedBox(
+              height: 20,
             ),
             Divider(
               height: 25,
@@ -83,10 +55,10 @@ listview(BuildContext context, Association association) {
                   TextFormField(
                     initialValue: association.bio,
                     onSaved: (value) {
-                      _bio = value.toString();
+                      bio = value.toString();
                     },
                     validator: (value) {
-                      _bio = value.toString();
+                      bio = value.toString();
                       return null;
                     },
                     decoration: InputDecoration(
@@ -114,10 +86,10 @@ listview(BuildContext context, Association association) {
                   TextFormField(
                     initialValue: association.address,
                     onSaved: (value) {
-                      _address = value.toString();
+                      address = value.toString();
                     },
                     validator: (value) {
-                      _address = value.toString();
+                      address = value.toString();
                       return null;
                     },
                     decoration: InputDecoration(
@@ -133,10 +105,10 @@ listview(BuildContext context, Association association) {
                   TextFormField(
                     initialValue: association.email,
                     onSaved: (value) {
-                      _email = value.toString();
+                      email = value.toString();
                     },
                     validator: (value) {
-                      _email = value.toString();
+                      email = value.toString();
                       return null;
                     },
                     decoration: InputDecoration(
@@ -152,10 +124,10 @@ listview(BuildContext context, Association association) {
                   TextFormField(
                     initialValue: association.phone,
                     onSaved: (value) {
-                      _phone = value.toString();
+                      phone = value.toString();
                     },
                     validator: (value) {
-                      _phone = value.toString();
+                      phone = value.toString();
                       return null;
                     },
                     decoration: InputDecoration(
@@ -179,27 +151,26 @@ listview(BuildContext context, Association association) {
     ),
     ElevatedButton(
         onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            print(_email);
-            print(_bio);
-            print(_phone);
-            print(_address);
-            Association volunteerUpdate = Association(
+          if (formKey.currentState!.validate()) {
+            print(email);
+            print(bio);
+            print(phone);
+            print(address);
+            Association associationUpdate = Association(
                 name: association.name,
-                phone: association.phone,
-                address: _address,
-                bio: _bio,
+                phone: phone,
+                address: address,
+                bio: bio,
                 city: association.city,
                 email: association.email,
                 imageProfile: association.imageProfile,
                 postalCode: association.postalCode,
                 type: '');
 
-            /*BlocProvider.of<A>(context)
-                              .updateVolunteer(volunteerUpdate);
-                          BlocProvider.of<VolunteerCubit>(context)
-                              .volunteerState(volunteerUpdate);   
-                          Navigator.pop(context);*/
+            BlocProvider.of<AssociationCubit>(context)
+                .updateAssociation(associationUpdate);
+
+            Navigator.pop(context);
           } else {
             print("erreur");
           }

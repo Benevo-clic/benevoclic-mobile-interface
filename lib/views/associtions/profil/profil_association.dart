@@ -7,7 +7,6 @@ import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
-import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
@@ -20,7 +19,8 @@ import '../../common/authentification/repository/auth_repository.dart';
 
 class ProfilPageAssociation extends StatelessWidget {
   UserModel? user;
-  Association? association;
+  Association association =
+      Association(name: "name", phone: "phone", type: "type");
   dynamic name = "corentin";
 
   getUserType(BuildContext context) {
@@ -45,7 +45,7 @@ class ProfilPageAssociation extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: getAppBarProfil(context, association),
         body: SingleChildScrollView(
-            child: affichageAssociation(context, association!)));
+            child: affichageAssociation(context, association)));
   }
 }
 
@@ -60,7 +60,7 @@ AppBar getAppBarProfil(BuildContext context, association) {
             context,
             MaterialPageRoute(
                 builder: (context) => ModifProfilAsso(
-                      association: association!,
+                      association: association,
                     )),
           );
         },

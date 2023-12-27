@@ -12,7 +12,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       dateEvent: json['dateEvent'] as String,
       datePublication: json['datePublication'] as String,
       description: json['description'] as String,
-      full: json['full'] as bool?,
+      full: json['isFull'] as bool?,
       isVisible: json['isVisible'] as bool?,
       image: json['image'] as String? ?? 'https://via.placeholder.com/150',
       location:
@@ -40,7 +40,7 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'dateEvent': instance.dateEvent,
       'datePublication': instance.datePublication,
       'description': instance.description,
-      'full': instance.full,
+      'isFull': instance.full,
       'image': instance.image,
       'location': instance.location,
       'isVisible': instance.isVisible,

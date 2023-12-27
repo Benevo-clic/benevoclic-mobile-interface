@@ -16,10 +16,27 @@ class AssociationCubit extends Cubit<AssociationState> {
   }
 
   void changeState(AssociationState state) {
+    if (state is AssociationInitialState) {
+      return;
+    }
+    if (state is AssociationLoadingState) {
+      return;
+    }
+    if (state is AssociationErrorState) {
+      return;
+    }
+    if (state is AssociationCreatedState) {
+      return;
+    }
+
     emit(state);
   }
 
   Future<void> createAssociation(Association association) async {
+    if (state is AssociationCreatedState) {
+      return;
+    }
+
     emit(AssociationLoadingState());
     try {
       await _associationRepository.createAssociation(association);

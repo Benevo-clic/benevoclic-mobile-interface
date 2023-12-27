@@ -34,10 +34,17 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void userConnexion(UserModel userModel) {
+    if (state is UserConnexionState) {
+      return;
+    }
     emit(UserConnexionState(userModel: userModel));
   }
 
   Future<void> createUser(String email, String password) async {
+    if (state is UserEmailVerificationState) {
+      return;
+    }
+
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
@@ -51,6 +58,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> googleAuth() async {
+    if (state is UserEmailVerificationState) {
+      return;
+    }
     emit(UserLoadingState());
     try {
       UserCredential userCredential = await _authRepository.signInWithGoogle();
@@ -101,6 +111,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> updateUser(UserModel user) async {
+    if (state is UserUpdateState) {
+      return;
+    }
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
@@ -112,6 +125,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> connexion() async {
+    if (state is ResponseUserState) {
+      return;
+    }
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
@@ -124,6 +140,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> disconnect() async {
+    if (state is UserDisconnectedState) {
+      return;
+    }
     try {
       emit(UserLoadingState());
       final users = await _userRepository.disconnect();

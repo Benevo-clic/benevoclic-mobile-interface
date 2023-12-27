@@ -69,6 +69,16 @@ class AnnouncementCreatedState extends AnnouncementState {
   List<Object?> get props => [announcement];
 }
 
+class HideAnnouncementState extends AnnouncementState {
+  final Announcement announcement;
+  bool isVisible = false;
+
+  HideAnnouncementState({required this.announcement, this.isVisible = false});
+
+  @override
+  List<Object?> get props => [announcement];
+}
+
 class AnnouncementSelectedState extends AnnouncementLoadedState {
   final Announcement announcement;
 

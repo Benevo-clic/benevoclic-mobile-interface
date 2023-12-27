@@ -21,11 +21,15 @@ class AnnouncementCommon extends StatefulWidget {
 class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -34,7 +38,9 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
         listener: (context, state) async {
       if (state is AnnouncementLoadedState) {
         setState(() {
-          announcements = state.announcements;
+          announcements = state.announcements
+              .where((element) => element.isVisible == true)
+              .toList();
         });
       }
       if (state is AnnouncementLoadedStateWithoutAnnouncements) {
@@ -45,6 +51,21 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       if (state is DeleteAnnouncementState) {
         SnackBar snackBar = SnackBar(
           content: Text('Annonce supprimée'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        String idAssociation = preferences.getString('idAssociation')!;
+
+        BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+        BlocProvider.of<AnnouncementCubit>(context)
+            .getAllAnnouncementByAssociation(idAssociation);
+      }
+      if (state is HideAnnouncementState) {
+        SnackBar snackBar = SnackBar(
+          content: Text('Annonce cachée'),
           duration: Duration(seconds: 1),
           backgroundColor: Colors.green,
         );

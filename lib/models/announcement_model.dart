@@ -22,7 +22,7 @@ class Announcement {
   @JsonKey(name: 'description')
   late final String description;
 
-  @JsonKey(name: 'full')
+  @JsonKey(name: 'isFull')
   final bool? full;
 
   @JsonKey(name: 'image', defaultValue: 'https://via.placeholder.com/150')

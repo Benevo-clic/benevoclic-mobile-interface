@@ -31,6 +31,18 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
         announcement: announcement, isUpdating: true));
   }
 
+  void hiddenAnnouncement(String id, bool isVisible) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcementUpdated =
+          await _announcementRepository.hiddenAnnouncement(id, isVisible);
+      emit(HideAnnouncementState(
+          announcement: announcementUpdated, isVisible: isVisible));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void updateAnnouncement(String id, Announcement announcement) async {
     emit(AnnouncementLoadingState());
     try {
@@ -51,6 +63,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   void createAnnouncement(Announcement announcement) async {
+    if (state is AnnouncementCreatedState) {
+      return;
+    }
+
     emit(AnnouncementLoadingState());
     try {
       Announcement announcementCreated =
@@ -62,10 +78,6 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   void getAllAnnouncementByAssociation(String idAssociation) async {
-    if (state is AnnouncementLoadedStateWithoutAnnouncements) {
-      emit(AnnouncementLoadedStateWithoutAnnouncements(announcements: []));
-    }
-
     emit(AnnouncementLoadingState());
 
     try {
@@ -80,7 +92,7 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
 
   void deleteAnnouncement(String id) async {
     if (state is DeleteAnnouncementState) {
-      emit(AnnouncementLoadedState(announcements: []));
+      return;
     }
 
     emit(AnnouncementLoadingState());

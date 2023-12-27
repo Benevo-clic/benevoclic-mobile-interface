@@ -8,12 +8,11 @@ part of 'announcement_model.dart';
 
 Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       id: json['id'] as String?,
-      isFavorite: json['isFavorite'] as bool?,
       idAssociation: json['idAssociation'] as String,
       dateEvent: json['dateEvent'] as String,
       datePublication: json['datePublication'] as String,
       description: json['description'] as String,
-      full: json['isFull'] as bool?,
+      full: json['full'] as bool?,
       isVisible: json['isVisible'] as bool?,
       image: json['image'] as String? ?? 'https://via.placeholder.com/150',
       location:
@@ -28,7 +27,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       volunteers: (json['volunteers'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      imageProfileAssociation: json['imageProfileAssociation'] as String?,
+      imageProfileAssociation: json['imageProfileAssociation'] as String,
       volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -41,7 +40,7 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'dateEvent': instance.dateEvent,
       'datePublication': instance.datePublication,
       'description': instance.description,
-      'isFull': instance.full,
+      'full': instance.full,
       'image': instance.image,
       'location': instance.location,
       'isVisible': instance.isVisible,
@@ -55,5 +54,4 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) =>
       'type': instance.type,
       'volunteers': instance.volunteers,
       'volunteersWaiting': instance.volunteersWaiting,
-      'isFavorite': instance.isFavorite,
     };

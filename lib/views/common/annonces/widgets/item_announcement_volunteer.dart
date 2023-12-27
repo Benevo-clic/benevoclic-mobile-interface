@@ -5,35 +5,27 @@ import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
 
-class ItemAnnouncementVolunteer extends StatelessWidget {
+class ItemAnnouncementVolunteer extends StatefulWidget {
   final Announcement announcement;
-  bool? isSelected;
-  VoidCallback? toggleFavorite;
+  final bool isSelected;
 
-  ItemAnnouncementVolunteer({super.key,
-    required this.announcement,
-      this.isSelected,
-      this.toggleFavorite});
+  ItemAnnouncementVolunteer(
+      {super.key, required this.announcement, required this.isSelected});
 
-  ImageProvider _getImageProvider(String? imageString) {
-    if (imageString == null) {
-      return AssetImage('assets/logo.png');
-    }
-    if (isBase64(imageString)) {
-      return MemoryImage(base64.decode(imageString));
-    } else {
-      return NetworkImage(imageString);
-    }
+  @override
+  State<ItemAnnouncementVolunteer> createState() =>
+      _ItemAnnouncementVolunteerState();
+}
+
+class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
+  String imageProfileAssociation = '';
+
+  @override
+  void initState() {
+    super.initState();
+    imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
-  bool isBase64(String str) {
-    try {
-      base64.decode(str);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +59,9 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: _getImageProvider(announcement.image),
+                        backgroundImage:
+                            Image.memory(base64.decode(imageProfileAssociation))
+                                .image,
                       ),
                       SizedBox(
                         width: 10,
@@ -76,7 +70,8 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            announcement.nameAssociation,
+                            widget.announcement.nameAssociation ??
+                                'Association',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -84,7 +79,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           ),
                           Text(
                             ManageDate.describeRelativeDateTime(
-                                announcement.datePublication),
+                                widget.announcement.datePublication),
                             style: TextStyle(
                               fontSize: 12,
                             ),
@@ -94,13 +89,8 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                     ],
                   ),
                   IconButton(
-                    onPressed: toggleFavorite,
-                    icon: isSelected!
-                        ? Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    )
-                        : Icon(
+                    onPressed: () => print('favoris'),
+                    icon: Icon(
                       Icons.favorite_border,
                       color: Colors.red,
                     ),
@@ -124,7 +114,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: announcement.location.address,
+                        text: widget.announcement.location.address,
                         size: 11,
                       ),
                     ],
@@ -138,7 +128,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: announcement.dateEvent,
+                        text: widget.announcement.dateEvent,
                         size: 11,
                       ),
                     ],
@@ -152,7 +142,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: '${announcement.nbHours} heures',
+                        text: '${widget.announcement.nbHours} heures',
                         size: 11,
                       ),
                       InformationAnnonce(
@@ -162,14 +152,14 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           size: 16,
                         ),
                         text:
-                            '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
+                            '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
                       ),
                     ],
                   ),
                 ],
               ),
               Text(
-                announcement.labelEvent,
+                widget.announcement.labelEvent,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -181,7 +171,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                 indent: width * .06,
               ),
               Text(
-                announcement.description,
+                widget.announcement.description,
                 style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -24,28 +25,41 @@ class ProfilPageAssociation extends StatelessWidget {
   dynamic name = "corentin";
 
   getUserType(BuildContext context) {
+    getUser(context);
+
+    getAssociation(context);
+  }
+
+  getUser(BuildContext context) async {
     user = context.read<UserCubit>().user!;
-    if (user!.rule.rulesType == RulesType.USER_ASSOCIATION) {
-      getAssociation(context);
-    }
   }
 
   getAssociation(BuildContext context) async {
     User user = FirebaseAuth.instance.currentUser!;
     association =
         await context.read<AssociationCubit>().getAssociation(user.uid);
+    context.read<AssociationCubit>().stateInfo(association);
   }
 
   @override
   Widget build(BuildContext context) {
     getUserType(context);
 
-    return Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        appBar: getAppBarProfil(context, association),
-        body: SingleChildScrollView(
-            child: affichageAssociation(context, association)));
+    return BlocConsumer<AssociationCubit, AssociationState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is AssociationConnexion) {
+          return Scaffold(
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: false,
+              appBar: getAppBarProfil(context, state.association),
+              body: SingleChildScrollView(
+                  child: affichageAssociation(context, state.association!)));
+        }else{
+          return Text("");
+        }
+      },
+    );
   }
 }
 
@@ -122,8 +136,9 @@ class Bio extends StatelessWidget {
 
 affichageAssociation(BuildContext context, Association association) {
   String bio = "";
+  String address = "";
   if (association.bio != null) bio = association.bio!;
-
+  if (association.address != null) address = association.address!;
   return Center(
     child: Column(
       children: [
@@ -167,7 +182,7 @@ affichageAssociation(BuildContext context, Association association) {
                 color: Colors.white,
               ),
               Section(
-                  text: association.address!,
+                  text: address,
                   icon: Icon(Icons.location_on_outlined)),
               Divider(
                 height: 25,

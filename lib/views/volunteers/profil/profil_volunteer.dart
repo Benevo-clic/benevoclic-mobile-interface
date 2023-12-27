@@ -39,9 +39,7 @@ class ProfilPageVolunteer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("non");
     getUser(context);
-    //print(volunteer!.address);
     return BlocConsumer<VolunteerCubit, VolunteerState>(
         listener: (context, state) {},
         builder: (context, state) {

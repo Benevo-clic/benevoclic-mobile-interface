@@ -169,6 +169,8 @@ listview(BuildContext context, Association association) {
 
             BlocProvider.of<AssociationCubit>(context)
                 .updateAssociation(associationUpdate);
+            BlocProvider.of<AssociationCubit>(context)
+                .stateInfo(associationUpdate);
 
             Navigator.pop(context);
           } else {

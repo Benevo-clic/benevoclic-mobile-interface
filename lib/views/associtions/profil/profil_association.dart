@@ -55,7 +55,7 @@ class ProfilPageAssociation extends StatelessWidget {
               appBar: getAppBarProfil(context, state.association),
               body: SingleChildScrollView(
                   child: affichageAssociation(context, state.association!)));
-        }else{
+        } else {
           return Text("");
         }
       },
@@ -84,7 +84,7 @@ AppBar getAppBarProfil(BuildContext context, association) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ParametersView()),
+            MaterialPageRoute(builder: (context) => ParametersView(rule: RulesType.USER_ASSOCIATION,)),
           );
         },
       ),
@@ -181,9 +181,7 @@ affichageAssociation(BuildContext context, Association association) {
                 height: 25,
                 color: Colors.white,
               ),
-              Section(
-                  text: address,
-                  icon: Icon(Icons.location_on_outlined)),
+              Section(text: address, icon: Icon(Icons.location_on_outlined)),
               Divider(
                 height: 25,
                 color: Colors.white,

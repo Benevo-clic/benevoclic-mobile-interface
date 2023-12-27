@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
 import 'package:namer_app/views/common/profiles/widget/email_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/password_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/personal_informations.dart';
+import 'package:namer_app/views/common/profiles/widget/personal_informations_asso.dart';
 import 'package:namer_app/views/common/profiles/widget/phone_number.dart';
+import 'package:namer_app/views/common/profiles/widget/phone_number_asso.dart';
 import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 
 class ParametersView extends StatelessWidget {
+  RulesType rule = RulesType.NONE;
+
+  ParametersView({required this.rule});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +41,15 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return PopDialog(
-                                      content: InformationDialog(),
-                                    );
+                                    if (rule == RulesType.USER_VOLUNTEER) {
+                                      return PopDialog(
+                                        content: InformationDialog(),
+                                      );
+                                    } else {
+                                      return PopDialog(
+                                        content: InformationDialogAsso(),
+                                      );
+                                    }
                                   })
                             }),
                     Divider(
@@ -86,7 +99,12 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: ((context) {
-                                    return PopDialog(content: PhoneDialog());
+                                    if (rule == RulesType.USER_VOLUNTEER) {
+                                      return PopDialog(content: PhoneDialog());
+                                    } else {
+                                      return PopDialog(
+                                          content: PhoneDialogAsso());
+                                    }
                                   }))
                             }),
                     SizedBox(
@@ -104,7 +122,8 @@ class ParametersView extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    ParameterLine(title: "Sécurité de compte", fct: (value) => {}),
+                    ParameterLine(
+                        title: "Sécurité de compte", fct: (value) => {}),
                   ],
                 ),
               ),
@@ -122,7 +141,8 @@ class ParametersView extends StatelessWidget {
                 icon: Icon(Icons.question_mark_outlined),
                 content: Column(
                   children: [
-                    ParameterLine(title: "Informations légales", fct: (value) => {}),
+                    ParameterLine(
+                        title: "Informations légales", fct: (value) => {}),
                     SizedBox(
                       height: 15,
                     ),

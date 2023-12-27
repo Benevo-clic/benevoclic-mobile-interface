@@ -77,7 +77,7 @@ AppBar getAppBarProfil(BuildContext context) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ParametersView()),
+            MaterialPageRoute(builder: (context) => ParametersView(rule: RulesType.USER_VOLUNTEER,)),
           );
         },
       ),

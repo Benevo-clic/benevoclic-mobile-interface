@@ -190,21 +190,23 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   void _onPublishButtonPressed(AnnouncementState state) {
     try {
       Announcement announcement = Announcement(
-        description: _descriptionController.text,
-        dateEvent: _dateEvent,
+        description: _descriptionController.text ?? "",
+        dateEvent: _dateEvent ?? "",
         nbHours: int.parse(_nbHoursController.text),
         nbPlaces: int.parse(_nbPlacesController.text),
-        type: _typeController.text,
+        type: _typeController.text ?? "",
         datePublication: DateFormat('dd/MM/yyyy H:mm:s').format(DateTime.now()),
         location: LocationModel(
-          address: _addressController.text,
+          address: _addressController.text ?? "",
           latitude: 0,
           longitude: 0,
         ),
-        labelEvent: _titleController.text,
-        idAssociation: "615f1e9b1a560d0016a6b0a5",
-        nameAssociation: "Association",
-        imageProfileAssociation: "https://via.placeholder.com/150",
+        labelEvent: _titleController.text ?? "",
+        idAssociation: "615f1e9b1a560d0016a6b0a5" ?? "",
+        nameAssociation: "Association" ?? "",
+        imageProfileAssociation: "https://via.placeholder.com/150" ?? "",
+        nbPlacesTaken: 0,
+        isVisible: true,
       );
 
       if (_imageCover != null) {

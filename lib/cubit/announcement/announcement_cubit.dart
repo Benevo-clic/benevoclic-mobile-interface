@@ -1,13 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/repositories/api/Announcement_repository.dart';
+import 'package:namer_app/repositories/api/announcement_repository.dart';
 
+import '../../repositories/api/favorites_repository.dart';
 import 'announcement_state.dart';
 
 class AnnouncementCubit extends Cubit<AnnouncementState> {
   final AnnouncementRepository _announcementRepository;
+  final FavoritesRepository _favoritesRepository = FavoritesRepository();
 
-  AnnouncementCubit({required AnnouncementRepository announcementRepository})
+  AnnouncementCubit(
+      {required AnnouncementRepository announcementRepository,
+      required FavoritesRepository favoritesRepository})
       : _announcementRepository = announcementRepository,
         super(AnnouncementInitialState());
 
@@ -59,6 +63,17 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       emit(CustomAnnouncementTypeState(""));
     } else {
       emit(AnnouncementInitialState());
+    }
+  }
+
+  void isFavorite(String idVolunteer, String? idAnnouncement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      var isFavorite =
+          await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
+      emit(FavoritesAnnouncementIsFavoriteState(isFavorite: isFavorite));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
     }
   }
 

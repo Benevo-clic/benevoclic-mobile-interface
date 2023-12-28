@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/repositories/api/favorites_repository.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,9 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
   bool isLoading = false;
+  String _idVolunteer = '';
+  bool isSelected = false;
+  FavoritesRepository favoritesRepository = FavoritesRepository();
 
   @override
   void initState() {
@@ -29,6 +33,25 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
     setState(() {
       isLoading = false;
+    });
+    if (widget.rulesType == RulesType.USER_VOLUNTEER) {
+      _getIdVolunteer();
+      print(_idVolunteer);
+    }
+  }
+
+  _isFavorite(String idVolunteer, String? idAnnouncement) {
+    setState(() async {
+      isSelected =
+          await favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
+    });
+  }
+
+  _getIdVolunteer() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    String idVolunteer = preferences.getString('idVolunteer')!;
+    setState(() {
+      _idVolunteer = idVolunteer;
     });
   }
 
@@ -48,6 +71,15 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           announcementsAssociation = state.announcements;
         });
       }
+
+      if (state is AnnouncementErrorState) {
+        SnackBar snackBar = SnackBar(
+          content: Text(state.message),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
       if (state is DeleteAnnouncementState) {
         SnackBar snackBar = SnackBar(
           content: Text('Annonce supprimée'),
@@ -63,6 +95,12 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
         BlocProvider.of<AnnouncementCubit>(context)
             .getAllAnnouncementByAssociation(idAssociation);
       }
+      if (state is FavoritesAnnouncementIsFavoriteState) {
+        setState(() {
+          isSelected = state.isFavorite!;
+        });
+      }
+
       if (state is HideAnnouncementState) {
         SnackBar snackBar = SnackBar(
           content: Text('Annonce cachée'),
@@ -98,10 +136,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
                 );
               }
               int reversedIndex = announcements.length - index - 1;
-
               return ItemAnnouncementVolunteer(
                 announcement: announcements[reversedIndex],
-                isSelected: false,
+                isSelected: isSelected,
+                idVolunteer: _idVolunteer,
               );
             },
             itemCount: widget.rulesType == RulesType.USER_ASSOCIATION

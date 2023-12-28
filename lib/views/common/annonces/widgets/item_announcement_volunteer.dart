@@ -1,16 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
 
 class ItemAnnouncementVolunteer extends StatefulWidget {
   final Announcement announcement;
-  final bool isSelected;
+  bool isSelected;
+  String? idVolunteer;
 
-  ItemAnnouncementVolunteer(
-      {super.key, required this.announcement, required this.isSelected});
+  ItemAnnouncementVolunteer({super.key,
+    required this.announcement,
+    required this.isSelected,
+    this.idVolunteer});
 
   @override
   State<ItemAnnouncementVolunteer> createState() =>
@@ -26,6 +31,11 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
     imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
+  void _isLiked() {
+    setState(() {
+      widget.isSelected = !widget.isSelected;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +99,31 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     ],
                   ),
                   IconButton(
-                    onPressed: () => print('favoris'),
-                    icon: Icon(
+                    onPressed: () =>
+                    {
+                      if (widget.isSelected)
+                        {
+                          print('remove favorites'),
+
+                          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+                              .removeFavoritesAnnouncement(
+                              widget.idVolunteer, widget.announcement.id!),
+                        }
+                      else
+                        {
+                          print('add favorites'),
+                          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+                              .addFavoritesAnnouncement(
+                              widget.idVolunteer, widget.announcement.id!),
+                        },
+                      _isLiked(),
+                    },
+                    icon: widget.isSelected
+                        ? Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                        : Icon(
                       Icons.favorite_border,
                       color: Colors.red,
                     ),

@@ -16,12 +16,24 @@ class AnnouncementInitialState extends AnnouncementState {}
 class AnnouncementLoadingState extends AnnouncementState {
 }
 
+class FavoritesAnnouncementIsFavoriteState extends AnnouncementState {
+  final bool? isFavorite;
+
+  FavoritesAnnouncementIsFavoriteState({required this.isFavorite});
+
+  @override
+  List<Object?> get props => [isFavorite];
+}
+
 class AnnouncementUpdatingState extends AnnouncementState {
   final Announcement announcement;
   final bool? isUpdating;
 
   AnnouncementUpdatingState(
       {required this.isUpdating, required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement, isUpdating];
 }
 
 class AnnouncementLoadedState extends AnnouncementState {
@@ -76,7 +88,7 @@ class HideAnnouncementState extends AnnouncementState {
   HideAnnouncementState({required this.announcement, this.isVisible = false});
 
   @override
-  List<Object?> get props => [announcement];
+  List<Object?> get props => [announcement, isVisible];
 }
 
 class AnnouncementSelectedState extends AnnouncementLoadedState {

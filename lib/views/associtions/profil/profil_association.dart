@@ -90,7 +90,7 @@ AppBar getAppBarProfil(BuildContext context, association) {
 
 class LineProfil extends StatelessWidget {
   final String text;
-  final icon;
+  final dynamic icon;
 
   const LineProfil({super.key, required this.text, required this.icon});
 
@@ -146,7 +146,7 @@ affichageAssociation(BuildContext context, Association association) {
           content: Column(
             children: [
               Text(
-                "${association.name}",
+                association.name,
                 style: TextStyle(),
                 textAlign: TextAlign.center,
               ),

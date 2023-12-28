@@ -4,10 +4,10 @@ import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
 import 'package:namer_app/views/common/profiles/widget/email_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/password_dialog.dart';
-import 'package:namer_app/views/common/profiles/widget/personal_informations.dart';
-import 'package:namer_app/views/common/profiles/widget/personal_informations_asso.dart';
-import 'package:namer_app/views/common/profiles/widget/phone_number.dart';
-import 'package:namer_app/views/common/profiles/widget/phone_number_asso.dart';
+import 'package:namer_app/views/volunteers/profil/parameter/personal_informations.dart';
+import 'package:namer_app/views/associtions/profil/parameters/personal_informations_asso.dart';
+import 'package:namer_app/views/volunteers/profil/parameter/phone_number.dart';
+import 'package:namer_app/views/associtions/profil/parameters/phone_number_asso.dart';
 import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 

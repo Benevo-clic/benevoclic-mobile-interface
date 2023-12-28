@@ -8,7 +8,7 @@ import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
-import 'package:namer_app/views/common/profiles/modif_profil.dart';
+import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
@@ -90,7 +90,7 @@ AppBar getAppBarProfil(BuildContext context) {
 
 class LineProfil extends StatelessWidget {
   final String text;
-  final icon;
+  final dynamic icon;
 
   const LineProfil({super.key, required this.text, required this.icon});
 

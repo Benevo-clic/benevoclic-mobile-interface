@@ -1,5 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:namer_app/util/password_verification.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';

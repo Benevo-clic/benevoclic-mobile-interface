@@ -156,4 +156,14 @@ class UserCubit extends Cubit<UserState> {
       emit(UserErrorState(message: e.toString()));
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      emit(UserLoadingState());
+      final users = await _userRepository.deleteUser();
+      emit(UserDisconnectedState(statusCode: users.toString()));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
 }

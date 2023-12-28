@@ -73,4 +73,8 @@ class AssociationCubit extends Cubit<AssociationState> {
   Future<void> updateAssociation(Association association) async {
     await _associationRepository.updateAssociation(association);
   }
+
+  Future<void> deleteAccount() async {
+    await _associationRepository.deleteAssociation();
+  }
 }

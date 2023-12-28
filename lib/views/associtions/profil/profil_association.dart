@@ -84,7 +84,10 @@ AppBar getAppBarProfil(BuildContext context, association) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ParametersView(rule: RulesType.USER_ASSOCIATION,)),
+            MaterialPageRoute(
+                builder: (context) => ParametersView(
+                      rule: RulesType.USER_ASSOCIATION,
+                    )),
           );
         },
       ),
@@ -218,7 +221,9 @@ affichageAssociation(BuildContext context, Association association) {
             text: "Suppression compte",
             icon: IconButton(
               onPressed: () async {
-                await AuthRepository().deleteAccount();
+                BlocProvider.of<AssociationCubit>(context).deleteAccount();
+                BlocProvider.of<UserCubit>(context).deleteAccount();
+                AuthRepository().deleteAccount();
               },
               icon: Icon(Icons.no_accounts_sharp),
             )),

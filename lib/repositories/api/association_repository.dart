@@ -126,18 +126,44 @@ class AssociationRepository {
       };
       var dio = Dio();
       var data = json.encode(association.toJson());
-      var response = await dio.request(
-        'http://$url/api/v1/associations/updateAssociation',
-        options: Options(
-          method: 'PUT',
-          headers: headers,
-        ),
-        data: data
-      );
+      var response =
+          await dio.request('http://$url/api/v1/associations/updateAssociation',
+              options: Options(
+                method: 'PUT',
+                headers: headers,
+              ),
+              data: data);
       print(response);
 
       if (response.statusCode == 200) {
         return Association.fromJson(response.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> deleteAssociation() async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${globals.id}',
+      };
+      var dio = Dio();
+
+      var response = await dio.request(
+        'http://$url/api/v1/associations/deleteAssociation',
+        options: Options(
+          method: 'DELETE',
+          headers: headers,
+        ),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+        return response.data;
       } else {
         throw Exception(response.statusMessage);
       }

@@ -54,16 +54,13 @@ class FavoritesRepository {
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-        'id': idVolunteer,
+        'idVolunteer': idVolunteer,
       };
 
       var response = await _dio.get(
-        'http://${globals
-            .url}/api/v1/favoritesAnnouncement/favoritesAnnouncementById',
+        'http://${globals.url}/api/v1/favoritesAnnouncement/favoritesAnnouncementByVolunteerId',
         options: Options(headers: headers),
       );
-
-      print(response.data);
 
       if (response.statusCode == 200) {
         return Favorites.fromJson(response.data);
@@ -79,7 +76,6 @@ class FavoritesRepository {
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
       }
-
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
       throw Exception(e);
@@ -123,7 +119,7 @@ class FavoritesRepository {
     }
   }
 
-  Future<bool> isFavorite(String? idVolunteer, String idAnnouncement) async {
+  Future<bool> isFavorite(String idVolunteer, String idAnnouncement) async {
     await _tokenService.refreshTokenIfNeeded();
 
     try {
@@ -172,6 +168,7 @@ class FavoritesRepository {
         'idVolunteer': idVolunteer,
         'idAnnouncement': idAnnouncement,
       };
+      print("response deleteFavoritesAnnouncement");
 
       var response = await _dio.put(
         'http://${globals.url}/api/v1/favoritesAnnouncement/deleteFavoritesAnnouncement',
@@ -179,6 +176,7 @@ class FavoritesRepository {
       );
 
       if (response.statusCode == 200) {
+        print("response deleteFavoritesAnnouncement");
         return;
       } else {
         throw Exception(

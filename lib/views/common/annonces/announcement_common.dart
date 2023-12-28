@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
@@ -20,17 +21,63 @@ class AnnouncementCommon extends StatefulWidget {
 class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
-        builder: (context, state) {
+        listener: (context, state) async {
+      if (state is AnnouncementLoadedState) {
+        setState(() {
+          announcements = state.announcements
+              .where((element) => element.isVisible == true)
+              .toList();
+        });
+      }
+      if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+        setState(() {
+          announcementsAssociation = state.announcements;
+        });
+      }
+      if (state is DeleteAnnouncementState) {
+        SnackBar snackBar = SnackBar(
+          content: Text('Annonce supprimée'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        String idAssociation = preferences.getString('idAssociation')!;
+
+        BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+        BlocProvider.of<AnnouncementCubit>(context)
+            .getAllAnnouncementByAssociation(idAssociation);
+      }
+      if (state is HideAnnouncementState) {
+        SnackBar snackBar = SnackBar(
+          content: Text('Annonce cachée'),
+          duration: Duration(seconds: 1),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        String idAssociation = preferences.getString('idAssociation')!;
+        BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+        BlocProvider.of<AnnouncementCubit>(context)
+            .getAllAnnouncementByAssociation(idAssociation);
+      }
+    }, builder: (context, state) {
       return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height *
@@ -63,13 +110,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           ),
         ),
       );
-    }, listener: (context, state) {
-      if (state is AnnouncementLoadedState) {
-        announcements = state.announcements;
-      }
-      if (state is AnnouncementLoadedStateWithoutAnnouncements) {
-        announcementsAssociation = state.announcements;
-      }
     });
   }
 }

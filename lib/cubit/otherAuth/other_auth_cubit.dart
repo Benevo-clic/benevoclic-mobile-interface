@@ -14,6 +14,9 @@ class OtherAuthCubit extends Cubit<OtherAuthState> {
   }
 
   Future<void> googleAuth() async {
+    if (state is OtherAuthLoadingState) {
+      return;
+    }
     emit(OtherAuthLoadingState());
     try {
       UserCredential userCredential = await _authRepository.signInWithGoogle();

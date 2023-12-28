@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -45,56 +46,69 @@ class _ImagePickerAnnouncementState extends State<ImagePickerAnnouncement> {
     if (widget.image != null) {
       _image = widget.image;
     }
-
-    return SizedBox(
-      child: Center(
-        child: Stack(
-          children: [
-            _image != null
-                ? Container(
-                    width: width * .8,
-                    height: height * .3,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: MemoryImage(_image!),
-                        fit: BoxFit
-                            .cover, // Adapte l'image à la taille du conteneur
+    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
+      listener: (context, state) {
+        if (state is AnnouncementUpdatingState) {
+          if (state.announcement.image == "https://via.placeholder.com/150") {
+            _image = null; // <-- here
+          } else {
+            _image = base64.decode(state.announcement.image!);
+          }
+        }
+      },
+      builder: (context, state) {
+        return SizedBox(
+          child: Center(
+            child: Stack(
+              children: [
+                _image != null
+                    ? Container(
+                        width: width * .8,
+                        height: height * .3,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: MemoryImage(_image!),
+                            fit: BoxFit
+                                .cover, // Adapte l'image à la taille du conteneur
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width * .8,
+                        height: MediaQuery.of(context).size.height * .3,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                NetworkImage("https://via.placeholder.com/150"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
-                  )
-                : Container(
-                    width: MediaQuery.of(context).size.width * .8,
-                    height: MediaQuery.of(context).size.height * .3,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage("https://via.placeholder.com/150"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-            Positioned(
-                bottom: bottomPosition,
-                right: rightPosition,
-                child: IconButton(
-                  onPressed: () {
-                    showImagePickerOption(context);
-                  },
-                  icon: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.black,
-                        size: 20,
-                      )),
-                )),
-          ],
-        ),
-      ),
+                Positioned(
+                    bottom: bottomPosition,
+                    right: rightPosition,
+                    child: IconButton(
+                      onPressed: () {
+                        showImagePickerOption(context);
+                      },
+                      icon: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: const Icon(
+                            Icons.camera_alt,
+                            color: Colors.black,
+                            size: 20,
+                          )),
+                    )),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

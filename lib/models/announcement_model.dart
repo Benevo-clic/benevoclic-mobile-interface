@@ -22,7 +22,7 @@ class Announcement {
   @JsonKey(name: 'description')
   late final String description;
 
-  @JsonKey(name: 'full')
+  @JsonKey(name: 'isFull')
   final bool? full;
 
   @JsonKey(name: 'image', defaultValue: 'https://via.placeholder.com/150')
@@ -31,8 +31,11 @@ class Announcement {
   @JsonKey(name: 'location')
   late final LocationModel location;
 
+  @JsonKey(name: 'isVisible')
+  final bool? isVisible;
+
   @JsonKey(name: 'nameAssociation')
-  final String? nameAssociation;
+  late final String nameAssociation;
 
   @JsonKey(name: 'imageProfileAssociation')
   final String imageProfileAssociation;
@@ -68,9 +71,10 @@ class Announcement {
       required this.datePublication,
       required this.description,
       this.full,
+      this.isVisible,
       this.image,
       required this.location,
-      this.nameAssociation,
+      required this.nameAssociation,
       required this.labelEvent,
       required this.nbHours,
       required this.nbPlaces,

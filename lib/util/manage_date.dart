@@ -12,10 +12,8 @@ class ManageDate {
       return "Format de date invalide";
     }
 
-    // Réassemble la date au format 'yyyy-MM-dd'
     String formattedDate = '${dateParts[2]}-${dateParts[1]}-${dateParts[0]}';
 
-    // Ajoute la partie de l'heure
     return formattedDate + ' ' + dateTimeParts[1];
   }
 
@@ -25,7 +23,6 @@ class ManageDate {
       DateTime now = DateTime.now();
       Duration difference = now.difference(inputDate);
 
-      // Calculer les différences en termes de jours, heures, minutes
       int days = difference.inDays;
       int hours = difference.inHours % 24;
       int minutes = difference.inMinutes % 60;

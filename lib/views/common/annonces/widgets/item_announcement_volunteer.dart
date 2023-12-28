@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
-import '../../../../models/association_model.dart';
-import '../../../../repositories/api/Announcement_repository.dart';
 
 class ItemAnnouncementVolunteer extends StatefulWidget {
   final Announcement announcement;
@@ -28,11 +26,6 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
     imageProfileAssociation = widget.announcement.imageProfileAssociation;
   }
 
-  Future<Association> getAssociation(String idAssociation) async {
-    Association association =
-        await AnnouncementRepository().getAssociationById(idAssociation);
-    return association;
-  }
 
   @override
   Widget build(BuildContext context) {

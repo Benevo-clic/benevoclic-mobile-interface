@@ -36,6 +36,7 @@ dependencies:
   permission_handler:
   flutter_svg:
   google_fonts: ^6.1.0
+  equatable: ^2.0.5
 
 
 dependency_overrides:

@@ -41,4 +41,9 @@ class VolunteerCubit extends Cubit<VolunteerState> {
   Future<void> volunteerState(Volunteer volunteer) async {
     emit(VolunteerInfo(volunteer: volunteer));
   }
+
+  Future<void> deleteVolunteer() async {
+    await _volunteerRepository.deleteVolunteer();
+  }
+
 }

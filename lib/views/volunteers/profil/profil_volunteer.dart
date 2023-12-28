@@ -11,6 +11,7 @@ import 'package:namer_app/views/common/authentification/repository/auth_reposito
 import 'package:namer_app/views/common/profiles/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
+import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
@@ -221,7 +222,13 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
             text: "Suppression compte",
             icon: IconButton(
               onPressed: () async {
-                await AuthRepository().deleteAccount();
+                BlocProvider.of<VolunteerCubit>(context).deleteVolunteer();
+                BlocProvider.of<UserCubit>(context).deleteAccount();
+                AuthRepository().deleteAccount();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeView()),
+                );
               },
               icon: Icon(Icons.no_accounts_sharp),
             )),

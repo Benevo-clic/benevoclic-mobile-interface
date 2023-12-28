@@ -101,4 +101,29 @@ class VolunteerRepository {
       throw Exception(e);
     }
   }
+
+  Future<void> deleteVolunteer() async {
+    try {
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${globals.id}',
+      };
+      var dio = Dio();
+      var response = await dio.request(
+        'http://$url/api/v1/volunteers/deleteVolunteer',
+        options: Options(
+          method: 'DELETE',
+          headers: headers,
+        ),
+      );
+      print(response);
+
+      if (response.statusCode == 200) {
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

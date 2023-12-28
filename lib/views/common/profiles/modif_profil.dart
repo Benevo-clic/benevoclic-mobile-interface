@@ -5,8 +5,8 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/util/phone_number_verification.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -165,8 +165,13 @@ listview(BuildContext context, Volunteer volunteer) {
                       _phone = value.toString();
                     },
                     validator: (value) {
-                      _phone = value.toString();
-                      return null;
+                      var phoneParam = PhoneVerification(value.toString());
+                      if (phoneParam.security()) {
+                        _phone = value.toString();
+                        return null;
+                      } else {
+                        return phoneParam.message;
+                      }
                     },
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.phone_android),
@@ -195,16 +200,22 @@ listview(BuildContext context, Volunteer volunteer) {
             print(_phone);
             print(_address);
             Volunteer volunteerUpdate = Volunteer(
-                              firstName: volunteer.firstName,
-                              lastName: volunteer.lastName,
-                              phone: volunteer.phone,
-                              birthDayDate: volunteer.birthDayDate, address: _address, bio: _bio,  city: volunteer.city, email: volunteer.email, imageProfile: volunteer.imageProfile, postalCode: volunteer.postalCode);
+                firstName: volunteer.firstName,
+                lastName: volunteer.lastName,
+                phone: _phone,
+                birthDayDate: volunteer.birthDayDate,
+                address: _address,
+                bio: _bio,
+                city: volunteer.city,
+                email: volunteer.email,
+                imageProfile: volunteer.imageProfile,
+                postalCode: volunteer.postalCode);
 
             BlocProvider.of<VolunteerCubit>(context)
-                              .updateVolunteer(volunteerUpdate);
-                          BlocProvider.of<VolunteerCubit>(context)
-                              .volunteerState(volunteerUpdate);   
-                          Navigator.pop(context);
+                .updateVolunteer(volunteerUpdate);
+            BlocProvider.of<VolunteerCubit>(context)
+                .volunteerState(volunteerUpdate);
+            Navigator.pop(context);
           } else {
             print("erreur");
           }

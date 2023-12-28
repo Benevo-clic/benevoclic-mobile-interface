@@ -4,7 +4,6 @@ import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
-import 'package:namer_app/views/common/profiles/widget/phone_number.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 

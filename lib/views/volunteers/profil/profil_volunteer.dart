@@ -6,7 +6,6 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
 import 'package:namer_app/views/common/profiles/modif_profil.dart';
@@ -77,7 +76,10 @@ AppBar getAppBarProfil(BuildContext context) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ParametersView(rule: RulesType.USER_VOLUNTEER,)),
+            MaterialPageRoute(
+                builder: (context) => ParametersView(
+                      rule: RulesType.USER_VOLUNTEER,
+                    )),
           );
         },
       ),
@@ -130,6 +132,10 @@ class Bio extends StatelessWidget {
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
   String bio = "";
   if (volunteer.bio != null) bio = volunteer.bio!;
+  String address = "";
+  if (volunteer.address != null) address = volunteer.address!;
+  String email = "";
+  if (volunteer.email != null) email = volunteer.email!;
 
   return Center(
     child: Column(
@@ -173,14 +179,12 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 height: 25,
                 color: Colors.white,
               ),
-              Section(
-                  text: volunteer.address!,
-                  icon: Icon(Icons.location_on_outlined)),
+              Section(text: address, icon: Icon(Icons.location_on_outlined)),
               Divider(
                 height: 25,
                 color: Colors.white,
               ),
-              Section(text: volunteer.birthDayDate, icon: Icon(Icons.mail)),
+              Section(text: email, icon: Icon(Icons.mail)),
               Divider(
                 height: 25,
                 color: Colors.white,

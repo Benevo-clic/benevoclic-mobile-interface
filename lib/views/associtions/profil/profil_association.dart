@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
+import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
@@ -19,19 +19,12 @@ import '../../../cubit/user/user_cubit.dart';
 import '../../common/authentification/repository/auth_repository.dart';
 
 class ProfilPageAssociation extends StatelessWidget {
-  UserModel? user;
   Association association =
       Association(name: "name", phone: "phone", type: "type");
   dynamic name = "corentin";
 
   getUserType(BuildContext context) {
-    getUser(context);
-
     getAssociation(context);
-  }
-
-  getUser(BuildContext context) async {
-    user = context.read<UserCubit>().user!;
   }
 
   getAssociation(BuildContext context) async {
@@ -224,6 +217,10 @@ affichageAssociation(BuildContext context, Association association) {
                 BlocProvider.of<AssociationCubit>(context).deleteAccount();
                 BlocProvider.of<UserCubit>(context).deleteAccount();
                 AuthRepository().deleteAccount();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeView()),
+                );
               },
               icon: Icon(Icons.no_accounts_sharp),
             )),

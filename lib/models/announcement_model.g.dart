@@ -27,7 +27,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
       volunteers: (json['volunteers'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      imageProfileAssociation: json['imageProfileAssociation'] as String,
+      imageProfileAssociation: json['imageProfileAssociation'] as String?,
       volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
           ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
           .toList(),

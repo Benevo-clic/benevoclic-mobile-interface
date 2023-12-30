@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/util/manage_date.dart';
 
+import '../../../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../../../models/announcement_model.dart';
 
 class ItemAnnouncementVolunteer extends StatefulWidget {
@@ -28,7 +28,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   void initState() {
     super.initState();
-    imageProfileAssociation = widget.announcement.imageProfileAssociation;
+    imageProfileAssociation = widget.announcement.imageProfileAssociation!;
   }
 
   void _isLiked() {
@@ -80,8 +80,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.announcement.nameAssociation ??
-                                'Association',
+                            widget.announcement.nameAssociation ?? '',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -103,15 +102,12 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     {
                       if (widget.isSelected)
                         {
-                          print('remove favorites'),
-
                           BlocProvider.of<FavoritesAnnouncementCubit>(context)
                               .removeFavoritesAnnouncement(
                               widget.idVolunteer, widget.announcement.id!),
                         }
                       else
                         {
-                          print('add favorites'),
                           BlocProvider.of<FavoritesAnnouncementCubit>(context)
                               .addFavoritesAnnouncement(
                               widget.idVolunteer, widget.announcement.id!),

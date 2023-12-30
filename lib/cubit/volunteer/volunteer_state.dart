@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import '../../models/volunteer_model.dart';
 
 @immutable
-abstract class VolunteerState extends Equatable {
+abstract class VolunteerState {
   Volunteer? volunteer;
 
-  getVolunteer(){
+  getVolunteer() {
     return volunteer;
   }
+
   @override
   List<Object?> get props => [];
 }
@@ -88,8 +89,9 @@ class VolunteerInfo extends VolunteerState {
 
   VolunteerInfo({required this.volunteer});
 
+  
   getInfo() {
-    return volunteer;
+    return this.volunteer;
   }
 }
 

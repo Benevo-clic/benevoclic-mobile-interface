@@ -98,4 +98,13 @@ class AuthRepository {
     await _auth.currentUser?.reload();
     return _auth.currentUser?.emailVerified ?? false;
   }
+
+  Future<void> changePassword(String newPassword) async {
+    User? user = await FirebaseAuth.instance.currentUser;
+    user!.updatePassword(newPassword).then((_){
+      print("changed");
+    }).catchError((error){
+      print("not changed")   ;
+    });
+  }
 }

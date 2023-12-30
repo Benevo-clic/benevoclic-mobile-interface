@@ -81,7 +81,9 @@ class _InformationDialog extends State<InformationDialog> {
                   SizedBox(
                     height: 10,
                   ),
-                  InputField(title: state.volunteer!.birthDayDate, fct: changeBirthDate),
+                  InputField(
+                      title: state.volunteer!.birthDayDate,
+                      fct: changeBirthDate),
                   SizedBox(
                     height: 10,
                   ),
@@ -107,11 +109,20 @@ class _InformationDialog extends State<InformationDialog> {
                               firstName: _firstName,
                               lastName: _lastName,
                               phone: _phone,
-                              birthDayDate: _birth);
+                              birthDayDate: _birth,
+                              address: state.volunteer!.birthDayDate,
+                              bio: state.volunteer!.bio,
+                              city: state.volunteer!.city,
+                              email: state.volunteer!.email,
+                              imageProfile: state.volunteer!.imageProfile,
+                              myAssociations: state.volunteer!.myAssociations,
+                              postalCode: state.volunteer!.postalCode,
+                              myAssociationsWaiting:
+                                  state.volunteer!.myAssociationsWaiting);
                           BlocProvider.of<VolunteerCubit>(context)
                               .updateVolunteer(volunteer);
                           BlocProvider.of<VolunteerCubit>(context)
-                              .volunteerState(volunteer);   
+                              .volunteerState(volunteer);
                           Navigator.pop(context);
                         }
                       },

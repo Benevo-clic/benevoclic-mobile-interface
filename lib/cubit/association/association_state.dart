@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
 
 @immutable
-abstract class AssociationState extends Equatable {
+abstract class AssociationState {
   Association? association;
 
   @override

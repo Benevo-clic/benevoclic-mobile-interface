@@ -111,7 +111,7 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  Navigator.push(
+                                  /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
@@ -119,7 +119,7 @@ class LoginPage extends StatelessWidget {
                                         rulesType: title,
                                       ),
                                     ),
-                                  );
+                                  );*/
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -151,13 +151,13 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  Navigator.push(
+                                  /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
                                           context: context, rulesType: title),
                                     ),
-                                  );
+                                  );*/
                                 });
                               },
                               style: ElevatedButton.styleFrom(

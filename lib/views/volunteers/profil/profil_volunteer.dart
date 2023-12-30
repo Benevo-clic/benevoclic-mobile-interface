@@ -5,6 +5,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
+import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
@@ -15,15 +16,10 @@ import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:namer_app/widgets/background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 import '../../../cubit/user/user_cubit.dart';
-import '../../../repositories/auth_repository.dart';
-import '../authentification/login/widgets/login.dart';
-import 'modif_profil.dart';
-import '../authentification/repository/auth_repository.dart';
 
 class ProfilPageVolunteer extends StatelessWidget {
   UserModel? user;
@@ -31,10 +27,10 @@ class ProfilPageVolunteer extends StatelessWidget {
   dynamic name = "corentin";
 
   getUser(BuildContext context) async {
-  User user = FirebaseAuth.instance.currentUser!;
-  volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
-  name = volunteer!.lastName;
-  await context.read<VolunteerCubit>().volunteerState(volunteer!);
+    User user = FirebaseAuth.instance.currentUser!;
+    volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
+    name = volunteer!.lastName;
+    await context.read<VolunteerCubit>().volunteerState(volunteer!);
   }
 
   @override
@@ -45,13 +41,14 @@ class ProfilPageVolunteer extends StatelessWidget {
         builder: (context, state) {
           print(state);
           if (state is VolunteerInfo) {
-            Volunteer volunteer = state.getInfo();
+            volunteer = state.getInfo();
+            print(volunteer!.bio);
             return Scaffold(
                 backgroundColor: Colors.transparent,
                 resizeToAvoidBottomInset: false,
                 appBar: getAppBarProfil(context),
                 body: SingleChildScrollView(
-                    child: affichageVolunteer(context, volunteer)));
+                    child: affichageVolunteer(context, state.volunteer)));
           } else {
             return Scaffold(body: Text("oui"));
           }
@@ -103,7 +100,7 @@ class LineProfil extends StatelessWidget {
             flex: 0,
             child: IconButton(
               onPressed: () async {
-                await AuthRepository().logout();
+                await AuthRepository().signOut();
               },
               icon: icon,
             ),
@@ -237,7 +234,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
         ),
         ElevatedButton(
             onPressed: () async {
-              await AuthRepository().logout();
+              await AuthRepository().signOut();
               BlocProvider.of<UserCubit>(context).disconnect();
               Navigator.push(
                 context,
@@ -255,6 +252,8 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
       ],
     ),
   );
+}  
+  /*
   return Column(
     children: [
       SizedBox(
@@ -401,49 +400,4 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
   }
 }
 
-class LineProfil extends StatelessWidget {
-  final String text;
-  final icon;
-
-  const LineProfil({super.key, required this.text, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-      content: Row(
-        children: [
-          Expanded(
-            flex: 0,
-            child: IconButton(
-              onPressed: () async {
-                await AuthRepository().signOut();
-              },
-              icon: icon,
-            ),
-          ),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-}
-
-class Bio extends StatelessWidget {
-  final String text;
-
-  Bio({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-        content: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text("Bio"),
-        SizedBox(height: 5),
-        Text(
-            "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. ")
-      ],
-    ));
-  }
-}
+*/

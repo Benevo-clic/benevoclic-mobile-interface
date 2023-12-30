@@ -51,7 +51,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
               rulesType: RulesType.USER_VOLUNTEER,
             ),
             Messages(),
-            ProfileView(title: RulesType.USER_VOLUNTEER)
+            ProfilPageVolunteer()
           ];
           return IndexedStack(
             index: currentPageIndex,

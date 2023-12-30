@@ -22,7 +22,7 @@ class ModifProfil extends StatelessWidget {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is VolunteerInfo) {
-              Volunteer volunteer = state.getInfo();
+              Volunteer volunteer = state.volunteer;
               return listview(context, volunteer);
             } else {
               return listview(
@@ -210,11 +210,11 @@ listview(BuildContext context, Volunteer volunteer) {
                 email: volunteer.email,
                 imageProfile: volunteer.imageProfile,
                 postalCode: volunteer.postalCode);
-
-            BlocProvider.of<VolunteerCubit>(context)
-                .updateVolunteer(volunteerUpdate);
             BlocProvider.of<VolunteerCubit>(context)
                 .volunteerState(volunteerUpdate);
+            BlocProvider.of<VolunteerCubit>(context)
+                .updateVolunteer(volunteerUpdate);
+
             Navigator.pop(context);
           } else {
             print("erreur");

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
@@ -103,7 +104,7 @@ class LineProfil extends StatelessWidget {
             flex: 0,
             child: IconButton(
               onPressed: () async {
-                await AuthRepository().logout();
+                await AuthRepository().signOut();
               },
               icon: icon,
             ),
@@ -229,7 +230,7 @@ affichageAssociation(BuildContext context, Association association) {
         ),
         ElevatedButton(
             onPressed: () async {
-              await AuthRepository().logout();
+              await AuthRepository().signOut();
               BlocProvider.of<UserCubit>(context).disconnect();
               Navigator.push(
                 context,

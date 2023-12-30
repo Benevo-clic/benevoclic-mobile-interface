@@ -68,8 +68,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: _getImageProvider(
-                            announcement.imageProfileAssociation),
+                        backgroundImage: _getImageProvider(announcement.image),
                       ),
                       SizedBox(
                         width: 10,
@@ -78,7 +77,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            announcement.nameAssociation ?? '',
+                            announcement.nameAssociation,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

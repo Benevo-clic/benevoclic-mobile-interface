@@ -20,15 +20,20 @@ class UserModel {
   @JsonKey(name: 'email')
   final String? email;
 
+  @JsonKey(name: 'isBanned')
+  final bool? isBanned;
+
   @JsonKey(name: 'isVerified')
   final bool isVerified;
 
-  UserModel(this.isVerified, {
+  UserModel({
     required this.id,
     required this.isActif,
     required this.isConnect,
     required this.rule,
     required this.email,
+    required this.isVerified,
+    this.isBanned,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

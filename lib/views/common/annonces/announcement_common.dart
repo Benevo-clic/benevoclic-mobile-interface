@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/repositories/api/favorites_repository.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
+import '../../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
+import '../../../repositories/api/favorites_repository.dart';
 import '../../../type/rules_type.dart';
 import '../../../widgets/app_bar_search.dart';
 
@@ -22,133 +23,180 @@ class AnnouncementCommon extends StatefulWidget {
 class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
-  bool isLoading = false;
+  FavoritesRepository _favoritesRepository = FavoritesRepository();
+
   String _idVolunteer = '';
-  bool isSelected = false;
-  FavoritesRepository favoritesRepository = FavoritesRepository();
 
   @override
   void initState() {
     super.initState();
+    _loadInitialData();
+  }
+
+  void _loadInitialData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _idVolunteer = prefs.getString('idVolunteer') ?? '';
     BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-    setState(() {
-      isLoading = false;
-    });
-    if (widget.rulesType == RulesType.USER_VOLUNTEER) {
-      _getIdVolunteer();
-      print(_idVolunteer);
+  }
+
+  void _toggleFavorite(Announcement announcement) async {
+    final isFavorite =
+        await _favoritesRepository.isFavorite(_idVolunteer, announcement.id!);
+    if (isFavorite) {
+      BlocProvider.of<FavoritesAnnouncementCubit>(context)
+          .removeFavoritesAnnouncement(_idVolunteer, announcement.id!);
+    } else {
+      BlocProvider.of<FavoritesAnnouncementCubit>(context)
+          .addFavoritesAnnouncement(_idVolunteer, announcement.id!);
     }
-  }
+    print('isFavorite: $isFavorite');
 
-  _isFavorite(String idVolunteer, String? idAnnouncement) {
-    setState(() async {
-      isSelected =
-          await favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
-    });
-  }
-
-  _getIdVolunteer() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    String idVolunteer = preferences.getString('idVolunteer')!;
     setState(() {
-      _idVolunteer = idVolunteer;
+      announcement.isFavorite = !isFavorite;
     });
+  }
+
+  Future<bool> _checkIfFavorite(
+      String idVolunteer, String? idAnnouncement) async {
+    return await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
+  }
+
+  Future<List<Announcement>> _loadAndProcessAnnouncements() async {
+    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+
+    await Future.delayed(Duration(milliseconds: 500));
+    final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
+    if (currentState is AnnouncementLoadedState) {
+      announcements = currentState.announcements;
+    }
+
+    return await _updateFavoriteStatus(announcements);
+  }
+
+  Future<List<Announcement>> _processAnnouncements() async {
+    // Attendre que l'état soit mis à jour
+    await Future.delayed(Duration(milliseconds: 500));
+    // Obtenir les annonces depuis l'état courant du Bloc
+    final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
+    List<Announcement> loadedAnnouncements = [];
+    if (currentState is AnnouncementLoadedState) {
+      loadedAnnouncements = currentState.announcements;
+    }
+    return await _updateFavoriteStatus(loadedAnnouncements);
+  }
+
+  Future<List<Announcement>> _updateFavoriteStatus(
+      List<Announcement> announcements) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String idVolunteer = prefs.getString('idVolunteer') ?? '';
+    final updatedAnnouncements =
+        await Future.wait(announcements.map((announcement) async {
+      final isFavorite = await _checkIfFavorite(idVolunteer, announcement.id);
+      return announcement.copyWith(isFavorite: isFavorite);
+    }));
+    announcements = updatedAnnouncements
+        .where((element) => element.isVisible ?? true)
+        .toList();
+    return announcements;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
-        listener: (context, state) async {
-      if (state is AnnouncementLoadedState) {
-        setState(() {
-          announcements = state.announcements
-              .where((element) => element.isVisible == true)
-              .toList();
-        });
-      }
-      if (state is AnnouncementLoadedStateWithoutAnnouncements) {
-        setState(() {
-          announcementsAssociation = state.announcements;
-        });
-      }
-
-      if (state is AnnouncementErrorState) {
-        SnackBar snackBar = SnackBar(
-          content: Text(state.message),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-      if (state is DeleteAnnouncementState) {
-        SnackBar snackBar = SnackBar(
-          content: Text('Annonce supprimée'),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.green,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        final SharedPreferences preferences =
-            await SharedPreferences.getInstance();
-        String idAssociation = preferences.getString('idAssociation')!;
-
-        BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-        BlocProvider.of<AnnouncementCubit>(context)
-            .getAllAnnouncementByAssociation(idAssociation);
-      }
-      if (state is FavoritesAnnouncementIsFavoriteState) {
-        setState(() {
-          isSelected = state.isFavorite!;
-        });
-      }
-
-      if (state is HideAnnouncementState) {
-        SnackBar snackBar = SnackBar(
-          content: Text('Annonce cachée'),
-          duration: Duration(seconds: 1),
-          backgroundColor: Colors.green,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        final SharedPreferences preferences =
-            await SharedPreferences.getInstance();
-        String idAssociation = preferences.getString('idAssociation')!;
-        BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-        BlocProvider.of<AnnouncementCubit>(context)
-            .getAllAnnouncementByAssociation(idAssociation);
-      }
-    }, builder: (context, state) {
-      return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height *
-              0.15), // Hauteur personnalisée
-          child: AppBarSearch(
-            contexts: context,
-            label: 'Annonces',
-          ),
-        ),
-        resizeToAvoidBottomInset: true,
-        body: Center(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-                int reversedIndex = announcementsAssociation.length - index - 1;
-                return ItemAnnouncementAssociation(
-                  announcement: announcementsAssociation[reversedIndex],
-                );
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
+        child: AppBarSearch(contexts: context, label: 'Annonces'),
+      ),
+      body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
+        listener: (context, state) {
+          if (state is AnnouncementLoadedState) {
+            setState(() {
+              announcements = state.announcements
+                  .where((element) => element.isVisible ?? true)
+                  .toList();
+            });
+          } else if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+            setState(() {
+              announcementsAssociation = state.announcements;
+            });
+          } else if (state is AnnouncementErrorState) {
+            _showSnackBar(context, state.message, Colors.red);
+          } else if (state is DeleteAnnouncementState) {
+            _showSnackBar(context, 'Annonce supprimée', Colors.green);
+            _reloadData();
+          } else if (state is HideAnnouncementState) {
+            _showSnackBar(context, 'Annonce cachée', Colors.green);
+            _reloadData();
+          }
+        },
+        builder: (context, state) {
+          if (state is AnnouncementLoadingState) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return FutureBuilder<List<Announcement>>(
+            future: _processAnnouncements(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                print('waiting');
+                return Center(child: CircularProgressIndicator());
               }
-              int reversedIndex = announcements.length - index - 1;
-              return ItemAnnouncementVolunteer(
-                announcement: announcements[reversedIndex],
-                isSelected: isSelected,
-                idVolunteer: _idVolunteer,
-              );
+              if (snapshot.hasError) {
+                return Center(
+                    child: Text('Erreur lors du chargement des annonces'));
+              }
+              if (!snapshot.hasData) {
+                return Center(child: Text('Aucune annonce disponible'));
+              }
+              final announcements = snapshot.data!;
+              return _buildAnnouncementsList(announcements);
             },
-            itemCount: widget.rulesType == RulesType.USER_ASSOCIATION
-                ? announcementsAssociation.length
-                : announcements.length,
-          ),
-        ),
-      );
-    });
+          );
+        },
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 2),
+      backgroundColor: color,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _reloadData() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String idAssociation = preferences.getString('idAssociation') ?? '';
+    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+    BlocProvider.of<AnnouncementCubit>(context)
+        .getAllAnnouncementByAssociation(idAssociation);
+  }
+
+  Widget _buildAnnouncementsList(List<Announcement> announcements) {
+    return Center(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+            int reversedIndex = announcementsAssociation.length - index - 1;
+            return ItemAnnouncementAssociation(
+                announcement: announcementsAssociation[reversedIndex]);
+          } else {
+            int reversedIndex = announcements.length - index - 1;
+            Announcement announcement = announcements[reversedIndex];
+            return ItemAnnouncementVolunteer(
+              announcement: announcement,
+              isSelected: announcement.isFavorite ?? false,
+              toggleFavorite: () => _toggleFavorite(announcement),
+            );
+          }
+        },
+        itemCount: widget.rulesType == RulesType.USER_ASSOCIATION
+            ? announcementsAssociation.length
+            : announcements.length,
+      ),
+    );
   }
 }
-

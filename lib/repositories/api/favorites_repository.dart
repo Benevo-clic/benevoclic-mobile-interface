@@ -168,7 +168,6 @@ class FavoritesRepository {
         'idVolunteer': idVolunteer,
         'idAnnouncement': idAnnouncement,
       };
-      print("response deleteFavoritesAnnouncement");
 
       var response = await _dio.put(
         'http://${globals.url}/api/v1/favoritesAnnouncement/deleteFavoritesAnnouncement',
@@ -176,7 +175,6 @@ class FavoritesRepository {
       );
 
       if (response.statusCode == 200) {
-        print("response deleteFavoritesAnnouncement");
         return;
       } else {
         throw Exception(

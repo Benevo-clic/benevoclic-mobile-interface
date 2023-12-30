@@ -49,7 +49,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       BlocProvider.of<FavoritesAnnouncementCubit>(context)
           .addFavoritesAnnouncement(_idVolunteer, announcement.id!);
     }
-    print('isFavorite: $isFavorite');
 
     setState(() {
       announcement.isFavorite = !isFavorite;
@@ -74,9 +73,7 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   }
 
   Future<List<Announcement>> _processAnnouncements() async {
-    // Attendre que l'état soit mis à jour
     await Future.delayed(Duration(milliseconds: 500));
-    // Obtenir les annonces depuis l'état courant du Bloc
     final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
     List<Announcement> loadedAnnouncements = [];
     if (currentState is AnnouncementLoadedState) {
@@ -111,6 +108,8 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
           if (state is AnnouncementLoadedState) {
+            print('AnnouncementLoadedStateWithoutAnnouncements');
+
             setState(() {
               announcements = state.announcements
                   .where((element) => element.isVisible ?? true)
@@ -126,7 +125,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
             _showSnackBar(context, 'Annonce supprimée', Colors.green);
             _reloadData();
           } else if (state is HideAnnouncementState) {
-            _showSnackBar(context, 'Annonce cachée', Colors.green);
+            if (state.isVisible == true)
+              _showSnackBar(context, 'Annonce affichée', Colors.green);
+            else
+              _showSnackBar(context, 'Annonce cachée', Colors.green);
             _reloadData();
           }
         },
@@ -138,7 +140,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
             future: _processAnnouncements(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                print('waiting');
                 return Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
@@ -173,6 +174,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
     BlocProvider.of<AnnouncementCubit>(context)
         .getAllAnnouncementByAssociation(idAssociation);
+  }
+
+  Future<void> _reloadDataVolunteer() async {
+    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
   }
 
   Widget _buildAnnouncementsList(List<Announcement> announcements) {

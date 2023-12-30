@@ -64,8 +64,11 @@ class Announcement {
   @JsonKey(name: 'volunteersWaiting')
   final List<ResponseModel>? volunteersWaiting;
 
+  bool? isFavorite;
+
   Announcement(
       {this.id,
+      this.isFavorite,
       required this.idAssociation,
       required this.dateEvent,
       required this.datePublication,
@@ -89,4 +92,48 @@ class Announcement {
       _$AnnouncementFromJson(json);
 
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
+
+  Announcement copyWith({
+    String? id,
+    String? idAssociation,
+    String? dateEvent,
+    String? datePublication,
+    String? description,
+    bool? full,
+    String? image,
+    LocationModel? location,
+    bool? isVisible,
+    String? nameAssociation,
+    String? labelEvent,
+    int? nbHours,
+    int? nbPlaces,
+    int? nbPlacesTaken,
+    List<String>? tags,
+    String? type,
+    List<ResponseModel>? volunteers,
+    List<ResponseModel>? volunteersWaiting,
+    bool? isFavorite,
+  }) {
+    return Announcement(
+      id: id ?? this.id,
+      idAssociation: idAssociation ?? this.idAssociation,
+      dateEvent: dateEvent ?? this.dateEvent,
+      datePublication: datePublication ?? this.datePublication,
+      description: description ?? this.description,
+      full: full ?? this.full,
+      image: image ?? this.image,
+      location: location ?? this.location,
+      isVisible: isVisible ?? this.isVisible,
+      nameAssociation: nameAssociation ?? this.nameAssociation,
+      labelEvent: labelEvent ?? this.labelEvent,
+      nbHours: nbHours ?? this.nbHours,
+      nbPlaces: nbPlaces ?? this.nbPlaces,
+      nbPlacesTaken: nbPlacesTaken ?? this.nbPlacesTaken,
+      tags: tags ?? this.tags,
+      type: type ?? this.type,
+      volunteers: volunteers ?? this.volunteers,
+      volunteersWaiting: volunteersWaiting ?? this.volunteersWaiting,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

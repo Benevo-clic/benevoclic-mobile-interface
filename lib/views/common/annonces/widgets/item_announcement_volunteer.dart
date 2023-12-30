@@ -1,40 +1,39 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/util/manage_date.dart';
 
-import '../../../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../../../models/announcement_model.dart';
 
-class ItemAnnouncementVolunteer extends StatefulWidget {
+class ItemAnnouncementVolunteer extends StatelessWidget {
   final Announcement announcement;
-  bool isSelected;
-  String? idVolunteer;
+  bool? isSelected;
+  VoidCallback? toggleFavorite;
 
   ItemAnnouncementVolunteer({super.key,
     required this.announcement,
-    required this.isSelected,
-    this.idVolunteer});
+      this.isSelected,
+      this.toggleFavorite});
 
-  @override
-  State<ItemAnnouncementVolunteer> createState() =>
-      _ItemAnnouncementVolunteerState();
-}
-
-class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
-  String imageProfileAssociation = '';
-
-  @override
-  void initState() {
-    super.initState();
-    imageProfileAssociation = widget.announcement.imageProfileAssociation!;
+  ImageProvider _getImageProvider(String? imageString) {
+    print('imageString: $imageString');
+    if (imageString == null) {
+      return AssetImage('assets/logo.png');
+    }
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString));
+    } else {
+      return NetworkImage(imageString);
+    }
   }
 
-  void _isLiked() {
-    setState(() {
-      widget.isSelected = !widget.isSelected;
-    });
+  bool isBase64(String str) {
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -69,9 +68,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage:
-                            Image.memory(base64.decode(imageProfileAssociation))
-                                .image,
+                        backgroundImage: _getImageProvider(
+                            announcement.imageProfileAssociation),
                       ),
                       SizedBox(
                         width: 10,
@@ -80,7 +78,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.announcement.nameAssociation ?? '',
+                            announcement.nameAssociation ?? '',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -88,7 +86,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           ),
                           Text(
                             ManageDate.describeRelativeDateTime(
-                                widget.announcement.datePublication),
+                                announcement.datePublication),
                             style: TextStyle(
                               fontSize: 12,
                             ),
@@ -98,23 +96,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     ],
                   ),
                   IconButton(
-                    onPressed: () =>
-                    {
-                      if (widget.isSelected)
-                        {
-                          BlocProvider.of<FavoritesAnnouncementCubit>(context)
-                              .removeFavoritesAnnouncement(
-                              widget.idVolunteer, widget.announcement.id!),
-                        }
-                      else
-                        {
-                          BlocProvider.of<FavoritesAnnouncementCubit>(context)
-                              .addFavoritesAnnouncement(
-                              widget.idVolunteer, widget.announcement.id!),
-                        },
-                      _isLiked(),
-                    },
-                    icon: widget.isSelected
+                    onPressed: toggleFavorite,
+                    icon: isSelected!
                         ? Icon(
                       Icons.favorite,
                       color: Colors.red,
@@ -143,7 +126,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: widget.announcement.location.address,
+                        text: announcement.location.address,
                         size: 11,
                       ),
                     ],
@@ -157,7 +140,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: widget.announcement.dateEvent,
+                        text: announcement.dateEvent,
                         size: 11,
                       ),
                     ],
@@ -171,7 +154,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: '${widget.announcement.nbHours} heures',
+                        text: '${announcement.nbHours} heures',
                         size: 11,
                       ),
                       InformationAnnonce(
@@ -181,14 +164,14 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           size: 16,
                         ),
                         text:
-                            '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
+                            '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
                       ),
                     ],
                   ),
                 ],
               ),
               Text(
-                widget.announcement.labelEvent,
+                announcement.labelEvent,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -200,7 +183,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                 indent: width * .06,
               ),
               Text(
-                widget.announcement.description,
+                announcement.description,
                 style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.ellipsis,

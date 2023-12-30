@@ -60,7 +60,6 @@ class UserRepository {
 
     try {
       String? token = await _tokenService.getToken();
-      print(token);
 
       Response result = await Dio().post(
         "http://${globals.url}/api/v1/users/connect",

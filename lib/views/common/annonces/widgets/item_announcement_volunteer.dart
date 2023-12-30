@@ -16,7 +16,6 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
       this.toggleFavorite});
 
   ImageProvider _getImageProvider(String? imageString) {
-    print('imageString: $imageString');
     if (imageString == null) {
       return AssetImage('assets/logo.png');
     }

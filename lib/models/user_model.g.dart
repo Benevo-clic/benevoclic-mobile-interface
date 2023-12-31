@@ -7,12 +7,13 @@ part of 'user_model.dart';
 // **************************************************************************
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
-      json['isVerified'] as bool,
       id: json['id'] as String,
       isActif: json['isActif'] as bool,
       isConnect: json['isConnect'] as bool,
       rule: RuleModel.fromJson(json['rule'] as Map<String, dynamic>),
       email: json['email'] as String?,
+      isVerified: json['isVerified'] as bool,
+      isBanned: json['isBanned'] as bool?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -21,5 +22,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'isConnect': instance.isConnect,
       'rule': instance.rule,
       'email': instance.email,
+      'isBanned': instance.isBanned,
       'isVerified': instance.isVerified,
     };

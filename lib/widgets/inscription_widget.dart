@@ -99,7 +99,7 @@ class InscriptionWidget extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                /*Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => OtherConnection(
@@ -107,7 +107,7 @@ class InscriptionWidget extends StatelessWidget {
                                       rulesType: rulesType,
                                     ),
                                   ),
-                                );*/
+                                );
                               });
                             },
                             style: ElevatedButton.styleFrom(
@@ -138,13 +138,13 @@ class InscriptionWidget extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                /*Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => OtherConnection(
                                         context: context, rulesType: rulesType),
                                   ),
-                                );*/
+                                );
                               });
                             },
                             style: ElevatedButton.styleFrom(

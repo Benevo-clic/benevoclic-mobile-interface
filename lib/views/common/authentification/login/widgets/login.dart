@@ -4,12 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/authentification/login/statefullwIdgets/formulaire_connexion.dart';
+import 'package:namer_app/views/common/authentification/login/statefullwIdgets/other_connexion.dart';
 
 import '../../../../../widgets/auth_app_bar.dart';
 import '../../../../associtions/signup/signup_association.dart';
 import '../../../../volunteers/signup/widgets/signup_volunteer.dart';
-import '../statefullwIdgets/formulaire_connexion.dart';
-import '../statefullwIdgets/other_connexion.dart';
 
 class LoginPage extends StatelessWidget {
   final RulesType title;
@@ -111,7 +111,7 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  /*Navigator.push(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
@@ -119,7 +119,7 @@ class LoginPage extends StatelessWidget {
                                         rulesType: title,
                                       ),
                                     ),
-                                  );*/
+                                  );
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -151,13 +151,13 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  /*Navigator.push(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => OtherConnection(
                                           context: context, rulesType: title),
                                     ),
-                                  );*/
+                                  );
                                 });
                               },
                               style: ElevatedButton.styleFrom(

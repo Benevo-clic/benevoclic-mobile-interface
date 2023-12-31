@@ -1,4 +1,4 @@
-/*import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +50,7 @@ class _OtherConnectionState extends State<OtherConnection> {
       } else if (userModel) {
         UserModel user = await UserRepository().getUserByEmail(_email!);
         if (user.isActif && user.rule.rulesType == widget.rulesType) {
-          BlocProvider.of<UserCubit>(context).connexion();
+          BlocProvider.of<UserCubit>(context).connexion(user);
           SnackBar snackBar = SnackBar(
             content: Text("Connexion réussi"),
             backgroundColor: Colors.green,
@@ -151,4 +151,3 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
 }
 
 authFacebook() async {}
-*/

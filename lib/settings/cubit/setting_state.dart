@@ -1,22 +1,21 @@
-
-
-
 import 'package:flutter/material.dart';
 
-class SettingState{
+class SettingState {
   final ThemeData themeData;
   SettingState({required this.themeData});
 }
 
 class SettingInitialState extends SettingState {
-  SettingInitialState({required ThemeData themeData}) : super(themeData: themeData);
+  SettingInitialState({required ThemeData themeData})
+      : super(themeData: themeData);
 }
 
 class SettingDarkState extends SettingState {
-  SettingDarkState({required ThemeData themeData}) : super(themeData: themeData);
+  SettingDarkState({required ThemeData themeData})
+      : super(themeData: themeData);
 }
 
 class SettingLightState extends SettingState {
-  SettingLightState({required ThemeData themeData}) : super(themeData: themeData);
+  SettingLightState({required ThemeData themeData})
+      : super(themeData: themeData);
 }
-

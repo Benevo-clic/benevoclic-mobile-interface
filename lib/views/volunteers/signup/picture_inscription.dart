@@ -323,4 +323,3 @@ class _PictureInscriptionState extends State<PictureInscription> {
     );
   }
 }
-

@@ -21,8 +21,8 @@ Volunteer side:
 # Installation
 
 Need to have following configurations:
-- Dart  3.2 >
-- Flutter
+- Dart  3.2 >=
+- Flutter Flutter 3.16.4
 - Firebase
 
 # Exectue project
@@ -32,17 +32,3 @@ Execute the following command to start project :
 
 Then 
 - Flutter run  (execute the project)
-
-# Ressources
-## anonymous authentification with firebase
-
-Vidéo qui montre comment se passe l'authentification avec firebase
-  https://www.youtube.com/watch?v=gV8qlGkaZVE&t=662s
-
-
-## Gmail authentification :
-
-Commande pour entrer code encryptage nécessaire pour utiliser l'authentification gmail 
-  https://stackoverflow.com/questions/54557479/flutter-and-google-sign-in-plugin-platformexceptionsign-in-failed-com-google
-Video montrant pas à pas l'authentification gmail:  
-  https://www.youtube.com/watch?v=VCrXSFqdsoA

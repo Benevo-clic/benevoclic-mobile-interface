@@ -50,7 +50,7 @@ class _OtherConnectionState extends State<OtherConnection> {
       } else if (userModel) {
         UserModel user = await UserRepository().getUserByEmail(_email!);
         if (user.isActif && user.rule.rulesType == widget.rulesType) {
-          BlocProvider.of<UserCubit>(context).connexion();
+          BlocProvider.of<UserCubit>(context).connexion(user);
           SnackBar snackBar = SnackBar(
             content: Text("Connexion réussi"),
             backgroundColor: Colors.green,

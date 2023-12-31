@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 import '../../models/volunteer_model.dart';
 
 @immutable
-abstract class VolunteerState extends Equatable {
+abstract class VolunteerState {
+  Volunteer? volunteer;
+
+  getVolunteer() {
+    return volunteer;
+  }
+
   @override
   List<Object?> get props => [];
 }
@@ -44,7 +50,6 @@ class VolunteerPictureState extends VolunteerState {
   List<Object?> get props => [imageProfile];
 }
 
-
 class VolunteerInfoState extends VolunteerState {
   final String lastName;
   final String firstName;
@@ -77,6 +82,17 @@ class VolunteerInfoState extends VolunteerState {
         city,
         postalCode,
       ];
+}
+
+class VolunteerInfo extends VolunteerState {
+  final Volunteer volunteer;
+
+  VolunteerInfo({required this.volunteer});
+
+  
+  getInfo() {
+    return this.volunteer;
+  }
 }
 
 class VolunteerUpdateState extends VolunteerState {

@@ -4,11 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
-import 'package:namer_app/widgets/build_navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
+import '../../widgets/build_navbar.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import '../common/profiles/profil.dart';

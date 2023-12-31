@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/repositories/api/Announcement_repository.dart';
+import 'package:namer_app/repositories/api/announcement_repository.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
+import 'package:namer_app/repositories/api/favorites_repository.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/repositories/api/volunteer_repository.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
@@ -34,7 +36,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(
+        BlocProvider(
+            create: (context) => FavoritesAnnouncementCubit(
+                  favoritesRepository: FavoritesRepository(),
+                )),
+        BlocProvider(
               create: (context) => UserCubit(
                   userRepository: UserRepository(),
             authRepository: AuthRepository(),
@@ -43,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AnnouncementCubit(
             announcementRepository: AnnouncementRepository(),
+            favoritesRepository: FavoritesRepository(),
           ),
         ),
         BlocProvider(create: (context) => SettingCubit()),

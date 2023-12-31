@@ -57,9 +57,6 @@ class _OtherConnectionState extends State<OtherConnection> {
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           _navigateToNextPage(context, widget.rulesType, user.id);
-        } else if (!user.isActif) {
-          final cubit = context.read<UserCubit>();
-          cubit.createUserOtherConnexion(widget.rulesType);
         } else if (user.isActif && user.rule.rulesType != widget.rulesType) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -69,6 +66,14 @@ class _OtherConnectionState extends State<OtherConnection> {
           );
           await AuthRepository().signOut();
           Navigator.pop(context);
+        }
+        if (!user.isActif &&
+            !user.isConnect &&
+            !user.isVerified &&
+            !user.isConnect &&
+            user.rule.rulesType == widget.rulesType) {
+          BlocProvider.of<UserCubit>(context)
+              .changeState(UserCreatedState(statusCode: "200"));
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -86,7 +91,8 @@ class _OtherConnectionState extends State<OtherConnection> {
         if (state is UserRegisterErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Erreur lors de l'inscription"),
+              content: Text(
+                  "Erreur lors de l'inscription, ou compte existant mais pas actif, continuer votre inscription"),
             ),
           );
           await AuthRepository().signOut();

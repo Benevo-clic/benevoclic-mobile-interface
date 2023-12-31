@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../models/association_model.dart';
+import '../../util/globals.dart';
 import '../../util/token_service.dart';
 
 class AssociationRepository {
-  final String url = "37.187.38.160:8080";
   final TokenService _tokenService = TokenService();
 
   Future<Association> createAssociation(Association association) async {

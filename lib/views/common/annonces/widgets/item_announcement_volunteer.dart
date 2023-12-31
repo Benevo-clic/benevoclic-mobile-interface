@@ -5,27 +5,35 @@ import 'package:namer_app/util/manage_date.dart';
 
 import '../../../../models/announcement_model.dart';
 
-class ItemAnnouncementVolunteer extends StatefulWidget {
+class ItemAnnouncementVolunteer extends StatelessWidget {
   final Announcement announcement;
-  final bool isSelected;
+  bool? isSelected;
+  VoidCallback? toggleFavorite;
 
-  ItemAnnouncementVolunteer(
-      {super.key, required this.announcement, required this.isSelected});
+  ItemAnnouncementVolunteer({super.key,
+    required this.announcement,
+      this.isSelected,
+      this.toggleFavorite});
 
-  @override
-  State<ItemAnnouncementVolunteer> createState() =>
-      _ItemAnnouncementVolunteerState();
-}
-
-class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
-  String imageProfileAssociation = '';
-
-  @override
-  void initState() {
-    super.initState();
-    imageProfileAssociation = widget.announcement.imageProfileAssociation;
+  ImageProvider _getImageProvider(String? imageString) {
+    if (imageString == null) {
+      return AssetImage('assets/logo.png');
+    }
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString));
+    } else {
+      return NetworkImage(imageString);
+    }
   }
 
+  bool isBase64(String str) {
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +67,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage:
-                            Image.memory(base64.decode(imageProfileAssociation))
-                                .image,
+                        backgroundImage: _getImageProvider(announcement.image),
                       ),
                       SizedBox(
                         width: 10,
@@ -70,8 +76,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.announcement.nameAssociation ??
-                                'Association',
+                            announcement.nameAssociation,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -79,7 +84,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           ),
                           Text(
                             ManageDate.describeRelativeDateTime(
-                                widget.announcement.datePublication),
+                                announcement.datePublication),
                             style: TextStyle(
                               fontSize: 12,
                             ),
@@ -89,8 +94,13 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                     ],
                   ),
                   IconButton(
-                    onPressed: () => print('favoris'),
-                    icon: Icon(
+                    onPressed: toggleFavorite,
+                    icon: isSelected!
+                        ? Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                        : Icon(
                       Icons.favorite_border,
                       color: Colors.red,
                     ),
@@ -114,7 +124,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: widget.announcement.location.address,
+                        text: announcement.location.address,
                         size: 11,
                       ),
                     ],
@@ -128,7 +138,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: widget.announcement.dateEvent,
+                        text: announcement.dateEvent,
                         size: 11,
                       ),
                     ],
@@ -142,7 +152,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        text: '${widget.announcement.nbHours} heures',
+                        text: '${announcement.nbHours} heures',
                         size: 11,
                       ),
                       InformationAnnonce(
@@ -152,14 +162,14 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                           size: 16,
                         ),
                         text:
-                            '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
+                            '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
                       ),
                     ],
                   ),
                 ],
               ),
               Text(
-                widget.announcement.labelEvent,
+                announcement.labelEvent,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -171,7 +181,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                 indent: width * .06,
               ),
               Text(
-                widget.announcement.description,
+                announcement.description,
                 style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.ellipsis,

@@ -12,14 +12,33 @@ class ItemAnnouncementAssociation extends StatelessWidget {
   final Announcement announcement;
 
   ItemAnnouncementAssociation({super.key, required this.announcement});
-  late String imageProfileAssociation;
+
   late bool isVisible;
   late bool full;
+
+  ImageProvider _getImageProvider(String? imageString) {
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString!));
+    } else {
+      return NetworkImage(imageString!);
+    }
+  }
+
+  bool isBase64(String? str) {
+    if (str == null) return false;
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    imageProfileAssociation = announcement.imageProfileAssociation;
+    String? imageProfileAssociation = announcement.imageProfileAssociation ??
+        'https://via.placeholder.com/150';
 
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -53,9 +72,8 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundImage: Image.memory(
-                                  base64.decode(imageProfileAssociation))
-                              .image,
+                          backgroundImage:
+                              _getImageProvider(imageProfileAssociation),
                         ),
                         SizedBox(
                           width: 10,
@@ -103,7 +121,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        InformationAnnonce(
+                        InformationAnnouncement(
                           icon: Icon(
                             Icons.location_on,
                             color: Colors.black,
@@ -117,7 +135,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        InformationAnnonce(
+                        InformationAnnouncement(
                           icon: Icon(
                             Icons.calendar_month,
                             color: Colors.black,
@@ -131,7 +149,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InformationAnnonce(
+                        InformationAnnouncement(
                           icon: Icon(
                             Icons.access_time,
                             color: Colors.black,
@@ -140,7 +158,7 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                           text: '${announcement.nbHours} heures',
                           size: 11,
                         ),
-                        InformationAnnonce(
+                        InformationAnnouncement(
                           icon: Icon(
                             Icons.person,
                             color: Colors.black,
@@ -279,12 +297,12 @@ class ItemAnnouncementAssociation extends StatelessWidget {
   }
 }
 
-class InformationAnnonce extends StatelessWidget {
+class InformationAnnouncement extends StatelessWidget {
   final Icon icon;
   final String text;
   double? size;
 
-  InformationAnnonce({required this.icon, required this.text, this.size});
+  InformationAnnouncement({required this.icon, required this.text, this.size});
 
   @override
   Widget build(BuildContext context) {

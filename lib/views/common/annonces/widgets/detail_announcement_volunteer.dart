@@ -1,28 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/announcement_model.dart';
 
-import '../../../../models/location_model.dart';
 import '../../../../widgets/information_announcement.dart';
 
 class DetailAnnouncementVolunteer extends StatelessWidget {
-  Announcement announcement = Announcement(
-      idAssociation: "id",
-      dateEvent: "12/12/2021 12:00",
-      datePublication: "datePublication",
-      description:
-          "dans ccompagnement de mineurs isolés étrangers, la mise à l'abri de femmes seules ou avec enfants afin qu'elles ne dorment pas dehors la nuit. De plus, "
-          "il propose une friperie : La boutique solidaire .dans ccompagnement de mineurs isolés étrangers, la mise à l'abri de femmes "
-          "seules ou avec enfants afin qu'elles ",
-      location: LocationModel(address: "address", latitude: 0, longitude: 0),
-      nameAssociation: "nameAssociation",
-      labelEvent: "Distribution alimentaire",
-      image: "image",
-      imageProfileAssociation: "imageProfileAssociation",
-      nbHours: 2,
-      nbPlaces: 2,
-      nbPlacesTaken: 2,
-      type: "type");
+  Announcement announcement;
+  int? nbAnnouncementsAssociation;
+
+  DetailAnnouncementVolunteer(
+      {super.key, required this.announcement, this.nbAnnouncementsAssociation});
+
+  ImageProvider _getImageProvider(String? imageString) {
+    if (imageString == null) {
+      return AssetImage('assets/logo.png');
+    }
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString));
+    } else {
+      return NetworkImage(imageString);
+    }
+  }
+
+  bool isBase64(String str) {
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +79,8 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
           ),
           infoAsso(context),
           infoAddress(context),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -221,7 +231,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                       color: Colors.black,
                     ),
                     label: Text(
-                      "3 rue de la paix, 75000 Paris",
+                      announcement.location.address!,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -287,7 +297,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "38 annonces",
+                        "$nbAnnouncementsAssociation annonces",
                         style: TextStyle(
                           fontSize: 12,
                         ),
@@ -330,6 +340,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -352,8 +363,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            "Dans l'accompagnement de mineurs isolés étrangers, la mise à l'abri de femmes seules ou avec enfants afin qu'elles ne dorment pas dehors la nuit. De plus, "
-            "il propose une friperie ...",
+            announcement.description!,
             style: TextStyle(fontSize: 10),
           ),
           SizedBox(height: 10),

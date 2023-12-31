@@ -168,7 +168,8 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           if (widget.rulesType == RulesType.USER_ASSOCIATION) {
             int reversedIndex = announcementsAssociation.length - index - 1;
             return ItemAnnouncementAssociation(
-                announcement: announcementsAssociation[reversedIndex]);
+                announcement: announcementsAssociation[reversedIndex],
+                nbAnnouncementsAssociation: announcementsAssociation.length);
           } else {
             int reversedIndex = announcements.length - index - 1;
             Announcement announcement = announcements[reversedIndex];
@@ -176,7 +177,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
               announcement: announcement,
               isSelected: announcement.isFavorite ?? false,
               toggleFavorite: () => _toggleFavorite(announcement),
-            );
+                nbAnnouncementsAssociation: announcements
+                    .where((element) =>
+                        element.idAssociation == announcement.idAssociation)
+                    .length);
           }
         },
         itemCount: widget.rulesType == RulesType.USER_ASSOCIATION

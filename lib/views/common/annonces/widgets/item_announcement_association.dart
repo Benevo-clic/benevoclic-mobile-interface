@@ -12,8 +12,10 @@ import '../../../../widgets/information_announcement.dart';
 
 class ItemAnnouncementAssociation extends StatelessWidget {
   final Announcement announcement;
+  int? nbAnnouncementsAssociation;
 
-  ItemAnnouncementAssociation({super.key, required this.announcement});
+  ItemAnnouncementAssociation(
+      {super.key, required this.announcement, this.nbAnnouncementsAssociation});
 
   late bool isVisible;
   late bool full;
@@ -47,7 +49,9 @@ class ItemAnnouncementAssociation extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailAnnouncementAssociation(),
+            builder: (context) =>
+                DetailAnnouncementAssociation(announcement: announcement,
+                    nbAnnouncementsAssociation: nbAnnouncementsAssociation!),
           ),
         );
       },

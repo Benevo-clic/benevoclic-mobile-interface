@@ -11,11 +11,13 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
   final Announcement announcement;
   bool? isSelected;
   VoidCallback? toggleFavorite;
+  int? nbAnnouncementsAssociation;
 
   ItemAnnouncementVolunteer({super.key,
     required this.announcement,
       this.isSelected,
-      this.toggleFavorite});
+      this.toggleFavorite,
+      this.nbAnnouncementsAssociation});
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -46,7 +48,10 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailAnnouncementVolunteer(),
+            builder: (context) => DetailAnnouncementVolunteer(
+              announcement: announcement,
+              nbAnnouncementsAssociation: nbAnnouncementsAssociation,
+            ),
           ),
         );
       },

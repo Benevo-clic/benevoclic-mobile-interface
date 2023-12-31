@@ -14,8 +14,10 @@ import '../../../widgets/app_bar_search.dart';
 
 class AnnouncementCommon extends StatefulWidget {
   final RulesType rulesType;
+  final String? idVolunteer;
 
-  const AnnouncementCommon({super.key, required this.rulesType});
+  const AnnouncementCommon(
+      {super.key, required this.rulesType, this.idVolunteer});
   @override
   State<AnnouncementCommon> createState() => _AnnouncementCommonState();
 }
@@ -25,29 +27,21 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcementsAssociation = [];
   FavoritesRepository _favoritesRepository = FavoritesRepository();
 
-  String _idVolunteer = '';
 
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
-  }
-
-  void _loadInitialData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _idVolunteer = prefs.getString('idVolunteer') ?? '';
-    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
   }
 
   void _toggleFavorite(Announcement announcement) async {
-    final isFavorite =
-        await _favoritesRepository.isFavorite(_idVolunteer, announcement.id!);
+    final isFavorite = await _favoritesRepository.isFavorite(
+        widget.idVolunteer, announcement.id!);
     if (isFavorite) {
       BlocProvider.of<FavoritesAnnouncementCubit>(context)
-          .removeFavoritesAnnouncement(_idVolunteer, announcement.id!);
+          .removeFavoritesAnnouncement(widget.idVolunteer, announcement.id!);
     } else {
       BlocProvider.of<FavoritesAnnouncementCubit>(context)
-          .addFavoritesAnnouncement(_idVolunteer, announcement.id!);
+          .addFavoritesAnnouncement(widget.idVolunteer, announcement.id!);
     }
 
     setState(() {
@@ -60,17 +54,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     return await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
   }
 
-  Future<List<Announcement>> _loadAndProcessAnnouncements() async {
-    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-
-    await Future.delayed(Duration(milliseconds: 500));
-    final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
-    if (currentState is AnnouncementLoadedState) {
-      announcements = currentState.announcements;
-    }
-
-    return await _updateFavoriteStatus(announcements);
-  }
 
   Future<List<Announcement>> _processAnnouncements() async {
     await Future.delayed(Duration(milliseconds: 500));
@@ -108,8 +91,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
           if (state is AnnouncementLoadedState) {
-            print('AnnouncementLoadedStateWithoutAnnouncements');
-
             setState(() {
               announcements = state.announcements
                   .where((element) => element.isVisible ?? true)

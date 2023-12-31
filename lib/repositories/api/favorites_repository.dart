@@ -54,13 +54,16 @@ class FavoritesRepository {
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
-        'idVolunteer': idVolunteer,
+        'id': idVolunteer,
       };
 
       var response = await _dio.get(
-        'http://${globals.url}/api/v1/favoritesAnnouncement/favoritesAnnouncementByVolunteerId',
+        'http://${globals
+            .url}/api/v1/favoritesAnnouncement/favoritesAnnouncementById',
         options: Options(headers: headers),
       );
+
+      print(response.data);
 
       if (response.statusCode == 200) {
         return Favorites.fromJson(response.data);
@@ -76,6 +79,7 @@ class FavoritesRepository {
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
       }
+
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
       throw Exception(e);
@@ -119,7 +123,7 @@ class FavoritesRepository {
     }
   }
 
-  Future<bool> isFavorite(String idVolunteer, String idAnnouncement) async {
+  Future<bool> isFavorite(String? idVolunteer, String idAnnouncement) async {
     await _tokenService.refreshTokenIfNeeded();
 
     try {

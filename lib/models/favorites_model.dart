@@ -6,8 +6,6 @@ part 'favorites_model.g.dart';
 
 @JsonSerializable()
 class Favorites {
-  @JsonKey(name: 'id')
-  final String? id;
 
   @JsonKey(name: 'idVolunteer')
   final String idVolunteer;
@@ -16,7 +14,6 @@ class Favorites {
   final List<AnnouncementItem> announcementFavorites;
 
   Favorites({
-    this.id,
     required this.idVolunteer,
     required this.announcementFavorites,
   });

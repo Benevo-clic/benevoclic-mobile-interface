@@ -93,6 +93,7 @@ class FavoritesAnnouncementCubit extends Cubit<FavoritesAnnouncementState> {
       emit(FavoritesAnnouncementLoadedState(
           favoritesAnnouncement: favoritesAnnouncement));
     } catch (e) {
+      print(e.toString());
       emit(FavoritesAnnouncementErrorState(message: e.toString()));
     }
   }

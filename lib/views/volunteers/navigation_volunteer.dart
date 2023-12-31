@@ -76,9 +76,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
                 idVolunteer: _idVolunteer!,
               ),
               Messages(),
-              ProfileView(
-                title: RulesType.USER_VOLUNTEER,
-              )
+              ProfileView(title: RulesType.USER_VOLUNTEER)
             ],
           );
         },

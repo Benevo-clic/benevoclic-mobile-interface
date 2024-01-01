@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
-import 'package:namer_app/repositories/api/announcement_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
@@ -27,8 +26,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   List<String?> idAnnouncements = [];
 
   FavoritesRepository _favoritesRepository = FavoritesRepository();
-  AnnouncementRepository _announcementRepository = AnnouncementRepository();
-
   @override
   void initState() {
     super.initState();
@@ -55,8 +52,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
-    List<Announcement> announcements =
-        await _announcementRepository.getAnnouncements();
 
     return loadedAnnouncements
         .where((element) => element.isVisible ?? true)
@@ -78,10 +73,22 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
               .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
           return Center(child: CircularProgressIndicator());
         }
+        if (state is FavoritesAnnouncementAddingState) {
+          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+              .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (state is FavoritesAnnouncementRemovingState) {
+          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+              .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
+          return Center(child: CircularProgressIndicator());
+        }
 
         if (state is FavoritesAnnouncementLoadedState) {
           idAnnouncements = state.favoritesAnnouncement.announcementFavorites
               .map((e) => e.id)
+              .where((element) => element != null)
               .toList();
         }
         return Scaffold(
@@ -118,7 +125,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
 
   Widget _buildAnnouncementsList(
       List<Announcement> filteredAnnouncements, Function _toggleFavorite) {
-    print(filteredAnnouncements.length);
     return ListView.builder(
       itemCount: filteredAnnouncements.length,
       itemBuilder: (context, index) {

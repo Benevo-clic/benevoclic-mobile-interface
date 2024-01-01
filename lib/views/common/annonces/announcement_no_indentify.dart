@@ -1,59 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
 import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
-import '../../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../../repositories/api/favorites_repository.dart';
-import '../../../type/rules_type.dart';
 import '../../../widgets/app_bar_search.dart';
 
-class AnnouncementCommon extends StatefulWidget {
-  final RulesType rulesType;
-  final String? idVolunteer;
+class AnnouncementNoIndentify extends StatefulWidget {
+  const AnnouncementNoIndentify();
 
-  const AnnouncementCommon(
-      {super.key, required this.rulesType, this.idVolunteer});
   @override
-  State<AnnouncementCommon> createState() => _AnnouncementCommonState();
+  State<AnnouncementNoIndentify> createState() =>
+      _AnnouncementNoIndentifyState();
 }
 
-class _AnnouncementCommonState extends State<AnnouncementCommon> {
+class _AnnouncementNoIndentifyState extends State<AnnouncementNoIndentify> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
   FavoritesRepository _favoritesRepository = FavoritesRepository();
-
 
   @override
   void initState() {
     super.initState();
   }
-
-  void _toggleFavorite(Announcement announcement) async {
-    final isFavorite = await _favoritesRepository.isFavorite(
-        widget.idVolunteer, announcement.id!);
-    if (isFavorite) {
-      BlocProvider.of<FavoritesAnnouncementCubit>(context)
-          .removeFavoritesAnnouncement(widget.idVolunteer, announcement.id!);
-    } else {
-      BlocProvider.of<FavoritesAnnouncementCubit>(context)
-          .addFavoritesAnnouncement(widget.idVolunteer, announcement.id!);
-    }
-
-    setState(() {
-      announcement.isFavorite = !isFavorite;
-    });
-  }
-
-  Future<bool> _checkIfFavorite(
-      String idVolunteer, String? idAnnouncement) async {
-    return await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
-  }
-
 
   Future<List<Announcement>> _processAnnouncements() async {
     await Future.delayed(Duration(milliseconds: 500));
@@ -62,22 +34,7 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
-    return await _updateFavoriteStatus(loadedAnnouncements);
-  }
-
-  Future<List<Announcement>> _updateFavoriteStatus(
-      List<Announcement> announcements) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String idVolunteer = prefs.getString('idVolunteer') ?? '';
-    final updatedAnnouncements =
-        await Future.wait(announcements.map((announcement) async {
-      final isFavorite = await _checkIfFavorite(idVolunteer, announcement.id);
-      return announcement.copyWith(isFavorite: isFavorite);
-    }));
-    announcements = updatedAnnouncements
-        .where((element) => element.isVisible ?? true)
-        .toList();
-    return announcements;
+    return loadedAnnouncements;
   }
 
   @override
@@ -167,27 +124,17 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     return Center(
       child: ListView.builder(
         itemBuilder: (context, index) {
-          if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-            int reversedIndex = announcementsAssociation.length - index - 1;
-            return ItemAnnouncementAssociation(
-                announcement: announcementsAssociation[reversedIndex],
-                nbAnnouncementsAssociation: announcementsAssociation.length);
-          } else {
-            int reversedIndex = announcements.length - index - 1;
-            Announcement announcement = announcements[reversedIndex];
-            return ItemAnnouncementVolunteer(
+          int reversedIndex = announcements.length - index - 1;
+          Announcement announcement = announcements[reversedIndex];
+          return ItemAnnouncementVolunteer(
               announcement: announcement,
               isSelected: announcement.isFavorite ?? false,
-              toggleFavorite: () => _toggleFavorite(announcement),
-                nbAnnouncementsAssociation: announcements
-                    .where((element) =>
-                        element.idAssociation == announcement.idAssociation)
-                    .length);
-          }
+              nbAnnouncementsAssociation: announcements
+                  .where((element) =>
+                      element.idAssociation == announcement.idAssociation)
+                  .length);
         },
-        itemCount: widget.rulesType == RulesType.USER_ASSOCIATION
-            ? announcementsAssociation.length
-            : announcements.length,
+        itemCount: announcements.length,
       ),
     );
   }

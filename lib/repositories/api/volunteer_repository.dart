@@ -68,7 +68,6 @@ class VolunteerRepository {
           headers: headers,
         ),
       );
-      print(response);
 
       if (response.statusCode == 200) {
         return Volunteer.fromJson(response.data);
@@ -106,7 +105,6 @@ class VolunteerRepository {
         ),
         data: data
       );
-      print(response);
 
       if (response.statusCode == 200) {
         return Volunteer.fromJson(response.data);
@@ -142,7 +140,6 @@ class VolunteerRepository {
           headers: headers,
         ),
       );
-      print(response);
 
       if (response.statusCode == 200) {
       } else {

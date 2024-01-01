@@ -13,8 +13,9 @@ import '../../../../volunteers/signup/widgets/signup_volunteer.dart';
 
 class LoginPage extends StatelessWidget {
   final RulesType title;
+  bool? isLogin = false;
 
-  LoginPage({super.key, required this.title});
+  LoginPage({super.key, required this.title, this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AuthAppBar(contexts: context, isLogin: true),
+                      AuthAppBar(contexts: context, isLogin: isLogin),
                       Divider(
                         color: Colors.grey.shade400,
                         endIndent: MediaQuery.of(context).size.height * .04,

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
-import 'package:namer_app/models/announcement_item_model.dart';
+import 'package:namer_app/repositories/api/announcement_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
@@ -24,10 +24,10 @@ class FavoritesVolunteer extends StatefulWidget {
 }
 
 class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
-  List<AnnouncementItem> announcements = [];
   List<String?> idAnnouncements = [];
 
   FavoritesRepository _favoritesRepository = FavoritesRepository();
+  AnnouncementRepository _announcementRepository = AnnouncementRepository();
 
   @override
   void initState() {
@@ -55,8 +55,12 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
+    List<Announcement> announcements =
+        await _announcementRepository.getAnnouncements();
 
-    return loadedAnnouncements;
+    return loadedAnnouncements
+        .where((element) => element.isVisible ?? true)
+        .toList();
   }
 
   @override
@@ -114,6 +118,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
 
   Widget _buildAnnouncementsList(
       List<Announcement> filteredAnnouncements, Function _toggleFavorite) {
+    print(filteredAnnouncements.length);
     return ListView.builder(
       itemCount: filteredAnnouncements.length,
       itemBuilder: (context, index) {
@@ -122,6 +127,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
           announcement: announcement,
           isSelected: announcement.isFavorite ?? false,
           toggleFavorite: () => _toggleFavorite(announcement),
+          nbAnnouncementsAssociation: 0,
         );
       },
     );

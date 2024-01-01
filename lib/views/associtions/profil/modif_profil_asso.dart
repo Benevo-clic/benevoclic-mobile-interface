@@ -158,10 +158,6 @@ listview(BuildContext context, Association association) {
     ElevatedButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
-            print(email);
-            print(bio);
-            print(phone);
-            print(address);
             Association associationUpdate = Association(
                 name: association.name,
                 phone: phone,

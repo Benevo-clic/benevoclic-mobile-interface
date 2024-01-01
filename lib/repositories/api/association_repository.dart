@@ -110,7 +110,6 @@ class AssociationRepository {
           headers: headers,
         ),
       );
-      print(response);
 
       if (response.statusCode == 200) {
         return Association.fromJson(response.data);
@@ -150,7 +149,6 @@ class AssociationRepository {
                 headers: headers,
               ),
               data: data);
-      print(response);
 
       if (response.statusCode == 200) {
         return Association.fromJson(response.data);
@@ -190,7 +188,6 @@ class AssociationRepository {
           headers: headers,
         ),
       );
-      print(response);
 
       if (response.statusCode == 200) {
         return response.data;

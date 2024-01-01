@@ -15,9 +15,9 @@ import 'package:namer_app/views/volunteers/associations/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
-import '../../common/authentification/repository/auth_repository.dart';
 
 class ProfilPageAssociation extends StatelessWidget {
   Association association =
@@ -230,13 +230,19 @@ affichageAssociation(BuildContext context, Association association) {
         ),
         ElevatedButton(
             onPressed: () async {
-              await AuthRepository().signOut();
-              BlocProvider.of<UserCubit>(context).disconnect();
+              BlocProvider.of<UserCubit>(context)
+                  .disconnect()
+                  .then((_) async => await AuthRepository().signOut());
+
+              final SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+              preferences.setBool('Association', false);
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => LoginPage(
-                    title: RulesType.USER_VOLUNTEER,
+                    title: RulesType.USER_ASSOCIATION,
+                    isLogin: true,
                   ),
                 ),
               );

@@ -8,16 +8,15 @@ import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
-import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
-import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/associations/associations_view.dart';
+import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 
@@ -234,13 +233,19 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
         ),
         ElevatedButton(
             onPressed: () async {
-              await AuthRepository().signOut();
-              BlocProvider.of<UserCubit>(context).disconnect();
+              BlocProvider.of<UserCubit>(context)
+                  .disconnect()
+                  .then((_) async => await AuthRepository().signOut());
+
+              final SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+              preferences.setBool('Volunteer', false);
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => LoginPage(
                     title: RulesType.USER_VOLUNTEER,
+                    isLogin: true,
                   ),
                 ),
               );

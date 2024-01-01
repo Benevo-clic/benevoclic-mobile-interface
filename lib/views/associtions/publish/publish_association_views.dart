@@ -172,7 +172,13 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           ),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => NavigationAssociation()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                NavigationAssociation(),
+            transitionDuration: Duration(milliseconds: 1),
+            // Durée très courte
+            reverseTransitionDuration: Duration(milliseconds: 1),
+          ),
         );
       }
     } catch (e) {
@@ -223,7 +229,12 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           ),
         );
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => NavigationAssociation()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                NavigationAssociation(),
+            transitionDuration: Duration(milliseconds: 1),
+            reverseTransitionDuration: Duration(milliseconds: 1),
+          ),
         );
       }
     } catch (e) {
@@ -360,9 +371,14 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                           child: ElevatedButton(
                             onPressed: () => {
                               Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        NavigationAssociation()),
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          NavigationAssociation(),
+                                  transitionDuration: Duration(milliseconds: 1),
+                                  reverseTransitionDuration:
+                                      Duration(milliseconds: 1),
+                                ),
                               )
                             },
                             style: ElevatedButton.styleFrom(

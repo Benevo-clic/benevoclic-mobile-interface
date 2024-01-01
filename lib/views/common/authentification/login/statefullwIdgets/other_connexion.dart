@@ -102,7 +102,7 @@ class _OtherConnectionState extends State<OtherConnection> {
         if (state is UserCreatedState) {
           if (widget.rulesType == RulesType.USER_VOLUNTEER) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => InfosInscriptionVolunteer(
@@ -114,7 +114,7 @@ class _OtherConnectionState extends State<OtherConnection> {
             });
           } else if (widget.rulesType == RulesType.USER_ASSOCIATION) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => InscriptionAssociation(
@@ -147,11 +147,16 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
     preferences.setString('idVolunteer', id);
   }
 
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-    return rulesType == RulesType.USER_ASSOCIATION
-        ? NavigationAssociation()
-        : NavigationVolunteer();
-  }));
+  Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            rulesType == RulesType.USER_ASSOCIATION
+                ? NavigationAssociation()
+                : NavigationVolunteer(),
+        transitionDuration: Duration(milliseconds: 1),
+        reverseTransitionDuration: Duration(milliseconds: 1),
+      ));
 
   BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }

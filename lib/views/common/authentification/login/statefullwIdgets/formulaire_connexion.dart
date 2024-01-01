@@ -246,11 +246,15 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
     preferences.setString('idVolunteer', id);
   }
 
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-    return rulesType == RulesType.USER_ASSOCIATION
-        ? NavigationAssociation()
-        : NavigationVolunteer();
-  }));
-
+  Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            rulesType == RulesType.USER_ASSOCIATION
+                ? NavigationAssociation()
+                : NavigationVolunteer(),
+        transitionDuration: Duration(milliseconds: 1),
+        reverseTransitionDuration: Duration(milliseconds: 1),
+      ));
   BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }

@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
+import 'package:namer_app/repositories/api/announcement_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/favorites_repository.dart';
 import '../../../widgets/app_bar_widget.dart';
-import '../../common/annonces/widgets/item_announcement_volunteer.dart';
+import '../announcement/item_announcement_volunteer.dart';
 
 class FavoritesVolunteer extends StatefulWidget {
   final RulesType rulesType;
@@ -24,8 +25,11 @@ class FavoritesVolunteer extends StatefulWidget {
 
 class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   List<String?> idAnnouncements = [];
+  List<Announcement> announcements = [];
 
   FavoritesRepository _favoritesRepository = FavoritesRepository();
+  AnnouncementRepository _announcementRepository = AnnouncementRepository();
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +56,8 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
+
+    announcements = await _announcementRepository.getAnnouncements();
 
     return loadedAnnouncements
         .where((element) => element.isVisible ?? true)
@@ -133,7 +139,10 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
           announcement: announcement,
           isSelected: announcement.isFavorite ?? false,
           toggleFavorite: () => _toggleFavorite(announcement),
-          nbAnnouncementsAssociation: 0,
+          nbAnnouncementsAssociation: announcements
+              .where((element) =>
+                  element.idAssociation == announcement.idAssociation)
+              .length,
         );
       },
     );

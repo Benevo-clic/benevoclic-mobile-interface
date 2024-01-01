@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/views/associtions/announcement/participant_announcement.dart';
+
+import '../../../cubit/page/page_cubit.dart';
 
 class DetailAnnouncementAssociation extends StatelessWidget {
   final Announcement announcement;
@@ -119,7 +123,12 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 height: 25,
                 width: 150,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ParticipantAnnouncement()));
+                  },
                   icon: Icon(Icons.person, size: 15),
                   label: Text(
                     "${announcement.nbPlacesTaken} / ${announcement.nbPlaces} bénévoles",
@@ -256,7 +265,10 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 height: 30,
                 width: 100,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    BlocProvider.of<PageCubit>(context).setPage(3);
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromRGBO(170, 77, 79, 1),
                     shape: RoundedRectangleBorder(

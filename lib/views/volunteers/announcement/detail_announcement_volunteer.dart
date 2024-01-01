@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/announcement_model.dart';
 
-import '../../../../widgets/information_announcement.dart';
+import '../../../widgets/information_announcement.dart';
 
 class DetailAnnouncementVolunteer extends StatelessWidget {
   Announcement announcement;

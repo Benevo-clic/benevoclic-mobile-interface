@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
-import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
+import 'package:namer_app/views/associtions/announcement/item_announcement_association.dart';
+import 'package:namer_app/views/volunteers/announcement/item_announcement_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';

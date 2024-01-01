@@ -19,29 +19,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 
-class ProfilPageAssociation extends StatelessWidget {
+class ProfilPageAssociation extends StatefulWidget {
+  const ProfilPageAssociation({super.key});
+
+  @override
+  State<ProfilPageAssociation> createState() => _ProfilPageAssociationState();
+}
+
+class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
   Association association =
       Association(name: "name", phone: "phone", type: "type");
   dynamic name = "corentin";
 
-  getUserType(BuildContext context) {
+  @override
+  void initState() {
+    super.initState();
     getAssociation(context);
   }
 
   getAssociation(BuildContext context) async {
     User user = FirebaseAuth.instance.currentUser!;
-    association =
-        await context.read<AssociationCubit>().getAssociation(user.uid);
+    BlocProvider.of<AssociationCubit>(context).getAssociation(user.uid);
     context.read<AssociationCubit>().stateInfo(association);
   }
 
   @override
   Widget build(BuildContext context) {
-    getUserType(context);
 
     return BlocConsumer<AssociationCubit, AssociationState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AssociationConnexion) {
+          association = state.association!;
+        }
+      },
       builder: (context, state) {
+        if (state is AssociationLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
         if (state is AssociationConnexion) {
           return Scaffold(
               backgroundColor: Colors.transparent,

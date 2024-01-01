@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/views/associtions/announcement/participant_announcement.dart';
+import 'package:namer_app/views/associtions/announcement/participant_announcement_accept.dart';
 
 import '../../../cubit/page/page_cubit.dart';
 
@@ -52,7 +52,7 @@ class DetailAnnouncementAssociation extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-          infosMission(context),
+          infosMission(context, announcement),
           bio(context),
           SizedBox(
             height: 5,
@@ -64,7 +64,7 @@ class DetailAnnouncementAssociation extends StatelessWidget {
     );
   }
 
-  Widget infosMission(BuildContext context) {
+  Widget infosMission(BuildContext context, Announcement announcement) {
     double height = MediaQuery.sizeOf(context).height;
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -124,10 +124,13 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 width: 150,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ParticipantAnnouncement()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ParticipantAnnouncementAccept(
+                            announcement: announcement),
+                      ),
+                    );
                   },
                   icon: Icon(Icons.person, size: 15),
                   label: Text(

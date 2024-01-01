@@ -177,7 +177,8 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
             Announcement announcement = announcements[reversedIndex];
             return ItemAnnouncementVolunteer(
               announcement: announcement,
-              isSelected: announcement.isFavorite ?? false,
+                idVolunteer: widget.idVolunteer,
+                isSelected: announcement.isFavorite ?? false,
               toggleFavorite: () => _toggleFavorite(announcement),
                 nbAnnouncementsAssociation: announcements
                     .where((element) =>

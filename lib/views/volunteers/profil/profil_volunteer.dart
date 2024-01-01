@@ -20,36 +20,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
 
-class ProfilPageVolunteer extends StatelessWidget {
+class ProfilPageVolunteer extends StatefulWidget {
+  const ProfilPageVolunteer({super.key});
+
+  @override
+  State<ProfilPageVolunteer> createState() => _ProfilPageVolunteerState();
+}
+
+class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
   UserModel? user;
   Volunteer? volunteer;
   dynamic name = "corentin";
 
+  @override
+  void initState() {
+    super.initState();
+    getUser(context);
+  }
+
   getUser(BuildContext context) async {
     User user = FirebaseAuth.instance.currentUser!;
-    volunteer = await context.read<VolunteerCubit>().getVolunteer(user.uid);
-    name = volunteer!.lastName;
-    await context.read<VolunteerCubit>().volunteerState(volunteer!);
+    BlocProvider.of<VolunteerCubit>(context).getVolunteer(user.uid);
   }
 
   @override
   Widget build(BuildContext context) {
-    getUser(context);
     return BlocConsumer<VolunteerCubit, VolunteerState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is VolunteerInfo) {
-            volunteer = state.getInfo();
-            return Scaffold(
-                backgroundColor: Colors.transparent,
-                resizeToAvoidBottomInset: false,
-                appBar: getAppBarProfil(context),
-                body: SingleChildScrollView(
-                    child: affichageVolunteer(context, state.volunteer)));
-          } else {
-            return Scaffold(body: Text("oui"));
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is VolunteerLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state is VolunteerInfo) {
+          volunteer = state.getInfo();
+          return Scaffold(
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: false,
+              appBar: getAppBarProfil(context),
+              body: SingleChildScrollView(
+                  child: affichageVolunteer(context, state.volunteer)));
+        } else {
+          return Scaffold(body: Text("oui"));
           }
-        });
+      },
+    );
   }
 }
 

@@ -137,6 +137,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         Announcement announcement = filteredAnnouncements[index];
         return ItemAnnouncementVolunteer(
           announcement: announcement,
+          idVolunteer: widget.idVolunteer,
           isSelected: announcement.isFavorite ?? false,
           toggleFavorite: () => _toggleFavorite(announcement),
           nbAnnouncementsAssociation: announcements

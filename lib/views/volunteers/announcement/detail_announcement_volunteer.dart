@@ -9,9 +9,13 @@ import '../../../widgets/information_announcement.dart';
 class DetailAnnouncementVolunteer extends StatelessWidget {
   Announcement announcement;
   int? nbAnnouncementsAssociation;
+  String? idVolunteer;
 
   DetailAnnouncementVolunteer(
-      {super.key, required this.announcement, this.nbAnnouncementsAssociation});
+      {super.key,
+      required this.announcement,
+      this.nbAnnouncementsAssociation,
+      this.idVolunteer});
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {

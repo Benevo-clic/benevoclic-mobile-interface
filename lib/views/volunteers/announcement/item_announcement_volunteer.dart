@@ -12,12 +12,14 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
   bool? isSelected;
   VoidCallback? toggleFavorite;
   int? nbAnnouncementsAssociation;
+  String? idVolunteer;
 
   ItemAnnouncementVolunteer({super.key,
     required this.announcement,
       this.isSelected,
       this.toggleFavorite,
-      this.nbAnnouncementsAssociation});
+      this.nbAnnouncementsAssociation,
+      this.idVolunteer});
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -39,6 +41,23 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
     }
   }
 
+  void _toggleParticipant(Announcement announcement) async {
+    if (idVolunteer == null) {
+      return;
+    }
+
+    final isParticipate =
+        announcement.volunteersWaiting!.contains(idVolunteer) ||
+            announcement.volunteers!.contains(idVolunteer);
+    if (isParticipate) {
+      // BlocProvider.of<AnnouncementCubit>(context)
+      //     .removeParticipantAnnouncement(idVolunteer, announcement.id!);
+    } else {
+      // BlocProvider.of<AnnouncementCubit>(context)
+      //     .addParticipantAnnouncement(idVolunteer, announcement.id!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -51,6 +70,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
             builder: (context) => DetailAnnouncementVolunteer(
               announcement: announcement,
               nbAnnouncementsAssociation: nbAnnouncementsAssociation,
+              idVolunteer: idVolunteer,
             ),
           ),
         );

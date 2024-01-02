@@ -6,12 +6,14 @@ import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/associtions/profil/members_view.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
-import 'package:namer_app/views/volunteers/associations/associations_view.dart';
+import 'package:namer_app/views/volunteers/profil/announcements_view.dart';
+import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -165,12 +167,18 @@ affichageAssociation(BuildContext context, Association association) {
                 style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
-              Text(
-                "${association.volunteers?.length} associations",
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MembersView()));
+                },
+                child: Text(
+                  "${association.volunteers?.length} membres",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -209,7 +217,7 @@ affichageAssociation(BuildContext context, Association association) {
             icon: IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AssociationsSub()));
+                    MaterialPageRoute(builder: (context) => AnnouncementView()));
               },
               icon: Icon(Icons.map_rounded),
             )),

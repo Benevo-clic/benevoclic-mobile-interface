@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 
-class AssociationsSub extends StatelessWidget {
-  final List assos = ["asso1", "asso2"];
-
+class MembersView extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
-      listener: (context, state) {
-      
-      },
+    return BlocConsumer<AssociationCubit, AssociationState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -39,16 +36,17 @@ class AssociationsSub extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              Text("${state.volunteer!.myAssociations!.length} associations",
+              Text("${state.association!.volunteers!.length} bénévoles",
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: ListView.builder(
-                  itemCount: state.volunteer!.myAssociations!.length, //assos.length,
+                  itemCount: state.association!.volunteers!.length,
                   itemBuilder: (context, index) {
-                    return AssociationCard(asso: state.volunteer!.myAssociations![index]);
+                    return AssociationCard(
+                        asso: state.association!.volunteers![index]);
                   },
                 ),
               ))
@@ -60,10 +58,10 @@ class AssociationsSub extends StatelessWidget {
   }
 }
 
-class AssociationCard extends StatelessWidget {
+class MembersCard extends StatelessWidget {
   final dynamic asso;
 
-  const AssociationCard({super.key, this.asso});
+  const MembersCard({super.key, this.asso});
   @override
   Widget build(BuildContext context) {
     return ListTile(

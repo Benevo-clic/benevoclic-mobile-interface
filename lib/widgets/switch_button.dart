@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/util/color.dart';
 
 class SwitchButton extends StatelessWidget {
   bool value;
@@ -10,7 +11,8 @@ class SwitchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Switch(
       value: value,
-      activeColor: Colors.red,
+      activeColor: Colors.white,
+      activeTrackColor: marron,
       onChanged: (bool value) {
         fct(value);
         print(value);

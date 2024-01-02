@@ -86,7 +86,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
               .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
         }
-
         if (state is FavoritesAnnouncementLoadedState) {
           idAnnouncements = state.favoritesAnnouncement.announcementFavorites
               .map((e) => e.id)
@@ -95,8 +94,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         }
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(MediaQuery.of(context).size.height *
-                0.15), // Hauteur personnalisée
+            preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
             child: AppBarWidget(contexts: context, label: 'Mes Favoris'),
           ),
           body: FutureBuilder<List<Announcement>>(

@@ -45,10 +45,46 @@ class AnnouncementLoadedState extends AnnouncementState {
   List<Object?> get props => [announcements];
 }
 
+class AnnouncementAddedWaitingState extends AnnouncementState {
+  final Announcement announcement;
+
+  AnnouncementAddedWaitingState({required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement];
+}
+
+class AnnouncementAddedParticipateState extends AnnouncementState {
+  final Announcement announcement;
+
+  AnnouncementAddedParticipateState({required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement];
+}
+
+class AnnouncementRemovedParticipateState extends AnnouncementState {
+  final Announcement announcement;
+
+  AnnouncementRemovedParticipateState({required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement];
+}
+
 class DeleteAnnouncementState extends AnnouncementState {
   final Announcement announcement;
 
   DeleteAnnouncementState({required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement];
+}
+
+class AnnouncementRemovedWaitingState extends AnnouncementState {
+  final Announcement announcement;
+
+  AnnouncementRemovedWaitingState({required this.announcement});
 
   @override
   List<Object?> get props => [announcement];

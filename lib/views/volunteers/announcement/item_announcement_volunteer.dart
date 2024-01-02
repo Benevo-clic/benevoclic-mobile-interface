@@ -2,14 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/util/manage_date.dart';
 import 'package:namer_app/widgets/information_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../models/announcement_model.dart';
 import '../../../models/association_model.dart';
-import '../../../repositories/api/association_repository.dart';
 import 'detail_announcement_volunteer.dart';
 
 class ItemAnnouncementVolunteer extends StatefulWidget {
@@ -35,7 +33,6 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   bool isParticipate = false;
   bool isWaiting = false;
   Association? association;
-  AssociationRepository _associationRepository = AssociationRepository();
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -91,29 +88,17 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
       BlocProvider.of<AnnouncementCubit>(context)
           .addVolunteerToWaitingList(announcement.id!, widget.idVolunteer!);
     }
-
-    if (mounted) {
-      setState(() {
-        isParticipate = announcement.volunteersWaiting!
-            .map((e) => e.id)
-            .toList()
-            .contains(widget.idVolunteer);
-        isWaiting = announcement.volunteersWaiting!
-            .map((e) => e.id)
-            .toList()
-            .contains(widget.idVolunteer);
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    BlocProvider.of<AssociationCubit>(context)
-        .getAssociation(widget.announcement.idAssociation!);
 
     return InkWell(
       onTap: () {
+        if (widget.idVolunteer == null) {
+          return;
+        }
         Navigator.push(
           context,
           MaterialPageRoute(

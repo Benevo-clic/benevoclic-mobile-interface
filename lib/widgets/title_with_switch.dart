@@ -14,7 +14,7 @@ class TitleWithSwitch extends StatelessWidget {
           Expanded(
               child: Text(
             text,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 18),
           )),
           content
         ],

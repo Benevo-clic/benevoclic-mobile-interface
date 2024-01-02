@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/switch_button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 import 'package:namer_app/widgets/title_with_switch.dart';
@@ -104,6 +105,15 @@ class _NotificationsState extends State<NotificationsDialog> {
                     fct: changeVolunteerAccepted,
                   ),
                   text: "Annoncer lorqu'un benevole accepte une mission"),
+              SizedBox(height: 15),
+              Button(
+                text: "Sauvegarder",
+                color: Colors.black,
+                fct: () {
+                  Navigator.pop(context);
+                },
+                backgroundColor: Colors.grey.shade400,
+              )
             ],
           ))
     ]);

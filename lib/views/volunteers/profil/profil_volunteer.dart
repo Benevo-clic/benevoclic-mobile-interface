@@ -61,7 +61,7 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
                   child: affichageVolunteer(context, state.volunteer)));
         } else {
           return Scaffold(body: Text("oui"));
-          }
+        }
       },
     );
   }
@@ -161,12 +161,18 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
-              Text(
-                "${volunteer.myAssociations?.length} associations",
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AssociationsSub()));
+                },
+                child: Text(
+                  "${volunteer.myAssociations?.length} associations",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -269,4 +275,4 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
       ],
     ),
   );
-}  
+}

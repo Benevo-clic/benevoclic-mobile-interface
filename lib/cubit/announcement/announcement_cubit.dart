@@ -131,11 +131,11 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void registerAnnouncement(String? idVolunteer, String idAnnouncement) async {
+  void registerAnnouncement(String idAnnouncement, String? idVolunteer) async {
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement = await _announcementRepository
-          .registerVolunteerToAnnouncement(idVolunteer!, idAnnouncement);
+          .registerVolunteerToAnnouncement(idAnnouncement, idVolunteer!);
       emit(AnnouncementLoadedState(announcements: [announcement]));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
@@ -154,12 +154,12 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void removeVolunteerFromWaitingList(
-      String? idVolunteer, String idAnnouncement) async {
+  void removeVolunteerFromWaitingList(String? idAnnouncement,
+      String? idVolunteer) async {
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement = await _announcementRepository
-          .removeVolunteerFromWaitingList(idVolunteer!, idAnnouncement);
+          .removeVolunteerFromWaitingList(idAnnouncement!, idVolunteer!);
       emit(AnnouncementLoadedState(announcements: [announcement]));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));

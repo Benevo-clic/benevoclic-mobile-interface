@@ -74,6 +74,9 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
       BlocProvider.of<AnnouncementCubit>(context)
           .removeVolunteerFromWaitingList(
               announcement.id!, widget.idVolunteer!);
+    } else if (isParticipate) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .unregisterAnnouncement(announcement.id!, widget.idVolunteer!);
     } else if (!isWaiting && !isParticipate) {
       BlocProvider.of<AnnouncementCubit>(context)
           .addVolunteerToWaitingList(announcement.id!, widget.idVolunteer!);

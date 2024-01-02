@@ -5,6 +5,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/views/associtions/announcement/participant_announcement_accept.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/volunteer_repository.dart';
@@ -28,6 +29,33 @@ class _ParticipantAnnouncementWaitingState
   @override
   void initState() {
     super.initState();
+  }
+
+  _toggleParticipant(Announcement announcement, String? idVolunteer) async {
+    bool isWaiting = announcement.volunteersWaiting!
+        .map((e) => e.id)
+        .toList()
+        .contains(idVolunteer);
+    print(isWaiting);
+    if (isWaiting) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .registerAnnouncement(announcement.id!, idVolunteer);
+    }
+
+    setState(() {});
+  }
+
+  _toggleRefuse(Announcement announcement, String? idVolunteer) async {
+    var isWaiting = announcement.volunteersWaiting!
+        .map((e) => e.id)
+        .toList()
+        .contains(idVolunteer);
+    if (isWaiting) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .removeVolunteerFromWaitingList(announcement.id, idVolunteer);
+    }
+
+    setState(() {});
   }
 
   Future<List<Volunteer>> _processVolunteer() async {
@@ -184,7 +212,7 @@ class _ParticipantAnnouncementWaitingState
           ),
           SizedBox(
             child: Text(
-              "${widget.announcement!.nbPlacesTaken} Demande(s) Acceptée(s)",
+              "${widget.announcement!.volunteersWaiting?.length} Demande(s) en attente(s)",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
@@ -241,42 +269,64 @@ class _ParticipantAnnouncementWaitingState
     return Container(
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.red,
-          width: 1.0,
-        ),
-        borderRadius:
-            BorderRadius.circular(10.0), // Bordure arrondie (optionnel)
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 20,
-          backgroundImage: AssetImage('assets/logo.png'),
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text(volunteer.firstName),
-        trailing: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.white,
-            backgroundColor: Colors.red,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            textStyle: TextStyle(
-              fontSize: 12,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 4,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Colors.black,
+                  radius: 40,
+                ),
+                SizedBox(width: 38),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      volunteer.firstName + " " + volunteer.lastName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _toggleParticipant(
+                                widget.announcement!, volunteer.id);
+                          },
+                          child: Text("Accepter"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue, // background (button) color
+                            onPrimary: Colors.white, // text color
+                          ),
+                        ),
+                        SizedBox(width: 18),
+                        ElevatedButton(
+                          onPressed: () {
+                            _toggleRefuse(widget.announcement!, volunteer.id);
+                          },
+                          child: Text("Refuser"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red, // background (button) color
+                            onPrimary: Colors.white, // text color
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          onPressed: () {},
-          child: Text(
-            'Supprimer',
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }

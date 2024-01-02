@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/util/password_verification.dart';
@@ -45,7 +44,6 @@ class _PasswordDialog extends State<PasswordDialog> {
               ),
               TextFormField(
                 validator: (value) {
-                  
                   PasswordVerification password = PasswordVerification(value!);
                   if (!password.security()) {
                     return password.message;

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
-class SwitchButton extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    return _SwitchButtonState();
-  }
+class SwitchButton extends StatelessWidget {
+  bool value;
+  dynamic fct;
 
-}
+  SwitchButton({required this.value, required this.fct});
 
-class _SwitchButtonState extends State<SwitchButton>{
   @override
   Widget build(BuildContext context) {
-    return Column();
+    return Switch(
+      value: value,
+      activeColor: Colors.red,
+      onChanged: (bool value) {
+        fct(value);
+        print(value);
+      },
+    );
   }
-  
-
 }

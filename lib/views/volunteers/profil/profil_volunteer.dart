@@ -163,9 +163,11 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 textAlign: TextAlign.center,
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AssociationsSub()));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AssociationsSub()));
                 },
                 child: Text(
                   "${volunteer.myAssociations?.length} associations",
@@ -216,8 +218,10 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
             text: "Historique de missions",
             icon: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AnnouncementView()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AnnouncementView()));
               },
               icon: Icon(Icons.map_rounded),
             )),

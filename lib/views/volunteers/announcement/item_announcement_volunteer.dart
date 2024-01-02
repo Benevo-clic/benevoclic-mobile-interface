@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/util/manage_date.dart';
 import 'package:namer_app/widgets/information_announcement.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../models/announcement_model.dart';
 import 'detail_announcement_volunteer.dart';
 
-class ItemAnnouncementVolunteer extends StatelessWidget {
+class ItemAnnouncementVolunteer extends StatefulWidget {
   final Announcement announcement;
   bool? isSelected;
   VoidCallback? toggleFavorite;
@@ -21,6 +23,14 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
       this.nbAnnouncementsAssociation,
       this.idVolunteer});
 
+  @override
+  State<ItemAnnouncementVolunteer> createState() =>
+      _ItemAnnouncementVolunteerState();
+}
+
+class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
+  bool isParticipate = false;
+  bool isWaiting = false;
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
       return AssetImage('assets/logo.png');
@@ -30,6 +40,11 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
     } else {
       return NetworkImage(imageString);
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   bool isBase64(String str) {
@@ -42,19 +57,39 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
   }
 
   void _toggleParticipant(Announcement announcement) async {
-    if (idVolunteer == null) {
+    if (widget.idVolunteer == null) {
       return;
     }
+    print(announcement.volunteersWaiting);
 
-    final isParticipate =
-        announcement.volunteersWaiting!.contains(idVolunteer) ||
-            announcement.volunteers!.contains(idVolunteer);
-    if (isParticipate) {
-      // BlocProvider.of<AnnouncementCubit>(context)
-      //     .removeParticipantAnnouncement(idVolunteer, announcement.id!);
-    } else {
-      // BlocProvider.of<AnnouncementCubit>(context)
-      //     .addParticipantAnnouncement(idVolunteer, announcement.id!);
+    isParticipate = announcement.volunteers!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+    isWaiting = announcement.volunteersWaiting!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+    if (isWaiting) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .removeVolunteerFromWaitingList(
+              announcement.id!, widget.idVolunteer!);
+    } else if (!isWaiting && !isParticipate) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .addVolunteerToWaitingList(announcement.id!, widget.idVolunteer!);
+    }
+
+    if (mounted) {
+      setState(() {
+        isParticipate = announcement.volunteersWaiting!
+            .map((e) => e.id)
+            .toList()
+            .contains(widget.idVolunteer);
+        isWaiting = announcement.volunteersWaiting!
+            .map((e) => e.id)
+            .toList()
+            .contains(widget.idVolunteer);
+      });
     }
   }
 
@@ -64,13 +99,24 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        print(isParticipate);
+        print(isWaiting);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DetailAnnouncementVolunteer(
-              announcement: announcement,
-              nbAnnouncementsAssociation: nbAnnouncementsAssociation,
-              idVolunteer: idVolunteer,
+              announcement: widget.announcement,
+              nbAnnouncementsAssociation: widget.nbAnnouncementsAssociation,
+              idVolunteer: widget.idVolunteer,
+              isParticipate: widget.announcement.volunteersWaiting!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer) ||
+                  widget.announcement.volunteers!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer),
+              toggleParticipant: () => _toggleParticipant(widget.announcement),
             ),
           ),
         );
@@ -104,7 +150,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                         CircleAvatar(
                           radius: 30,
                           backgroundImage:
-                          _getImageProvider(announcement.image),
+                              _getImageProvider(widget.announcement.image),
                         ),
                         SizedBox(
                           width: 10,
@@ -113,7 +159,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              announcement.nameAssociation,
+                              widget.announcement.nameAssociation,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -121,7 +167,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                             ),
                             Text(
                               ManageDate.describeRelativeDateTime(
-                                  announcement.datePublication),
+                                  widget.announcement.datePublication),
                               style: TextStyle(
                                 fontSize: 12,
                               ),
@@ -131,8 +177,8 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                       ],
                     ),
                     IconButton(
-                      onPressed: toggleFavorite,
-                      icon: isSelected!
+                      onPressed: widget.toggleFavorite,
+                      icon: widget.isSelected!
                           ? Icon(
                         Icons.favorite,
                         color: Colors.red,
@@ -161,7 +207,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                             color: Colors.black,
                             size: 16,
                           ),
-                          text: announcement.location.address,
+                          text: widget.announcement.location.address,
                           size: 11,
                         ),
                       ],
@@ -175,7 +221,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                             color: Colors.black,
                             size: 16,
                           ),
-                          text: announcement.dateEvent,
+                          text: widget.announcement.dateEvent,
                           size: 11,
                         ),
                       ],
@@ -189,7 +235,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                             color: Colors.black,
                             size: 16,
                           ),
-                          text: '${announcement.nbHours} heures',
+                          text: '${widget.announcement.nbHours} heures',
                           size: 11,
                         ),
                         InformationAnnouncement(
@@ -199,15 +245,14 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                             size: 16,
                           ),
                           text:
-                          '${announcement.nbPlacesTaken} / ${announcement
-                              .nbPlaces}',
+                              '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
                         ),
                       ],
                     ),
                   ],
                 ),
                 Text(
-                  announcement.labelEvent,
+                  widget.announcement.labelEvent,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -219,7 +264,7 @@ class ItemAnnouncementVolunteer extends StatelessWidget {
                   indent: width * .06,
                 ),
                 Text(
-                  announcement.description,
+                  widget.announcement.description,
                   style: TextStyle(
                     fontSize: 14,
                     overflow: TextOverflow.ellipsis,

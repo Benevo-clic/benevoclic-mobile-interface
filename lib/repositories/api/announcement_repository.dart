@@ -81,7 +81,6 @@ class AnnouncementRepository {
           await FirebaseAuth.instance.signOut();
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
-        throw Exception('Erreur Dio : ${e.message}');
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -121,7 +120,6 @@ class AnnouncementRepository {
           await FirebaseAuth.instance.signOut();
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
-        throw Exception('Erreur Dio : ${e.message}');
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -142,9 +140,9 @@ class AnnouncementRepository {
         'volunteerId': idVolunteer
       };
 
-      var response = await _dio.put(
+      var response = await _dio.request(
         'http://${globals.url}/api/v1/announcement/removeVolunteerFromWaitingList',
-        options: Options(headers: headers),
+        options: Options(method: 'PUT', headers: headers),
       );
 
       if (response.statusCode == 200) {
@@ -161,7 +159,6 @@ class AnnouncementRepository {
           await FirebaseAuth.instance.signOut();
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
-        throw Exception('Erreur Dio : ${e.message}');
       }
       throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
@@ -186,22 +183,13 @@ class AnnouncementRepository {
         'http://${globals.url}/api/v1/announcement/updateAnnouncementVolunteersWaiting',
         options: Options(headers: headers),
       );
-
+      print(response.data);
       if (response.statusCode == 200) {
         return Announcement.fromJson(response.data);
       } else {
         throw Exception(
             'Erreur lors de la récupération des annonces : ${response.statusMessage}');
       }
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        bool refreshed = await _tokenService.tryRefreshToken();
-        if (!refreshed) {
-          await FirebaseAuth.instance.signOut();
-          throw Exception('Session expirée. Utilisateur déconnecté.');
-        }
-      }
-      throw Exception('Erreur Dio : ${e.message}');
     } catch (e) {
       throw Exception(e);
     }

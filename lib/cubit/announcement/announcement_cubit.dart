@@ -131,6 +131,53 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
+  void registerAnnouncement(String? idVolunteer, String idAnnouncement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcement = await _announcementRepository
+          .registerVolunteerToAnnouncement(idVolunteer!, idAnnouncement);
+      emit(AnnouncementLoadedState(announcements: [announcement]));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void unregisterAnnouncement(
+      String? idVolunteer, String idAnnouncement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcement = await _announcementRepository
+          .unregisterVolunteer(idVolunteer!, idAnnouncement);
+      emit(AnnouncementLoadedState(announcements: [announcement]));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void removeVolunteerFromWaitingList(
+      String? idVolunteer, String idAnnouncement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcement = await _announcementRepository
+          .removeVolunteerFromWaitingList(idVolunteer!, idAnnouncement);
+      emit(AnnouncementLoadedState(announcements: [announcement]));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void addVolunteerToWaitingList(
+      String? idVolunteer, String idAnnouncement) async {
+    emit(AnnouncementLoadingState());
+    try {
+      Announcement announcement = await _announcementRepository
+          .putAnnouncementInWatingList(idVolunteer!, idAnnouncement);
+      emit(AnnouncementLoadedState(announcements: [announcement]));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void changeState(AnnouncementState state) {
     emit(state);
   }

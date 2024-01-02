@@ -10,12 +10,16 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
   Announcement announcement;
   int? nbAnnouncementsAssociation;
   String? idVolunteer;
+  VoidCallback? toggleParticipant;
+  bool? isParticipate;
 
   DetailAnnouncementVolunteer(
       {super.key,
       required this.announcement,
       this.nbAnnouncementsAssociation,
-      this.idVolunteer});
+      this.isParticipate,
+      this.idVolunteer,
+      this.toggleParticipant});
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -171,30 +175,60 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
               SizedBox(
                 width: 15,
               ),
-              Expanded(
-                child: SizedBox(
-                  height: 25,
-                  width: 150,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(170, 77, 79, 1),
-                      padding: EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.black, width: 1),
+              if (isParticipate!)
+                Expanded(
+                  child: SizedBox(
+                    height: 25,
+                    width: 150,
+                    child: TextButton(
+                      onPressed: () {
+                        toggleParticipant!();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+                        padding: EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.black, width: 1),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      "Participer",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
+                      child: Text(
+                        "Annuler participation",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
-              )
+              if (!isParticipate!)
+                Expanded(
+                  child: SizedBox(
+                    height: 25,
+                    width: 150,
+                    child: TextButton(
+                      onPressed: () {
+                        toggleParticipant!();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(170, 77, 79, 1),
+                        padding: EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.black, width: 1),
+                        ),
+                      ),
+                      child: Text(
+                        "Participer",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ],

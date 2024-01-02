@@ -60,7 +60,6 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
     if (widget.idVolunteer == null) {
       return;
     }
-    print(announcement.volunteersWaiting);
 
     isParticipate = announcement.volunteers!
         .map((e) => e.id)
@@ -111,14 +110,10 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
               announcement: widget.announcement,
               nbAnnouncementsAssociation: widget.nbAnnouncementsAssociation,
               idVolunteer: widget.idVolunteer,
-              isParticipate: widget.announcement.volunteersWaiting!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer) ||
-                  widget.announcement.volunteers!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer),
+              isParticipate: widget.announcement.volunteers!
+                  .map((e) => e.id)
+                  .toList()
+                  .contains(widget.idVolunteer),
               toggleParticipant: () => _toggleParticipant(widget.announcement),
             ),
           ),

@@ -175,6 +175,61 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
               SizedBox(
                 width: 15,
               ),
+              if (announcement.full! && !isParticipate!)
+                Expanded(
+                  child: SizedBox(
+                    height: 25,
+                    width: 150,
+                    child: TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+                        padding: EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.black, width: 1),
+                        ),
+                      ),
+                      child: Text(
+                        "Complet",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              if (announcement.volunteersWaiting!
+                  .map((e) => e.id)
+                  .toList()
+                  .contains(idVolunteer))
+                Expanded(
+                  child: SizedBox(
+                    height: 25,
+                    width: 150,
+                    child: TextButton(
+                      onPressed: () {
+                        toggleParticipant!();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(217, 217, 217, 1),
+                        padding: EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.black, width: 1),
+                        ),
+                      ),
+                      child: Text(
+                        "En attente",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
               if (isParticipate!)
                 Expanded(
                   child: SizedBox(
@@ -202,7 +257,12 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (!isParticipate!)
+              if (!isParticipate! &&
+                  !announcement.full! &&
+                  !announcement.volunteersWaiting!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(idVolunteer))
                 Expanded(
                   child: SizedBox(
                     height: 25,

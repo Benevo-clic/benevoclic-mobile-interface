@@ -1,3 +1,5 @@
+
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
@@ -10,9 +12,10 @@ import '../../repositories/auth_repository.dart';
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;
   final AuthRepository _authRepository = AuthRepository();
+  UserModel? user;
 
-  UserCubit(
-      {required UserRepository userRepository,
+  UserCubit({ this.user,
+      required UserRepository userRepository,
       required AuthRepository authRepository})
       : _userRepository = userRepository,
         super(UserInitialState());
@@ -34,9 +37,11 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void userConnexion(UserModel userModel) {
+    user = userModel;
     if (state is UserConnexionState) {
       return;
     }
+    userModel = userModel;
     emit(UserConnexionState(userModel: userModel));
   }
 
@@ -124,14 +129,14 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> connexion() async {
+  Future<void> connexion(userModel) async {
     if (state is ResponseUserState) {
       return;
     }
     try {
       emit(UserLoadingState());
       await Future.delayed(const Duration(seconds: 1));
-
+      user = userModel;
       final users = await _userRepository.connexion();
       emit(ResponseUserState(user: users));
     } catch (e) {
@@ -146,6 +151,16 @@ class UserCubit extends Cubit<UserState> {
     try {
       emit(UserLoadingState());
       final users = await _userRepository.disconnect();
+      emit(UserDisconnectedState(statusCode: users.toString()));
+    } catch (e) {
+      emit(UserErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      emit(UserLoadingState());
+      final users = await _userRepository.deleteUser();
       emit(UserDisconnectedState(statusCode: users.toString()));
     } catch (e) {
       emit(UserErrorState(message: e.toString()));

@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
-import 'package:namer_app/models/announcement_item_model.dart';
+import 'package:namer_app/repositories/api/announcement_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/favorites_repository.dart';
 import '../../../widgets/app_bar_widget.dart';
-import '../../common/annonces/widgets/item_announcement_volunteer.dart';
+import '../announcement/item_announcement_volunteer.dart';
 
 class FavoritesVolunteer extends StatefulWidget {
   final RulesType rulesType;
@@ -24,16 +24,15 @@ class FavoritesVolunteer extends StatefulWidget {
 }
 
 class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
-  List<AnnouncementItem> announcements = [];
   List<String?> idAnnouncements = [];
+  List<Announcement> announcements = [];
 
   FavoritesRepository _favoritesRepository = FavoritesRepository();
+  AnnouncementRepository _announcementRepository = AnnouncementRepository();
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FavoritesAnnouncementCubit>(context)
-        .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
   }
 
   void _toggleFavorite(Announcement announcement) async {
@@ -49,14 +48,18 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   }
 
   Future<List<Announcement>> _processAnnouncements() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 300));
     final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
     List<Announcement> loadedAnnouncements = [];
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
 
-    return loadedAnnouncements;
+    announcements = await _announcementRepository.getAnnouncements();
+
+    return loadedAnnouncements
+        .where((element) => element.isVisible ?? true)
+        .toList();
   }
 
   @override
@@ -74,10 +77,20 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
               .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
           return Center(child: CircularProgressIndicator());
         }
+        if (state is FavoritesAnnouncementAddingState) {
+          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+              .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
+        }
+
+        if (state is FavoritesAnnouncementRemovingState) {
+          BlocProvider.of<FavoritesAnnouncementCubit>(context)
+              .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
+        }
 
         if (state is FavoritesAnnouncementLoadedState) {
           idAnnouncements = state.favoritesAnnouncement.announcementFavorites
               .map((e) => e.id)
+              .where((element) => element != null)
               .toList();
         }
         return Scaffold(
@@ -120,8 +133,13 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         Announcement announcement = filteredAnnouncements[index];
         return ItemAnnouncementVolunteer(
           announcement: announcement,
+          idVolunteer: widget.idVolunteer,
           isSelected: announcement.isFavorite ?? false,
           toggleFavorite: () => _toggleFavorite(announcement),
+          nbAnnouncementsAssociation: announcements
+              .where((element) =>
+                  element.idAssociation == announcement.idAssociation)
+              .length,
         );
       },
     );

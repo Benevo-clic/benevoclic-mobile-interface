@@ -68,7 +68,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         );
       } else {
         UserModel userModel = await UserRepository().getUserByEmail(_email);
-
+        BlocProvider.of<UserCubit>(context).connexion(userModel);
         if (!userModel.isActif) {
           ShowDialogYesNo.show(
             context,
@@ -100,7 +100,7 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
           );
         } else if (!userModel.isConnect &&
             (userModel.rule.rulesType == widget.rulesType)) {
-          BlocProvider.of<UserCubit>(context).connexion();
+          BlocProvider.of<UserCubit>(context).connexion(userModel);
           SnackBar snackBar = SnackBar(
             content: Text("Connexion réussi"),
             backgroundColor: Colors.green,
@@ -246,11 +246,15 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
     preferences.setString('idVolunteer', id);
   }
 
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-    return rulesType == RulesType.USER_ASSOCIATION
-        ? NavigationAssociation()
-        : NavigationVolunteer();
-  }));
-
+  Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            rulesType == RulesType.USER_ASSOCIATION
+                ? NavigationAssociation()
+                : NavigationVolunteer(),
+        transitionDuration: Duration(milliseconds: 1),
+        reverseTransitionDuration: Duration(milliseconds: 1),
+      ));
   BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }

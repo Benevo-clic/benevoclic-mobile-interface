@@ -63,7 +63,6 @@ class FavoritesRepository {
         options: Options(headers: headers),
       );
 
-      print(response.data);
 
       if (response.statusCode == 200) {
         return Favorites.fromJson(response.data);

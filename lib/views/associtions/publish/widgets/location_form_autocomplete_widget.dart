@@ -61,19 +61,6 @@ class _LocationFormAutocompleteState extends State<LocationFormAutocomplete> {
               )
             ],
           ),
-          // ListView.builder(
-          //     itemCount: _places.length,
-          //     itemBuilder: (_, i) {
-          //       var place = _places[i];
-          //       return ListTile(
-          //         leading: Icon(Icons.place),
-          //         title: Text(place.description),
-          //         onTap: () {
-          //           print(place.description);
-          //           Navigator.pop(context, place);
-          //         },
-          //       );
-          //     })
         ],
       ),
     );

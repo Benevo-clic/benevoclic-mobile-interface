@@ -4,17 +4,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/authentification/login/statefullwIdgets/formulaire_connexion.dart';
+import 'package:namer_app/views/common/authentification/login/statefullwIdgets/other_connexion.dart';
 
 import '../../../../../widgets/auth_app_bar.dart';
 import '../../../../associtions/signup/signup_association.dart';
 import '../../../../volunteers/signup/widgets/signup_volunteer.dart';
-import '../statefullwIdgets/formulaire_connexion.dart';
-import '../statefullwIdgets/other_connexion.dart';
 
 class LoginPage extends StatelessWidget {
   final RulesType title;
+  bool? isLogin = false;
 
-  LoginPage({super.key, required this.title});
+  LoginPage({super.key, required this.title, this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AuthAppBar(contexts: context, isLogin: true),
+                      AuthAppBar(contexts: context, isLogin: isLogin),
                       Divider(
                         color: Colors.grey.shade400,
                         endIndent: MediaQuery.of(context).size.height * .04,

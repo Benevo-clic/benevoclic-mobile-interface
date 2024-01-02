@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
 
 @immutable
-abstract class AssociationState extends Equatable {
+abstract class AssociationState {
+  Association? association;
+
   @override
   List<Object?> get props => [];
 }
@@ -33,7 +35,6 @@ class AssociationErrorState extends AssociationState {
   @override
   List<Object?> get props => [message];
 }
-
 
 class AssociationInfoState extends AssociationState {
   final String name;
@@ -64,6 +65,13 @@ class AssociationInfoState extends AssociationState {
         postalCode,
         type,
       ];
+}
+
+class AssociationConnexion extends AssociationState {
+
+  AssociationConnexion(Association associationParam){
+    association = associationParam;
+  }
 }
 
 class AssociationPictureState extends AssociationState {

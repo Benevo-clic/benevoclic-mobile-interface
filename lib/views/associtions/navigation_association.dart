@@ -11,7 +11,7 @@ import '../../cubit/page/page_cubit.dart';
 import '../../widgets/build_navbar.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
-import '../common/profiles/profil.dart';
+import 'profil/profil_association.dart';
 
 class NavigationAssociation extends StatefulWidget {
   const NavigationAssociation({super.key});
@@ -27,7 +27,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     AnnouncementCommon(rulesType: RulesType.USER_ASSOCIATION),
     PublishAnnouncement(),
     Messages(),
-    ProfileView(title: RulesType.USER_ASSOCIATION),
+    ProfilPageAssociation(),
   ];
 
   Future<void> onPageChanged(int newIndex) async {
@@ -83,7 +83,6 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     BuildNavigationModel(
       iconTitle: 'assets/icons/profile.svg', label: 'Profil', size: 41),
   ];
-
 
   @override
   Widget build(BuildContext context) {

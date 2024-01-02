@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
-import 'package:namer_app/views/common/annonces/widgets/item_announcement_association.dart';
-import 'package:namer_app/views/common/annonces/widgets/item_announcement_volunteer.dart';
+import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/views/associtions/announcement/item_announcement_association.dart';
+import 'package:namer_app/views/volunteers/announcement/item_announcement_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
@@ -25,8 +26,8 @@ class AnnouncementCommon extends StatefulWidget {
 class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
+  Association? association;
   FavoritesRepository _favoritesRepository = FavoritesRepository();
-
 
   @override
   void initState() {
@@ -105,12 +106,14 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           } else if (state is DeleteAnnouncementState) {
             _showSnackBar(context, 'Annonce supprimée', Colors.green);
             _reloadData();
+            _reloadDataVolunteer();
           } else if (state is HideAnnouncementState) {
             if (state.isVisible == true)
               _showSnackBar(context, 'Annonce affichée', Colors.green);
             else
               _showSnackBar(context, 'Annonce cachée', Colors.green);
             _reloadData();
+            _reloadDataVolunteer();
           }
         },
         builder: (context, state) {
@@ -168,15 +171,20 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           if (widget.rulesType == RulesType.USER_ASSOCIATION) {
             int reversedIndex = announcementsAssociation.length - index - 1;
             return ItemAnnouncementAssociation(
-                announcement: announcementsAssociation[reversedIndex]);
+                announcement: announcementsAssociation[reversedIndex],
+                nbAnnouncementsAssociation: announcementsAssociation.length);
           } else {
             int reversedIndex = announcements.length - index - 1;
             Announcement announcement = announcements[reversedIndex];
             return ItemAnnouncementVolunteer(
               announcement: announcement,
-              isSelected: announcement.isFavorite ?? false,
-              toggleFavorite: () => _toggleFavorite(announcement),
-            );
+                idVolunteer: widget.idVolunteer,
+                isSelected: announcement.isFavorite ?? false,
+                toggleFavorite: () => _toggleFavorite(announcement),
+                nbAnnouncementsAssociation: announcements
+                    .where((element) =>
+                        element.idAssociation == announcement.idAssociation)
+                    .length);
           }
         },
         itemCount: widget.rulesType == RulesType.USER_ASSOCIATION

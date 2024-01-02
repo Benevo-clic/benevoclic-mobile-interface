@@ -1,12 +1,13 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/home_view.dart';
 
-import 'common/annonces/announcement_common.dart';
+import '../cubit/announcement/announcement_cubit.dart';
+import 'common/annonces/announcement_no_indentify.dart';
 
 class NavigationNoIndentify extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
   int currentPageIndex = 0;
 
   final List<Widget> pages = [
-    AnnouncementCommon(rulesType: RulesType.USER_VOLUNTEER),
+    AnnouncementNoIndentify(),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),
     HomeView(title: "Vous devez être connecté"),
@@ -79,6 +80,8 @@ class _NavigationNoIndentifyState extends State<NavigationNoIndentify> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.transparent,

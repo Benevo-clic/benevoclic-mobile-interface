@@ -82,10 +82,13 @@ class _PictureInscriptionState extends State<PictureInscription> {
         preferences.setString('idAssociation', widget.id);
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => NavigationAssociation(),
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  NavigationAssociation(),
+              transitionDuration: Duration(milliseconds: 1),
+              reverseTransitionDuration: Duration(milliseconds: 1),
             ),
           );
         });

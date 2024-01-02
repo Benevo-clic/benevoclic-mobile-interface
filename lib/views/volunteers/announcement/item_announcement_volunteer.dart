@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/util/manage_date.dart';
 import 'package:namer_app/widgets/information_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../models/announcement_model.dart';
+import '../../../models/association_model.dart';
+import '../../../repositories/api/association_repository.dart';
 import 'detail_announcement_volunteer.dart';
 
 class ItemAnnouncementVolunteer extends StatefulWidget {
@@ -17,7 +20,7 @@ class ItemAnnouncementVolunteer extends StatefulWidget {
   String? idVolunteer;
 
   ItemAnnouncementVolunteer({super.key,
-    required this.announcement,
+      required this.announcement,
       this.isSelected,
       this.toggleFavorite,
       this.nbAnnouncementsAssociation,
@@ -31,6 +34,9 @@ class ItemAnnouncementVolunteer extends StatefulWidget {
 class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   bool isParticipate = false;
   bool isWaiting = false;
+  Association? association;
+  AssociationRepository _associationRepository = AssociationRepository();
+
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
       return AssetImage('assets/logo.png');
@@ -45,6 +51,11 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   bool isBase64(String str) {
@@ -98,11 +109,11 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    BlocProvider.of<AssociationCubit>(context)
+        .getAssociation(widget.announcement.idAssociation!);
 
     return InkWell(
       onTap: () {
-        print(isParticipate);
-        print(isWaiting);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -132,7 +143,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
               offset: Offset(0, 6),
             ),
           ],
-          color: Colors.grey[100],
+          color:
+              widget.announcement.full! ? Colors.grey[700] : Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.red, width: 1),
         ),

@@ -1,17 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/repositories/api/association_repository.dart';
 
+import '../../../cubit/volunteer/volunteer_cubit.dart';
 import '../../../widgets/information_announcement.dart';
 
-class DetailAnnouncementVolunteer extends StatelessWidget {
+class DetailAnnouncementVolunteer extends StatefulWidget {
   Announcement announcement;
   int? nbAnnouncementsAssociation;
   String? idVolunteer;
   VoidCallback? toggleParticipant;
   bool? isParticipate;
+  VoidCallback? toggleFollow;
 
   DetailAnnouncementVolunteer(
       {super.key,
@@ -19,7 +24,17 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
       this.nbAnnouncementsAssociation,
       this.isParticipate,
       this.idVolunteer,
-      this.toggleParticipant});
+      this.toggleParticipant,
+      this.toggleFollow});
+
+  @override
+  State<DetailAnnouncementVolunteer> createState() =>
+      _DetailAnnouncementVolunteerState();
+}
+
+class _DetailAnnouncementVolunteerState
+    extends State<DetailAnnouncementVolunteer> {
+  AssociationRepository _associationRepository = AssociationRepository();
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -29,6 +44,41 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
       return MemoryImage(base64.decode(imageString));
     } else {
       return NetworkImage(imageString);
+    }
+  }
+
+  Future<Association> getAssociation() async {
+    await Future.delayed(Duration(milliseconds: 500));
+
+    Association? association = await _associationRepository
+        .getAssociation(widget.announcement.idAssociation);
+
+    return association;
+  }
+
+  void _toggleFollowAssociation(Association association) async {
+    if (widget.idVolunteer == null) {
+      return;
+    }
+    bool isFollow = association.volunteers!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+    if (isFollow) {
+      BlocProvider.of<VolunteerCubit>(context)
+          .unfollowAssociation(widget.announcement.idAssociation);
+    } else {
+      BlocProvider.of<VolunteerCubit>(context)
+          .followAssociation(widget.announcement.idAssociation);
+    }
+
+    if (mounted) {
+      setState(() {
+        isFollow = association.volunteers!
+            .map((e) => e.id)
+            .toList()
+            .contains(widget.idVolunteer);
+      });
     }
   }
 
@@ -45,48 +95,75 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.sizeOf(context).height;
+    return FutureBuilder<Association>(
+      future: getAssociation(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Erreur lors du chargement des annonces'));
+        }
+        if (!snapshot.hasData) {
+          return Center(child: Text('Association introuvable'));
+        }
+        final association = snapshot.data!;
+        print(association.volunteersWaiting!
+            .map((e) => e.id)
+            .toList()
+            .contains(widget.idVolunteer));
+        return _buildAnnouncementDetail(context, association);
+      },
+    );
+  }
+
+  Widget _buildAnnouncementDetail(
+      BuildContext context, Association association) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.sizeOf(context).height;
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(children: [
-          Stack(
-            alignment: Alignment.topLeft, // Adjust the alignment as needed
-            children: [
-              Container(
-                height: 200,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/annonce.png"),
-                      // NetworkImage(announcement.image!),
-                      fit: BoxFit.cover),
-                ),
-              ),
-              Positioned(
-                top: height * 0.05,
-                left: width * 0.03,
-                child: IconButton(
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/icons/cancel.svg",
-                    height: height * .04,
-                    color: Colors.white,
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.topLeft, // Adjust the alignment as needed
+              children: [
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/annonce.png"),
+                        // NetworkImage(announcement.image!),
+                        fit: BoxFit.cover),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          infosMission(context),
-          bio(context),
-          SizedBox(
-            height: 5,
-          ),
-          infoAsso(context),
-          infoAddress(context),
+                Positioned(
+                  top: height * 0.05,
+                  left: width * 0.03,
+                  child: IconButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: SvgPicture.asset(
+                      "assets/icons/cancel.svg",
+                      height: height * .04,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            infosMission(context),
+            bio(context),
+            SizedBox(
+              height: 5,
+            ),
+            infoAsso(context, association),
+            infoAddress(context),
           ],
         ),
       ),
@@ -119,14 +196,14 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    announcement.labelEvent!,
+                    widget.announcement.labelEvent!,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   Text(
-                    announcement.dateEvent!,
+                    widget.announcement.dateEvent!,
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ],
@@ -138,7 +215,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                   size: 24,
                 ),
                 text:
-                    '${announcement.nbPlacesTaken} / ${announcement.nbPlaces}',
+                    '${widget.announcement.nbPlacesTaken} / ${widget.announcement.nbPlaces}',
               ),
             ],
           ),
@@ -175,7 +252,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
               SizedBox(
                 width: 15,
               ),
-              if (announcement.full! && !isParticipate!)
+              if (widget.announcement.full! && !widget.isParticipate!)
                 Expanded(
                   child: SizedBox(
                     height: 25,
@@ -200,17 +277,17 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (announcement.volunteersWaiting!
+              if (widget.announcement.volunteersWaiting!
                   .map((e) => e.id)
                   .toList()
-                  .contains(idVolunteer))
+                  .contains(widget.idVolunteer))
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        toggleParticipant!();
+                        widget.toggleParticipant!();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(217, 217, 217, 1),
@@ -230,14 +307,14 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (isParticipate!)
+              if (widget.isParticipate!)
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        toggleParticipant!();
+                        widget.toggleParticipant!();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(217, 217, 217, 1),
@@ -257,19 +334,19 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (!isParticipate! &&
-                  !announcement.full! &&
-                  !announcement.volunteersWaiting!
+              if (!widget.isParticipate! &&
+                  !widget.announcement.full! &&
+                  !widget.announcement.volunteersWaiting!
                       .map((e) => e.id)
                       .toList()
-                      .contains(idVolunteer))
+                      .contains(widget.idVolunteer))
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        toggleParticipant!();
+                        widget.toggleParticipant!();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(170, 77, 79, 1),
@@ -329,7 +406,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                       color: Colors.black,
                     ),
                     label: Text(
-                      announcement.location.address!,
+                      widget.announcement.location.address,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -350,7 +427,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
     );
   }
 
-  Widget infoAsso(BuildContext context) {
+  Widget infoAsso(BuildContext context, Association association) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -385,7 +462,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        announcement.nameAssociation,
+                        widget.announcement.nameAssociation,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -395,7 +472,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "$nbAnnouncementsAssociation annonces",
+                        "${widget.nbAnnouncementsAssociation} annonces",
                         style: TextStyle(
                           fontSize: 12,
                         ),
@@ -409,24 +486,87 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
               //   icon: ,
               // ),
 
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.back_hand, size: 15),
-                label: Text(
-                  "Adhérer",
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
+              if (!association.volunteersWaiting!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer) &&
+                  !association.volunteers!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer))
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _toggleFollowAssociation(association);
+                  },
+                  icon: Icon(Icons.back_hand, size: 15),
+                  label: Text(
+                    "Adhérer",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: Colors.black, width: 1),
+                    ),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: Colors.black, width: 1),
+
+              if (!association.volunteers!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer) &&
+                  association.volunteersWaiting!
+                      .map((e) => e.id)
+                      .toList()
+                      .contains(widget.idVolunteer))
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _toggleFollowAssociation(association);
+                  },
+                  icon: Icon(Icons.back_hand, size: 15),
+                  label: Text(
+                    "En attente",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: Colors.black, width: 1),
+                    ),
                   ),
                 ),
-              )
+              if (association.volunteers!
+                  .map((e) => e.id)
+                  .toList()
+                  .contains(widget.idVolunteer))
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _toggleFollowAssociation(association);
+                  },
+                  icon: Icon(Icons.back_hand, size: 15),
+                  label: Text(
+                    "Se désinscrire",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: Colors.black, width: 1),
+                    ),
+                  ),
+                ),
             ],
           ),
         ],
@@ -461,7 +601,7 @@ class DetailAnnouncementVolunteer extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            announcement.description!,
+            widget.announcement.description,
             style: TextStyle(fontSize: 10),
           ),
           SizedBox(height: 10),

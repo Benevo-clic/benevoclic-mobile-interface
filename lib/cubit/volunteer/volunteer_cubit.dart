@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/association_model.dart';
 
 import '../../models/volunteer_model.dart';
 import '../../repositories/api/volunteer_repository.dart';
@@ -24,6 +25,28 @@ class VolunteerCubit extends Cubit<VolunteerState> {
     try {
       await _volunteerRepository.createVolunteer(volunteer);
       emit(VolunteerCreatedState(volunteerModel: volunteer));
+    } catch (e) {
+      emit(VolunteerErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> unfollowAssociation(String id) async {
+    emit(VolunteerLoadingState());
+    try {
+      Association association =
+          await _volunteerRepository.unfollowAssociation(id);
+      emit(VolunteerUnFollowAssociationState(association: association));
+    } catch (e) {
+      emit(VolunteerErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> followAssociation(String id) async {
+    emit(VolunteerLoadingState());
+    try {
+      Association association =
+          await _volunteerRepository.followAssociation(id);
+      emit(VolunteerFollowAssociationState(association: association));
     } catch (e) {
       emit(VolunteerErrorState(message: e.toString()));
     }

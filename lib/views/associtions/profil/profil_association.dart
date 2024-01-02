@@ -47,7 +47,6 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocConsumer<AssociationCubit, AssociationState>(
       listener: (context, state) {
         if (state is AssociationConnexion) {
@@ -168,9 +167,9 @@ affichageAssociation(BuildContext context, Association association) {
                 textAlign: TextAlign.center,
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MembersView()));
+                      MaterialPageRoute(builder: (context) => MembersView()));
                 },
                 child: Text(
                   "${association.volunteers?.length} membres",
@@ -216,19 +215,12 @@ affichageAssociation(BuildContext context, Association association) {
             text: "Historique de missions",
             icon: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AnnouncementView()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AnnouncementView()));
               },
               icon: Icon(Icons.map_rounded),
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        LineProfil(
-            text: "Paramètres",
-            icon: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.settings),
             )),
         SizedBox(
           height: 20,

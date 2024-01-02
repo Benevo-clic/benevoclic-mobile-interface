@@ -229,15 +229,6 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
           height: 20,
         ),
         LineProfil(
-            text: "Paramètres",
-            icon: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.settings),
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        LineProfil(
             text: "Suppression compte",
             icon: IconButton(
               onPressed: () async {

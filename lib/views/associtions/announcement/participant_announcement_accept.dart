@@ -5,6 +5,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/views/associtions/announcement/participant_announcement_waiting.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/volunteer_repository.dart';
@@ -29,6 +30,19 @@ class _ParticipantAnnouncementAcceptState
   void initState() {
     super.initState();
     print(widget.announcement!.id);
+  }
+
+  _toggleRefuse(Announcement announcement, String? idVolunteer) async {
+    var isParticipant = announcement.volunteers!
+        .map((e) => e.id)
+        .toList()
+        .contains(idVolunteer);
+    if (isParticipant) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .unregisterAnnouncement(announcement.id, idVolunteer!);
+    }
+
+    setState(() {});
   }
 
   Future<List<Volunteer>> _processAnnouncements() async {
@@ -267,7 +281,9 @@ class _ParticipantAnnouncementAcceptState
               fontSize: 12,
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            _toggleRefuse(widget.announcement!, volunteer.id);
+          },
           child: Text(
             'Supprimer',
             style: TextStyle(

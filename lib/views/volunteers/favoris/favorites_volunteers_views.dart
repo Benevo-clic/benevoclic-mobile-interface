@@ -33,8 +33,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FavoritesAnnouncementCubit>(context)
-        .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
   }
 
   void _toggleFavorite(Announcement announcement) async {
@@ -50,7 +48,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   }
 
   Future<List<Announcement>> _processAnnouncements() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 300));
     final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
     List<Announcement> loadedAnnouncements = [];
     if (currentState is AnnouncementLoadedState) {
@@ -82,13 +80,11 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         if (state is FavoritesAnnouncementAddingState) {
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
               .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
-          return Center(child: CircularProgressIndicator());
         }
 
         if (state is FavoritesAnnouncementRemovingState) {
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
               .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
-          return Center(child: CircularProgressIndicator());
         }
 
         if (state is FavoritesAnnouncementLoadedState) {

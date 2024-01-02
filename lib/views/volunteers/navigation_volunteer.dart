@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
+import '../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../widgets/build_navbar.dart';

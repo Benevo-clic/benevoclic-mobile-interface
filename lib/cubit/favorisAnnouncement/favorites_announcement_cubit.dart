@@ -63,7 +63,6 @@ class FavoritesAnnouncementCubit extends Cubit<FavoritesAnnouncementState> {
 
   void isFavorite(String? idVolunteer, String idAnnouncement) async {
     emit(FavoritesAnnouncementLoadingState());
-    Future.delayed(Duration(seconds: 2));
     try {
       var isFavorite =
           await _favoritesRepository.isFavorite(idVolunteer!, idAnnouncement);

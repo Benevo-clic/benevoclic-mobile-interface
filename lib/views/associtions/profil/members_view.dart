@@ -3,10 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/button.dart';
+import 'package:namer_app/widgets/searchbar_widget.dart';
 
-class MembersView extends StatelessWidget{
+class MembersView extends StatelessWidget {
+  List<String> benevoles = ["bene 1", "bene 2"];
+
+  TextEditingController myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AssociationCubit, AssociationState>(
@@ -23,30 +28,34 @@ class MembersView extends StatelessWidget{
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
                 children: [
-                  ElevatedButton(onPressed: () {}, child: Text("Tous")),
-                  ElevatedButton(onPressed: () {}, child: Text("Récents"))
+                  Button(text: "Tous", color: Colors.black, fct: (){}, backgroundColor: Colors.grey.shade400),
+                  ElevatedButton(onPressed: () {}, child: Text("Récents")),
+                  Expanded(
+                      flex: 1,
+                      child: IconButton(
+                          onPressed: () {
+                            print("ajout");
+                          },
+                          icon: Icon(Icons.add)))
                 ],
               ),
               SizedBox(
                 height: 15,
               ),
-              SearchBar(
-                leading: Icon(Icons.search, color: Colors.black),
-              ),
+              SearchBarWidget(myController: myController),
               SizedBox(
                 height: 15,
               ),
-              Text("${state.association!.volunteers!.length} bénévoles",
+              Text("${benevoles.length} bénévoles",
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: ListView.builder(
-                  itemCount: state.association!.volunteers!.length,
+                  itemCount: benevoles.length,
                   itemBuilder: (context, index) {
-                    return AssociationCard(
-                        asso: state.association!.volunteers![index]);
+                    return MembersCard(benevole: benevoles[index]);
                   },
                 ),
               ))
@@ -59,21 +68,26 @@ class MembersView extends StatelessWidget{
 }
 
 class MembersCard extends StatelessWidget {
-  final dynamic asso;
+  final dynamic benevole;
 
-  const MembersCard({super.key, this.asso});
+  const MembersCard({super.key, this.benevole});
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: AbstractContainer2(
           content: Row(
         children: [
-          Expanded(child: Icon(Icons.ac_unit)),
-          Expanded(child: Text(asso)),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Abonner", maxLines: 1),
+          Expanded(flex: 0, child: Icon(Icons.ac_unit)),
+          SizedBox(
+            width: 10,
           ),
+          Expanded(flex: 1, child: Text(benevole)),
+          Button(
+            backgroundColor: marron,
+            color: Colors.black,
+            fct: () {},
+            text: "Supprimer",
+          )
         ],
       )),
     );

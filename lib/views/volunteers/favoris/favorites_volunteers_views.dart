@@ -4,7 +4,6 @@ import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
-import 'package:namer_app/type/rules_type.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
@@ -13,11 +12,9 @@ import '../../../widgets/app_bar_widget.dart';
 import '../announcement/item_announcement_volunteer.dart';
 
 class FavoritesVolunteer extends StatefulWidget {
-  final RulesType rulesType;
   final String idVolunteer;
 
-  const FavoritesVolunteer(
-      {super.key, required this.rulesType, required this.idVolunteer});
+  const FavoritesVolunteer({super.key, required this.idVolunteer});
 
   @override
   State<FavoritesVolunteer> createState() => _FavoritesVolunteerState();

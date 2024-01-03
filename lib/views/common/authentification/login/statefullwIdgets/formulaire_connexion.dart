@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
+import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -9,6 +11,8 @@ import 'package:namer_app/views/common/authentification/login/widgets/customText
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
+import '../../../../../models/volunteer_model.dart';
+import '../../../../../repositories/api/volunteer_repository.dart';
 import '../../../../../repositories/auth_repository.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
@@ -241,9 +245,11 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
   if (rulesType == RulesType.USER_ASSOCIATION) {
     preferences.setBool('Association', true);
     preferences.setString('idAssociation', id);
+    BlocProvider.of<AssociationCubit>(context).getAssociation(id);
   } else if (rulesType == RulesType.USER_VOLUNTEER) {
     preferences.setBool('Volunteer', true);
     preferences.setString('idVolunteer', id);
+    BlocProvider.of<VolunteerCubit>(context).getVolunteer(id);
   }
 
   Navigator.pushReplacement(
@@ -256,5 +262,5 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
         transitionDuration: Duration(milliseconds: 1),
         reverseTransitionDuration: Duration(milliseconds: 1),
       ));
-  BlocProvider.of<UserCubit>(context).changeState(UserInitialState());
 }
+

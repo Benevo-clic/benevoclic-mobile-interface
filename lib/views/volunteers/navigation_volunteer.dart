@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,13 +9,16 @@ import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
+import '../../repositories/api/volunteer_repository.dart';
 import '../../widgets/build_navbar.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import 'favoris/favorites_volunteers_views.dart';
 
 class NavigationVolunteer extends StatefulWidget {
-  const NavigationVolunteer({super.key});
+  Volunteer? volunteer;
+
+  NavigationVolunteer({super.key, this.volunteer});
 
   @override
   State<NavigationVolunteer> createState() => _NavigationVolunteerState();
@@ -47,6 +51,16 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     setState(() {
       _idVolunteer = preferences.getString('idVolunteer')!;
     });
+    var volunteer;
+    if (_idVolunteer != null) {
+      volunteer = await VolunteerRepository().getVolunteer(_idVolunteer!);
+    }
+
+    if (volunteer != null) {
+      setState(() {
+        widget.volunteer = volunteer;
+      });
+    }
   }
 
   @override
@@ -57,26 +71,25 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          if (_idVolunteer == null) {
+          if (widget.volunteer == null) {
             return CircularProgressIndicator();
           }
           BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
 
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(_idVolunteer!);
+              .getFavoritesAnnouncementByVolunteerId(widget.volunteer!.id!);
 
           return IndexedStack(
             index: currentPageIndex,
             children: [
               AnnouncementCommon(
                   rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: _idVolunteer!),
+                  idVolunteer: widget.volunteer!.id!),
               FavoritesVolunteer(
-                rulesType: RulesType.USER_VOLUNTEER,
-                idVolunteer: _idVolunteer!,
+                idVolunteer: widget.volunteer!.id!,
               ),
               Messages(),
-              ProfilPageVolunteer(idVolunteer: _idVolunteer!)
+              ProfilPageVolunteer(volunteer: widget.volunteer!)
             ],
           );
         },

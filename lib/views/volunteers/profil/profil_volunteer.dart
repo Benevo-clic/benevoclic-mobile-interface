@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
-import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/repositories/api/volunteer_repository.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
@@ -21,66 +18,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../cubit/user/user_cubit.dart';
 
 class ProfilPageVolunteer extends StatefulWidget {
-  String idVolunteer;
+  Volunteer volunteer;
 
-  ProfilPageVolunteer({super.key, required this.idVolunteer});
+  ProfilPageVolunteer({super.key, required this.volunteer});
 
   @override
   State<ProfilPageVolunteer> createState() => _ProfilPageVolunteerState();
 }
 
 class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
-  UserModel? user;
-  Volunteer? volunteer;
-  dynamic name = "corentin";
-  VolunteerRepository _volunteerRepository = VolunteerRepository();
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<Volunteer?> getVolunteer() async {
-    volunteer = await _volunteerRepository.getVolunteer(widget.idVolunteer);
-    return volunteer;
-  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
-      listener: (context, state) {
-        if (state is VolunteerInfo) {
-          setState(() {
-            volunteer = state.volunteer;
-          });
-        }
-      },
-      builder: (context, state) {
-        return FutureBuilder<Volunteer?>(
-          future: getVolunteer(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              print(volunteer);
-              return Center(child: Text('Erreur lors du chargement du profil'));
-            }
-            if (!snapshot.hasData) {
-              return Center(child: Text('Aucune annonce disponible'));
-            }
-            volunteer = snapshot.data!;
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              appBar: getAppBarProfil(context),
-              body: SingleChildScrollView(
-                child: affichageVolunteer(context, volunteer!),
-              ),
-            );
-          },
-        );
-      },
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
+      appBar: getAppBarProfil(context),
+      body: SingleChildScrollView(
+        child: affichageVolunteer(context, widget.volunteer),
+      ),
     );
   }
 }
@@ -180,7 +142,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "${volunteer.myAssociations?.length} associations",
+                "${volunteer.myAssociations?.length ?? 0} associations",
                 style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold),

@@ -10,6 +10,8 @@ import 'package:namer_app/widgets/searchbar_widget.dart';
 class AssociationsSub extends StatelessWidget {
   final List assos = ["association 1", "association 2"];
 
+  TextEditingController myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VolunteerCubit, VolunteerState>(
@@ -33,7 +35,7 @@ class AssociationsSub extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              SearchBarWidget(),
+              SearchBarWidget(myController: myController),
               SizedBox(
                 height: 15,
               ),

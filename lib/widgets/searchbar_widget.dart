@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  final myController = TextEditingController();
+  final TextEditingController myController;
   final dynamic fct;
 
-  SearchBarWidget({super.key, this.fct});
+  SearchBarWidget({super.key, this.fct, required this.myController});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,11 @@ class SearchBarWidget extends StatelessWidget {
               width: 1,
             ),
           ),
-          prefixIcon: Icon(
-            Icons.search,
-            size: 15,
-          ),
+          prefixIcon: IconButton(
+              onPressed: () {
+                print(myController.text);
+              },
+              icon: Icon(Icons.search)),
         ),
       ),
     );

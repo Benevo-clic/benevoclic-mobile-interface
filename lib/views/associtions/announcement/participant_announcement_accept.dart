@@ -29,7 +29,6 @@ class _ParticipantAnnouncementAcceptState
   @override
   void initState() {
     super.initState();
-    print(widget.announcement!.id);
   }
 
   _toggleRefuse(Announcement announcement, String? idVolunteer) async {
@@ -63,24 +62,84 @@ class _ParticipantAnnouncementAcceptState
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double iconSize = 0.05 * (width < height ? width : height);
-    return Scaffold(
-      body: Column(
-        children: [
-          AppBarBackWidget(),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
+    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
+      listener: (context, state) {
+        if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+          widget.announcement = state.announcements.firstWhere(
+              (element) => element.id == widget.announcement!.id,
+              orElse: () => widget.announcement!);
+        }
+        if (state is AnnouncementRemovedParticipateState) {
+          widget.announcement = state.announcement;
+          BlocProvider.of<AnnouncementCubit>(context)
+              .getAllAnnouncementByAssociation(
+                  widget.announcement!.idAssociation!);
+        }
+      },
+      builder: (context, state) {
+        if (state is AnnouncementLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return Scaffold(
+          body: Column(
             children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: SizedBox(
+              AppBarBackWidget(),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: SizedBox(
+                        height: 25,
+                        width: 90,
+                        child: TextButton(
+                          onPressed: () {
+                            // BlocProvider.of<PageCubit>(context).setPage(3);
+                            // Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Color.fromRGBO(217, 217, 217, 1),
+                            padding: EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Accepter",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
                     height: 25,
                     width: 90,
                     child: TextButton(
                       onPressed: () {
-                        // BlocProvider.of<PageCubit>(context).setPage(3);
-                        // Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                ParticipantAnnouncementWaiting(
+                              announcement: widget.announcement,
+                            ),
+                            transitionDuration: Duration(milliseconds: 1),
+                            // Durée très courte
+                            reverseTransitionDuration:
+                                Duration(milliseconds: 1),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Color.fromRGBO(217, 217, 217, 1),
@@ -91,151 +150,114 @@ class _ParticipantAnnouncementAcceptState
                       ),
                       child: Center(
                         child: Text(
-                          "Accepter",
+                          "en attente",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                            color: Colors.black,
                             decoration: TextDecoration.none,
                           ),
                         ),
                       ),
                     ),
-                  )),
-              SizedBox(
-                width: 10,
+                  )
+                ],
               ),
               SizedBox(
-                height: 25,
-                width: 90,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            ParticipantAnnouncementWaiting(
-                          announcement: widget.announcement,
-                        ),
-                        transitionDuration: Duration(milliseconds: 1),
-                        // Durée très courte
-                        reverseTransitionDuration: Duration(milliseconds: 1),
-                      ),
-                    );
+                height: 10,
+              ),
+              SizedBox(
+                width: width * 0.9,
+                height: height * 0.05,
+                // Hauteur fixe, par exemple 40 pixels
+                child: TextFormField(
+                  controller: _controller,
+                  onChanged: (value) {
+                    setState(() {
+                      print(value);
+                    });
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromRGBO(217, 217, 217, 1),
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "en attente",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
+                  cursorColor: Color.fromRGBO(30, 29, 29, 1.0),
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher',
+                    fillColor: Colors.grey[200],
+                    filled: true,
+                    contentPadding: EdgeInsets.all(0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 1,
                       ),
                     ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: iconSize,
+                    ),
+                    suffixIcon: _controller.text.isNotEmpty
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.cancel,
+                              size: iconSize,
+                            ),
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {
+                              _controller.clear();
+                              setState(() {});
+                            },
+                          )
+                        : null, // Pas d'icône quand le champ est vide
                   ),
                 ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: width * 0.9,
-            height: height * 0.05,
-            // Hauteur fixe, par exemple 40 pixels
-            child: TextFormField(
-              controller: _controller,
-              onChanged: (value) {
-                setState(() {
-                  print(value);
-                });
-              },
-              cursorColor: Color.fromRGBO(30, 29, 29, 1.0),
-              decoration: InputDecoration(
-                hintText: 'Rechercher',
-                fillColor: Colors.grey[200],
-                filled: true,
-                contentPadding: EdgeInsets.all(0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                child: Text(
+                  "${widget.announcement!.nbPlacesTaken} Demande(s) Acceptée(s)",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
                   ),
                 ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: iconSize,
-                ),
-                suffixIcon: _controller.text.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.cancel,
-                          size: iconSize,
-                        ),
-                        padding: EdgeInsets.all(0),
-                        onPressed: () {
-                          _controller.clear();
-                          setState(() {});
-                        },
-                      )
-                    : null, // Pas d'icône quand le champ est vide
               ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            child: Text(
-              "${widget.announcement!.nbPlacesTaken} Demande(s) Acceptée(s)",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                decoration: TextDecoration.none,
+              SizedBox(
+                height: 10,
               ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          BlocConsumer<VolunteerCubit, VolunteerState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              if (state is AnnouncementLoadingState) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return FutureBuilder<List<Volunteer>>(
-                future: _processAnnouncements(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+              BlocConsumer<VolunteerCubit, VolunteerState>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  if (state is VolunteerLoadingState) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  if (snapshot.hasError) {
-                    return Center(
-                        child: Text('Erreur lors du chargement des annonces'));
-                  }
-                  if (!snapshot.hasData) {
-                    return Center(child: Text('Aucune annonce disponible'));
-                  }
-                  final volunteer = snapshot.data!;
-                  return _buildAnnouncementsList(volunteer);
+
+                  return FutureBuilder<List<Volunteer>>(
+                    future: _processAnnouncements(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return Center(
+                            child:
+                                Text('Erreur lors du chargement des annonces'));
+                      }
+                      if (!snapshot.hasData) {
+                        return Center(child: Text('Aucune annonce disponible'));
+                      }
+                      final volunteer = snapshot.data!;
+                      return _buildAnnouncementsList(volunteer);
+                    },
+                  );
                 },
-              );
-            },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -282,7 +304,15 @@ class _ParticipantAnnouncementAcceptState
             ),
           ),
           onPressed: () {
-            _toggleRefuse(widget.announcement!, volunteer.id);
+            var isParticipant = widget.announcement!.volunteers!
+                .map((e) => e.id)
+                .toList()
+                .contains(volunteer.id);
+            if (isParticipant) {
+              BlocProvider.of<AnnouncementCubit>(context)
+                  .unregisterAnnouncement(
+                      widget.announcement!.id, volunteer.id!);
+            }
           },
           child: Text(
             'Supprimer',

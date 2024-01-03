@@ -142,12 +142,12 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void unregisterAnnouncement(
-      String? idVolunteer, String idAnnouncement) async {
+  void unregisterAnnouncement(String? idAnnouncement,
+      String idVolunteer) async {
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement = await _announcementRepository
-          .unregisterVolunteer(idVolunteer!, idAnnouncement);
+          .unregisterVolunteer(idAnnouncement!, idVolunteer);
       emit(AnnouncementRemovedParticipateState(announcement: announcement));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));

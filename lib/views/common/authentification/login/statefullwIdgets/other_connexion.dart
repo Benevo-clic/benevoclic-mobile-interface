@@ -40,7 +40,7 @@ class _OtherConnectionState extends State<OtherConnection> {
 
   _submit(UserEmailGoggleVerificationState state) async {
     try {
-      _email = state.user!.email ?? "aaaa@gmail.com";
+      _email = state.user!.email;
       _id = state.user!.uid;
       final userModel = await UserRepository().isUserExist(_email!);
 

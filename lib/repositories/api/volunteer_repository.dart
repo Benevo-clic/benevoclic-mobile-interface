@@ -69,7 +69,6 @@ class VolunteerRepository {
         ),
       );
 
-      print(response.data);
 
       if (response.statusCode == 200) {
         return Volunteer.fromJson(response.data);

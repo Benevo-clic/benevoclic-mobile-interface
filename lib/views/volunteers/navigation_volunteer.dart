@@ -22,31 +22,30 @@ class NavigationVolunteer extends StatefulWidget {
 
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
-  late List<BuildNavigationModel> buildNavigationModel;
   String? _idVolunteer; // Make it nullable
 
   @override
   void initState() {
     super.initState();
-    buildNavigationModel = [
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/Menu.svg', label: 'Annonces', size: 30),
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/chat.svg', label: 'Messages', size: 30),
-      BuildNavigationModel(
-        iconTitle: 'assets/icons/profile.svg',
-        label: 'Profil',
-      ),
-    ];
-    _loadInitialData();
+    getIdVolunteer();
   }
 
-  Future<void> _loadInitialData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<BuildNavigationModel> buildNavigationModel = [
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/Menu.svg', label: 'Annonces', size: 30),
+    BuildNavigationModel(iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/chat.svg', label: 'Messages', size: 30),
+    BuildNavigationModel(
+      iconTitle: 'assets/icons/profile.svg',
+      label: 'Profil',
+    ),
+  ];
+
+  getIdVolunteer() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      _idVolunteer = prefs.getString('idVolunteer') ?? '';
+      _idVolunteer = preferences.getString('idVolunteer')!;
     });
   }
 
@@ -58,10 +57,11 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
           if (_idVolunteer == null) {
             return CircularProgressIndicator();
           }
+          BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
               .getFavoritesAnnouncementByVolunteerId(_idVolunteer!);
 
@@ -76,7 +76,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
                 idVolunteer: _idVolunteer!,
               ),
               Messages(),
-              ProfilPageVolunteer()
+              ProfilPageVolunteer(idVolunteer: _idVolunteer!)
             ],
           );
         },

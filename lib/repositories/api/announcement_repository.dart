@@ -183,7 +183,6 @@ class AnnouncementRepository {
         'http://${globals.url}/api/v1/announcement/updateAnnouncementVolunteersWaiting',
         options: Options(headers: headers),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         return Announcement.fromJson(response.data);
       } else {

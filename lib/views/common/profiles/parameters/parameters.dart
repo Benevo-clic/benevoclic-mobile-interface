@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/common/profiles/parameters/notifications_dialog.dart';
 import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
 import 'package:namer_app/views/common/profiles/widget/email_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/password_dialog.dart';
@@ -55,7 +56,15 @@ class ParametersView extends StatelessWidget {
                     Divider(
                       color: Colors.white,
                     ),
-                    ParameterLine(title: "Notifications", fct: (value) => {}),
+                    ParameterLine(
+                        title: "Notifications",
+                        fct: (context) => {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return PopDialog(content: NotificationsDialog());
+                                  })
+                            }),
                     Divider(
                       color: Colors.white,
                     ),

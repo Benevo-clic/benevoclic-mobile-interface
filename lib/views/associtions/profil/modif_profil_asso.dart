@@ -130,7 +130,7 @@ listview(BuildContext context, Association association) {
                     validator: (value) {
                       var phoneParam = PhoneVerification(value.toString());
                       if (phoneParam.security()) {
-                          phone = value.toString();
+                        phone = value.toString();
                         return null;
                       } else {
                         return phoneParam.message;

@@ -11,7 +11,8 @@ import 'package:namer_app/views/common/authentification/login/widgets/login.dart
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
-import 'package:namer_app/views/volunteers/associations/associations_view.dart';
+import 'package:namer_app/views/volunteers/profil/announcements_view.dart';
+import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
@@ -61,7 +62,7 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
                   child: affichageVolunteer(context, state.volunteer)));
         } else {
           return Scaffold(body: Text("oui"));
-          }
+        }
       },
     );
   }
@@ -161,12 +162,20 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 style: TextStyle(),
                 textAlign: TextAlign.center,
               ),
-              Text(
-                "${volunteer.myAssociations?.length} associations",
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AssociationsSub()));
+                },
+                child: Text(
+                  "${volunteer.myAssociations?.length} associations",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -209,19 +218,12 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
             text: "Historique de missions",
             icon: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AssociationsSub()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AnnouncementView()));
               },
               icon: Icon(Icons.map_rounded),
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        LineProfil(
-            text: "Paramètres",
-            icon: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.settings),
             )),
         SizedBox(
           height: 20,
@@ -269,4 +271,4 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
       ],
     ),
   );
-}  
+}

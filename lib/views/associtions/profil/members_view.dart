@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/volunteers/associations/association_profil.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
@@ -96,7 +97,10 @@ class MembersCard extends StatelessWidget {
           Button(
             backgroundColor: marron,
             color: Colors.black,
-            fct: () {},
+            fct: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AssociationProfil(bio: "fefed",)));
+            },
             text: "Supprimer",
           )
         ],

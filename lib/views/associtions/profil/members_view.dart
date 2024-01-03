@@ -4,6 +4,7 @@ import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
@@ -18,48 +19,58 @@ class MembersView extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: orange,
-            iconTheme: IconThemeData(color: Colors.white),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                children: [
-                  Button(text: "Tous", color: Colors.black, fct: (){}, backgroundColor: Colors.grey.shade400),
-                  ElevatedButton(onPressed: () {}, child: Text("Récents")),
-                  Expanded(
-                      flex: 1,
-                      child: IconButton(
-                          onPressed: () {
-                            print("ajout");
-                          },
-                          icon: Icon(Icons.add)))
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              SearchBarWidget(myController: myController),
-              SizedBox(
-                height: 15,
-              ),
-              Text("${benevoles.length} bénévoles",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+          body: Column(
+            children: [
+              AppBarBackWidget(),
               Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                child: ListView.builder(
-                  itemCount: benevoles.length,
-                  itemBuilder: (context, index) {
-                    return MembersCard(benevole: benevoles[index]);
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 5),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Button(
+                                text: "Tous",
+                                color: Colors.black,
+                                fct: () {},
+                                backgroundColor: Colors.grey.shade400),
+                            Button(
+                                text: "Récents",
+                                color: Colors.black,
+                                fct: () {},
+                                backgroundColor: Colors.grey.shade200),
+                            Expanded(child: Text("")),
+                            Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                    onPressed: () {
+                                      print("ajout");
+                                    },
+                                    icon: Icon(Icons.add)))
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        SearchBarWidget(myController: myController),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text("${benevoles.length} bénévoles",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Expanded(
+                            child: ListView.builder(
+                          itemCount: benevoles.length,
+                          itemBuilder: (context, index) {
+                            return MembersCard(benevole: benevoles[index]);
+                          },
+                        ))
+                      ]),
                 ),
-              ))
-            ]),
+              ),
+            ],
           ),
         );
       },

@@ -4,6 +4,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/searchbar_widget.dart';
 
 class AssociationsSub extends StatelessWidget {
   final List assos = ["asso1", "asso2"];
@@ -31,9 +32,7 @@ class AssociationsSub extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              SearchBar(
-                leading: Icon(Icons.search, color: Colors.black),
-              ),
+              SearchBarWidget(),
               SizedBox(
                 height: 15,
               ),
@@ -50,7 +49,7 @@ class AssociationsSub extends StatelessWidget {
                         asso: state.volunteer!.myAssociations![index]);
                   },
                 ),
-              ))
+              )),
             ]),
           ),
         );

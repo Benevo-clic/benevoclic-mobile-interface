@@ -4,10 +4,11 @@ import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
 class AssociationsSub extends StatelessWidget {
-  final List assos = ["asso1", "asso2"];
+  final List assos = ["association 1", "association 2"];
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class AssociationsSub extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(15.0),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
@@ -43,10 +44,10 @@ class AssociationsSub extends StatelessWidget {
                   child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: ListView.builder(
-                  itemCount: state.volunteer!.myAssociations!.length,
+                  itemCount:
+                      assos.length, //state.volunteer!.myAssociations!.length,
                   itemBuilder: (context, index) {
-                    return AssociationCard(
-                        asso: state.volunteer!.myAssociations![index]);
+                    return AssociationCard(asso: assos[index]);
                   },
                 ),
               )),
@@ -68,12 +69,21 @@ class AssociationCard extends StatelessWidget {
       title: AbstractContainer2(
           content: Row(
         children: [
-          Expanded(child: Icon(Icons.ac_unit)),
-          Expanded(child: Text(asso)),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Abonner", maxLines: 1),
+          Expanded(
+              flex: 0,
+              child: Icon(
+                Icons.ac_unit,
+              )),
+          SizedBox(
+            width: 10,
           ),
+          Expanded(flex: 1, child: Text(asso)),
+          Button(
+            backgroundColor: marron,
+            color: Colors.black,
+            fct: () {},
+            text: "Se désabonner",
+          )
         ],
       )),
     );

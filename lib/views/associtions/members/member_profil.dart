@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
-import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/container3.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 

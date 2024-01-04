@@ -75,8 +75,17 @@ class AssociationCard extends StatelessWidget {
         children: [
           Expanded(
               flex: 0,
-              child: Icon(
-                Icons.ac_unit,
+              child: IconButton(
+                icon: Icon(Icons.ac_unit),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AssociationProfil(
+                                association: Association(
+                                    name: "fefe", phone: "phone", type: "type"),
+                              )));
+                },
               )),
           SizedBox(
             width: 10,
@@ -85,15 +94,7 @@ class AssociationCard extends StatelessWidget {
           Button(
             backgroundColor: marron,
             color: Colors.black,
-            fct: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AssociationProfil(
-                            association: Association(
-                                name: "fefe", phone: "phone", type: "type"),
-                          )));
-            },
+            fct: () {},
             text: "Se désabonner",
           )
         ],

@@ -90,7 +90,31 @@ class MembersCard extends StatelessWidget {
       title: AbstractContainer2(
           content: Row(
         children: [
-          Expanded(flex: 0, child: Icon(Icons.ac_unit)),
+          Expanded(
+              flex: 0,
+              child: IconButton(
+                icon: Icon(Icons.ac_unit),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MemberProfil(
+                                volunteer: Volunteer(
+                                    phone: "052525",
+                                    birthDayDate: "",
+                                    firstName: "geoffrey",
+                                    lastName: "herman",
+                                    address: "fczefezfez",
+                                    bio: "vezfczfze",
+                                    city: "fefe",
+                                    email: "vezvz",
+                                    imageProfile: "",
+                                    myAssociations: [],
+                                    postalCode: "",
+                                    myAssociationsWaiting: []),
+                              )));
+                },
+              )),
           SizedBox(
             width: 10,
           ),
@@ -98,26 +122,7 @@ class MembersCard extends StatelessWidget {
           Button(
             backgroundColor: marron,
             color: Colors.black,
-            fct: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MemberProfil(
-                            volunteer: Volunteer(
-                                phone: "052525",
-                                birthDayDate: "",
-                                firstName: "geoffrey",
-                                lastName: "herman",
-                                address: "fczefezfez",
-                                bio: "vezfczfze",
-                                city: "fefe",
-                                email: "vezvz",
-                                imageProfile: "",
-                                myAssociations: [],
-                                postalCode: "",
-                                myAssociationsWaiting: []),
-                          )));
-            },
+            fct: () {},
             text: "Supprimer",
           )
         ],

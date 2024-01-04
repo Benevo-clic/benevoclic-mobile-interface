@@ -13,7 +13,6 @@ import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/profil/announcements_view.dart';
-import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -147,7 +146,6 @@ class Bio extends StatelessWidget {
 }
 
 affichageAssociation(BuildContext context, Association association) {
-  print(association.volunteers!.length);
   String bio = "";
   String address = "";
   if (association.bio != null) bio = association.bio!;

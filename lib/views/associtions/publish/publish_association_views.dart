@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/util/globals.dart' as globals;
-import 'package:namer_app/views/associtions/publish/widgets/location_form_autocomplete_widget.dart';
+import 'package:namer_app/widgets/location_form_autocomplete_widget.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
@@ -31,7 +31,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   List<String> announcementType = globals.announcementType;
   String? selectedItem = globals.announcementType[0];
   String? selectedOption;
-  LocationModel? location;
+  late LocationModel location;
   FocusNode? focusNode;
   Uint8List? _imageCover;
   late String _idAnnouncement;
@@ -75,11 +75,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   @override
   void initState() {
     super.initState();
-    location = LocationModel(
-      address: "",
-      latitude: 0,
-      longitude: 0,
-    );
+
     _addressFocusNode.addListener(_handleAddressFocusChange);
     BlocProvider.of<AnnouncementCubit>(context)
         .changeState(AnnouncementInitialState());
@@ -88,9 +84,16 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   void _handleAddressFocusChange() async {
     if (_addressFocusNode.hasFocus) {
       LocationModel? selectedLocation = await ShowInputAutocomplete(context);
-      if (selectedLocation != null) {
-        _addressController.text = selectedLocation.address;
-      }
+      setState(() {
+        if (selectedLocation != null) {
+          location = LocationModel(
+            address: selectedLocation.address,
+            latitude: selectedLocation.latitude,
+            longitude: selectedLocation.longitude,
+          );
+          _addressController.text = selectedLocation.address;
+        }
+      });
     }
   }
 
@@ -161,7 +164,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         announcement.image = "https://via.placeholder.com/150";
       }
 
-      if (_formKey.currentState!.validate()) {
+      if (_formKey.currentState!.validate() && location.address.isNotEmpty) {
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
             .updateAnnouncement(id, announcement);
@@ -202,11 +205,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         nbPlaces: int.parse(_nbPlacesController.text),
         type: _typeController.text,
         datePublication: DateFormat('dd/MM/yyyy H:mm:s').format(DateTime.now()),
-        location: LocationModel(
-          address: _addressController.text,
-          latitude: 0,
-          longitude: 0,
-        ),
+        location: location,
         labelEvent: _titleController.text,
         idAssociation: "615f1e9b1a560d0016a6b0a5",
         nameAssociation: "Association",
@@ -218,7 +217,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       } else {
         announcement.image = "https://via.placeholder.com/150";
       }
-      if (_formKey.currentState!.validate()) {
+      if (_formKey.currentState!.validate() && location.address.isNotEmpty) {
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
             .createAnnouncement(announcement);
@@ -401,11 +400,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                                   idAssociation: _idAssociation,
                                   type: _typeController.text,
                                   datePublication: _datePublication,
-                                  location: LocationModel(
-                                    address: _addressController.text,
-                                    latitude: 0,
-                                    longitude: 0,
-                                  ),
+                                  location: location,
                                   description: _descriptionController.text,
                                   labelEvent: _titleController.text,
                                   nbHours: int.parse(_nbHoursController.text),
@@ -692,6 +687,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
     return SizedBox(
       width: width * 0.8,
       child: TextFormField(
+        focusNode: _addressFocusNode,
         controller: _addressController,
         keyboardType: TextInputType.streetAddress,
         decoration: InputDecoration(

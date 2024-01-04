@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 class AppBarSearch extends StatefulWidget {
   final BuildContext contexts;
   final String? label;
-  final Function(String) onSearchChanged;
+  final Function(String?) onSearchChanged;
 
   AppBarSearch(
       {super.key,
@@ -27,8 +27,6 @@ class _AppBarSearchState extends State<AppBarSearch> {
     try {
       if (_debounce.isActive) _debounce.cancel();
       _debounce = Timer(Duration(milliseconds: 500), () async {
-        if (query.isEmpty) return;
-        print(query);
         widget.onSearchChanged(query);
       });
     } catch (e) {
@@ -126,7 +124,8 @@ class _AppBarSearchState extends State<AppBarSearch> {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     _controller.clear();
-                                    setState(() {});
+                                    widget.onSearchChanged('');
+                                    print("clear");
                                   },
                                 )
                               : null, // Pas d'icône quand le champ est vide

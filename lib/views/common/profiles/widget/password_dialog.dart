@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/util/password_verification.dart';
-import 'package:namer_app/views/common/authentification/repository/auth_repository.dart';
-
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 class PasswordDialog extends StatefulWidget {

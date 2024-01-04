@@ -45,6 +45,15 @@ class AnnouncementLoadedState extends AnnouncementState {
   List<Object?> get props => [announcements];
 }
 
+class AnnouncementFindBySearchText extends AnnouncementState {
+  final List<Announcement> announcements;
+
+  AnnouncementFindBySearchText({required this.announcements});
+
+  @override
+  List<Object?> get props => [announcements];
+}
+
 class AnnouncementAddedWaitingState extends AnnouncementState {
   final Announcement announcement;
 

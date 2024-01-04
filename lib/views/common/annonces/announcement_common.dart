@@ -64,6 +64,20 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
+    if (_searchQuery.isNotEmpty && _searchQuery != '') {
+      loadedAnnouncements = loadedAnnouncements
+          .where((element) =>
+              element.labelEvent
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              element.description
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              element.nameAssociation
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
+          .toList();
+    }
     return await _updateFavoriteStatus(loadedAnnouncements);
   }
 
@@ -82,9 +96,9 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     return announcements;
   }
 
-  void _handleSearchChanged(String query) {
+  void _handleSearchChanged(String? query) {
     setState(() {
-      _searchQuery = query;
+      _searchQuery = query!;
     });
   }
 
@@ -151,7 +165,22 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
                 .toList();
           }
           if (state is AnnouncementLoadedStateWithoutAnnouncements) {
-            announcementsAssociation = state.announcements;
+            if (_searchQuery.isNotEmpty && _searchQuery != '') {
+              announcementsAssociation = state.announcements
+                  .where((element) =>
+                      element.labelEvent
+                          .toLowerCase()
+                          .contains(_searchQuery.toLowerCase()) ||
+                      element.description
+                          .toLowerCase()
+                          .contains(_searchQuery.toLowerCase()) ||
+                      element.nameAssociation
+                          .toLowerCase()
+                          .contains(_searchQuery.toLowerCase()))
+                  .toList();
+            } else {
+              announcementsAssociation = state.announcements;
+            }
           }
 
           return FutureBuilder<List<Announcement>>(

@@ -49,6 +49,36 @@ class AnnouncementRepository {
     }
   }
 
+  Future<List<Announcement>> findAnnouncementByTextSearch(
+      String textSearch) async {
+    await _tokenService.refreshTokenIfNeeded();
+
+    try {
+      String? token = await _tokenService.getToken();
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'textSearch': textSearch
+      };
+
+      var response = await _dio.get(
+        'http://${globals.url}/api/v1/announcement/findAnnouncementByTextSearch',
+        options: Options(headers: headers),
+      );
+      print(response.data);
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((announcement) => Announcement.fromJson(announcement))
+            .toList();
+      } else {
+        throw Exception(
+            'Erreur lors de la récupération des annonces : ${response.statusMessage}');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<Announcement> unregisterVolunteer(
       String idAnnouncement, String idVolunteer) async {
     await _tokenService.refreshTokenIfNeeded();

@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
-import '../../../repositories/api/favorites_repository.dart';
 import '../../../widgets/app_bar_search.dart';
 
 class AnnouncementNoIndentify extends StatefulWidget {
@@ -20,7 +19,6 @@ class AnnouncementNoIndentify extends StatefulWidget {
 class _AnnouncementNoIndentifyState extends State<AnnouncementNoIndentify> {
   List<Announcement> announcements = [];
   List<Announcement> announcementsAssociation = [];
-  FavoritesRepository _favoritesRepository = FavoritesRepository();
   String _searchQuery = '';
 
   @override
@@ -38,9 +36,9 @@ class _AnnouncementNoIndentifyState extends State<AnnouncementNoIndentify> {
     return loadedAnnouncements;
   }
 
-  void _handleSearchChanged(String query) {
+  void _handleSearchChanged(String? query) {
     setState(() {
-      _searchQuery = query;
+      _searchQuery = query!;
     });
   }
 

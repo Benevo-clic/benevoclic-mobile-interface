@@ -131,6 +131,17 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
+  void findAnnouncementByTextSearch(String textSearch) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByTextSearch(textSearch);
+      emit(AnnouncementLoadedState(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void registerAnnouncement(String idAnnouncement, String? idVolunteer) async {
     emit(AnnouncementLoadingState());
     try {

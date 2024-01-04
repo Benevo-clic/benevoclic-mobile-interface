@@ -28,6 +28,7 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   List<Announcement> announcementsAssociation = [];
   Association? association;
   FavoritesRepository _favoritesRepository = FavoritesRepository();
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -63,6 +64,7 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
+    print('AnnouncementCommon _processAnnouncements ' + _searchQuery);
     return await _updateFavoriteStatus(loadedAnnouncements);
   }
 
@@ -81,13 +83,23 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     return announcements;
   }
 
+  void _handleSearchChanged(String query) {
+    setState(() {
+      _searchQuery = query;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('AnnouncementCommon build ' + _searchQuery);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
-        child: AppBarSearch(contexts: context, label: 'Annonces'),
+        child: AppBarSearch(
+            contexts: context,
+            label: 'Annonces',
+            onSearchChanged: _handleSearchChanged),
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {

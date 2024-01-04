@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
-import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/views/volunteers/associations/association_profil.dart';
+import 'package:namer_app/views/associtions/members/member_profil.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
@@ -102,9 +102,20 @@ class MembersCard extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AssociationProfil(
-                            association: Association(
-                                name: "fefe", phone: "phone", type: "type"),
+                      builder: (context) => MemberProfil(
+                            volunteer: Volunteer(
+                                phone: "052525",
+                                birthDayDate: "",
+                                firstName: "geoffrey",
+                                lastName: "herman",
+                                address: "fczefezfez",
+                                bio: "vezfczfze",
+                                city: "fefe",
+                                email: "vezvz",
+                                imageProfile: "",
+                                myAssociations: [],
+                                postalCode: "",
+                                myAssociationsWaiting: []),
                           )));
             },
             text: "Supprimer",

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';

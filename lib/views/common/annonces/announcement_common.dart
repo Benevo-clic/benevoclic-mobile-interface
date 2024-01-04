@@ -64,7 +64,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
-    print('AnnouncementCommon _processAnnouncements ' + _searchQuery);
     return await _updateFavoriteStatus(loadedAnnouncements);
   }
 
@@ -91,7 +90,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
 
   @override
   Widget build(BuildContext context) {
-    print('AnnouncementCommon build ' + _searchQuery);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:

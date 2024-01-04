@@ -66,6 +66,9 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    String? imageProfileAssociation =
+        widget.announcement.imageProfileAssociation ??
+            'https://via.placeholder.com/150';
 
     return InkWell(
       onTap: () {
@@ -113,7 +116,7 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                         CircleAvatar(
                           radius: 30,
                           backgroundImage:
-                              _getImageProvider(widget.announcement.image),
+                              _getImageProvider(imageProfileAssociation),
                         ),
                         SizedBox(
                           width: 10,

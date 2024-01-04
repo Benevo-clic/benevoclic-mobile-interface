@@ -27,6 +27,7 @@ class NavigationVolunteer extends StatefulWidget {
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
   String? _idVolunteer; // Make it nullable
+  Volunteer? volunteer;
 
   @override
   void initState() {
@@ -51,14 +52,14 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     setState(() {
       _idVolunteer = preferences.getString('idVolunteer')!;
     });
-    var volunteer;
+    var currentVolunteer;
     if (_idVolunteer != null) {
-      volunteer = await VolunteerRepository().getVolunteer(_idVolunteer!);
+      currentVolunteer =
+          await VolunteerRepository().getVolunteer(_idVolunteer!);
     }
-
-    if (volunteer != null) {
+    if (currentVolunteer != null) {
       setState(() {
-        widget.volunteer = volunteer;
+        volunteer = currentVolunteer;
       });
     }
   }
@@ -71,25 +72,25 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          if (widget.volunteer == null) {
+          if (volunteer == null) {
             return CircularProgressIndicator();
           }
           BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
 
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(widget.volunteer!.id!);
+              .getFavoritesAnnouncementByVolunteerId(volunteer!.id!);
 
           return IndexedStack(
             index: currentPageIndex,
             children: [
               AnnouncementCommon(
                   rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: widget.volunteer!.id!),
+                  idVolunteer: volunteer!.id!),
               FavoritesVolunteer(
-                idVolunteer: widget.volunteer!.id!,
+                idVolunteer: volunteer!.id!,
               ),
               Messages(),
-              ProfilPageVolunteer(volunteer: widget.volunteer!)
+              ProfilPageVolunteer(volunteer: volunteer!)
             ],
           );
         },

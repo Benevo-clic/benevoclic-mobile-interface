@@ -113,6 +113,7 @@ class Announcement {
     List<ResponseModel>? volunteers,
     List<ResponseModel>? volunteersWaiting,
     bool? isFavorite,
+    String? imageProfileAssociation,
   }) {
     return Announcement(
       id: id ?? this.id,
@@ -134,6 +135,8 @@ class Announcement {
       volunteers: volunteers ?? this.volunteers,
       volunteersWaiting: volunteersWaiting ?? this.volunteersWaiting,
       isFavorite: isFavorite ?? this.isFavorite,
+      imageProfileAssociation:
+          imageProfileAssociation ?? this.imageProfileAssociation,
     );
   }
 }

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/volunteers/associations/association_profil.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/button.dart';
 
 class AssociationsSub extends StatelessWidget {
   final List assos = ["asso1", "asso2"];
@@ -76,6 +79,20 @@ class AssociationCard extends StatelessWidget {
             onPressed: () {},
             child: Text("Abonner", maxLines: 1),
           ),
+          Button(
+            backgroundColor: marron,
+            color: Colors.black,
+            fct: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AssociationProfil(
+                            association: Association(
+                                name: "fefe", phone: "phone", type: "type"),
+                          )));
+            },
+            text: "Supprimer",
+          )
         ],
       )),
     );

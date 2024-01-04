@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/publish/publish_association_views.dart';
@@ -38,36 +37,6 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);
-    }
-  }
-
-  void navigateToPublishPage() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PublishAnnouncement()),
-    );
-  }
-
-  Widget buildNavigationIcon(String assetName, int index, {double? size}) {
-    final bool isSelected = index == currentPageIndex;
-
-    if (isSelected) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset(
-            assetName,
-            height: size ?? 24,
-            color: Color.fromRGBO(55, 94, 232, 1),
-          ),
-        ],
-      );
-    } else {
-      return SvgPicture.asset(
-        assetName,
-        height: size ?? 24,
-      );
     }
   }
 

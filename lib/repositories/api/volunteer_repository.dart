@@ -49,7 +49,43 @@ class VolunteerRepository {
     }
   }
 
-  Future<Volunteer> getVolunteer(String id) async {
+  Future<Volunteer> getVolunteerByEmail(String email) async {
+    await _tokenService.refreshTokenIfNeeded();
+    try {
+      String? token = await _tokenService.getToken();
+
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'email': email
+      };
+
+      var dio = Dio();
+      var response = await dio.request(
+        'http://${globals.url}/api/v1/volunteers/volunteerEmail',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return Volunteer.fromJson(response.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        await FirebaseAuth.instance.signOut();
+        throw Exception('Session expirée. Utilisateur déconnecté.');
+      }
+      throw Exception('Erreur Dio : ${e.message}');
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<dynamic> getVolunteer(String id) async {
     await _tokenService.refreshTokenIfNeeded();
 
     try {
@@ -69,7 +105,6 @@ class VolunteerRepository {
         ),
       );
 
-      print(response.data);
 
       if (response.statusCode == 200) {
         return Volunteer.fromJson(response.data);
@@ -81,7 +116,7 @@ class VolunteerRepository {
         await FirebaseAuth.instance.signOut();
         throw Exception('Session expirée. Utilisateur déconnecté.');
       }
-      throw Exception('Erreur Dio : ${e.message}');
+      return;
     } catch (e) {
       throw Exception(e);
     }

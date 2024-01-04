@@ -166,7 +166,7 @@ affichageAssociation(BuildContext context, Association association) {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "${association.volunteers?.length} associations",
+                "${association.volunteers?.length} bénévoles",
                 style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold),

@@ -120,6 +120,30 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
           if (state is AnnouncementLoadingState) {
             return Center(child: CircularProgressIndicator());
           }
+          if (state is AnnouncementErrorState) {
+            return Center(child: Text(state.message));
+          }
+          if (state is AnnouncementRemovedParticipateState) {
+            BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+          }
+          if (state is AnnouncementRemovedWaitingState) {
+            BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+          }
+          if (state is AnnouncementAddedParticipateState) {
+            BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+          }
+          if (state is AnnouncementAddedWaitingState) {
+            BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+          }
+          if (state is AnnouncementLoadedState) {
+            announcements = state.announcements
+                .where((element) => element.isVisible ?? true)
+                .toList();
+          }
+          if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+            announcementsAssociation = state.announcements;
+          }
+
           return FutureBuilder<List<Announcement>>(
             future: _processAnnouncements(),
             builder: (context, snapshot) {

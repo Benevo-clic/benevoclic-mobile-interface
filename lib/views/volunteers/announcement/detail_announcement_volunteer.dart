@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
 import '../../../widgets/information_announcement.dart';
 
@@ -14,17 +16,13 @@ class DetailAnnouncementVolunteer extends StatefulWidget {
   Announcement announcement;
   int? nbAnnouncementsAssociation;
   String? idVolunteer;
-  VoidCallback? toggleParticipant;
-  bool? isParticipate;
   VoidCallback? toggleFollow;
 
   DetailAnnouncementVolunteer(
       {super.key,
       required this.announcement,
       this.nbAnnouncementsAssociation,
-      this.isParticipate,
       this.idVolunteer,
-      this.toggleParticipant,
       this.toggleFollow});
 
   @override
@@ -35,6 +33,21 @@ class DetailAnnouncementVolunteer extends StatefulWidget {
 class _DetailAnnouncementVolunteerState
     extends State<DetailAnnouncementVolunteer> {
   AssociationRepository _associationRepository = AssociationRepository();
+  late bool isWaiting;
+  late bool isParticipate;
+
+  @override
+  void initState() {
+    super.initState();
+    isParticipate = widget.announcement.volunteers!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+    isWaiting = widget.announcement.volunteersWaiting!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+  }
 
   ImageProvider _getImageProvider(String? imageString) {
     if (imageString == null) {
@@ -71,15 +84,6 @@ class _DetailAnnouncementVolunteerState
       BlocProvider.of<VolunteerCubit>(context)
           .followAssociation(widget.announcement.idAssociation);
     }
-
-    if (mounted) {
-      setState(() {
-        isFollow = association.volunteers!
-            .map((e) => e.id)
-            .toList()
-            .contains(widget.idVolunteer);
-      });
-    }
   }
 
   bool isBase64(String str) {
@@ -91,28 +95,64 @@ class _DetailAnnouncementVolunteerState
     }
   }
 
+  void _processAnnouncements(Announcement announcement) {
+    isParticipate = announcement.volunteers!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+    isWaiting = announcement.volunteersWaiting!
+        .map((e) => e.id)
+        .toList()
+        .contains(widget.idVolunteer);
+  }
+
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.sizeOf(context).height;
-    return FutureBuilder<Association>(
-      future: getAssociation(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return BlocBuilder<AnnouncementCubit, AnnouncementState>(
+      builder: (context, state) {
+        if (state is AnnouncementRemovedParticipateState) {
+          widget.announcement = state.announcement;
+          _processAnnouncements(state.announcement);
+        }
+        if (state is AnnouncementAddedParticipateState) {
+          widget.announcement = state.announcement;
+          _processAnnouncements(state.announcement);
+        }
+        if (state is AnnouncementErrorState) {
+          SnackBar snackBar = SnackBar(content: Text("Erreur lors de l'ajout"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+        if (state is AnnouncementLoadingState) {
           return Center(child: CircularProgressIndicator());
         }
-        if (snapshot.hasError) {
-          return Center(child: Text('Erreur lors du chargement des annonces'));
+        if (state is AnnouncementRemovedWaitingState) {
+          widget.announcement = state.announcement;
+          _processAnnouncements(state.announcement);
         }
-        if (!snapshot.hasData) {
-          return Center(child: Text('Association introuvable'));
+        if (state is AnnouncementAddedWaitingState) {
+          widget.announcement = state.announcement;
+          _processAnnouncements(state.announcement);
         }
-        final association = snapshot.data!;
-        print(association.volunteersWaiting!
-            .map((e) => e.id)
-            .toList()
-            .contains(widget.idVolunteer));
-        return _buildAnnouncementDetail(context, association);
+        if (state is AnnouncementErrorState) {
+          return Center(child: Text(state.message));
+        }
+        return FutureBuilder<Association>(
+          future: getAssociation(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(
+                  child: Text('Erreur lors du chargement des annonces'));
+            }
+            if (!snapshot.hasData) {
+              return Center(child: Text('Association introuvable'));
+            }
+            final association = snapshot.data!;
+            return _buildAnnouncementDetail(context, association);
+          },
+        );
       },
     );
   }
@@ -252,7 +292,7 @@ class _DetailAnnouncementVolunteerState
               SizedBox(
                 width: 15,
               ),
-              if (widget.announcement.full! && !widget.isParticipate!)
+              if (widget.announcement.full! && !isParticipate)
                 Expanded(
                   child: SizedBox(
                     height: 25,
@@ -277,17 +317,16 @@ class _DetailAnnouncementVolunteerState
                     ),
                   ),
                 ),
-              if (widget.announcement.volunteersWaiting!
-                  .map((e) => e.id)
-                  .toList()
-                  .contains(widget.idVolunteer))
+              if (isWaiting)
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        widget.toggleParticipant!();
+                        BlocProvider.of<AnnouncementCubit>(context)
+                            .removeVolunteerFromWaitingList(
+                                widget.announcement.id!, widget.idVolunteer!);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(217, 217, 217, 1),
@@ -307,14 +346,16 @@ class _DetailAnnouncementVolunteerState
                     ),
                   ),
                 ),
-              if (widget.isParticipate!)
+              if (isParticipate)
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        widget.toggleParticipant!();
+                        BlocProvider.of<AnnouncementCubit>(context)
+                            .unregisterAnnouncement(
+                                widget.announcement.id!, widget.idVolunteer!);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(217, 217, 217, 1),
@@ -334,19 +375,16 @@ class _DetailAnnouncementVolunteerState
                     ),
                   ),
                 ),
-              if (!widget.isParticipate! &&
-                  !widget.announcement.full! &&
-                  !widget.announcement.volunteersWaiting!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer))
+              if (!isParticipate && !widget.announcement.full! && !isWaiting)
                 Expanded(
                   child: SizedBox(
                     height: 25,
                     width: 150,
                     child: TextButton(
                       onPressed: () {
-                        widget.toggleParticipant!();
+                        BlocProvider.of<AnnouncementCubit>(context)
+                            .addVolunteerToWaitingList(
+                                widget.announcement.id!, widget.idVolunteer!);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(170, 77, 79, 1),

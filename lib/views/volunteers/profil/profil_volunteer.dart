@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
-import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -21,48 +18,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../cubit/user/user_cubit.dart';
 
 class ProfilPageVolunteer extends StatefulWidget {
-  const ProfilPageVolunteer({super.key});
+  Volunteer volunteer;
+
+  ProfilPageVolunteer({super.key, required this.volunteer});
 
   @override
   State<ProfilPageVolunteer> createState() => _ProfilPageVolunteerState();
 }
 
 class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
-  UserModel? user;
-  Volunteer? volunteer;
-  dynamic name = "corentin";
 
   @override
   void initState() {
     super.initState();
-    getUser(context);
   }
 
-  getUser(BuildContext context) async {
-    User user = FirebaseAuth.instance.currentUser!;
-    BlocProvider.of<VolunteerCubit>(context).getVolunteer(user.uid);
-  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VolunteerCubit, VolunteerState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (state is VolunteerLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (state is VolunteerInfo) {
-          volunteer = state.getInfo();
-          return Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              appBar: getAppBarProfil(context),
-              body: SingleChildScrollView(
-                  child: affichageVolunteer(context, state.volunteer)));
-        } else {
-          return Scaffold(body: Text("oui"));
-          }
-      },
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
+      appBar: getAppBarProfil(context),
+      body: SingleChildScrollView(
+        child: affichageVolunteer(context, widget.volunteer),
+      ),
     );
   }
 }
@@ -162,7 +142,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "${volunteer.myAssociations?.length} associations",
+                "${volunteer.myAssociations?.length ?? 0} associations",
                 style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.bold),

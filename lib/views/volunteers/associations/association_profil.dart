@@ -30,9 +30,10 @@ class AssociationProfil extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(""),
+                Text(association.name),
                 Expanded(child: Text("")),
-                Text(""),
+                Text(
+                    association.volunteers?.length.toString() ?? "0 bénévoles"),
               ],
             ),
             Row(

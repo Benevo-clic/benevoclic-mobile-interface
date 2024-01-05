@@ -30,31 +30,6 @@ class MembersToAccept extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Button(
-                                text: "Tous",
-                                color: Colors.black,
-                                fct: () {},
-                                backgroundColor: Colors.grey.shade400),
-                            Button(
-                                text: "Récents",
-                                color: Colors.black,
-                                fct: () {},
-                                backgroundColor: Colors.grey.shade200),
-                            Expanded(child: Text("")),
-                            Expanded(
-                                flex: 1,
-                                child: IconButton(
-                                    onPressed: () {
-                                      print("ajout");
-                                    },
-                                    icon: Icon(Icons.add)))
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
                         SearchBarWidget(myController: myController),
                         SizedBox(
                           height: 15,
@@ -66,7 +41,7 @@ class MembersToAccept extends StatelessWidget {
                             child: ListView.builder(
                           itemCount: benevoles.length,
                           itemBuilder: (context, index) {
-                            return MembersCard(benevole: benevoles[index]);
+                            return MembersCardToAdd(benevole: benevoles[index]);
                           },
                         ))
                       ]),
@@ -80,10 +55,10 @@ class MembersToAccept extends StatelessWidget {
   }
 }
 
-class MembersCard extends StatelessWidget {
+class MembersCardToAdd extends StatelessWidget {
   final dynamic benevole;
 
-  const MembersCard({super.key, this.benevole});
+  const MembersCardToAdd({super.key, this.benevole});
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -118,19 +93,30 @@ class MembersCard extends StatelessWidget {
           SizedBox(
             width: 10,
           ),
-          Expanded(flex: 1, child: Text(benevole)),
-          Button(
-            backgroundColor: marron,
-            color: Colors.black,
-            fct: () {},
-            text: "Supprimer",
+          Column(
+            children: [
+              Text(benevole),
+              Row(
+                children: [
+                  Button(
+                    backgroundColor: Colors.blue.shade800,
+                    color: Colors.white,
+                    fct: () {},
+                    text: "Accepter",
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Button(
+                    backgroundColor: marron,
+                    color: Colors.white,
+                    fct: () {},
+                    text: "Refuser",
+                  )
+                ],
+              ),
+            ],
           ),
-          Button(
-            backgroundColor: marron,
-            color: Colors.black,
-            fct: () {},
-            text: "ajouter",
-          )
         ],
       )),
     );

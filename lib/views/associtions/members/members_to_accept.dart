@@ -5,13 +5,12 @@ import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/members/member_profil.dart';
-import 'package:namer_app/views/associtions/members/members_to_accept.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
-class MembersView extends StatelessWidget {
+class MembersToAccept extends StatelessWidget {
   List<String> benevoles = ["bene 1", "bene 2"];
 
   TextEditingController myController = TextEditingController();
@@ -48,11 +47,6 @@ class MembersView extends StatelessWidget {
                                 flex: 1,
                                 child: IconButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MembersToAccept()));
                                       print("ajout");
                                     },
                                     icon: Icon(Icons.add)))
@@ -130,6 +124,12 @@ class MembersCard extends StatelessWidget {
             color: Colors.black,
             fct: () {},
             text: "Supprimer",
+          ),
+          Button(
+            backgroundColor: marron,
+            color: Colors.black,
+            fct: () {},
+            text: "ajouter",
           )
         ],
       )),

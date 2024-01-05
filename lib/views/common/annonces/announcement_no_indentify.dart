@@ -42,6 +42,12 @@ class _AnnouncementNoIndentifyState extends State<AnnouncementNoIndentify> {
     });
   }
 
+  void _handleAnnouncementFilterChanged(List<Announcement>? announcements) {
+    setState(() {
+      this.announcements = announcements!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +57,8 @@ class _AnnouncementNoIndentifyState extends State<AnnouncementNoIndentify> {
         child: AppBarSearch(
             contexts: context,
             label: 'Annonces',
-            onSearchChanged: _handleSearchChanged),
+            onSearchChanged: _handleSearchChanged,
+            onAnnouncementsChanged: _handleAnnouncementFilterChanged),
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {

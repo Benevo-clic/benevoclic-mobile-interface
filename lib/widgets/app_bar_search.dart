@@ -2,17 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/models/announcement_model.dart';
+
+import '../views/common/filter/filter_view.dart';
 
 class AppBarSearch extends StatefulWidget {
   final BuildContext contexts;
   final String? label;
   final Function(String?) onSearchChanged;
+  final Function(List<Announcement>?) onAnnouncementsChanged;
 
   AppBarSearch(
       {super.key,
       required this.contexts,
       this.label,
-      required this.onSearchChanged});
+      required this.onSearchChanged,
+      required this.onAnnouncementsChanged});
 
   @override
   State<AppBarSearch> createState() => _AppBarSearchState();
@@ -125,7 +130,6 @@ class _AppBarSearchState extends State<AppBarSearch> {
                                   onPressed: () {
                                     _controller.clear();
                                     widget.onSearchChanged('');
-                                    print("clear");
                                   },
                                 )
                               : null, // Pas d'icône quand le champ est vide
@@ -134,7 +138,10 @@ class _AppBarSearchState extends State<AppBarSearch> {
                     ),
                     IconButton(
                       onPressed: () {
-                        // Action pour le deuxième bouton
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FilterView()));
                       },
                       padding: EdgeInsets.only(bottom: 1, right: 10, top: 6),
                       icon: SvgPicture.asset(

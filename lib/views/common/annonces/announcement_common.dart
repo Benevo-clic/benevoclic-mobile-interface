@@ -102,6 +102,16 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     });
   }
 
+  void _handleAnnouncementFilterChanged(List<Announcement>? announcements) {
+    setState(() {
+      if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+        announcementsAssociation = announcements!;
+      } else {
+        this.announcements = announcements!;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +121,8 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
         child: AppBarSearch(
             contexts: context,
             label: 'Annonces',
-            onSearchChanged: _handleSearchChanged),
+            onSearchChanged: _handleSearchChanged,
+            onAnnouncementsChanged: _handleAnnouncementFilterChanged),
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {

@@ -45,6 +45,33 @@ class AnnouncementLoadedState extends AnnouncementState {
   List<Object?> get props => [announcements];
 }
 
+class AnnouncementLoadedStateAfterFilter extends AnnouncementState {
+  final List<Announcement> announcements;
+
+  AnnouncementLoadedStateAfterFilter({required this.announcements});
+
+  @override
+  List<Object?> get props => [announcements];
+}
+
+class AnnouncementLoadedStateAfterFilterAndSearch extends AnnouncementState {
+  final List<Announcement> announcements;
+
+  AnnouncementLoadedStateAfterFilterAndSearch({required this.announcements});
+
+  @override
+  List<Object?> get props => [announcements];
+}
+
+class AnnouncementLoadedStateAfterFilterError extends AnnouncementState {
+  final String message;
+
+  AnnouncementLoadedStateAfterFilterError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class AnnouncementFindBySearchText extends AnnouncementState {
   final List<Announcement> announcements;
 

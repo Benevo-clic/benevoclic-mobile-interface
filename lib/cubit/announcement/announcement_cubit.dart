@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/filter_announcement_model.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
 
 import '../../repositories/api/favorites_repository.dart';
@@ -128,6 +129,17 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       emit(AnnouncementLoadedState(announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementAfterFilter(FilterAnnouncement filter) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements =
+          await _announcementRepository.findAnnouncementAfterFilter(filter);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementLoadedStateAfterFilterError(message: e.toString()));
     }
   }
 

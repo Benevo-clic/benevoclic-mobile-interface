@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/filter_announcement_model.dart';
 import 'package:namer_app/util/globals.dart' as globals;
 
 import '../../models/announcement_model.dart';
@@ -44,6 +45,36 @@ class AnnouncementRepository {
         }
       }
       throw Exception('Erreur Dio : ${e.message}');
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<Announcement>> findAnnouncementAfterFilter(
+      FilterAnnouncement filterAnnouncement) async {
+    await _tokenService.refreshTokenIfNeeded();
+
+    try {
+      String? token = await _tokenService.getToken();
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      var data = json.encode(filterAnnouncement.toJson());
+
+      var response = await _dio.get(
+        'http://${globals.url}/api/v1/announcement/findAnnouncementByFilter',
+        options: Options(headers: headers),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        return (response.data as List)
+            .map((announcement) => Announcement.fromJson(announcement))
+            .toList();
+      } else {
+        throw Exception(
+            'Erreur lors de la récupération des annonces : ${response.statusMessage}');
+      }
     } catch (e) {
       throw Exception(e);
     }
@@ -241,6 +272,8 @@ class AnnouncementRepository {
         'http://${globals.url}/api/v1/announcement/announcementByAssociationId',
         options: Options(headers: headers),
       );
+
+      print(response.data);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((announcement) => Announcement.fromJson(announcement))

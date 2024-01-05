@@ -64,6 +64,15 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
+    if (currentState is AnnouncementLoadedStateWithoutAnnouncements) {
+      loadedAnnouncements = currentState.announcements;
+    }
+
+    if (currentState is AnnouncementLoadedStateAfterFilter) {
+      print("AnnouncementLoadedStateAfterFilter");
+      loadedAnnouncements = currentState.announcements;
+    }
+
     if (_searchQuery.isNotEmpty && _searchQuery != '') {
       loadedAnnouncements = loadedAnnouncements
           .where((element) =>
@@ -126,6 +135,14 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
+          // if (state is AnnouncementLoadedStateAfterFilter) {
+          //   setState(() {
+          //     announcementsAssociation = state.announcements;
+          //   });
+          //   print("AnnouncementLoadedStateAfterFilter common");
+          //   print(announcementsAssociation.length);
+          // }
+
           if (state is AnnouncementLoadedState) {
             setState(() {
               announcements = state.announcements

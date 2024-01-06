@@ -157,16 +157,12 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
           if (state is AnnouncementLoadedState) {
-            setState(() {
               announcements = state.announcements
                   .where((element) => element.isVisible ?? true)
                   .toList();
-            });
           } else if (state is AnnouncementLoadedStateWithoutAnnouncements) {
             if (widget.idAssociation != null && widget.idAssociation != '') {
-              setState(() {
                 announcementsAssociation = state.announcements;
-              });
             }
           } else if (state is AnnouncementErrorState) {
             _showSnackBar(context, state.message, Colors.red);
@@ -201,7 +197,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
             BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
           }
           if (state is AnnouncementLoadedState) {
-            print(state.announcements.length);
             announcements = state.announcements
                 .where((element) => element.isVisible ?? true)
                 .toList();
@@ -232,7 +227,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
                 return Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
-                print(snapshot.error);
                 return _buildEmptyList();
               }
               if (!snapshot.hasData) {

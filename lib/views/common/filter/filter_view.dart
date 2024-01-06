@@ -97,6 +97,10 @@ class _FilterView extends State<FilterView> {
           ? values.add("Après 18:00")
           : values.remove("Après 18:00");
     }
+    setState(() {
+      valuesList = valuesList;
+      values = values;
+    });
   }
 
   changeHour(hourParam) {
@@ -166,7 +170,6 @@ class _FilterView extends State<FilterView> {
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
       if (state is AnnouncementLoadedStateAfterFilter) {
-        setState(() {
           _searchAnnouncement(state.announcements);
           if (widget.idAssociation == null || widget.idAssociation == '') {
             announcements = state.announcements.where((element) {
@@ -175,7 +178,6 @@ class _FilterView extends State<FilterView> {
           } else {
             announcements = state.announcements;
           }
-        });
       }
     }, builder: (context, state) {
       return Scaffold(

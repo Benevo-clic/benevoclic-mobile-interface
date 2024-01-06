@@ -17,9 +17,7 @@ import '../../common/authentification/login/widgets/customTextFormField_widget.d
 import '../navigation_association.dart';
 
 class PublishAnnouncement extends StatefulWidget {
-  bool? isEditing = false;
-
-  PublishAnnouncement({super.key, this.isEditing});
+  PublishAnnouncement({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,6 +39,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   late String _datePublication;
   late double longitude;
   late double latitude;
+  bool? isEditing = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _addressFocusNode = FocusNode();
@@ -167,6 +166,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       }
 
       if (_formKey.currentState!.validate() && location.address.isNotEmpty) {
+        print('Form is valid');
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
             .updateAnnouncement(id, announcement);
@@ -191,7 +191,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                "Une erreur s'est produite lors de la création de l'annonce"),
+                "Une erreur s'est produite lors de la modification de l'annonce"),
           ),
         );
       });
@@ -289,7 +289,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
             selectedOption = 'Autre';
             _nbPlacesTaken == state.announcement.nbPlacesTaken;
             _idAnnouncement = state.announcement.id!;
-            widget.isEditing = state.isUpdating;
+            isEditing = state.isUpdating;
             _idAssociation = state.announcement.idAssociation;
             _isVisibility = state.announcement.isVisible!;
             _datePublication = state.announcement.datePublication;
@@ -369,7 +369,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                       ],
                     ),
                   ),
-                  if (widget.isEditing == null || widget.isEditing == false)
+                  if (isEditing == null || isEditing == false)
                     Positioned(
                       bottom: 20,
                       right: 20,
@@ -385,7 +385,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                         child: Icon(Icons.publish_rounded),
                       ),
                     ),
-                  if (widget.isEditing == true)
+                  if (isEditing == true)
                     Stack(
                       children: [
                         Positioned(

@@ -49,7 +49,7 @@ class AssociationProfil extends StatelessWidget {
                       text: "Adhérer",
                       color: Colors.white,
                       fct: () {},
-                      backgroundColor: const Color.fromARGB(255, 95, 100, 95)),
+                      backgroundColor: Colors.green ),
                   Expanded(child: Text("")),
                   Button(
                       text: "Nous contacter",

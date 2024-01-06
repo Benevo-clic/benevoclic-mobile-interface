@@ -110,7 +110,7 @@ class _InformationDialog extends State<InformationDialog> {
                               lastName: _lastName,
                               phone: _phone,
                               birthDayDate: _birth,
-                              address: state.volunteer!.birthDayDate,
+                              address: _address ,
                               bio: state.volunteer!.bio,
                               city: state.volunteer!.city,
                               email: state.volunteer!.email,

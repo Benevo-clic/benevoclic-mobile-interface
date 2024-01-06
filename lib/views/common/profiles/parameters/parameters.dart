@@ -62,7 +62,8 @@ class ParametersView extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return PopDialog(content: NotificationsDialog());
+                                    return PopDialog(
+                                        content: NotificationsDialog());
                                   })
                             }),
                     Divider(

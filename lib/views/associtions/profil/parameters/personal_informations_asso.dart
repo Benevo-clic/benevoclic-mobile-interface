@@ -83,7 +83,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                               name: _name,
                               phone: _phone,
                               type: '',
-                              address: state.association!.address,
+                              address: _address,
                               bio: state.association!.bio,
                               announcement: state.association!.announcement,
                               city: state.association!.city,

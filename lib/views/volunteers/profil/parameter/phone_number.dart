@@ -68,15 +68,25 @@ class _PopDialog extends State<PhoneDialog> {
                         if (_formKey.currentState!.validate()) {
                           print(_phone);
                           Volunteer volunteer = Volunteer(
+                              bio: state.volunteer!.bio,
+                              city: state.volunteer!.city,
+                              email: state.volunteer!.email,
+                              imageProfile: state.volunteer!.imageProfile,
+                              myAssociations: state.volunteer!.myAssociations,
+                              myAssociationsWaiting:
+                                  state.volunteer!.myAssociationsWaiting,
+                              postalCode: state.volunteer!.postalCode,
+                              address: state.volunteer!.address,
                               firstName: state.volunteer!.firstName,
                               lastName: state.volunteer!.lastName,
                               phone: _phone.toString(),
                               birthDayDate: state.volunteer!.birthDayDate);
                           BlocProvider.of<VolunteerCubit>(context)
                               .updateVolunteer(volunteer);
-                              Navigator.pop(context);
+                          BlocProvider.of<VolunteerCubit>(context)
+                              .volunteerState(volunteer);
+                          Navigator.pop(context);
                         }
-                        
                       },
                       backgroundColor: Colors.grey)
                 ],

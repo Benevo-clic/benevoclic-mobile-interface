@@ -11,24 +11,33 @@ import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
 class MembersView extends StatefulWidget {
+  final List<Volunteer> volunteers;
+
+  const MembersView({super.key, required this.volunteers});
   @override
   State<StatefulWidget> createState() {
-    return _MembersViewState();
+    return _MembersViewState(volunteers : volunteers);
   }
 }
 
 class _MembersViewState extends State<MembersView> {
-  List<Volunteer> volunteers = [];
+  List<Volunteer> volunteers;
   List<Volunteer> allVolunteers = [];
   TextEditingController myController = TextEditingController();
 
+  _MembersViewState({required this.volunteers});
+
+
+
   @override
   Widget build(BuildContext context) {
+    print(volunteers);
     return BlocConsumer<MembersCubit, MembersState>(
       listener: (context, state) {},
       builder: (context, state) {
         allVolunteers = state.volunteers!;
         if (state is MembersAcceptedState) {
+          print('ffffff$volunteers');
           return Scaffold(
             body: Column(
               children: [
@@ -132,9 +141,11 @@ class _MembersViewState extends State<MembersView> {
     final result = allVolunteers.where((volunteer) {
       final name = volunteer.firstName.toLowerCase();
       final input = query.toLowerCase();
+      print(input);
       return name.contains(input);
     }).toList();
-
+    
+    print(result);
     setState(() => volunteers = result);
   }
 }

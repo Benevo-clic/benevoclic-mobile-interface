@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/members/members_view.dart';
@@ -29,7 +30,7 @@ class ProfilPageAssociation extends StatefulWidget {
 
 class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
   Association association =
-      Association(name: "name", phone: "phone", type: "type");
+      Association(name: "name", phone: "phone", type: "type", volunteers: [], volunteersWaiting: []);
   dynamic name = "corentin";
 
   @override
@@ -150,6 +151,7 @@ affichageAssociation(BuildContext context, Association association) {
   String address = "";
   if (association.bio != null) bio = association.bio!;
   if (association.address != null) address = association.address!;
+
   return Center(
     child: Column(
       children: [
@@ -167,11 +169,14 @@ affichageAssociation(BuildContext context, Association association) {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MembersView()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MembersView(
+                              volunteers: association.volunteers!)));
                 },
                 child: Text(
-                  "${association.volunteers?.length} membres",
+                  "${association.volunteers!.length} membres",
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontWeight: FontWeight.bold),

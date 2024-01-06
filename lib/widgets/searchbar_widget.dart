@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  final TextEditingController myController;
+  final TextEditingController myController ;
   final dynamic fct;
 
   SearchBarWidget({super.key, this.fct, required this.myController});
@@ -9,7 +9,7 @@ class SearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: TextField(
+      child: TextFormField(
         onChanged: fct,
         controller: myController,
         cursorColor: Color.fromRGBO(30, 29, 29, 1.0),
@@ -27,7 +27,7 @@ class SearchBarWidget extends StatelessWidget {
           ),
           prefixIcon: IconButton(
               onPressed: () {
-                print(myController.text);
+                //print(myController.text);
               },
               icon: Icon(Icons.search)),
         ),

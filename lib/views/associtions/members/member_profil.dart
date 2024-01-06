@@ -17,18 +17,22 @@ class MemberProfil extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(children: [
-                AppBarBackWidgetFct(
-            fct: (value) =>
-                BlocProvider.of<MembersCubit>(context).initState(value)),
-                Icon(
+      child: Column(children: [
+        AppBarBackWidgetFct(fct: (value) {
+          if (context.read<MembersCubit>().state.oldState == "0") {
+            BlocProvider.of<MembersCubit>(context).initState(value);
+          } else {
+            BlocProvider.of<MembersCubit>(context).membersToAccept(value);
+          }
+        }),
+        Icon(
           Icons.pie_chart_outline_sharp,
           size: MediaQuery.sizeOf(context).height * 0.2,
-                ),
-                SizedBox(
+        ),
+        SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
-                ),
-                Container3(
+        ),
+        Container3(
             content: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,15 +44,15 @@ class MemberProfil extends StatelessWidget {
               Text("${volunteer.myAssociations} associations")
             ],
           ),
-                )),
-                SizedBox(
+        )),
+        SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
-                ),
-                AbstractContainer2(content: Text(volunteer.bio ?? "aucune bio")),
-                SizedBox(
+        ),
+        AbstractContainer2(content: Text(volunteer.bio ?? "aucune bio")),
+        SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
-                ),
-                AbstractContainer2(
+        ),
+        AbstractContainer2(
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -74,16 +78,16 @@ class MemberProfil extends StatelessWidget {
               Section(text: volunteer.phone, icon: Icon(Icons.phone_android)),
             ],
           ),
-                ),
-                SizedBox(
+        ),
+        SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
-                ),
-                AbstractContainer2(
+        ),
+        AbstractContainer2(
             content: TitleWithIcon(
           icon: Icon(Icons.text_snippet_outlined),
           title: "Annones",
-                )),
-              ]),
-        ));
+        )),
+      ]),
+    ));
   }
 }

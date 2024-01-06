@@ -29,8 +29,12 @@ class ProfilPageAssociation extends StatefulWidget {
 }
 
 class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
-  Association association =
-      Association(name: "name", phone: "phone", type: "type", volunteers: [], volunteersWaiting: []);
+  Association association = Association(
+      name: "name",
+      phone: "phone",
+      type: "type",
+      volunteers: [],
+      volunteersWaiting: []);
   dynamic name = "corentin";
 
   @override

@@ -5,6 +5,7 @@ import 'package:namer_app/models/volunteer_model.dart';
 abstract class MembersState {
   List<Volunteer> volunteers = [];
   Volunteer? detailVolunteer;
+  final String oldState = "0";
 }
 
 class MembersAcceptedState extends MembersState {
@@ -16,6 +17,8 @@ class MembersAcceptedState extends MembersState {
 class MembersLoadingState extends MembersState {}
 
 class MembersToAcceptState extends MembersState {
+  @override
+  String oldState = "1";
   final List<Volunteer> volunteers;
 
   MembersToAcceptState({required this.volunteers});

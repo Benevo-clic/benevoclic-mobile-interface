@@ -5,7 +5,6 @@ import 'package:namer_app/cubit/members/members_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/members/member_profil.dart';
-import 'package:namer_app/views/associtions/members/members_to_accept.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
@@ -20,7 +19,7 @@ class MembersView extends StatefulWidget {
 
 class _MembersViewState extends State<MembersView> {
   List<Volunteer> volunteers = [];
-  List<Volunteer> allVolunteers= [];
+  List<Volunteer> allVolunteers = [];
   TextEditingController myController = TextEditingController();
 
   @override
@@ -29,7 +28,6 @@ class _MembersViewState extends State<MembersView> {
       listener: (context, state) {},
       builder: (context, state) {
         allVolunteers = state.volunteers!;
-        
         if (state is MembersAcceptedState) {
           return Scaffold(
             body: Column(
@@ -80,8 +78,7 @@ class _MembersViewState extends State<MembersView> {
                               child: ListView.builder(
                             itemCount: volunteers.length,
                             itemBuilder: (context, index) {
-                              final volunteer = volunteers[index];
-                              return MembersCard(benevole: volunteer);
+                              return MembersCard(benevole: volunteers[index]);
                             },
                           ))
                         ]),
@@ -91,7 +88,38 @@ class _MembersViewState extends State<MembersView> {
             ),
           );
         } else if (state is MembersToAcceptState) {
-          return Text("");
+          return Scaffold(
+            body: Column(
+              children: [
+                AppBarBackWidgetFct(fct: (value) => BlocProvider.of<MembersCubit>(context).initState(value)),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 20, 15, 5),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SearchBarWidget(
+                              myController: myController, fct: search),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text("${volunteers.length} bénévoles",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Expanded(
+                              child: ListView.builder(
+                            itemCount: volunteers.length,
+                            itemBuilder: (context, index) {
+                              return MembersCardToAdd(
+                                  benevole: volunteers[index]);
+                            },
+                          ))
+                        ]),
+                  ),
+                ),
+              ],
+            ),
+          );
           //return MembersToAccept();
         } else {
           return Text('');
@@ -156,6 +184,74 @@ class MembersCard extends StatelessWidget {
             fct: () {},
             text: "Supprimer",
           )
+        ],
+      )),
+    );
+  }
+}
+
+class MembersCardToAdd extends StatelessWidget {
+  final Volunteer benevole;
+
+  const MembersCardToAdd({super.key, required this.benevole});
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: AbstractContainer2(
+          content: Row(
+        children: [
+          Expanded(
+              flex: 0,
+              child: IconButton(
+                icon: Icon(Icons.ac_unit),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MemberProfil(
+                                volunteer: Volunteer(
+                                    phone: "052525",
+                                    birthDayDate: "",
+                                    firstName: "geoffrey",
+                                    lastName: "herman",
+                                    address: "fczefezfez",
+                                    bio: "vezfczfze",
+                                    city: "fefe",
+                                    email: "vezvz",
+                                    imageProfile: "",
+                                    myAssociations: [],
+                                    postalCode: "",
+                                    myAssociationsWaiting: []),
+                              )));
+                },
+              )),
+          SizedBox(
+            width: 10,
+          ),
+          Column(
+            children: [
+              Text("${benevole.firstName} ${benevole.lastName}"),
+              Row(
+                children: [
+                  Button(
+                    backgroundColor: Colors.blue.shade800,
+                    color: Colors.white,
+                    fct: () {},
+                    text: "Accepter",
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Button(
+                    backgroundColor: marron,
+                    color: Colors.white,
+                    fct: () {},
+                    text: "Refuser",
+                  )
+                ],
+              ),
+            ],
+          ),
         ],
       )),
     );

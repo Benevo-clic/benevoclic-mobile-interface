@@ -45,7 +45,7 @@ class MembersCubit extends Cubit<MembersState> {
   }
 
   void membersToAccept(String id) {
-    //emit(MembersLoadingState());
+    emit(MembersLoadingState());
     List<Volunteer> volunteers = [
       Volunteer(
           firstName: "firstName",

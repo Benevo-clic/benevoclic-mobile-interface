@@ -187,7 +187,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
                             color: Colors.black,
                             size: 16,
                           ),
-                          text: widget.announcement.dateEvent,
+                          text:
+                              '${widget.announcement.dateEvent} à ${widget.announcement.hourEvent}',
                           size: 11,
                         ),
                       ],

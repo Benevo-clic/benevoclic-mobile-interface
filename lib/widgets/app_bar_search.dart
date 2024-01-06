@@ -2,17 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/models/announcement_model.dart';
+
+import '../views/common/filter/filter_view.dart';
 
 class AppBarSearch extends StatefulWidget {
   final BuildContext contexts;
   final String? label;
-  final Function(String) onSearchChanged;
+  final Function(String?) onSearchChanged;
+  final Function(List<Announcement>?) onAnnouncementsChanged;
+  final List<Announcement> announcements = [];
+  String? idAssociation;
 
   AppBarSearch(
       {super.key,
       required this.contexts,
       this.label,
-      required this.onSearchChanged});
+      required this.onSearchChanged,
+      required this.onAnnouncementsChanged,
+      this.idAssociation});
 
   @override
   State<AppBarSearch> createState() => _AppBarSearchState();
@@ -27,13 +35,19 @@ class _AppBarSearchState extends State<AppBarSearch> {
     try {
       if (_debounce.isActive) _debounce.cancel();
       _debounce = Timer(Duration(milliseconds: 500), () async {
-        if (query.isEmpty) return;
-        print(query);
         widget.onSearchChanged(query);
       });
     } catch (e) {
       print(e);
     }
+  }
+
+  List<Announcement> _getAnnouncements(List<Announcement>? announcement) {
+    setState(() {
+      widget.onAnnouncementsChanged(announcement);
+      widget.announcements.addAll(announcement!);
+    });
+    return widget.announcements;
   }
 
   @override
@@ -126,7 +140,7 @@ class _AppBarSearchState extends State<AppBarSearch> {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     _controller.clear();
-                                    setState(() {});
+                                    widget.onSearchChanged('');
                                   },
                                 )
                               : null, // Pas d'icône quand le champ est vide
@@ -135,7 +149,15 @@ class _AppBarSearchState extends State<AppBarSearch> {
                     ),
                     IconButton(
                       onPressed: () {
-                        // Action pour le deuxième bouton
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => FilterView(
+                              onAnnouncementsChanged: _getAnnouncements,
+                              idAssociation: widget.idAssociation,
+                            ),
+                          ),
+                        );
                       },
                       padding: EdgeInsets.only(bottom: 1, right: 10, top: 6),
                       icon: SvgPicture.asset(

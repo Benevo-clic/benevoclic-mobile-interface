@@ -7,7 +7,7 @@ import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 
 import '../../repositories/api/user_repository.dart';
-import '../../repositories/auth_repository.dart';
+import '../../repositories/google/auth_repository.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserRepository _userRepository;

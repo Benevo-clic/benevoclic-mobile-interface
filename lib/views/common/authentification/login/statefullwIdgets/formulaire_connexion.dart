@@ -11,9 +11,7 @@ import 'package:namer_app/views/common/authentification/login/widgets/customText
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
-import '../../../../../models/volunteer_model.dart';
-import '../../../../../repositories/api/volunteer_repository.dart';
-import '../../../../../repositories/auth_repository.dart';
+import '../../../../../repositories/google/auth_repository.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
 import '../../../../../widgets/inscription_signup.dart';

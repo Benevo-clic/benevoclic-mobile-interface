@@ -16,6 +16,9 @@ class Announcement {
   @JsonKey(name: 'dateEvent')
   late final String dateEvent;
 
+  @JsonKey(name: 'hourEvent')
+  late final String hourEvent;
+
   @JsonKey(name: 'datePublication')
   late final String datePublication;
 
@@ -76,6 +79,7 @@ class Announcement {
       this.full,
       this.isVisible,
       this.image,
+      required this.hourEvent,
       required this.location,
       required this.nameAssociation,
       required this.labelEvent,
@@ -97,6 +101,7 @@ class Announcement {
     String? id,
     String? idAssociation,
     String? dateEvent,
+    String? hourEvent,
     String? datePublication,
     String? description,
     bool? full,
@@ -119,6 +124,7 @@ class Announcement {
       id: id ?? this.id,
       idAssociation: idAssociation ?? this.idAssociation,
       dateEvent: dateEvent ?? this.dateEvent,
+      hourEvent: hourEvent ?? this.hourEvent,
       datePublication: datePublication ?? this.datePublication,
       description: description ?? this.description,
       full: full ?? this.full,

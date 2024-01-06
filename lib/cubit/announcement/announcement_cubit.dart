@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/filter_announcement_model.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
 
 import '../../repositories/api/favorites_repository.dart';
@@ -22,6 +23,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   void setAnnouncement(Announcement announcement) {
     emit(AnnouncementSelectedState(
         announcements: [], announcement: announcement));
+  }
+
+  void changeState(AnnouncementState state) {
+    emit(state);
   }
 
   void setAnnouncementUpdating(Announcement announcement) {
@@ -105,6 +110,19 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
+  void findAnnouncementByAssociationAndType(
+      FilterAnnouncement filterAnnouncement) async {
+    emit(AnnouncementLoadingState());
+
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByAssociation(filterAnnouncement);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void deleteAnnouncement(String id) async {
     if (state is DeleteAnnouncementState) {
       return;
@@ -125,6 +143,28 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     try {
       List<Announcement> announcements =
           await _announcementRepository.getAnnouncements();
+      emit(AnnouncementLoadedState(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementAfterFilter(FilterAnnouncement filter) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements =
+          await _announcementRepository.findAnnouncementAfterFilter(filter);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementLoadedStateAfterFilterError(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementByTextSearch(String textSearch) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByTextSearch(textSearch);
       emit(AnnouncementLoadedState(announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
@@ -178,7 +218,4 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void changeState(AnnouncementState state) {
-    emit(state);
-  }
 }

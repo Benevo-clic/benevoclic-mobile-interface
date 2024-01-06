@@ -19,10 +19,10 @@ Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       imageProfile: json['imageProfile'] as String?,
       bio: json['bio'] as String?,
       myAssociations: (json['myAssociations'] as List<dynamic>?)
-          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Association.fromJson(e as Map<String, dynamic>))
           .toList(),
       myAssociationsWaiting: (json['myAssociationsWaiting'] as List<dynamic>?)
-          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Association.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

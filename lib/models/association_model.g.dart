@@ -21,11 +21,11 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
           ?.map((e) => Announcement.fromJson(e as Map<String, dynamic>))
           .toList(),
       type: json['type'] as String,
-      volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>)
-          .map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
+      volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
+          ?.map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
           .toList(),
-      volunteers: (json['volunteers'] as List<dynamic>)
-          .map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
+      volunteers: (json['volunteers'] as List<dynamic>?)
+          ?.map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

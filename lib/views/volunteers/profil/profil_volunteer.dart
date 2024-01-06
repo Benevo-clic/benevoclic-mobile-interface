@@ -167,7 +167,9 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AssociationsSub()));
+                          builder: (context) => AssociationsSub(
+                                associations: volunteer.myAssociations!,
+                              )));
                 },
                 child: Text(
                   "${volunteer.myAssociations?.length} associations",

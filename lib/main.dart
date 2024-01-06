@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
+import 'package:namer_app/cubit/involved_associations/involved_association_cubit.dart';
 import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(create: (context) => MembersCubit()),
+        BlocProvider(create: (context) => InvolvedAssociationCubit()),
         BlocProvider(
           create: (context) => PageCubit(),
         ),

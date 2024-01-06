@@ -1,6 +1,7 @@
 
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/response_model.dart';
 
 part 'volunteer_model.g.dart';
@@ -42,10 +43,10 @@ class Volunteer{
   late final String? bio;
 
   @JsonKey(name: 'myAssociations')
-  late final List<ResponseModel>? myAssociations;
+  late final List<Association>? myAssociations;
 
   @JsonKey(name: 'myAssociationsWaiting')
-  late final List<ResponseModel>? myAssociationsWaiting;
+  late final List<Association>? myAssociationsWaiting;
 
   Volunteer(
       {required this.firstName,

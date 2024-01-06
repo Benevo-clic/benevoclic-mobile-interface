@@ -4,9 +4,7 @@ import 'package:namer_app/views/associtions/members/item_members.dart';
 import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/cubit/members/members_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/associtions/members/member_profil.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
@@ -34,9 +32,8 @@ class _MembersViewState extends State<MembersView> {
     return BlocConsumer<MembersCubit, MembersState>(
       listener: (context, state) {},
       builder: (context, state) {
-        allVolunteers = state.volunteers!;
+        allVolunteers = state.volunteers;
         if (state is MembersAcceptedState) {
-          print('ffffff$volunteers');
           return Scaffold(
             body: Column(
               children: [

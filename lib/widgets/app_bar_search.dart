@@ -11,13 +11,16 @@ class AppBarSearch extends StatefulWidget {
   final String? label;
   final Function(String?) onSearchChanged;
   final Function(List<Announcement>?) onAnnouncementsChanged;
+  final List<Announcement> announcements = [];
+  String? idAssociation;
 
   AppBarSearch(
       {super.key,
       required this.contexts,
       this.label,
       required this.onSearchChanged,
-      required this.onAnnouncementsChanged});
+      required this.onAnnouncementsChanged,
+      this.idAssociation});
 
   @override
   State<AppBarSearch> createState() => _AppBarSearchState();
@@ -37,6 +40,14 @@ class _AppBarSearchState extends State<AppBarSearch> {
     } catch (e) {
       print(e);
     }
+  }
+
+  List<Announcement> _getAnnouncements(List<Announcement>? announcement) {
+    setState(() {
+      widget.onAnnouncementsChanged(announcement);
+      widget.announcements.addAll(announcement!);
+    });
+    return widget.announcements;
   }
 
   @override
@@ -141,7 +152,12 @@ class _AppBarSearchState extends State<AppBarSearch> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FilterView()));
+                            builder: (context) => FilterView(
+                              onAnnouncementsChanged: _getAnnouncements,
+                              idAssociation: widget.idAssociation,
+                            ),
+                          ),
+                        );
                       },
                       padding: EdgeInsets.only(bottom: 1, right: 10, top: 6),
                       icon: SvgPicture.asset(

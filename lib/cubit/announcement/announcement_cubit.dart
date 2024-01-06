@@ -25,6 +25,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
         announcements: [], announcement: announcement));
   }
 
+  void changeState(AnnouncementState state) {
+    emit(state);
+  }
+
   void setAnnouncementUpdating(Announcement announcement) {
     var currentState = state;
     if (currentState is AnnouncementUpdatingState &&
@@ -101,6 +105,19 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
           .getAnnouncementByAssociation(idAssociation);
       emit(AnnouncementLoadedStateWithoutAnnouncements(
           announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementByAssociationAndType(
+      FilterAnnouncement filterAnnouncement) async {
+    emit(AnnouncementLoadingState());
+
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByAssociation(filterAnnouncement);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
     }
@@ -201,7 +218,4 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void changeState(AnnouncementState state) {
-    emit(state);
-  }
 }

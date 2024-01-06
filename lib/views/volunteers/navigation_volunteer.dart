@@ -26,13 +26,14 @@ class NavigationVolunteer extends StatefulWidget {
 
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
-  String? _idVolunteer; // Make it nullable
+  late String _idVolunteer; // Make it nullable
   Volunteer? volunteer;
 
   @override
   void initState() {
     super.initState();
     getIdVolunteer();
+    _idVolunteer = '';
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -85,9 +86,9 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
             children: [
               AnnouncementCommon(
                   rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: volunteer!.id!),
+                  idVolunteer: _idVolunteer),
               FavoritesVolunteer(
-                idVolunteer: volunteer!.id!,
+                idVolunteer: _idVolunteer,
               ),
               Messages(),
               ProfilPageVolunteer(volunteer: volunteer!)

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../cubit/announcement/announcement_cubit.dart';
+
 class AppBarFilter extends StatelessWidget {
-  const AppBarFilter({super.key});
+  String? idAssociation;
+  final VoidCallback? onReset;
+
+  AppBarFilter({super.key, this.idAssociation, this.onReset});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +37,13 @@ class AppBarFilter extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
+                  if (idAssociation != null && idAssociation != '') {
+                    BlocProvider.of<AnnouncementCubit>(context)
+                        .getAllAnnouncementByAssociation(idAssociation!);
+                  } else {
+                    BlocProvider.of<AnnouncementCubit>(context)
+                        .getAllAnnouncements();
+                  }
                   Navigator.pop(context);
                 },
                 icon: SvgPicture.asset(
@@ -47,7 +60,9 @@ class AppBarFilter extends StatelessWidget {
                     side: BorderSide(color: Colors.black87),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (onReset != null) onReset!();
+                },
                 child: Text(
                   "Tout effacer",
                   textAlign: TextAlign.center,

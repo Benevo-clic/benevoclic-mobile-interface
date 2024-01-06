@@ -5,7 +5,9 @@ import '../../../../util/color.dart';
 class CheckBoxWidget extends StatelessWidget {
   final dynamic fct;
 
-  CheckBoxWidget({super.key, required this.fct});
+  List<Checked> valuesList;
+
+  CheckBoxWidget({super.key, required this.fct, required this.valuesList});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +33,6 @@ class CheckBoxWidget extends StatelessWidget {
   }
 }
 
-List<Checked> valuesList = [
-  Checked("Avant 12:00", checked: false),
-  Checked("12:00 - 18:00", checked: false),
-  Checked("Après 18:00", checked: false),
-];
 
 class Checked {
   bool checked;

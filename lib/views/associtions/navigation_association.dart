@@ -21,13 +21,14 @@ class NavigationAssociation extends StatefulWidget {
 
 class _NavigationAssociationState extends State<NavigationAssociation> {
   int currentPageIndex = 0;
+  late String _idAssociation; // Make it nullable
 
-  final List<Widget> pages = [
-    AnnouncementCommon(rulesType: RulesType.USER_ASSOCIATION),
-    PublishAnnouncement(),
-    Messages(),
-    ProfilPageAssociation(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _idAssociation = '';
+    init();
+  }
 
   Future<void> onPageChanged(int newIndex) async {
     if (newIndex == 0) {
@@ -37,6 +38,14 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);
     }
+  }
+
+  Future<void> init() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    _idAssociation = preferences.getString('idAssociation')!;
+    // Future.delayed(Duration(seconds: 1), () {});
+    BlocProvider.of<AnnouncementCubit>(context)
+        .getAllAnnouncementByAssociation(_idAssociation);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -63,7 +72,15 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           onPageChanged(currentPageIndex);
           return IndexedStack(
             index: currentPageIndex,
-            children: pages,
+            children: [
+              AnnouncementCommon(
+                rulesType: RulesType.USER_ASSOCIATION,
+                idAssociation: _idAssociation,
+              ),
+              PublishAnnouncement(),
+              Messages(),
+              ProfilPageAssociation(),
+            ],
           );
         },
       ),

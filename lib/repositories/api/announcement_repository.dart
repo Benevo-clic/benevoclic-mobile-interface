@@ -96,7 +96,6 @@ class AnnouncementRepository {
         'http://${globals.url}/api/v1/announcement/findAnnouncementByTextSearch',
         options: Options(headers: headers),
       );
-      print(response.data);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((announcement) => Announcement.fromJson(announcement))
@@ -255,6 +254,38 @@ class AnnouncementRepository {
     }
   }
 
+  Future<List<Announcement>> findAnnouncementByAssociation(
+      FilterAnnouncement filterAnnouncement) async {
+    return Future.delayed(Duration(seconds: 2), () async {
+      await _tokenService.refreshTokenIfNeeded();
+
+      try {
+        String? token = await _tokenService.getToken();
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+        var data = json.encode(filterAnnouncement.toJson());
+
+        var response = await _dio.get(
+          'http://${globals.url}/api/v1/announcement/findAnnouncementByAssociationId',
+          options: Options(headers: headers),
+          data: data,
+        );
+        if (response.statusCode == 200) {
+          return (response.data as List)
+              .map((announcement) => Announcement.fromJson(announcement))
+              .toList();
+        } else {
+          throw Exception(
+              'Erreur lors de la récupération des annonces : ${response.statusMessage}');
+        }
+      } catch (e) {
+        throw Exception(e);
+      }
+    });
+  }
+
   Future<List<Announcement>> getAnnouncementByAssociation(
       String idAssociation) async {
     await _tokenService.refreshTokenIfNeeded();
@@ -273,7 +304,6 @@ class AnnouncementRepository {
         options: Options(headers: headers),
       );
 
-      print(response.data);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((announcement) => Announcement.fromJson(announcement))

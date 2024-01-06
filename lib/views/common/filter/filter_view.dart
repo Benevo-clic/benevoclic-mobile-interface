@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +18,13 @@ import '../../../models/announcement_model.dart';
 import '../../../widgets/app_bar_filter.dart';
 
 class FilterView extends StatefulWidget {
+  Function(List<Announcement>?) onAnnouncementsChanged;
+  String? idAssociation;
+
+  //
+  FilterView(
+      {super.key, required this.onAnnouncementsChanged, this.idAssociation});
+
   @override
   State<StatefulWidget> createState() {
     return _FilterView();
@@ -24,17 +33,26 @@ class FilterView extends StatefulWidget {
 
 class _FilterView extends State<FilterView> {
   TrierPar groupTri = TrierPar.recent;
-  double hour = 1;
+  double hour = 0;
   TextEditingController controller = TextEditingController();
   DateTime date = DateTime.now();
-  List<Checked> valuesList = [
-    Checked("Avant 12:00", checked: false),
-    Checked("12:00 - 18:00", checked: false),
-    Checked("Après 18:00", checked: false),
-  ];
-  List<String> values = [];
+  late List<Checked> valuesList;
+
+  late List<String> values;
   FilterAnnouncement filter = FilterAnnouncement();
   List<Announcement> announcements = [];
+  Timer _debounce = Timer(Duration(milliseconds: 1), () {});
+
+  @override
+  void initState() {
+    super.initState();
+    valuesList = [
+      Checked("Avant 12:00", checked: false),
+      Checked("12:00 - 18:00", checked: false),
+      Checked("Après 18:00", checked: false),
+    ];
+    values = [];
+  }
 
   void getFilter() {
     filter.sortBy =
@@ -42,14 +60,11 @@ class _FilterView extends State<FilterView> {
     filter.hours = hour.toInt();
     filter.startDate = selectedStartDate != null
         ? DateFormat('dd/MM/yyyy').format(selectedStartDate!)
-        : DateFormat('dd/MM/yyyy').format(DateTime.now());
+        : null;
     filter.endDate = selectedEndDate != null
         ? DateFormat('dd/MM/yyyy').format(selectedEndDate!)
-        : DateFormat('dd/MM/yyyy').format(DateTime.now());
-    filter.timeOfDay = values ?? [];
-    filter.userLatitude = 48.8566;
-    filter.userLongitude = 2.3522;
-    filter.maxDistance = 100.0;
+        : null;
+    filter.timeOfDay = values;
 
     setState(() {
       filter = filter;
@@ -78,12 +93,10 @@ class _FilterView extends State<FilterView> {
           .where((element) => element.name == "Après 18:00")
           .first
           .checked = valuesListParam.checked;
-
       valuesListParam.checked
           ? values.add("Après 18:00")
           : values.remove("Après 18:00");
     }
-    setState(() {});
   }
 
   changeHour(hourParam) {
@@ -114,18 +127,54 @@ class _FilterView extends State<FilterView> {
     }
   }
 
+  void resetFilters() {
+    setState(() {
+      groupTri = TrierPar.recent;
+      hour = 0;
+      controller.clear();
+      selectedStartDate = null;
+      selectedEndDate = null;
+      valuesList =
+          valuesList.map((e) => Checked(e.name, checked: false)).toList();
+      values.clear();
+      filter = FilterAnnouncement(); // Réinitialiser le filtre
+    });
+  }
+
+  Future<void> _searchAnnouncement(List<Announcement> announcement) async {
+    try {
+      if (_debounce.isActive) _debounce.cancel();
+      _debounce = Timer(Duration(milliseconds: 500), () async {
+        widget.onAnnouncementsChanged(announcement);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     getFilter();
-
-    BlocProvider.of<AnnouncementCubit>(context)
-        .findAnnouncementAfterFilter(filter);
+    if (widget.idAssociation != null && widget.idAssociation != '') {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .findAnnouncementByAssociationAndType(filter);
+    } else {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .findAnnouncementAfterFilter(filter);
+    }
 
     return BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
       if (state is AnnouncementLoadedStateAfterFilter) {
         setState(() {
-          announcements = state.announcements;
+          _searchAnnouncement(state.announcements);
+          if (widget.idAssociation == null || widget.idAssociation == '') {
+            announcements = state.announcements.where((element) {
+              return element.isVisible == true;
+            }).toList();
+          } else {
+            announcements = state.announcements;
+          }
         });
       }
     }, builder: (context, state) {
@@ -133,7 +182,10 @@ class _FilterView extends State<FilterView> {
         appBar: PreferredSize(
           preferredSize:
               Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
-          child: AppBarFilter(),
+          child: AppBarFilter(
+            idAssociation: widget.idAssociation,
+            onReset: resetFilters,
+          ),
         ),
         body: ListView(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
@@ -169,6 +221,7 @@ class _FilterView extends State<FilterView> {
               title: "Heure de la mission",
               content: CheckBoxWidget(
                 fct: changeMissionTime,
+                valuesList: valuesList,
               ),
             ),
             SizedBox(

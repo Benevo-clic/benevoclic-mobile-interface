@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,7 +141,27 @@ class Bio extends StatelessWidget {
   }
 }
 
+ImageProvider _getImageProvider(String? imageString) {
+  if (isBase64(imageString)) {
+    return MemoryImage(base64.decode(imageString!));
+  } else {
+    return NetworkImage(imageString!);
+  }
+}
+
+bool isBase64(String? str) {
+  if (str == null) return false;
+  try {
+    base64.decode(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
+  String? imageProfileVolunteer =
+      volunteer.imageProfile ?? 'https://via.placeholder.com/150';
   String bio = "";
   if (volunteer.bio != null) bio = volunteer.bio!;
   String address = "";
@@ -150,7 +172,10 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
   return Center(
     child: Column(
       children: [
-        Image.asset("assets/logo.png", height: 200),
+        CircleAvatar(
+          radius: 30,
+          backgroundImage: _getImageProvider(imageProfileVolunteer),
+        ),
         SizedBox(
           height: 10,
         ),

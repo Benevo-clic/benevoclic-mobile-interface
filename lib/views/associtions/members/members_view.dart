@@ -19,8 +19,8 @@ class MembersView extends StatefulWidget {
 }
 
 class _MembersViewState extends State<MembersView> {
-  List<Volunteer> volunteers = allVolunteers;
-
+  List<Volunteer> volunteers = [];
+  List<Volunteer> allVolunteers= [];
   TextEditingController myController = TextEditingController();
 
   @override
@@ -28,7 +28,9 @@ class _MembersViewState extends State<MembersView> {
     return BlocConsumer<MembersCubit, MembersState>(
       listener: (context, state) {},
       builder: (context, state) {
-        //if (state is MembersAcceptedState) {
+        allVolunteers = state.volunteers!;
+        
+        if (state is MembersAcceptedState) {
           return Scaffold(
             body: Column(
               children: [
@@ -56,13 +58,8 @@ class _MembersViewState extends State<MembersView> {
                                   flex: 1,
                                   child: IconButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MembersToAccept()));
-
-                                        //BlocProvider.of<MembersCubit>(context).membersToAccept("");
+                                        BlocProvider.of<MembersCubit>(context)
+                                            .membersToAccept("");
                                         print("ajout");
                                       },
                                       icon: Icon(Icons.add)))
@@ -93,12 +90,12 @@ class _MembersViewState extends State<MembersView> {
               ],
             ),
           );
-        /*}else if (state is MembersToAcceptState) {
-          return Scaffold(body: Center(child: Text("fr")),); 
-        }
-        else {
+        } else if (state is MembersToAcceptState) {
+          return Text("");
+          //return MembersToAccept();
+        } else {
           return Text('');
-        }*/
+        }
       },
     );
   }
@@ -164,16 +161,3 @@ class MembersCard extends StatelessWidget {
     );
   }
 }
-
-List<Volunteer> allVolunteers = [
-  Volunteer(
-      firstName: "firstName",
-      lastName: "lastName",
-      phone: "phone",
-      birthDayDate: "irthDayDate"),
-  Volunteer(
-      firstName: "GEo",
-      lastName: "lastName",
-      phone: "phone",
-      birthDayDate: "irthDayDate")
-];

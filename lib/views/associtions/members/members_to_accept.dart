@@ -9,7 +9,7 @@ import 'package:namer_app/widgets/abstract_container2.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
-
+/*
 class MembersToAccept extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -140,15 +140,4 @@ class MembersCardToAdd extends StatelessWidget {
   }
 }
 
-List<Volunteer> allVolunteers = [
-  Volunteer(
-      firstName: "firstName",
-      lastName: "lastName",
-      phone: "phone",
-      birthDayDate: "irthDayDate"),
-  Volunteer(
-      firstName: "GEo",
-      lastName: "lastName",
-      phone: "phone",
-      birthDayDate: "irthDayDate")
-];
+*/

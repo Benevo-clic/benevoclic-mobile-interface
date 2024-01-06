@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/views/associtions/members/item_members.dart';
 import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/cubit/members/members_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
@@ -16,7 +17,7 @@ class MembersView extends StatefulWidget {
   const MembersView({super.key, required this.volunteers});
   @override
   State<StatefulWidget> createState() {
-    return _MembersViewState(volunteers : volunteers);
+    return _MembersViewState(volunteers: volunteers);
   }
 }
 
@@ -26,8 +27,6 @@ class _MembersViewState extends State<MembersView> {
   TextEditingController myController = TextEditingController();
 
   _MembersViewState({required this.volunteers});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +99,9 @@ class _MembersViewState extends State<MembersView> {
           return Scaffold(
             body: Column(
               children: [
-                AppBarBackWidgetFct(fct: (value) => BlocProvider.of<MembersCubit>(context).initState(value)),
+                AppBarBackWidgetFct(
+                    fct: (value) => BlocProvider.of<MembersCubit>(context)
+                        .initState(value)),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(15, 20, 15, 5),
@@ -129,7 +130,16 @@ class _MembersViewState extends State<MembersView> {
               ],
             ),
           );
-          //return MembersToAccept();
+        } else if (state is MembersLoadingState) {
+          return CircularProgressIndicator();
+        } else if (state is MembersDetailState) {
+          return MemberProfil(
+            volunteer: Volunteer(
+                firstName: "firstName",
+                lastName: "lastName",
+                phone: "phone",
+                birthDayDate: "irthDayDate"),
+          );
         } else {
           return Text('');
         }
@@ -144,127 +154,8 @@ class _MembersViewState extends State<MembersView> {
       print(input);
       return name.contains(input);
     }).toList();
-    
+
     print(result);
     setState(() => volunteers = result);
-  }
-}
-
-class MembersCard extends StatelessWidget {
-  final Volunteer benevole;
-
-  const MembersCard({super.key, required this.benevole});
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: AbstractContainer2(
-          content: Row(
-        children: [
-          Expanded(
-              flex: 0,
-              child: IconButton(
-                icon: Icon(Icons.ac_unit),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MemberProfil(
-                                volunteer: Volunteer(
-                                    phone: "052525",
-                                    birthDayDate: "",
-                                    firstName: "geoffrey",
-                                    lastName: "herman",
-                                    address: "fczefezfez",
-                                    bio: "vezfczfze",
-                                    city: "fefe",
-                                    email: "vezvz",
-                                    imageProfile: "",
-                                    myAssociations: [],
-                                    postalCode: "",
-                                    myAssociationsWaiting: []),
-                              )));
-                },
-              )),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(flex: 1, child: Text(benevole.firstName)),
-          Button(
-            backgroundColor: marron,
-            color: Colors.black,
-            fct: () {},
-            text: "Supprimer",
-          )
-        ],
-      )),
-    );
-  }
-}
-
-class MembersCardToAdd extends StatelessWidget {
-  final Volunteer benevole;
-
-  const MembersCardToAdd({super.key, required this.benevole});
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: AbstractContainer2(
-          content: Row(
-        children: [
-          Expanded(
-              flex: 0,
-              child: IconButton(
-                icon: Icon(Icons.ac_unit),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MemberProfil(
-                                volunteer: Volunteer(
-                                    phone: "052525",
-                                    birthDayDate: "",
-                                    firstName: "geoffrey",
-                                    lastName: "herman",
-                                    address: "fczefezfez",
-                                    bio: "vezfczfze",
-                                    city: "fefe",
-                                    email: "vezvz",
-                                    imageProfile: "",
-                                    myAssociations: [],
-                                    postalCode: "",
-                                    myAssociationsWaiting: []),
-                              )));
-                },
-              )),
-          SizedBox(
-            width: 10,
-          ),
-          Column(
-            children: [
-              Text("${benevole.firstName} ${benevole.lastName}"),
-              Row(
-                children: [
-                  Button(
-                    backgroundColor: Colors.blue.shade800,
-                    color: Colors.white,
-                    fct: () {},
-                    text: "Accepter",
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Button(
-                    backgroundColor: marron,
-                    color: Colors.white,
-                    fct: () {},
-                    text: "Refuser",
-                  )
-                ],
-              ),
-            ],
-          ),
-        ],
-      )),
-    );
   }
 }

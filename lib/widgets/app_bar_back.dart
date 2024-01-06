@@ -53,7 +53,6 @@ class AppBarBackWidget extends StatelessWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-
 class AppBarBackWidgetFct extends StatelessWidget {
   dynamic fct;
   AppBarBackWidgetFct({super.key, required this.fct});

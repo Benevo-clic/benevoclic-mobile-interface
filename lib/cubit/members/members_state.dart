@@ -3,7 +3,8 @@ import 'package:namer_app/models/volunteer_model.dart';
 
 @immutable
 abstract class MembersState {
-  List<Volunteer>? volunteers;
+  List<Volunteer> volunteers = [];
+  Volunteer? detailVolunteer;
 }
 
 class MembersAcceptedState extends MembersState {

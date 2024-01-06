@@ -34,6 +34,8 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     if (newIndex == 0) {
       final SharedPreferences preferences =
           await SharedPreferences.getInstance();
+      if (!mounted) return;
+
       String idAssociation = preferences.getString('idAssociation')!;
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);

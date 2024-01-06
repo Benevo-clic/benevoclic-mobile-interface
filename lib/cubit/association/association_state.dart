@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 
 @immutable
 abstract class AssociationState {
@@ -39,19 +39,15 @@ class AssociationErrorState extends AssociationState {
 class AssociationInfoState extends AssociationState {
   final String name;
   final String? bio;
-  final String? address;
+  final LocationModel? location;
   final String phone;
-  final String? city;
-  final String? postalCode;
   final String type;
 
   AssociationInfoState({
     required this.name,
     this.bio,
-    this.address,
+    this.location,
     required this.phone,
-    this.city,
-    this.postalCode,
     required this.type,
   });
 
@@ -59,10 +55,8 @@ class AssociationInfoState extends AssociationState {
   List<Object?> get props => [
         name,
         bio,
-        address,
+        location,
         phone,
-        city,
-        postalCode,
         type,
       ];
 }

@@ -7,6 +7,7 @@ import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class PictureInscription extends StatefulWidget {
   final String typeAssociation;
   final String phoneNumber;
   final String bio;
-  final String address;
+  final LocationModel location;
   final String city;
   final String zipcode;
   final String email;
@@ -31,7 +32,7 @@ class PictureInscription extends StatefulWidget {
       {super.key,
       required this.phoneNumber,
       required this.bio,
-      required this.address,
+      required this.location,
       required this.city,
       required this.zipcode,
       required this.nameAssociation,
@@ -165,7 +166,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               name: widget.nameAssociation,
                               type: widget.typeAssociation,
                               phone: widget.phoneNumber,
-                              address: widget.address,
+                              location: widget.location,
                               city: widget.city,
                               imageProfile: '',
                               bio: widget.bio,
@@ -228,7 +229,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               name: widget.nameAssociation,
                               type: widget.typeAssociation,
                               phone: widget.phoneNumber,
-                              address: widget.address,
+                              location: widget.location,
                               city: widget.city,
                               bio: widget.bio,
                               email: widget.email,

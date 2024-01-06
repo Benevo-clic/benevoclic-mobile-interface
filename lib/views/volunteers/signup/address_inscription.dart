@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
+import '../../../widgets/location_form_autocomplete_widget.dart';
 import 'bio_inscription.dart';
 
 class AddressInscription extends StatefulWidget {
@@ -31,27 +32,53 @@ class AddressInscription extends StatefulWidget {
 class _AddressInscriptionState extends State<AddressInscription> {
   String _city = "";
   String _zipCode = "";
-  String _address = "";
+  late LocationModel location;
 
   DateTime currentDate = DateTime.now();
   TextEditingController dateController = TextEditingController();
+
+  final FocusNode _addressFocusNode = FocusNode();
+  final TextEditingController _addressController = TextEditingController();
 
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
+    _addressFocusNode.dispose();
   }
 
   @override
   void initState() {
     super.initState();
     _initUser();
+    location = LocationModel(
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    );
+    _addressFocusNode.addListener(_handleAddressFocusChange);
   }
 
   void _initUser() async {
     final cubit = context.read<VolunteerCubit>();
     cubit.initState();
+  }
+
+  void _handleAddressFocusChange() async {
+    if (_addressFocusNode.hasFocus) {
+      LocationModel? selectedLocation = await ShowInputAutocomplete(context);
+      setState(() {
+        if (selectedLocation != null) {
+          location = LocationModel(
+            address: selectedLocation.address,
+            latitude: selectedLocation.latitude,
+            longitude: selectedLocation.longitude,
+          );
+          _addressController.text = selectedLocation.address;
+        }
+      });
+    }
   }
 
   @override
@@ -68,7 +95,7 @@ class _AddressInscriptionState extends State<AddressInscription> {
                 lastName: widget.lastName,
                 birthDate: widget.birthDate,
                 phoneNumber: widget.phoneNumber,
-                address: _address,
+                location: location,
                 city: _city,
                 zipCode: _zipCode,
                 id: widget.id,
@@ -142,31 +169,29 @@ class _AddressInscriptionState extends State<AddressInscription> {
                         ),
                       ),
                       _infoVolunteer(context, state),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: TextButton(
-                          onPressed: () {
-                            final cubit = context.read<VolunteerCubit>();
-                            cubit.changeState(VolunteerInfoState(
-                              birthDate: widget.birthDate,
-                              firstName: widget.firstName,
-                              lastName: widget.lastName,
-                              phoneNumber: widget.phoneNumber,
-                              address: "",
-                              city: "",
-                              postalCode: "",
-                            ));
-                          },
-                          child: Text(
-                            "Ingnorer cette étape",
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .04,
-                              color: Colors.black87,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 30, right: 30),
+                      //   child: TextButton(
+                      //     onPressed: () {
+                      //       final cubit = context.read<VolunteerCubit>();
+                      //       cubit.changeState(VolunteerInfoState(
+                      //         birthDate: widget.birthDate,
+                      //         firstName: widget.firstName,
+                      //         lastName: widget.lastName,
+                      //         phoneNumber: widget.phoneNumber,
+                      //         location: null,
+                      //       ));
+                      //     },
+                      //     child: Text(
+                      //       "Ingnorer cette étape",
+                      //       style: TextStyle(
+                      //         fontSize: MediaQuery.of(context).size.width * .04,
+                      //         color: Colors.black87,
+                      //         decoration: TextDecoration.underline,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         padding: EdgeInsets.only(bottom: 20),
@@ -182,7 +207,8 @@ class _AddressInscriptionState extends State<AddressInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate() &&
+                                location.address != "") {
                               _formKey.currentState!.save();
                               final cubit = context.read<VolunteerCubit>();
                               cubit.changeState(VolunteerInfoState(
@@ -190,9 +216,7 @@ class _AddressInscriptionState extends State<AddressInscription> {
                                 firstName: widget.firstName,
                                 lastName: widget.lastName,
                                 phoneNumber: widget.phoneNumber,
-                                address: _address,
-                                city: _city,
-                                postalCode: _zipCode,
+                                location: location,
                               ));
                             }
                           },
@@ -251,69 +275,7 @@ class _AddressInscriptionState extends State<AddressInscription> {
                       SizedBox(
                         height: 10,
                       ),
-                      CustomTextFormField(
-                        hintText: "Address",
-                        icon: Icons.location_on,
-                        keyboardType: TextInputType.streetAddress,
-                        obscureText: false,
-                        prefixIcons: true,
-                        onSaved: (value) {
-                          _address = value.toString();
-                        },
-                        validator: (value) {
-                          var regex = RegExp(
-                              r"^\d+\s[a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ'\- ]+$");
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          } else if (!regex.hasMatch(value)) {
-                            return "Votre adresse n'est pas valide";
-                          } else if (value.length > 50) {
-                            return "Votre adresse ne doit pas dépasser 50 caractères";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "Code postal",
-                        keyboardType: TextInputType.number,
-                        obscureText: false,
-                        prefixIcons: false,
-                        maxLine: 1,
-                        onSaved: (value) {
-                          _zipCode = value.toString();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          } else if (!RegExp(r'^\d{5}$').hasMatch(value)) {
-                            return "Votre code postal n'est pas valide";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "City",
-                        keyboardType: TextInputType.text,
-                        icon: Icons.location_city,
-                        obscureText: false,
-                        prefixIcons: true,
-                        maxLine: 1,
-                        onSaved: (value) {
-                          _city = value.toString();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          }
-                          return null;
-                        },
-                      ),
+                      _buildAddressField(),
                       SizedBox(
                         height: 10,
                       ),
@@ -328,6 +290,37 @@ class _AddressInscriptionState extends State<AddressInscription> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAddressField() {
+    double width = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      width: width * 0.8,
+      child: TextFormField(
+        focusNode: _addressFocusNode,
+        controller: _addressController,
+        keyboardType: TextInputType.streetAddress,
+        decoration: InputDecoration(
+          fillColor: Colors.white.withOpacity(0.5),
+          filled: true,
+          prefixIcon: Icon(
+            Icons.location_on,
+            color: Colors.black54,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide.none,
+          ),
+          hintText: "Votre adresse",
+          hintStyle: TextStyle(color: Colors.black54),
+          errorStyle: TextStyle(
+            color: Colors.red[300],
+            overflow: TextOverflow.visible,
+          ),
+        ),
+      ),
     );
   }
 }

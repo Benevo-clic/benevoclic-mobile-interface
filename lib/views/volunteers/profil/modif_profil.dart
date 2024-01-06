@@ -122,7 +122,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: volunteer.address,
+                    initialValue: volunteer.location!.address,
                     onSaved: (value) {
                       _address = value.toString();
                     },
@@ -133,7 +133,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: volunteer.address,
+                        hintText: volunteer.location!.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -195,16 +195,12 @@ listview(BuildContext context, Volunteer volunteer) {
     ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            print(_email);
-            print(_bio);
-            print(_phone);
-            print(_address);
             Volunteer volunteerUpdate = Volunteer(
                 firstName: volunteer.firstName,
                 lastName: volunteer.lastName,
                 phone: _phone,
                 birthDayDate: volunteer.birthDayDate,
-                address: _address,
+                location: volunteer.location,
                 bio: _bio,
                 city: volunteer.city,
                 email: volunteer.email,

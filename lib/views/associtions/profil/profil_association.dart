@@ -147,9 +147,9 @@ class Bio extends StatelessWidget {
 
 affichageAssociation(BuildContext context, Association association) {
   String bio = "";
-  String address = "";
+  String? address = "";
   if (association.bio != null) bio = association.bio!;
-  if (association.address != null) address = association.address!;
+  if (association.location?.address != null) address = association.location?.address;
   return Center(
     child: Column(
       children: [

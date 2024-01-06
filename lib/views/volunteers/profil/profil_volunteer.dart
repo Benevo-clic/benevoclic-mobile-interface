@@ -121,8 +121,8 @@ class Bio extends StatelessWidget {
 affichageVolunteer(BuildContext context, Volunteer volunteer) {
   String bio = "";
   if (volunteer.bio != null) bio = volunteer.bio!;
-  String address = "";
-  if (volunteer.address != null) address = volunteer.address!;
+  String? address = "";
+  if (volunteer.location?.address != null) address = volunteer.location?.address;
   String email = "";
   if (volunteer.email != null) email = volunteer.email!;
 

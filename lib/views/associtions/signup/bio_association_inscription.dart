@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/views/associtions/signup/picture_inscription.dart';
 
 import '../../../cubit/association/association_state.dart';
@@ -14,7 +15,7 @@ class BioAssociationInscription extends StatefulWidget {
   final String typeAssociation;
   final String phoneNumber;
   final String zipCode;
-  final String address;
+  final LocationModel location;
   final String city;
   final String id;
   final String email;
@@ -22,7 +23,7 @@ class BioAssociationInscription extends StatefulWidget {
   const BioAssociationInscription(
       {super.key,
       required this.zipCode,
-      required this.address,
+      required this.location,
       required this.city,
       required this.nameAssociation,
       required this.typeAssociation,
@@ -75,7 +76,7 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
               builder: (context) => PictureInscription(
                 phoneNumber: widget.phoneNumber,
                 zipcode: widget.zipCode,
-                address: widget.address,
+                location: widget.location,
                 city: widget.city,
                 bio: _bio,
                 nameAssociation: widget.nameAssociation,
@@ -161,9 +162,7 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
                                 name: widget.nameAssociation,
                                 type: widget.typeAssociation,
                                 phone: widget.phoneNumber,
-                                address: widget.address,
-                                city: widget.city,
-                                postalCode: widget.zipCode,
+                                location: widget.location,
                                 bio: "",
                               ),
                             );
@@ -204,9 +203,7 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
                                   name: widget.nameAssociation,
                                   type: widget.typeAssociation,
                                   phone: widget.phoneNumber,
-                                  address: widget.address,
-                                  city: widget.city,
-                                  postalCode: widget.zipCode,
+                                  location: widget.location,
                                   bio: _bio,
                                 ),
                               );

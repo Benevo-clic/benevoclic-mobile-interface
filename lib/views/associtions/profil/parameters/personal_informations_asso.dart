@@ -66,7 +66,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                     height: 10,
                   ),
                   InputField(
-                      title: "${state.association!.address}",
+                      title: "${state.association!.location?.address}",
                       fct: changeAddress),
                   SizedBox(
                     height: 10,
@@ -83,7 +83,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                               name: _name,
                               phone: _phone,
                               type: '',
-                              address: state.association!.address,
+                              location: state.association!.location,
                               bio: state.association!.bio,
                               announcement: state.association!.announcement,
                               city: state.association!.city,

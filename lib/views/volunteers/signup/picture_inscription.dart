@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class PictureInscription extends StatefulWidget {
   final String birthDate;
   final String phoneNumber;
   final String bio;
-  final String address;
+  final LocationModel location;
   final String city;
   final String zipcode;
   final String email;
@@ -34,7 +35,7 @@ class PictureInscription extends StatefulWidget {
       required this.birthDate,
       required this.phoneNumber,
       required this.bio,
-      required this.address,
+      required this.location,
       required this.city,
       required this.zipcode,
       required this.email,
@@ -178,9 +179,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               id: widget.id,
                               myAssociations: [],
                               myAssociationsWaiting: [],
-                              address: widget.address,
-                              city: widget.city,
-                              postalCode: widget.zipcode,
+                              location: widget.location,
                             );
                             UserModel userModel = await UserRepository()
                                 .getUserByEmail(widget.email);
@@ -238,6 +237,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               lastName: widget.lastName,
                               phone: widget.phoneNumber,
                               birthDayDate: widget.birthDate,
+                              location: widget.location,
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/views/volunteers/signup/picture_inscription.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
@@ -13,7 +14,7 @@ class BioInscription extends StatefulWidget {
   final String birthDate;
   final String phoneNumber;
   final String zipCode;
-  final String address;
+  final LocationModel location;
   final String city;
   final String id;
   final String email;
@@ -25,7 +26,7 @@ class BioInscription extends StatefulWidget {
       required this.birthDate,
       required this.phoneNumber,
       required this.zipCode,
-      required this.address,
+      required this.location,
       required this.city,
       required this.id,
       required this.email});
@@ -80,7 +81,7 @@ class _BioInscriptionState extends State<BioInscription> {
                 birthDate: widget.birthDate,
                 phoneNumber: widget.phoneNumber,
                 zipcode: widget.zipCode,
-                address: widget.address,
+                location: widget.location,
                 city: widget.city,
                 bio: bio,
                 id: widget.id,
@@ -164,7 +165,7 @@ class _BioInscriptionState extends State<BioInscription> {
                               firstName: widget.firstName,
                               lastName: widget.lastName,
                               phoneNumber: widget.phoneNumber,
-                                address: widget.address,
+                                location: widget.location,
                                 city: widget.city,
                                 postalCode: widget.zipCode,
                                 bio: "",
@@ -207,7 +208,8 @@ class _BioInscriptionState extends State<BioInscription> {
                                 firstName: widget.firstName,
                                 lastName: widget.lastName,
                                 phoneNumber: widget.phoneNumber,
-                                bio: bio,
+                                  location: widget.location,
+                                  bio: bio,
                                 ),
                               );
                             }

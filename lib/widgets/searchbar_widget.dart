@@ -10,6 +10,7 @@ class SearchBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextField(
+        onChanged: fct,
         controller: myController,
         cursorColor: Color.fromRGBO(30, 29, 29, 1.0),
         decoration: InputDecoration(

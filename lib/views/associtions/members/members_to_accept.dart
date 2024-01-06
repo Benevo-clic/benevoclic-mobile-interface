@@ -10,8 +10,15 @@ import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
-class MembersToAccept extends StatelessWidget {
-  List<String> benevoles = ["bene 1", "bene 2"];
+class MembersToAccept extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MembersToAcceptState();
+  }
+}
+
+class _MembersToAcceptState extends State<MembersToAccept> {
+  List<Volunteer> benevoles = allVolunteers;
 
   TextEditingController myController = TextEditingController();
 
@@ -30,7 +37,7 @@ class MembersToAccept extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SearchBarWidget(myController: myController),
+                        SearchBarWidget(myController: myController, fct: search),
                         SizedBox(
                           height: 15,
                         ),
@@ -53,12 +60,22 @@ class MembersToAccept extends StatelessWidget {
       },
     );
   }
+
+  void search(String query) {
+    final result = allVolunteers.where((volunteer) {
+      final name = volunteer.firstName.toLowerCase();
+      final input = query.toLowerCase();
+      return name.contains(input) || volunteer.lastName.toLowerCase().contains(input);
+    }).toList();
+
+    setState(() => benevoles = result);
+  }
 }
 
 class MembersCardToAdd extends StatelessWidget {
-  final dynamic benevole;
+  final Volunteer benevole;
 
-  const MembersCardToAdd({super.key, this.benevole});
+  const MembersCardToAdd({super.key, required this.benevole});
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -95,7 +112,7 @@ class MembersCardToAdd extends StatelessWidget {
           ),
           Column(
             children: [
-              Text(benevole),
+              Text("${benevole.firstName} ${benevole.lastName}"),
               Row(
                 children: [
                   Button(
@@ -122,3 +139,16 @@ class MembersCardToAdd extends StatelessWidget {
     );
   }
 }
+
+List<Volunteer> allVolunteers = [
+  Volunteer(
+      firstName: "firstName",
+      lastName: "lastName",
+      phone: "phone",
+      birthDayDate: "irthDayDate"),
+  Volunteer(
+      firstName: "GEo",
+      lastName: "lastName",
+      phone: "phone",
+      birthDayDate: "irthDayDate")
+];

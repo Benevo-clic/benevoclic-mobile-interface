@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
+import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
@@ -35,14 +36,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
+      providers: [
         BlocProvider(
             create: (context) => FavoritesAnnouncementCubit(
                   favoritesRepository: FavoritesRepository(),
                 )),
         BlocProvider(
-              create: (context) => UserCubit(
-                  userRepository: UserRepository(),
+          create: (context) => UserCubit(
+            userRepository: UserRepository(),
             authRepository: AuthRepository(),
           ),
         ),
@@ -69,14 +70,15 @@ class MyApp extends StatelessWidget {
             associationRepository: AssociationRepository(),
           ),
         ),
+        BlocProvider(create: (context) => MembersCubit()),
         BlocProvider(
           create: (context) => PageCubit(),
         ),
         BlocProvider(create: (context) => DropdownCubit())
-        ],
-        child: BlocBuilder<SettingCubit, SettingState>(
-          builder: (context, state) {
-            return MaterialApp(
+      ],
+      child: BlocBuilder<SettingCubit, SettingState>(
+        builder: (context, state) {
+          return MaterialApp(
             title: 'Bénévoclic',
             theme: ThemeData(
               primarySwatch: Colors.blue,

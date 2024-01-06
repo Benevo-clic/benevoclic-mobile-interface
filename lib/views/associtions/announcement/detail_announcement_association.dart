@@ -86,9 +86,13 @@ class DetailAnnouncementAssociation extends StatelessWidget {
   Widget infosMission(BuildContext context, Announcement announcement) {
     double height = MediaQuery.sizeOf(context).height;
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+      padding: EdgeInsets.only(
+        left: 15,
+        right: 15,
+        top: 10,
+      ),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      height: 85,
+      height: 100,
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -122,19 +126,21 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/pencil.svg",
-                    height: height * .02,
-                    color: Colors.black,
-                  ),
-                ],
+              IconButton(
+                onPressed: () {
+                  BlocProvider.of<PageCubit>(context).setPage(1);
+                  BlocProvider.of<AnnouncementCubit>(context)
+                      .setAnnouncementUpdating(announcement);
+                  Navigator.pop(context);
+                },
+                padding: EdgeInsets.all(0),
+                icon: SvgPicture.asset(
+                  "assets/icons/pencil.svg",
+                  height: height * .02,
+                  color: Colors.black,
+                ),
               ),
             ],
-          ),
-          SizedBox(
-            height: 10,
           ),
           Column(
             children: [

@@ -32,8 +32,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   Association? association;
   FavoritesRepository _favoritesRepository = FavoritesRepository();
   String _searchQuery = '';
-  late final String idVolunteer;
-  late final String idAssociation;
 
   @override
   void initState() {

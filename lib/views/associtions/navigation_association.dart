@@ -21,13 +21,29 @@ class NavigationAssociation extends StatefulWidget {
 
 class _NavigationAssociationState extends State<NavigationAssociation> {
   int currentPageIndex = 0;
-  late String _idAssociation; // Make it nullable
+  String _idAssociation = '';
 
   @override
   void initState() {
     super.initState();
-    _idAssociation = '';
     init();
+  }
+
+  Future<void> init() async {
+    try {
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      String? savedIdAssociation = preferences.getString('idAssociation');
+      if (savedIdAssociation != null && savedIdAssociation.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _idAssociation = savedIdAssociation;
+          });
+        }
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération de _idAssociation: $e');
+    }
   }
 
   Future<void> onPageChanged(int newIndex) async {
@@ -40,14 +56,6 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);
     }
-  }
-
-  Future<void> init() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    _idAssociation = preferences.getString('idAssociation')!;
-    // Future.delayed(Duration(seconds: 1), () {});
-    BlocProvider.of<AnnouncementCubit>(context)
-        .getAllAnnouncementByAssociation(_idAssociation);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -65,6 +73,13 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
 
   @override
   Widget build(BuildContext context) {
+    if (_idAssociation.isEmpty) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       bottomNavigationBar: BuldNavBar(
         buildNavigationModel: buildNavigationModel,

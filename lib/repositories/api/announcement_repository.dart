@@ -266,8 +266,6 @@ class AnnouncementRepository {
         };
         var data = json.encode(filterAnnouncement.toJson());
 
-        print(data);
-
         var response = await _dio.get(
           'http://${globals.url}/api/v1/announcement/findAnnouncementByAssociationId',
           options: Options(headers: headers),

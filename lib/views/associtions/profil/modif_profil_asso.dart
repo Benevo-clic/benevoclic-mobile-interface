@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
@@ -27,9 +28,19 @@ class ModifProfilAsso extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white, size: 45),
             backgroundColor: orange,
             actions: []),
-        body: listview(context, association));
+        body: 
+        BlocConsumer<AssociationCubit, AssociationState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            print(state);
+            if( state is AssociationConnexion){
+              return listview(context, association);
+            }else{
+              return Text('');
+            }
+  }));}
   }
-}
+
 
 listview(BuildContext context, Association association) {
   String email = "";
@@ -37,35 +48,35 @@ listview(BuildContext context, Association association) {
   String phone = "";
   String address = "";
 
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   return ListView(padding: EdgeInsets.all(25), children: [
     Form(
-        key: formKey,
+        key: _formKey,
         child: Column(
           children: [
             SizedBox(
               height: 20,
             ),
             SizedBox(
-                  width: MediaQuery.of(context).size.width * .9,
-                  height: MediaQuery.of(context).size.height * .35,
-                  child: Card(
-                    margin: const EdgeInsets.all(5),
-                    shadowColor: Colors.grey,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        side:
-                            BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-                    color: Colors.white.withOpacity(0.8),
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: MyImagePicker(
-                          rulesType: RulesType.USER_ASSOCIATION,
-                           association: association,),
-                    ),
+              width: MediaQuery.of(context).size.width * .9,
+              height: MediaQuery.of(context).size.height * .35,
+              child: Card(
+                margin: const EdgeInsets.all(5),
+                shadowColor: Colors.grey,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
+                color: Colors.white.withOpacity(0.8),
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: MyImagePicker(
+                    rulesType: RulesType.USER_ASSOCIATION,
+                    association: association,
                   ),
                 ),
+              ),
+            ),
             Divider(
               height: 25,
               color: Colors.white,
@@ -185,7 +196,7 @@ listview(BuildContext context, Association association) {
     ),
     ElevatedButton(
         onPressed: () {
-          if (formKey.currentState!.validate()) {
+          if (_formKey.currentState!.validate()) {
             Association associationUpdate = Association(
                 name: association.name,
                 phone: phone,
@@ -374,21 +385,20 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   verified: widget.association.verified,
                   volunteers: widget.association.volunteers,
                   volunteersWaiting: widget.association.volunteersWaiting));
-            BlocProvider.of<AssociationCubit>(context).stateInfo(
-              Association(
-                  type: '',
-                  name: widget.association.name,
-                  phone: widget.association.phone,
-                  address: widget.association.address,
-                  bio: widget.association.bio,
-                  city: widget.association.city,
-                  email: widget.association.email,
-                  imageProfile: base64Encode(_image!),
-                  postalCode: widget.association.postalCode,
-                  announcement: widget.association.announcement,
-                  verified: widget.association.verified,
-                  volunteers: widget.association.volunteers,
-                  volunteersWaiting: widget.association.volunteersWaiting));
+          BlocProvider.of<AssociationCubit>(context).stateInfo(Association(
+              type: '',
+              name: widget.association.name,
+              phone: widget.association.phone,
+              address: widget.association.address,
+              bio: widget.association.bio,
+              city: widget.association.city,
+              email: widget.association.email,
+              imageProfile: base64Encode(_image!),
+              postalCode: widget.association.postalCode,
+              announcement: widget.association.announcement,
+              verified: widget.association.verified,
+              volunteers: widget.association.volunteers,
+              volunteersWaiting: widget.association.volunteersWaiting));
         } else {}
       },
     );

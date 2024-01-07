@@ -78,7 +78,7 @@ class AssociationProfil extends StatelessWidget {
                   color: Colors.white,
                 ),
                 Section(
-                    text: association.address ?? "no address",
+                    text: association.location?.address ?? "no address",
                     icon: Icon(Icons.location_on_outlined)),
                 Divider(
                   height: 25,

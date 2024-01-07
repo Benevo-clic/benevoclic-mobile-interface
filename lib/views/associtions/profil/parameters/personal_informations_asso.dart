@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -66,7 +67,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                     height: 10,
                   ),
                   InputField(
-                      title: "${state.association!.address}",
+                      title: "${state.association!.location?.address}",
                       fct: changeAddress),
                   SizedBox(
                     height: 10,
@@ -83,7 +84,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                               name: _name,
                               phone: _phone,
                               type: '',
-                              address: _address,
+                              location: LocationModel(address: _address, latitude: 0, longitude: 0),
                               bio: state.association!.bio,
                               announcement: state.association!.announcement,
                               city: state.association!.city,

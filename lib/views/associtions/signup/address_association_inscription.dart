@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
+import 'package:namer_app/models/location_model.dart';
 
 import '../../../cubit/association/association_state.dart';
 import '../../../widgets/auth_app_bar.dart';
@@ -65,7 +66,7 @@ class _AddressAssociationInscriptionState
                 nameAssociation: widget.nameAssociation,
                 typeAssociation: widget.typeAssociation,
                 phoneNumber: widget.phoneNumber,
-                address: _address,
+                location: LocationModel(address: _address, latitude: 0, longitude: 0),
                 city: _city,
                 zipCode: _zipCode,
                 id: widget.id,

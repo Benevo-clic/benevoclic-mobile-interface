@@ -175,7 +175,7 @@ affichageAssociation(BuildContext context, Association association) {
   String bio = "";
   String address = "";
   if (association.bio != null) bio = association.bio!;
-  if (association.address != null) address = association.address!;
+  address = "association.location!.address";
 
   return Center(
     child: Column(

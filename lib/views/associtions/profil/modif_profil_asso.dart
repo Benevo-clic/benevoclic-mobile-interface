@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
@@ -124,7 +125,7 @@ listview(BuildContext context, Association association) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: association.address,
+                    initialValue: association.location?.address,
                     onSaved: (value) {
                       address = value.toString();
                     },
@@ -135,7 +136,7 @@ listview(BuildContext context, Association association) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: association.address,
+                        hintText: association.location?.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -200,7 +201,7 @@ listview(BuildContext context, Association association) {
             Association associationUpdate = Association(
                 name: association.name,
                 phone: phone,
-                address: address,
+                location: LocationModel(address: address, latitude: 0, longitude: 0),
                 bio: bio,
                 city: association.city,
                 email: association.email,
@@ -375,7 +376,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   type: '',
                   name: widget.association.name,
                   phone: widget.association.phone,
-                  address: widget.association.address,
+                  location: widget.association.location,
                   bio: widget.association.bio,
                   city: widget.association.city,
                   email: widget.association.email,
@@ -389,7 +390,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               type: '',
               name: widget.association.name,
               phone: widget.association.phone,
-              address: widget.association.address,
+              location: widget.association.location,
               bio: widget.association.bio,
               city: widget.association.city,
               email: widget.association.email,

@@ -75,11 +75,6 @@ class AuthRepository {
     }
   }
 
-  Future<bool> isUserLoggedIn() async {
-    var user = _auth.currentUser;
-    return user != null;
-  }
-
   Future<UserCredential> createAccountWithEmailPassword(
       String email, String password) async {
     try {

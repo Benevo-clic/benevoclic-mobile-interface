@@ -34,6 +34,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     super.initState();
     getIdVolunteer();
     _idVolunteer = '';
+    print(widget.volunteer?.id);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [

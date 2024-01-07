@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +14,7 @@ import '../../../widgets/info_adress_detail_announcement.dart';
 class DetailAnnouncementAssociation extends StatelessWidget {
   final Announcement announcement;
   int? nbAnnouncementsAssociation;
+  String _imageCover = '';
 
   DetailAnnouncementAssociation(
       {super.key, required this.announcement, this.nbAnnouncementsAssociation});
@@ -41,15 +44,29 @@ class DetailAnnouncementAssociation extends StatelessWidget {
               Stack(
                 alignment: Alignment.topLeft, // Adjust the alignment as needed
                 children: [
-                  Container(
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/annonce.png"),
-                          // NetworkImage(announcement.image!),
+                  announcement.image != null &&
+                          announcement.image !=
+                              "https://via.placeholder.com/150"
+                      ? Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: MemoryImage(
+                                    base64.decode(announcement.image!)),
+                                // NetworkImage(announcement.image!),
                           fit: BoxFit.cover),
                     ),
-                  ),
+                        )
+                      : Container(
+                          height: 200,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://via.placeholder.com/150"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                   Positioned(
                     top: height * 0.05,
                     left: width * 0.03,

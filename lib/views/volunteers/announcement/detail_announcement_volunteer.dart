@@ -49,17 +49,8 @@ class _DetailAnnouncementVolunteerState
         .map((e) => e.id)
         .toList()
         .contains(widget.idVolunteer);
-  }
 
-  ImageProvider _getImageProvider(String? imageString) {
-    if (imageString == null) {
-      return AssetImage('assets/logo.png');
-    }
-    if (isBase64(imageString)) {
-      return MemoryImage(base64.decode(imageString));
-    } else {
-      return NetworkImage(imageString);
-    }
+    print(widget.announcement.image);
   }
 
   Future<Association> getAssociation() async {
@@ -170,15 +161,29 @@ class _DetailAnnouncementVolunteerState
             Stack(
               alignment: Alignment.topLeft, // Adjust the alignment as needed
               children: [
-                Container(
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/annonce.png"),
-                        // NetworkImage(announcement.image!),
-                        fit: BoxFit.cover),
-                  ),
-                ),
+                widget.announcement.image != null &&
+                        widget.announcement.image !=
+                            "https://via.placeholder.com/150"
+                    ? Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: MemoryImage(
+                                  base64.decode(widget.announcement.image!)),
+                              // NetworkImage(announcement.image!),
+                              fit: BoxFit.cover),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                NetworkImage("https://via.placeholder.com/150"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                 Positioned(
                   top: height * 0.05,
                   left: width * 0.03,

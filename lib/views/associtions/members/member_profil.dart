@@ -63,7 +63,7 @@ class MemberProfil extends StatelessWidget {
                 color: Colors.white,
               ),
               Section(
-                  text: volunteer.address ?? "no address",
+                  text: volunteer.location!.address,
                   icon: Icon(Icons.location_on_outlined)),
               Divider(
                 height: 25,

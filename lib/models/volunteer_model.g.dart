@@ -12,7 +12,9 @@ Volunteer _$VolunteerFromJson(Map<String, dynamic> json) => Volunteer(
       lastName: json['lastName'] as String,
       email: json['email'] as String?,
       phone: json['phone'] as String,
-      address: json['address'] as String?,
+      location: json['location'] == null
+          ? null
+          : LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       city: json['city'] as String?,
       postalCode: json['postalCode'] as String?,
       birthDayDate: json['birthDayDate'] as String,
@@ -32,7 +34,7 @@ Map<String, dynamic> _$VolunteerToJson(Volunteer instance) => <String, dynamic>{
       'lastName': instance.lastName,
       'email': instance.email,
       'phone': instance.phone,
-      'address': instance.address,
+      'location': instance.location,
       'city': instance.city,
       'postalCode': instance.postalCode,
       'birthDayDate': instance.birthDayDate,

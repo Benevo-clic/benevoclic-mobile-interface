@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
@@ -130,7 +131,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: volunteer.address,
+                    initialValue: volunteer.location?.address,
                     onSaved: (value) {
                       _address = value.toString();
                     },
@@ -141,7 +142,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: volunteer.address,
+                        hintText: volunteer.location?.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -212,7 +213,7 @@ listview(BuildContext context, Volunteer volunteer) {
                 lastName: volunteer.lastName,
                 phone: _phone,
                 birthDayDate: volunteer.birthDayDate,
-                address: _address,
+                location: LocationModel(address: _address, latitude: 0, longitude: 0),
                 bio: _bio,
                 city: volunteer.city,
                 email: volunteer.email,
@@ -386,7 +387,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               lastName: widget.volunteer.lastName,
               phone: widget.volunteer.phone,
               birthDayDate: widget.volunteer.birthDayDate,
-              address: widget.volunteer.address,
+              location: widget.volunteer.location,
               bio: widget.volunteer.bio,
               city: widget.volunteer.city,
               email: widget.volunteer.email,
@@ -399,7 +400,7 @@ class _MyImagePickerState extends State<MyImagePicker> {
               lastName: widget.volunteer.lastName,
               phone: widget.volunteer.phone,
               birthDayDate: widget.volunteer.birthDayDate,
-              address: widget.volunteer.address,
+              location: widget.volunteer.location,
               bio: widget.volunteer.bio,
               city: widget.volunteer.city,
               email: widget.volunteer.email,

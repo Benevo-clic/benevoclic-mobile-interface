@@ -76,7 +76,7 @@ class _PopDialog extends State<PhoneDialog> {
                               myAssociationsWaiting:
                                   state.volunteer!.myAssociationsWaiting,
                               postalCode: state.volunteer!.postalCode,
-                              address: state.volunteer!.address,
+                              location: state.volunteer!.location,
                               firstName: state.volunteer!.firstName,
                               lastName: state.volunteer!.lastName,
                               phone: _phone.toString(),

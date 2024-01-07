@@ -165,7 +165,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
   String bio = "";
   if (volunteer.bio != null) bio = volunteer.bio!;
   String address = "";
-  if (volunteer.address != null) address = volunteer.address!;
+  address = volunteer.location?.address ?? "no adress";
   String email = "";
   if (volunteer.email != null) email = volunteer.email!;
 
@@ -173,7 +173,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
     child: Column(
       children: [
         CircleAvatar(
-          radius: MediaQuery.sizeOf(context).width*0.25,
+          radius: MediaQuery.sizeOf(context).width * 0.25,
           backgroundImage: _getImageProvider(imageProfileVolunteer),
         ),
         SizedBox(

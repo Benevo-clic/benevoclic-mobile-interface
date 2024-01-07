@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
+import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
@@ -380,8 +382,6 @@ class _MyImagePickerState extends State<MyImagePicker> {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
         if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-          /*BlocProvider.of<AssociationCubit>(context)
-              .changeState(AssociationPictureState(imageProfile: _image));*/
         } else {
           BlocProvider.of<VolunteerCubit>(context).updateVolunteer(Volunteer(
               firstName: widget.volunteer.firstName,

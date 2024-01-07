@@ -6,6 +6,7 @@ import 'package:namer_app/views/associtions/signup/picture_inscription.dart';
 
 import '../../../cubit/association/association_state.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../models/association_model.dart';
 import '../../../widgets/auth_app_bar.dart';
 import '../../common/authentification/signup/bio.dart';
 
@@ -61,18 +62,21 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
     return BlocConsumer<AssociationCubit, AssociationState>(
         listener: (context, state) {
       if (state is AssociationInfoState) {
+        Association association = Association(
+          name: state.name,
+          type: state.type,
+          phone: state.phone,
+          location: state.location,
+          bio: state.bio,
+          id: widget.id,
+          email: widget.email,
+        );
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PictureInscription(
-                phoneNumber: widget.phoneNumber,
-                location: widget.location,
-                bio: _bio,
-                nameAssociation: widget.nameAssociation,
-                typeAssociation: widget.typeAssociation,
-                id: widget.id,
-                email: widget.email,
+                association: association,
               ),
             ),
           ); // ici mettre la page d'inscription

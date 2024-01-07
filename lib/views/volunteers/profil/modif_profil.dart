@@ -69,7 +69,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white.withOpacity(0.8),
                     child: Padding(
                       padding: EdgeInsets.all(15),
-                      child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
+                      child: MyImagePicker(),
                     ),
                   ),
                 )

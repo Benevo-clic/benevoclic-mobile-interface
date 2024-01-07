@@ -6,18 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:namer_app/cubit/association/association_cubit.dart';
-import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/cubit/signup/signup_state.dart';
 
-import '../cubit/association/association_state.dart';
-import '../cubit/volunteer/volunteer_cubit.dart';
-import '../cubit/volunteer/volunteer_state.dart';
+import '../cubit/signup/signup_cubit.dart';
 
 class MyImagePicker extends StatefulWidget {
   final Uint8List? image;
-  final RulesType? rulesType;
 
-  const MyImagePicker({super.key, this.image, this.rulesType});
+  const MyImagePicker({super.key, this.image});
 
   @override
   State<MyImagePicker> createState() => _MyImagePickerState();
@@ -123,13 +119,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   child: InkWell(
                     onTap: () {
                       _image = null;
-                      if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-                        BlocProvider.of<AssociationCubit>(context).changeState(
-                            AssociationPictureState(imageProfile: _image));
-                      } else {
-                        BlocProvider.of<VolunteerCubit>(context).changeState(
-                            VolunteerPictureState(imageProfile: _image));
-                      }
+                      BlocProvider.of<SignupCubit>(context).changeState(
+                          SignupPictureState(imageProfile: _image));
                       Navigator.of(context).pop();
                     },
                     child: const SizedBox(
@@ -164,13 +155,8 @@ class _MyImagePickerState extends State<MyImagePicker> {
       () {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
-        if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-          BlocProvider.of<AssociationCubit>(context)
-              .changeState(AssociationPictureState(imageProfile: _image));
-        } else {
-          BlocProvider.of<VolunteerCubit>(context)
-              .changeState(VolunteerPictureState(imageProfile: _image));
-        }
+        BlocProvider.of<SignupCubit>(context)
+            .changeState(SignupPictureState(imageProfile: _image));
       },
     );
     Navigator.of(context).pop();

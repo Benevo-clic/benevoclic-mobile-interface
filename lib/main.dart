@@ -21,6 +21,7 @@ import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type
 import 'cubit/dropdown/dropdown_cubit.dart';
 import 'cubit/otherAuth/other_auth_cubit.dart';
 import 'cubit/page/page_cubit.dart';
+import 'cubit/signup/signup_cubit.dart';
 import 'views/home_view.dart';
 
 void main() async {
@@ -37,6 +38,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+        BlocProvider(
+          create: (context) => SignupCubit(
+            volunteerRepository: VolunteerRepository(),
+            associationRepository: AssociationRepository(),
+          ),
+        ),
         BlocProvider(
             create: (context) => FavoritesAnnouncementCubit(
                   favoritesRepository: FavoritesRepository(),

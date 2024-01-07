@@ -36,7 +36,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   @override
   void initState() {
     super.initState();
-    print(widget.idAssociation);
   }
 
   void _toggleFavorite(Announcement announcement) async {

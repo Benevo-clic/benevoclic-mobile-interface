@@ -7,32 +7,23 @@ import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/location_model.dart';
-import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../cubit/signup/signup_cubit.dart';
+import '../../../cubit/signup/signup_state.dart';
 import '../../../models/user_model.dart';
+import '../../../models/volunteer_model.dart';
 import '../../../repositories/api/user_repository.dart';
 import '../../../widgets/auth_app_bar.dart';
+import '../../../widgets/picture_signup.dart';
+import '../../volunteers/navigation_volunteer.dart';
 import '../navigation_association.dart';
 
 class PictureInscription extends StatefulWidget {
-  final String nameAssociation;
-  final String typeAssociation;
-  final String phoneNumber;
-  final String bio;
-  final LocationModel location;
-  final String email;
-  final String id;
+  Association? association;
+  Volunteer? volunteer;
 
-  PictureInscription(
-      {super.key,
-      required this.phoneNumber,
-      required this.bio,
-      required this.location,
-      required this.nameAssociation,
-      required this.typeAssociation, required this.email, required this.id});
+  PictureInscription({super.key, this.volunteer, this.association});
 
   @override
   State<PictureInscription> createState() => _PictureInscriptionState();
@@ -61,22 +52,36 @@ class _PictureInscriptionState extends State<PictureInscription> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AssociationCubit, AssociationState>(
+    return BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) async {
-      if (state is AssociationPictureState) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Votre photo de profil a été mise à jour"),
-          ),
-        );
-        _imageProfile = state.imageProfile;
-        BlocProvider.of<AssociationCubit>(context).initState();
+      if (state is SignupPictureState) {
+        if (widget.association != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Votre photo de profil a été mise à jour"),
+            ),
+          );
+          _imageProfile = state.imageProfile;
+          BlocProvider.of<AssociationCubit>(context).initState();
+        }
+        if (widget.volunteer != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Votre photo de profil a été mise à jour"),
+            ),
+          );
+          _imageProfile = state.imageProfile;
+          BlocProvider.of<VolunteerCubit>(context).initState();
+        }
       }
 
-      if (state is AssociationCreatedState) {
-        final SharedPreferences preferences = await SharedPreferences.getInstance();
+      if (state is SignupCreatedAssociationState) {
+        print(state.associationModel.email);
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        String? id = widget.association?.id;
         preferences.setBool('Association', true);
-        preferences.setString('idAssociation', widget.id);
+        preferences.setString('idAssociation', id!);
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
@@ -86,6 +91,23 @@ class _PictureInscriptionState extends State<PictureInscription> {
                   NavigationAssociation(),
               transitionDuration: Duration(milliseconds: 1),
               reverseTransitionDuration: Duration(milliseconds: 1),
+            ),
+          );
+        });
+      }
+      if (state is SignupCreatedVolunteerState) {
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        preferences.setBool('Volunteer', true);
+        preferences.setString('idVolunteer', state.volunteerModel.id!);
+        print(state.volunteerModel.id!);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  NavigationVolunteer(volunteer: state.volunteerModel),
             ),
           );
         });
@@ -153,43 +175,84 @@ class _PictureInscriptionState extends State<PictureInscription> {
                           ),
                         ),
                       ),
-                      _pictureAssociation(context, state),
+                      PictureSignup(),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
                           onPressed: () async {
-                            Association association = Association(
-                              name: widget.nameAssociation,
-                              type: widget.typeAssociation,
-                              phone: widget.phoneNumber,
-                              location: widget.location,
-                              imageProfile: '',
-                              bio: widget.bio,
-                              email: widget.email,
-                              id: widget.id,
-                            );
-                            UserModel userModel = await UserRepository()
-                                .getUserByEmail(widget.email);
-                            UserModel userModel2 = UserModel.fromJson({
-                              "id": userModel.id,
-                              "email": userModel.email,
-                              "isConnect": true,
-                              "isVerified": true,
-                              "isActif": true,
-                              "rule": {
+                            if (widget.association != null) {
+                              Association association = Association(
+                                name: widget.association!.name,
+                                type: widget.association!.type,
+                                phone: widget.association!.phone,
+                                location: widget.association!.location,
+                                imageProfile: '',
+                                bio: widget.association!.bio,
+                                email: widget.association!.email,
+                                id: widget.association!.id,
+                              );
+                              String? email = widget.association!.email;
+                              UserModel userModel =
+                                  await UserRepository().getUserByEmail(email!);
+                              UserModel userModel2 = UserModel.fromJson({
                                 "id": userModel.id,
-                                "rulesType": "USER_ASSOCIATION"
-                              }
-                            });
-                            UserRepository()
-                                .updateUser(userModel2)
-                                .then((value) {
-                              BlocProvider.of<AssociationCubit>(context)
-                                  .createAssociation(association);
-                              BlocProvider.of<AssociationCubit>(context)
-                                  .changeState(AssociationCreatedState(
-                                  associationModel: association));
-                            });
+                                "email": userModel.email,
+                                "isConnect": true,
+                                "isVerified": true,
+                                "isActif": true,
+                                "rule": {
+                                  "id": userModel.id,
+                                  "rulesType": "USER_ASSOCIATION"
+                                }
+                              });
+                              UserRepository()
+                                  .updateUser(userModel2)
+                                  .then((value) {
+                                BlocProvider.of<SignupCubit>(context)
+                                    .createAssociation(association);
+                                BlocProvider.of<SignupCubit>(context)
+                                    .changeState(SignupCreatedAssociationState(
+                                        associationModel: association));
+                              });
+                            }
+                            if (widget.volunteer != null) {
+                              Volunteer volunteer = Volunteer(
+                                firstName: widget.volunteer!.firstName,
+                                lastName: widget.volunteer!.lastName,
+                                phone: widget.volunteer!.phone,
+                                birthDayDate: widget.volunteer!.birthDayDate,
+                                imageProfile: '',
+                                bio: widget.volunteer!.bio,
+                                email: widget.volunteer!.email,
+                                id: widget.volunteer!.id,
+                                myAssociations: [],
+                                myAssociationsWaiting: [],
+                                location: widget.volunteer!.location,
+                              );
+                              String? email = widget.volunteer!.email;
+                              UserModel userModel =
+                                  await UserRepository().getUserByEmail(email!);
+                              UserModel userModel2 = UserModel.fromJson({
+                                "id": userModel.id,
+                                "email": userModel.email,
+                                "isConnect": true,
+                                "isVerified": true,
+                                "isActif": true,
+                                "rule": {
+                                  "id": userModel.id,
+                                  "rulesType": "USER_VOLUNTEER"
+                                }
+                              });
+                              UserRepository()
+                                  .updateUser(userModel2)
+                                  .then((value) {
+                                BlocProvider.of<SignupCubit>(context)
+                                    .createVolunteer(volunteer);
+                                BlocProvider.of<SignupCubit>(context)
+                                    .changeState(SignupCreatedVolunteerState(
+                                        volunteerModel: volunteer));
+                              });
+                            }
                           },
                           child: Text(
                             "Ingnorer cette étape",
@@ -219,45 +282,91 @@ class _PictureInscriptionState extends State<PictureInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            Association association = Association(
-                              name: widget.nameAssociation,
-                              type: widget.typeAssociation,
-                              phone: widget.phoneNumber,
-                              location: widget.location,
-                              bio: widget.bio,
-                              email: widget.email,
-                              id: widget.id,
-                            );
-                            if (_imageProfile != null) {
-                              association.imageProfile =
-                                  base64Encode(_imageProfile!);
-                            } else {
-                              association.imageProfile = '';
-                            }
-
-                            UserModel userModel = await UserRepository()
-                                .getUserByEmail(widget.email);
-                            UserModel userModel2 = UserModel.fromJson({
-                              "id": userModel.id,
-                              "email": userModel.email,
-                              "isConnect": true,
-                              "isVerified": true,
-                              "isActif": true,
-                              "rule": {
+                            if (widget.association != null) {
+                              Association association = Association(
+                                name: widget.association!.name,
+                                type: widget.association!.type,
+                                phone: widget.association!.phone,
+                                location: widget.association!.location,
+                                bio: widget.association!.bio,
+                                email: widget.association!.email,
+                                id: widget.association!.id,
+                              );
+                              String? email = widget.association!.email;
+                              UserModel userModel =
+                                  await UserRepository().getUserByEmail(email!);
+                              UserModel userModel2 = UserModel.fromJson({
                                 "id": userModel.id,
-                                "rulesType": "USER_ASSOCIATION"
-                              }
-                            });
-                            UserRepository()
-                                .updateUser(userModel2)
-                                .then((value) {
-                              BlocProvider.of<AssociationCubit>(context)
-                                  .createAssociation(association);
-                              BlocProvider.of<AssociationCubit>(context)
-                                  .changeState(AssociationCreatedState(
-                                      associationModel: association));
-                            });
+                                "email": userModel.email,
+                                "isConnect": true,
+                                "isVerified": true,
+                                "isActif": true,
+                                "rule": {
+                                  "id": userModel.id,
+                                  "rulesType": "USER_ASSOCIATION"
+                                }
+                              });
 
+                              if (_imageProfile != null) {
+                                association.imageProfile =
+                                    base64Encode(_imageProfile!);
+                              } else {
+                                association.imageProfile = '';
+                              }
+                              UserRepository()
+                                  .updateUser(userModel2)
+                                  .then((value) {
+                                BlocProvider.of<SignupCubit>(context)
+                                    .createAssociation(association);
+                                BlocProvider.of<SignupCubit>(context)
+                                    .changeState(SignupCreatedAssociationState(
+                                        associationModel: association));
+                              });
+                            }
+                            if (widget.volunteer != null) {
+                              Volunteer volunteer = Volunteer(
+                                firstName: widget.volunteer!.firstName,
+                                lastName: widget.volunteer!.lastName,
+                                phone: widget.volunteer!.phone,
+                                birthDayDate: widget.volunteer!.birthDayDate,
+                                bio: widget.volunteer!.bio,
+                                email: widget.volunteer!.email,
+                                id: widget.volunteer!.id,
+                                myAssociations: [],
+                                myAssociationsWaiting: [],
+                                location: widget.volunteer!.location,
+                              );
+                              if (_imageProfile != null) {
+                                volunteer.imageProfile =
+                                    base64Encode(_imageProfile!);
+                              } else {
+                                volunteer.imageProfile = '';
+                              }
+
+                              String? email = widget.volunteer!.email;
+                              UserModel userModel =
+                                  await UserRepository().getUserByEmail(email!);
+                              UserModel userModel2 = UserModel.fromJson({
+                                "id": userModel.id,
+                                "email": userModel.email,
+                                "isConnect": true,
+                                "isVerified": true,
+                                "isActif": true,
+                                "rule": {
+                                  "id": userModel.id,
+                                  "rulesType": "USER_VOLUNTEER"
+                                }
+                              });
+                              UserRepository()
+                                  .updateUser(userModel2)
+                                  .then((value) {
+                                BlocProvider.of<SignupCubit>(context)
+                                    .createVolunteer(volunteer);
+                                BlocProvider.of<SignupCubit>(context)
+                                    .changeState(SignupCreatedVolunteerState(
+                                        volunteerModel: volunteer));
+                              });
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
@@ -287,34 +396,5 @@ class _PictureInscriptionState extends State<PictureInscription> {
         ],
       );
     });
-  }
-
-  Widget _pictureAssociation(BuildContext context, state) {
-    double padding = MediaQuery.of(context).size.height * .009 / 4;
-
-    return Stack(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .9,
-          height: MediaQuery.of(context).size.height * .35,
-          child: Card(
-            margin: const EdgeInsets.all(5),
-            shadowColor: Colors.grey,
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-                side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-            color: Colors.white.withOpacity(0.8),
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: MyImagePicker(rulesType: RulesType.USER_ASSOCIATION),
-            ),
-          ),
-        )
-      ],
-    );
   }
 }

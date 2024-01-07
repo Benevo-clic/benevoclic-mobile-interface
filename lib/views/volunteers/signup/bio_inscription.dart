@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/location_model.dart';
-import 'package:namer_app/views/volunteers/signup/picture_inscription.dart';
 
 import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../models/volunteer_model.dart';
 import '../../../widgets/auth_app_bar.dart';
+import '../../associtions/signup/picture_inscription.dart';
 import '../../common/authentification/signup/bio.dart';
 
 class BioInscription extends StatefulWidget {
@@ -59,19 +60,23 @@ class _BioInscriptionState extends State<BioInscription> {
         listener: (context, state) {
 
       if (state is VolunteerInfoState) {
+        Volunteer volunteer = Volunteer(
+          firstName: state.firstName,
+          lastName: state.lastName,
+          birthDayDate: state.birthDate,
+          phone: state.phoneNumber,
+          location: state.location,
+          bio: _bio,
+          id: widget.id,
+          email: widget.email,
+        );
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PictureInscription(
-                firstName: widget.firstName,
-                lastName: widget.lastName,
-                birthDate: widget.birthDate,
-                phoneNumber: widget.phoneNumber,
-                location: widget.location,
-                bio: _bio,
-                id: widget.id,
-                email: widget.email,
+                volunteer: volunteer,
               ),
             ),
           ); // ici mettre la page d'inscription

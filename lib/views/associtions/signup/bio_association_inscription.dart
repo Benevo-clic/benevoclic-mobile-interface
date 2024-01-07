@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/views/associtions/signup/picture_inscription.dart';
 
 import '../../../cubit/association/association_state.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
+import '../../common/authentification/signup/bio.dart';
 
 class BioAssociationInscription extends StatefulWidget {
   final String nameAssociation;
@@ -32,15 +31,6 @@ class BioAssociationInscription extends StatefulWidget {
 
 class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
   late String _bio = "";
-  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController _descriptionController = TextEditingController();
-
-  bool _isWordCountValid(String text) {
-    int wordCount =
-        text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
-    return wordCount <= 50;
-  }
 
   @override
   void dispose() {
@@ -55,8 +45,14 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
 
   void _initUser() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final cubit = context.read<VolunteerCubit>();
+      final cubit = context.read<AssociationCubit>();
       cubit.initState();
+    });
+  }
+
+  void _handleBioChanges(String? bio) async {
+    setState(() {
+      _bio = bio!;
     });
   }
 
@@ -145,7 +141,9 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
                           ),
                         ),
                       ),
-                      _infoAssociation(context, state),
+                      BioSignup(
+                        onBioChanged: _handleBioChanges,
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),
                         child: TextButton(
@@ -189,19 +187,16 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              final cubit = context.read<AssociationCubit>();
-                              cubit.changeState(
-                                AssociationInfoState(
-                                  name: widget.nameAssociation,
-                                  type: widget.typeAssociation,
-                                  phone: widget.phoneNumber,
-                                  location: widget.location,
-                                  bio: _bio,
-                                ),
-                              );
-                            }
+                            final cubit = context.read<AssociationCubit>();
+                            cubit.changeState(
+                              AssociationInfoState(
+                                name: widget.nameAssociation,
+                                type: widget.typeAssociation,
+                                phone: widget.phoneNumber,
+                                location: widget.location,
+                                bio: _bio,
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey.shade200,
@@ -233,74 +228,6 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
     });
   }
 
-  Widget _infoAssociation(BuildContext context, state) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * .9,
-          height: MediaQuery.of(context).size.height * .35,
-          child: Card(
-            margin: const EdgeInsets.all(5),
-            shadowColor: Colors.grey,
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-                side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-            color: Colors.white.withOpacity(0.8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, left: 20, right: 20, bottom: 10),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomTextFormField(
-                          controller: _descriptionController,
-                          hintText:
-                              "Entrez une description de vous jusqu'à 50 mots (facultatif)",
-                          keyboardType: TextInputType.multiline,
-                          maxLine:
-                              MediaQuery.of(context).size.height * 0.44 ~/ 50,
-                          obscureText: false,
-                          prefixIcons: false,
-                          onSaved: (value) {
-                            _descriptionController.text = value.toString();
-                            setState(() {
-                              _bio = _descriptionController.text;
-                            });
-                          },
-                          validator: (value) {
-                            if (value != null && !_isWordCountValid(value)) {
-                              return "votre description ne doit pas dépasser 50 mots";
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox.fromSize(
-                  size: const Size(0, 15),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
 }
 
 // UserCreatedState

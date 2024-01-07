@@ -7,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final void Function(String?)? onChanged;
   final void Function()? datepicker;
   final TextEditingController? controller;
   final int? maxLine;
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLine,
     this.prefixIcons,
     this.focusNode,
+    this.onChanged,
   });
 
   @override
@@ -39,6 +41,7 @@ class CustomTextFormField extends StatelessWidget {
         maxLines: maxLine,
         onSaved: onSaved,
         validator: validator,
+        onChanged: onChanged,
         decoration: InputDecoration(
           fillColor: Colors.white.withOpacity(0.5),
           filled: true,

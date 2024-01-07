@@ -7,6 +7,7 @@ import 'package:namer_app/views/associtions/announcement/participant_announcemen
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/page/page_cubit.dart';
+import '../../../widgets/info_adress_detail_announcement.dart';
 
 class DetailAnnouncementAssociation extends StatelessWidget {
   final Announcement announcement;
@@ -75,7 +76,11 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 height: 5,
               ),
               infoAsso(context),
-              infoAddress(context),
+              InfoAdressAnnouncement(
+                latitude: announcement.location.latitude,
+                longitude: announcement.location.longitude,
+                address: announcement.location.address,
+              ),
             ]),
           ),
         );
@@ -185,59 +190,6 @@ class DetailAnnouncementAssociation extends StatelessWidget {
     );
   }
 
-  Widget infoAddress(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      height: 100,
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 0,
-              blurRadius: 5,
-              offset: Offset(0, 6),
-            ),
-          ],
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.red, width: 1)),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.location_on,
-                      size: 15,
-                      color: Colors.black,
-                    ),
-                    label: Text(
-                      "3 rue de la paix, 75000 Paris",
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(),
-                  )
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget infoAsso(BuildContext context) {
     return Container(

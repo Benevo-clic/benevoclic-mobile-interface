@@ -7,10 +7,12 @@ import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
+import 'package:namer_app/widgets/info_adress_detail_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
 import '../../../widgets/information_announcement.dart';
+import '../../common/annonces/googleMap/google_map_widget.dart';
 
 class DetailAnnouncementVolunteer extends StatefulWidget {
   Announcement announcement;
@@ -203,7 +205,11 @@ class _DetailAnnouncementVolunteerState
               height: 5,
             ),
             infoAsso(context, association),
-            infoAddress(context),
+            InfoAdressAnnouncement(
+              latitude: widget.announcement.location.latitude,
+              longitude: widget.announcement.location.longitude,
+              address: widget.announcement.location.address,
+            ),
           ],
         ),
       ),
@@ -413,9 +419,8 @@ class _DetailAnnouncementVolunteerState
 
   Widget infoAddress(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      height: 100,
+      width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -429,18 +434,21 @@ class _DetailAnnouncementVolunteerState
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.red, width: 1)),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton.icon(
                     onPressed: () {},
                     icon: Icon(
                       Icons.location_on,
-                      size: 15,
+                      size: 16,
                       color: Colors.black,
                     ),
                     label: Text(
@@ -452,7 +460,16 @@ class _DetailAnnouncementVolunteerState
                       ),
                     ),
                     style: ElevatedButton.styleFrom(),
-                  )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.06),
+                    child: GoogleMapView(
+                      latitude: widget.announcement.location.latitude,
+                      longitude: widget.announcement.location.longitude,
+                      address: widget.announcement.location.address,
+                    ),
+                  ),
                 ],
               ),
             ],

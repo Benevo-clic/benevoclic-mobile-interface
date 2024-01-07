@@ -1,1 +1,1 @@
-enum TrierPar { proximite, recent, ancient }
+enum TrierPar { recent, ancient }

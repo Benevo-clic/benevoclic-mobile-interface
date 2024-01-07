@@ -267,6 +267,8 @@ class AnnouncementRepository {
         };
         var data = json.encode(filterAnnouncement.toJson());
 
+        print(data);
+
         var response = await _dio.get(
           'http://${globals.url}/api/v1/announcement/findAnnouncementByAssociationId',
           options: Options(headers: headers),
@@ -281,6 +283,7 @@ class AnnouncementRepository {
               'Erreur lors de la récupération des annonces : ${response.statusMessage}');
         }
       } catch (e) {
+        print(e);
         throw Exception(e);
       }
     });

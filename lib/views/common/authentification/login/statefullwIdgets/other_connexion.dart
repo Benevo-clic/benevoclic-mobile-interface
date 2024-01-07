@@ -30,12 +30,17 @@ class _OtherConnectionState extends State<OtherConnection> {
   late String? _id;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<UserCubit>();
       cubit.googleAuth();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   _submit(UserEmailGoggleVerificationState state) async {

@@ -25,12 +25,6 @@ class RadioSection extends StatelessWidget {
         RadioButton(
           fct: fct,
           tri: tri,
-          name: "A proximité",
-          triValue: TrierPar.proximite,
-        ),
-        RadioButton(
-          fct: fct,
-          tri: tri,
           name: "Le plus récent",
           triValue: TrierPar.recent,
         ),

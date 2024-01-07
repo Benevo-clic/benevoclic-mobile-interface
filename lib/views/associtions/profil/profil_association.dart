@@ -202,7 +202,7 @@ affichageAssociation(BuildContext context, Association association) {
                       context,
                       MaterialPageRoute(
                           builder: (context) => MembersView(
-                              volunteers: association.volunteers!)));
+                              volunteers: association.volunteers ?? [])));
                 },
                 child: Text(
                   "${association.volunteers?.length} membres",

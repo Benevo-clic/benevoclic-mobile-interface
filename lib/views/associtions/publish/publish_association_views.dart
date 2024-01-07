@@ -55,12 +55,10 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   final TextEditingController _dateEventController = TextEditingController();
   final TextEditingController _nbHoursController = TextEditingController();
   final TextEditingController _nbPlacesController = TextEditingController();
-  final TextEditingController _typeController =
-      TextEditingController(); // Si nécessaire
+  final TextEditingController _typeController = TextEditingController();
 
   @override
   void dispose() {
-    // Dispose des contrôleurs
     _titleController.dispose();
     _descriptionController.dispose();
     _dateEventController.dispose();
@@ -74,12 +72,18 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isEditing == null || isEditing == false) {
+      BlocProvider.of<AnnouncementCubit>(context)
+          .changeState(AnnouncementInitialState());
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-
     _addressFocusNode.addListener(_handleAddressFocusChange);
-    BlocProvider.of<AnnouncementCubit>(context)
-        .changeState(AnnouncementInitialState());
   }
 
   void _handleAddressFocusChange() async {
@@ -166,7 +170,6 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
       }
 
       if (_formKey.currentState!.validate() && location.address.isNotEmpty) {
-        print('Form is valid');
         _formKey.currentState!.save();
         BlocProvider.of<AnnouncementCubit>(context)
             .updateAnnouncement(id, announcement);
@@ -187,14 +190,12 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
         );
       }
     } catch (e) {
-      setState(() {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
                 "Une erreur s'est produite lors de la modification de l'annonce"),
           ),
         );
-      });
     }
   }
 
@@ -276,6 +277,7 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           _imageCover = state.image;
         }
         if (state is AnnouncementUpdatingState) {
+            selectedOption = 'Autre';
           _descriptionController.text = state.announcement.description;
           _dateEventController.text = concatDateAndHour(
               state.announcement.dateEvent, state.announcement.hourEvent);
@@ -284,21 +286,17 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
           _typeController.text = state.announcement.type;
           _titleController.text = state.announcement.labelEvent;
           _addressController.text = state.announcement.location.address;
-
-          setState(() {
-            selectedOption = 'Autre';
-            _nbPlacesTaken == state.announcement.nbPlacesTaken;
-            _idAnnouncement = state.announcement.id!;
-            isEditing = state.isUpdating;
-            _idAssociation = state.announcement.idAssociation;
-            _isVisibility = state.announcement.isVisible!;
-            _datePublication = state.announcement.datePublication;
+          _nbPlacesTaken == state.announcement.nbPlacesTaken;
+          _idAnnouncement = state.announcement.id!;
+          isEditing = state.isUpdating;
+          _idAssociation = state.announcement.idAssociation;
+          _isVisibility = state.announcement.isVisible!;
+          _datePublication = state.announcement.datePublication;
             location = LocationModel(
               address: state.announcement.location.address,
               latitude: state.announcement.location.latitude,
               longitude: state.announcement.location.longitude,
             );
-          });
 
           if (state.announcement.image != null &&
               state.announcement.image != "https://via.placeholder.com/150") {

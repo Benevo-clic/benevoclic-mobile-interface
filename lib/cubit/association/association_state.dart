@@ -25,8 +25,6 @@ class AssociationCreatedState extends AssociationState {
   List<Object?> get props => [associationModel];
 }
 
-class AssociationSelectedState extends AssociationState {}
-
 class AssociationErrorState extends AssociationState {
   final String message;
 
@@ -76,18 +74,3 @@ class AssociationPictureState extends AssociationState {
   @override
   List<Object?> get props => [imageProfile];
 }
-
-class AssociationUpdateState extends AssociationState {}
-
-class AssociationDeleteState extends AssociationState {}
-
-class AssociationVerifyState extends AssociationState {
-  final bool isVerified;
-
-  AssociationVerifyState({required this.isVerified});
-
-  @override
-  List<Object?> get props => [isVerified];
-}
-
-class AssociationVerifyErrorState extends AssociationState {}

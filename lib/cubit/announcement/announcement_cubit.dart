@@ -16,10 +16,6 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       : _announcementRepository = announcementRepository,
         super(AnnouncementInitialState());
 
-  void selectOption(String value) {
-    emit(value as AnnouncementState);
-  }
-
   void setAnnouncement(Announcement announcement) {
     emit(AnnouncementSelectedState(
         announcements: [], announcement: announcement));
@@ -58,25 +54,6 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       Announcement announcementUpdated =
           await _announcementRepository.updateAnnouncement(id, announcement);
       emit(AnnouncementCreatedState(announcement: announcementUpdated));
-    } catch (e) {
-      emit(AnnouncementErrorState(message: e.toString()));
-    }
-  }
-
-  void selectAnnouncementType(String type) {
-    if (type == 'Autre') {
-      emit(CustomAnnouncementTypeState(""));
-    } else {
-      emit(AnnouncementInitialState());
-    }
-  }
-
-  void isFavorite(String idVolunteer, String? idAnnouncement) async {
-    emit(AnnouncementLoadingState());
-    try {
-      var isFavorite =
-          await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
-      emit(FavoritesAnnouncementIsFavoriteState(isFavorite: isFavorite));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
     }

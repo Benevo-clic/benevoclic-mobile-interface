@@ -173,7 +173,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
     child: Column(
       children: [
         CircleAvatar(
-          radius: 30,
+          radius: MediaQuery.sizeOf(context).width*0.25,
           backgroundImage: _getImageProvider(imageProfileVolunteer),
         ),
         SizedBox(

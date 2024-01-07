@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/members/members_view.dart';
@@ -182,7 +181,8 @@ affichageAssociation(BuildContext context, Association association) {
     child: Column(
       children: [
         CircleAvatar(
-          radius: 30,
+
+          radius: MediaQuery.sizeOf(context).width*0.25,
           backgroundImage: _getImageProvider(imageProfileAssociation),
         ),
         SizedBox(

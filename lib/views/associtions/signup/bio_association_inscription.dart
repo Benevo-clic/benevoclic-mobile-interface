@@ -14,17 +14,13 @@ class BioAssociationInscription extends StatefulWidget {
   final String nameAssociation;
   final String typeAssociation;
   final String phoneNumber;
-  final String zipCode;
   final LocationModel location;
-  final String city;
   final String id;
   final String email;
 
   const BioAssociationInscription(
       {super.key,
-      required this.zipCode,
       required this.location,
-      required this.city,
       required this.nameAssociation,
       required this.typeAssociation,
       required this.phoneNumber, required this.id, required this.email});
@@ -75,9 +71,7 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
             MaterialPageRoute(
               builder: (context) => PictureInscription(
                 phoneNumber: widget.phoneNumber,
-                zipcode: widget.zipCode,
                 location: widget.location,
-                city: widget.city,
                 bio: _bio,
                 nameAssociation: widget.nameAssociation,
                 typeAssociation: widget.typeAssociation,

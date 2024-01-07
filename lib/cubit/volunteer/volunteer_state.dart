@@ -57,8 +57,6 @@ class VolunteerInfoState extends VolunteerState {
   final String birthDate;
   final String phoneNumber;
   final LocationModel? location;
-  final String? city;
-  final String? postalCode;
   final String? bio;
 
   VolunteerInfoState({
@@ -68,8 +66,6 @@ class VolunteerInfoState extends VolunteerState {
     required this.phoneNumber,
     this.bio,
     this.location,
-    this.city,
-    this.postalCode,
   });
 
   @override
@@ -80,8 +76,6 @@ class VolunteerInfoState extends VolunteerState {
         phoneNumber,
         bio,
         location,
-        city,
-        postalCode,
       ];
 }
 

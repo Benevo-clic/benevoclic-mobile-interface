@@ -23,8 +23,7 @@ class PictureInscription extends StatefulWidget {
   final String phoneNumber;
   final String bio;
   final LocationModel location;
-  final String city;
-  final String zipcode;
+
   final String email;
   final String id;
 
@@ -36,8 +35,6 @@ class PictureInscription extends StatefulWidget {
       required this.phoneNumber,
       required this.bio,
       required this.location,
-      required this.city,
-      required this.zipcode,
       required this.email,
       required this.id});
 

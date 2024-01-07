@@ -13,9 +13,7 @@ class BioInscription extends StatefulWidget {
   final String lastName;
   final String birthDate;
   final String phoneNumber;
-  final String zipCode;
   final LocationModel location;
-  final String city;
   final String id;
   final String email;
 
@@ -25,9 +23,7 @@ class BioInscription extends StatefulWidget {
       required this.lastName,
       required this.birthDate,
       required this.phoneNumber,
-      required this.zipCode,
       required this.location,
-      required this.city,
       required this.id,
       required this.email});
 
@@ -80,9 +76,7 @@ class _BioInscriptionState extends State<BioInscription> {
                 lastName: widget.lastName,
                 birthDate: widget.birthDate,
                 phoneNumber: widget.phoneNumber,
-                zipcode: widget.zipCode,
                 location: widget.location,
-                city: widget.city,
                 bio: bio,
                 id: widget.id,
                 email: widget.email,
@@ -166,8 +160,6 @@ class _BioInscriptionState extends State<BioInscription> {
                               lastName: widget.lastName,
                               phoneNumber: widget.phoneNumber,
                                 location: widget.location,
-                                city: widget.city,
-                                postalCode: widget.zipCode,
                                 bio: "",
                               ),
                             );

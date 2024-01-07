@@ -23,8 +23,6 @@ class PictureInscription extends StatefulWidget {
   final String phoneNumber;
   final String bio;
   final LocationModel location;
-  final String city;
-  final String zipcode;
   final String email;
   final String id;
 
@@ -33,8 +31,6 @@ class PictureInscription extends StatefulWidget {
       required this.phoneNumber,
       required this.bio,
       required this.location,
-      required this.city,
-      required this.zipcode,
       required this.nameAssociation,
       required this.typeAssociation, required this.email, required this.id});
 
@@ -167,12 +163,10 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               type: widget.typeAssociation,
                               phone: widget.phoneNumber,
                               location: widget.location,
-                              city: widget.city,
                               imageProfile: '',
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,
-                              postalCode: widget.zipcode,
                             );
                             UserModel userModel = await UserRepository()
                                 .getUserByEmail(widget.email);
@@ -230,7 +224,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               type: widget.typeAssociation,
                               phone: widget.phoneNumber,
                               location: widget.location,
-                              city: widget.city,
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,

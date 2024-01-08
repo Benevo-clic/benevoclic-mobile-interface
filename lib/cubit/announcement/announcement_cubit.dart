@@ -188,7 +188,7 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement = await _announcementRepository
-          .putAnnouncementInWatingList(idVolunteer!, idAnnouncement);
+          .putAnnouncementInWatingList(idAnnouncement, idVolunteer!);
       emit(AnnouncementAddedWaitingState(announcement: announcement));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));

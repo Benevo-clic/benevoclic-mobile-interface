@@ -35,22 +35,25 @@ class DetailAnnouncementVolunteer extends StatefulWidget {
 class _DetailAnnouncementVolunteerState
     extends State<DetailAnnouncementVolunteer> {
   AssociationRepository _associationRepository = AssociationRepository();
-  late bool isWaiting;
-  late bool isParticipate;
+  late bool isWaiting = false;
+  late bool isParticipate = false;
 
   @override
   void initState() {
     super.initState();
-    isParticipate = widget.announcement.volunteers!
-        .map((e) => e.id)
-        .toList()
-        .contains(widget.idVolunteer);
-    isWaiting = widget.announcement.volunteersWaiting!
-        .map((e) => e.id)
-        .toList()
-        .contains(widget.idVolunteer);
-
-    print(widget.announcement.image);
+    if (widget.announcement.volunteers != null && widget.idVolunteer != null) {
+      isParticipate = widget.announcement.volunteers!
+          .map((e) => e.id)
+          .toList()
+          .contains(widget.idVolunteer);
+    }
+    if (widget.announcement.volunteersWaiting != null &&
+        widget.idVolunteer != null) {
+      isWaiting = widget.announcement.volunteersWaiting!
+          .map((e) => e.id)
+          .toList()
+          .contains(widget.idVolunteer);
+    }
   }
 
   Future<Association> getAssociation() async {
@@ -79,7 +82,16 @@ class _DetailAnnouncementVolunteerState
     }
   }
 
-  bool isBase64(String str) {
+  ImageProvider _getImageProvider(String? imageString) {
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString!));
+    } else {
+      return NetworkImage(imageString!);
+    }
+  }
+
+  bool isBase64(String? str) {
+    if (str == null) return false;
     try {
       base64.decode(str);
       return true;
@@ -112,8 +124,11 @@ class _DetailAnnouncementVolunteerState
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementErrorState) {
-          SnackBar snackBar = SnackBar(content: Text("Erreur lors de l'ajout"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            SnackBar snackBar =
+                SnackBar(content: Text("Erreur lors de l'ajout"));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          });
         }
         if (state is AnnouncementLoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -123,7 +138,9 @@ class _DetailAnnouncementVolunteerState
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementAddedWaitingState) {
+          print("+++++++++++++++++++++++++++++++++++");
           widget.announcement = state.announcement;
+          print(state.announcement.volunteersWaiting!.length);
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementErrorState) {
@@ -395,7 +412,7 @@ class _DetailAnnouncementVolunteerState
                       onPressed: () {
                         BlocProvider.of<AnnouncementCubit>(context)
                             .addVolunteerToWaitingList(
-                                widget.announcement.id!, widget.idVolunteer!);
+                                widget.idVolunteer!, widget.announcement.id!);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(170, 77, 79, 1),
@@ -513,7 +530,8 @@ class _DetailAnnouncementVolunteerState
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage: _getImageProvider(
+                        widget.announcement.imageProfileAssociation),
                   ),
                   SizedBox(
                     width: 5,

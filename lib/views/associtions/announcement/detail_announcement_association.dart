@@ -19,6 +19,24 @@ class DetailAnnouncementAssociation extends StatelessWidget {
   DetailAnnouncementAssociation(
       {super.key, required this.announcement, this.nbAnnouncementsAssociation});
 
+  ImageProvider _getImageProvider(String? imageString) {
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString!));
+    } else {
+      return NetworkImage(imageString!);
+    }
+  }
+
+  bool isBase64(String? str) {
+    if (str == null) return false;
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -234,7 +252,8 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage:
+                        _getImageProvider(announcement.imageProfileAssociation),
                   ),
                   SizedBox(
                     width: 5,

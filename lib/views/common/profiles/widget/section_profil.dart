@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/util/color.dart';
 
 class Section extends StatelessWidget {
-  final String text;
+  final String? text;
   final Icon icon;
 
   Section({super.key, required this.text, required this.icon});
@@ -19,7 +19,7 @@ class Section extends StatelessWidget {
               width: 5,
             ),
             Text(
-              text,
+              text!,
             ),
           ],
         ));

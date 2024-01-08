@@ -7,7 +7,7 @@ import '../../../../../cubit/user/user_cubit.dart';
 import '../../../../../cubit/user/user_state.dart';
 import '../../../../../models/user_model.dart';
 import '../../../../../repositories/api/user_repository.dart';
-import '../../../../../repositories/auth_repository.dart';
+import '../../../../../repositories/google/auth_repository.dart';
 import '../../../../../type/rules_type.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../associtions/navigation_association.dart';
@@ -30,12 +30,17 @@ class _OtherConnectionState extends State<OtherConnection> {
   late String? _id;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final cubit = context.read<UserCubit>();
       cubit.googleAuth();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   _submit(UserEmailGoggleVerificationState state) async {

@@ -85,7 +85,7 @@ listview(BuildContext context, Association association) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: association.address,
+                    initialValue: association.location!.address,
                     onSaved: (value) {
                       address = value.toString();
                     },
@@ -96,7 +96,7 @@ listview(BuildContext context, Association association) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: association.address,
+                        hintText: association.location!.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -161,7 +161,7 @@ listview(BuildContext context, Association association) {
             Association associationUpdate = Association(
                 name: association.name,
                 phone: phone,
-                address: address,
+                location: association.location,
                 bio: bio,
                 city: association.city,
                 email: association.email,

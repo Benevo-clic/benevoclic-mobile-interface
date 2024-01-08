@@ -1,0 +1,1 @@
+enum TrierPar { recent, ancient }

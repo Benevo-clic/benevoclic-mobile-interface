@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
@@ -69,7 +68,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white.withOpacity(0.8),
                     child: Padding(
                       padding: EdgeInsets.all(15),
-                      child: MyImagePicker(rulesType: RulesType.USER_VOLUNTEER),
+                      child: MyImagePicker(),
                     ),
                   ),
                 )
@@ -122,7 +121,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: volunteer.address,
+                    initialValue: volunteer.location!.address,
                     onSaved: (value) {
                       _address = value.toString();
                     },
@@ -133,7 +132,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: volunteer.address,
+                        hintText: volunteer.location!.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -195,16 +194,12 @@ listview(BuildContext context, Volunteer volunteer) {
     ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            print(_email);
-            print(_bio);
-            print(_phone);
-            print(_address);
             Volunteer volunteerUpdate = Volunteer(
                 firstName: volunteer.firstName,
                 lastName: volunteer.lastName,
                 phone: _phone,
                 birthDayDate: volunteer.birthDayDate,
-                address: _address,
+                location: volunteer.location,
                 bio: _bio,
                 city: volunteer.city,
                 email: volunteer.email,

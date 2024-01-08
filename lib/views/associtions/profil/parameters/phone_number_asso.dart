@@ -71,7 +71,7 @@ class _PopDialog extends State<PhoneDialogAsso> {
                               name: state.association!.name,
                               phone: _phone.toString(),
                               type: '',
-                              address: state.association!.address,
+                              location: state.association!.location,
                               bio: state.association!.bio,
                               announcement: state.association!.announcement,
                               city: state.association!.city,

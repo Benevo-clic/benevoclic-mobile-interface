@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
@@ -12,7 +13,7 @@ import 'package:namer_app/repositories/api/association_repository.dart';
 import 'package:namer_app/repositories/api/favorites_repository.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/repositories/api/volunteer_repository.dart';
-import 'package:namer_app/repositories/auth_repository.dart';
+import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/settings/cubit/setting_cubit.dart';
 import 'package:namer_app/settings/cubit/setting_state.dart';
 import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type_cubit.dart';
@@ -20,6 +21,7 @@ import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type
 import 'cubit/dropdown/dropdown_cubit.dart';
 import 'cubit/otherAuth/other_auth_cubit.dart';
 import 'cubit/page/page_cubit.dart';
+import 'cubit/signup/signup_cubit.dart';
 import 'views/home_view.dart';
 
 void main() async {
@@ -36,6 +38,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+        BlocProvider(
+          create: (context) => SignupCubit(
+            volunteerRepository: VolunteerRepository(),
+            associationRepository: AssociationRepository(),
+          ),
+        ),
         BlocProvider(
             create: (context) => FavoritesAnnouncementCubit(
                   favoritesRepository: FavoritesRepository(),
@@ -78,6 +86,15 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
             title: 'Bénévoclic',
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'),
+              const Locale('fr', 'FR'),
+            ],
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,

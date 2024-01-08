@@ -52,45 +52,6 @@ class AssociationRepository {
     }
   }
 
-  Future<bool> verifySiret(String siret) async {
-    await _tokenService.refreshTokenIfNeeded();
-
-    try {
-      String? token = await _tokenService.getToken();
-
-      var headers = {
-        'Authorization': 'Bearer $token',
-        'siret': siret,
-      };
-      var dio = Dio();
-
-      var response = await dio.request(
-        'http://${globals.url}/api/v1/associations/associationSiret',
-        options: Options(
-          method: 'GET',
-          headers: headers,
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        bool refreshed = await _tokenService.tryRefreshToken();
-        if (!refreshed) {
-          await FirebaseAuth.instance.signOut();
-          throw Exception('Session expirée. Utilisateur déconnecté.');
-        }
-      }
-      throw Exception('Erreur Dio : ${e.message}');
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
   Future<Association> getAssociation(String id) async {
     await _tokenService.refreshTokenIfNeeded();
 

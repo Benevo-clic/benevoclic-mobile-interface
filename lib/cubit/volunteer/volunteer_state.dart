@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 
 import '../../models/volunteer_model.dart';
 
@@ -55,9 +56,7 @@ class VolunteerInfoState extends VolunteerState {
   final String firstName;
   final String birthDate;
   final String phoneNumber;
-  final String? address;
-  final String? city;
-  final String? postalCode;
+  final LocationModel? location;
   final String? bio;
 
   VolunteerInfoState({
@@ -66,9 +65,7 @@ class VolunteerInfoState extends VolunteerState {
     required this.birthDate,
     required this.phoneNumber,
     this.bio,
-    this.address,
-    this.city,
-    this.postalCode,
+    this.location,
   });
 
   @override
@@ -78,9 +75,7 @@ class VolunteerInfoState extends VolunteerState {
         birthDate,
         phoneNumber,
         bio,
-        address,
-        city,
-        postalCode,
+        location,
       ];
 }
 

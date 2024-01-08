@@ -35,8 +35,6 @@ class UserCreatedState extends UserState {
   List<Object?> get props => [statusCode];
 }
 
-class UserRegisterState extends UserState {}
-
 class UserDisconnectedState extends UserState {
   final String statusCode;
 
@@ -45,8 +43,6 @@ class UserDisconnectedState extends UserState {
   @override
   List<Object?> get props => [statusCode];
 }
-
-class UserRoleNotMatched extends UserState {}
 
 class UserEmailVerificationState extends UserState {
   final User? user;
@@ -66,14 +62,6 @@ class UserEmailGoggleVerificationState extends UserState {
   List<Object?> get props => [user];
 }
 
-class UserConnexionState extends UserState {
-  final UserModel userModel;
-
-  UserConnexionState({required this.userModel});
-
-  @override
-  List<Object?> get props => [userModel];
-}
 
 class UserErrorState extends UserState {
   final String message;
@@ -84,11 +72,6 @@ class UserErrorState extends UserState {
   List<Object?> get props => [message];
 }
 
-class UserUpdateState extends UserState {
-  final UserModel userModel;
-
-  UserUpdateState({required this.userModel});
-}
 
 class UserRegisterErrorState extends UserState {
   final String message;

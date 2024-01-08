@@ -26,13 +26,15 @@ class NavigationVolunteer extends StatefulWidget {
 
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
-  String? _idVolunteer; // Make it nullable
+  late String _idVolunteer; // Make it nullable
   Volunteer? volunteer;
 
   @override
   void initState() {
     super.initState();
     getIdVolunteer();
+    _idVolunteer = '';
+    print(widget.volunteer?.id);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -49,18 +51,23 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
 
   getIdVolunteer() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if (!mounted) return;
+
     setState(() {
-      _idVolunteer = preferences.getString('idVolunteer')!;
+      _idVolunteer = preferences.getString('idVolunteer')! ?? '';
     });
-    var currentVolunteer;
-    if (_idVolunteer != null) {
-      currentVolunteer =
+    if (_idVolunteer.isNotEmpty) {
+      var currentVolunteer =
           await VolunteerRepository().getVolunteer(_idVolunteer!);
-    }
-    if (currentVolunteer != null) {
-      setState(() {
-        volunteer = currentVolunteer;
-      });
+
+      if (!mounted) return;
+
+      if (currentVolunteer != null) {
+        setState(() {
+          volunteer = currentVolunteer;
+        });
+      }
     }
   }
 
@@ -73,7 +80,17 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           if (volunteer == null) {
-            return CircularProgressIndicator();
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/background1.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
           BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
 
@@ -85,9 +102,9 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
             children: [
               AnnouncementCommon(
                   rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: volunteer!.id!),
+                  idVolunteer: _idVolunteer),
               FavoritesVolunteer(
-                idVolunteer: volunteer!.id!,
+                idVolunteer: _idVolunteer,
               ),
               Messages(),
               ProfilPageVolunteer(volunteer: volunteer!)

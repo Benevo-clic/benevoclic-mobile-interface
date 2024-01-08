@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/repositories/auth_repository.dart';
+import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
@@ -147,9 +147,9 @@ class Bio extends StatelessWidget {
 
 affichageAssociation(BuildContext context, Association association) {
   String bio = "";
-  String address = "";
+  String? address = "";
   if (association.bio != null) bio = association.bio!;
-  if (association.address != null) address = association.address!;
+  if (association.location?.address != null) address = association.location?.address;
   return Center(
     child: Column(
       children: [

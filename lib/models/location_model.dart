@@ -5,7 +5,9 @@ part 'location_model.g.dart';
 @JsonSerializable()
 class LocationModel {
   late final String address;
+
   late final double latitude;
+
   late final double longitude;
 
   LocationModel({

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/views/associtions/announcement/participant_announcement_accept.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/page/page_cubit.dart';
 
 class DetailAnnouncementAssociation extends StatelessWidget {
@@ -17,50 +19,67 @@ class DetailAnnouncementAssociation extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.sizeOf(context).height;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Stack(
-            alignment: Alignment.topLeft, // Adjust the alignment as needed
-            children: [
-              Container(
-                height: 200,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/annonce.png"),
-                      // NetworkImage(announcement.image!),
-                      fit: BoxFit.cover),
-                ),
-              ),
-              Positioned(
-                top: height * 0.05,
-                left: width * 0.03,
-                child: IconButton(
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset(
-                    "assets/icons/cancel.svg",
-                    height: height * .04,
-                    color: Colors.white,
+    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
+      listener: (context, state) {
+        if (state is AnnouncementErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+
+        if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+          nbAnnouncementsAssociation = state.announcements.length;
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Stack(
+                alignment: Alignment.topLeft, // Adjust the alignment as needed
+                children: [
+                  Container(
+                    height: 200,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/annonce.png"),
+                          // NetworkImage(announcement.image!),
+                          fit: BoxFit.cover),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: height * 0.05,
+                    left: width * 0.03,
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset(
+                        "assets/icons/cancel.svg",
+                        height: height * .04,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+              SizedBox(
+                height: 5,
+              ),
+              infosMission(context, announcement),
+              bio(context),
+              SizedBox(
+                height: 5,
+              ),
+              infoAsso(context),
+              infoAddress(context),
+            ]),
           ),
-          SizedBox(
-            height: 5,
-          ),
-          infosMission(context, announcement),
-          bio(context),
-          SizedBox(
-            height: 5,
-          ),
-          infoAsso(context),
-          infoAddress(context),
-        ]),
-      ),
+        );
+      },
     );
   }
 
@@ -124,6 +143,10 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 width: 150,
                 child: ElevatedButton.icon(
                   onPressed: () {
+                    BlocProvider.of<AnnouncementCubit>(context)
+                        .getAllAnnouncementByAssociation(
+                            announcement.idAssociation);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(

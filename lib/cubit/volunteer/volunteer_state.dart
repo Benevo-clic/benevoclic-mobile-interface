@@ -89,10 +89,6 @@ class VolunteerInfo extends VolunteerState {
 
   VolunteerInfo({required this.volunteer});
 
-  
-  getInfo() {
-    return this.volunteer;
-  }
 }
 
 class VolunteerFollowAssociationState extends VolunteerState {

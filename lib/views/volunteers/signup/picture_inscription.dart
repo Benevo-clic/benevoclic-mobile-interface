@@ -87,12 +87,14 @@ class _PictureInscriptionState extends State<PictureInscription> {
             await SharedPreferences.getInstance();
         preferences.setBool('Volunteer', true);
         preferences.setString('idVolunteer', state.volunteerModel.id!);
+        print(state.volunteerModel.id!);
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NavigationVolunteer(),
+              builder: (context) =>
+                  NavigationVolunteer(volunteer: state.volunteerModel),
             ),
           );
         });
@@ -174,6 +176,11 @@ class _PictureInscriptionState extends State<PictureInscription> {
                               bio: widget.bio,
                               email: widget.email,
                               id: widget.id,
+                              myAssociations: [],
+                              myAssociationsWaiting: [],
+                              address: widget.address,
+                              city: widget.city,
+                              postalCode: widget.zipcode,
                             );
                             UserModel userModel = await UserRepository()
                                 .getUserByEmail(widget.email);

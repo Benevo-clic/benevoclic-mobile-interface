@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarSearch extends StatefulWidget {
-  var contexts;
+  final BuildContext contexts;
+  final String? label;
+  final Function(String) onSearchChanged;
 
-  var label;
-
-  AppBarSearch({super.key, required this.contexts, this.label});
+  AppBarSearch(
+      {super.key,
+      required this.contexts,
+      this.label,
+      required this.onSearchChanged});
 
   @override
   State<AppBarSearch> createState() => _AppBarSearchState();
@@ -15,12 +21,27 @@ class AppBarSearch extends StatefulWidget {
 class _AppBarSearchState extends State<AppBarSearch> {
   final TextEditingController _controller = TextEditingController();
 
+  Timer _debounce = Timer(Duration(milliseconds: 1), () {});
+
+  Future<void> _searchAnnouncement(String query) async {
+    try {
+      if (_debounce.isActive) _debounce.cancel();
+      _debounce = Timer(Duration(milliseconds: 500), () async {
+        if (query.isEmpty) return;
+        print(query);
+        widget.onSearchChanged(query);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(widget.contexts).size.width;
     double height = MediaQuery.of(widget.contexts).size.height;
     double iconSize = 0.05 * (width < height ? width : height);
-
+    // widget.onSearchChanged();
     return Container(
       width: width,
       height: height * .2,
@@ -76,7 +97,7 @@ class _AppBarSearchState extends State<AppBarSearch> {
                         controller: _controller,
                         onChanged: (value) {
                           setState(() {
-                            print(value);
+                            _searchAnnouncement(value);
                           });
                         },
                         cursorColor: Color.fromRGBO(30, 29, 29, 1.0),

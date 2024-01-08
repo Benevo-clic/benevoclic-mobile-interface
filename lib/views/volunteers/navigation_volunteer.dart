@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,13 +9,16 @@ import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
+import '../../repositories/api/volunteer_repository.dart';
 import '../../widgets/build_navbar.dart';
 import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import 'favoris/favorites_volunteers_views.dart';
 
 class NavigationVolunteer extends StatefulWidget {
-  const NavigationVolunteer({super.key});
+  Volunteer? volunteer;
+
+  NavigationVolunteer({super.key, this.volunteer});
 
   @override
   State<NavigationVolunteer> createState() => _NavigationVolunteerState();
@@ -22,32 +26,42 @@ class NavigationVolunteer extends StatefulWidget {
 
 class _NavigationVolunteerState extends State<NavigationVolunteer> {
   int currentPageIndex = 0;
-  late List<BuildNavigationModel> buildNavigationModel;
   String? _idVolunteer; // Make it nullable
+  Volunteer? volunteer;
 
   @override
   void initState() {
     super.initState();
-    buildNavigationModel = [
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/Menu.svg', label: 'Annonces', size: 30),
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
-      BuildNavigationModel(
-          iconTitle: 'assets/icons/chat.svg', label: 'Messages', size: 30),
-      BuildNavigationModel(
-        iconTitle: 'assets/icons/profile.svg',
-        label: 'Profil',
-      ),
-    ];
-    _loadInitialData();
+    getIdVolunteer();
   }
 
-  Future<void> _loadInitialData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<BuildNavigationModel> buildNavigationModel = [
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/Menu.svg', label: 'Annonces', size: 30),
+    BuildNavigationModel(iconTitle: 'assets/icons/heart.svg', label: 'Favoris'),
+    BuildNavigationModel(
+        iconTitle: 'assets/icons/chat.svg', label: 'Messages', size: 30),
+    BuildNavigationModel(
+      iconTitle: 'assets/icons/profile.svg',
+      label: 'Profil',
+    ),
+  ];
+
+  getIdVolunteer() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      _idVolunteer = prefs.getString('idVolunteer') ?? '';
+      _idVolunteer = preferences.getString('idVolunteer')!;
     });
+    var currentVolunteer;
+    if (_idVolunteer != null) {
+      currentVolunteer =
+          await VolunteerRepository().getVolunteer(_idVolunteer!);
+    }
+    if (currentVolunteer != null) {
+      setState(() {
+        volunteer = currentVolunteer;
+      });
+    }
   }
 
   @override
@@ -58,25 +72,25 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       ),
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
-          BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
-          if (_idVolunteer == null) {
+          if (volunteer == null) {
             return CircularProgressIndicator();
           }
+          BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(_idVolunteer!);
+              .getFavoritesAnnouncementByVolunteerId(volunteer!.id!);
 
           return IndexedStack(
             index: currentPageIndex,
             children: [
               AnnouncementCommon(
                   rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: _idVolunteer!),
+                  idVolunteer: volunteer!.id!),
               FavoritesVolunteer(
-                rulesType: RulesType.USER_VOLUNTEER,
-                idVolunteer: _idVolunteer!,
+                idVolunteer: volunteer!.id!,
               ),
               Messages(),
-              ProfilPageVolunteer()
+              ProfilPageVolunteer(volunteer: volunteer!)
             ],
           );
         },

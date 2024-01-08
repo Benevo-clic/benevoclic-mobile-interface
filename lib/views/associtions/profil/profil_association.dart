@@ -205,7 +205,7 @@ affichageAssociation(BuildContext context, Association association) {
                               volunteers: association.volunteers ?? [])));
                 },
                 child: Text(
-                  "${association.volunteers?.length} membres",
+                  "${association.volunteers?.length} bénévoles",
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontWeight: FontWeight.bold),

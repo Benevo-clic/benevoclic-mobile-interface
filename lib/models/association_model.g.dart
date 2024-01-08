@@ -13,9 +13,6 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
       location: json['location'] == null
           ? null
           : LocationModel.fromJson(json['location'] as Map<String, dynamic>),
-      location: json['address'] == null
-          ? null
-          : LocationModel.fromJson(json['address'] as Map<String, dynamic>),
       phone: json['phone'] as String,
       email: json['email'] as String?,
       city: json['city'] as String?,

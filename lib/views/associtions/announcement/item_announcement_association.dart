@@ -156,7 +156,8 @@ class ItemAnnouncementAssociation extends StatelessWidget {
                               color: Colors.black,
                               size: 16,
                             ),
-                            text: announcement.dateEvent,
+                            text:
+                                '${announcement.dateEvent} à ${announcement.hourEvent}',
                             size: 11,
                           ),
                         ],

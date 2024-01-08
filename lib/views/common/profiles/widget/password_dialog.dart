@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/repositories/auth_repository.dart';
+import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/util/password_verification.dart';
 
 import 'package:namer_app/widgets/title_with_icon.dart';

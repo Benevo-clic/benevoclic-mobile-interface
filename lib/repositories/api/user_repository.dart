@@ -102,7 +102,7 @@ class UserRepository {
         'Authorization': 'Bearer $token',
         'email': email,
       };
-      var dio = Dio();
+      Dio dio = Dio();
       var response = await dio.request(
         'http://${globals.url}/api/v1/users/isUserExist',
         options: Options(

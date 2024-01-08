@@ -1,20 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
-import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
-import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
 import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 class ModifProfil extends StatelessWidget {
@@ -76,9 +68,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white.withOpacity(0.8),
                     child: Padding(
                       padding: EdgeInsets.all(15),
-                      child: MyImagePicker(
-                          rulesType: RulesType.USER_VOLUNTEER,
-                          volunteer: volunteer),
+                      child: MyImagePicker(),
                     ),
                   ),
                 )
@@ -131,7 +121,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     color: Colors.white,
                   ),
                   TextFormField(
-                    initialValue: volunteer.location?.address,
+                    initialValue: volunteer.location!.address,
                     onSaved: (value) {
                       _address = value.toString();
                     },
@@ -142,7 +132,7 @@ listview(BuildContext context, Volunteer volunteer) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: volunteer.location?.address,
+                        hintText: volunteer.location!.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -204,16 +194,12 @@ listview(BuildContext context, Volunteer volunteer) {
     ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            print(_email);
-            print(_bio);
-            print(_phone);
-            print(_address);
             Volunteer volunteerUpdate = Volunteer(
                 firstName: volunteer.firstName,
                 lastName: volunteer.lastName,
                 phone: _phone,
                 birthDayDate: volunteer.birthDayDate,
-                location: LocationModel(address: _address, latitude: 0, longitude: 0),
+                location: volunteer.location,
                 bio: _bio,
                 city: volunteer.city,
                 email: volunteer.email,
@@ -231,186 +217,4 @@ listview(BuildContext context, Volunteer volunteer) {
         },
         child: Text("Modifier"))
   ]);
-}
-
-class MyImagePicker extends StatefulWidget {
-  final Uint8List? image;
-  final RulesType? rulesType;
-  final Volunteer volunteer;
-
-  const MyImagePicker(
-      {super.key, this.image, this.rulesType, required this.volunteer});
-
-  @override
-  State<MyImagePicker> createState() => _MyImagePickerState();
-}
-
-class _MyImagePickerState extends State<MyImagePicker> {
-  Uint8List? _image;
-  File? selectedIMage;
-  final _imagePicker = ImagePicker();
-  final _imageCropper = ImageCropper();
-
-  Future<CroppedFile?> _cropImage(
-          {required XFile file,
-          CropStyle cropStyle = CropStyle.circle}) async =>
-      await _imageCropper.cropImage(
-        cropStyle: cropStyle,
-        sourcePath: file.path,
-        compressQuality: 100,
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Center(
-        child: Stack(
-          children: [
-            _image != null
-                ? CircleAvatar(
-                    radius: 100, backgroundImage: MemoryImage(_image!))
-                : const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-                  ),
-            Positioned(
-              bottom: -0,
-              left: 140,
-              child: IconButton(
-                onPressed: () {
-                  showImagePickerOption(context);
-                },
-                icon: SvgPicture.asset(
-                  'assets/icons/Ellipse 116.svg',
-                  height: 20,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  void showImagePickerOption(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (builder) {
-        return Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 4.5,
-            child: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      _pickImage(context, ImageSource.gallery);
-                    },
-                    child: const SizedBox(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.image,
-                            size: 70,
-                          ),
-                          Text("Galerie")
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      _pickImage(context, ImageSource.camera);
-                    },
-                    child: const SizedBox(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.camera_alt,
-                            size: 70,
-                          ),
-                          Text("Camera")
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      _image = null;
-
-                      Navigator.of(context).pop();
-                    },
-                    child: const SizedBox(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.delete,
-                            size: 70,
-                          ),
-                          Text("Supprimer")
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future _pickImage(BuildContext context, ImageSource source) async {
-    final returnImage =
-        await _imagePicker.pickImage(source: source, imageQuality: 100);
-    if (returnImage == null) return;
-    final croppedFile = await _cropImage(file: returnImage);
-    if (croppedFile == null) return;
-
-    setState(
-      () {
-        selectedIMage = File(croppedFile.path);
-        _image = File(croppedFile.path).readAsBytesSync(); // <-- here
-        if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-        } else {
-          BlocProvider.of<VolunteerCubit>(context).updateVolunteer(Volunteer(
-              firstName: widget.volunteer.firstName,
-              lastName: widget.volunteer.lastName,
-              phone: widget.volunteer.phone,
-              birthDayDate: widget.volunteer.birthDayDate,
-              location: widget.volunteer.location,
-              bio: widget.volunteer.bio,
-              city: widget.volunteer.city,
-              email: widget.volunteer.email,
-              imageProfile: base64Encode(_image!),
-              myAssociations: widget.volunteer.myAssociations,
-              myAssociationsWaiting: widget.volunteer.myAssociationsWaiting,
-              postalCode: widget.volunteer.postalCode));
-          BlocProvider.of<VolunteerCubit>(context).volunteerState(Volunteer(
-              firstName: widget.volunteer.firstName,
-              lastName: widget.volunteer.lastName,
-              phone: widget.volunteer.phone,
-              birthDayDate: widget.volunteer.birthDayDate,
-              location: widget.volunteer.location,
-              bio: widget.volunteer.bio,
-              city: widget.volunteer.city,
-              email: widget.volunteer.email,
-              imageProfile: base64Encode(_image!),
-              myAssociations: widget.volunteer.myAssociations,
-              myAssociationsWaiting: widget.volunteer.myAssociationsWaiting,
-              postalCode: widget.volunteer.postalCode));
-        }
-      },
-    );
-    Navigator.of(context).pop();
-  }
 }

@@ -5,6 +5,8 @@ import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/response_model.dart';
 
+import 'location_model.dart';
+
 part 'volunteer_model.g.dart';
 
 @JsonSerializable()

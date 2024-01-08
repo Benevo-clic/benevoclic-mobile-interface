@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/filter_announcement_model.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
 
 import '../../repositories/api/favorites_repository.dart';
@@ -15,13 +16,13 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       : _announcementRepository = announcementRepository,
         super(AnnouncementInitialState());
 
-  void selectOption(String value) {
-    emit(value as AnnouncementState);
-  }
-
   void setAnnouncement(Announcement announcement) {
     emit(AnnouncementSelectedState(
         announcements: [], announcement: announcement));
+  }
+
+  void changeState(AnnouncementState state) {
+    emit(state);
   }
 
   void setAnnouncementUpdating(Announcement announcement) {
@@ -58,25 +59,6 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  void selectAnnouncementType(String type) {
-    if (type == 'Autre') {
-      emit(CustomAnnouncementTypeState(""));
-    } else {
-      emit(AnnouncementInitialState());
-    }
-  }
-
-  void isFavorite(String idVolunteer, String? idAnnouncement) async {
-    emit(AnnouncementLoadingState());
-    try {
-      var isFavorite =
-          await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
-      emit(FavoritesAnnouncementIsFavoriteState(isFavorite: isFavorite));
-    } catch (e) {
-      emit(AnnouncementErrorState(message: e.toString()));
-    }
-  }
-
   void createAnnouncement(Announcement announcement) async {
     if (state is AnnouncementCreatedState) {
       return;
@@ -105,6 +87,19 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
+  void findAnnouncementByAssociationAndType(
+      FilterAnnouncement filterAnnouncement) async {
+    emit(AnnouncementLoadingState());
+
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByAssociation(filterAnnouncement);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
   void deleteAnnouncement(String id) async {
     if (state is DeleteAnnouncementState) {
       return;
@@ -125,6 +120,28 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     try {
       List<Announcement> announcements =
           await _announcementRepository.getAnnouncements();
+      emit(AnnouncementLoadedState(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementErrorState(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementAfterFilter(FilterAnnouncement filter) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements =
+          await _announcementRepository.findAnnouncementAfterFilter(filter);
+      emit(AnnouncementLoadedStateAfterFilter(announcements: announcements));
+    } catch (e) {
+      emit(AnnouncementLoadedStateAfterFilterError(message: e.toString()));
+    }
+  }
+
+  void findAnnouncementByTextSearch(String textSearch) async {
+    emit(AnnouncementLoadingState());
+    try {
+      List<Announcement> announcements = await _announcementRepository
+          .findAnnouncementByTextSearch(textSearch);
       emit(AnnouncementLoadedState(announcements: announcements));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
@@ -171,14 +188,11 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     emit(AnnouncementLoadingState());
     try {
       Announcement announcement = await _announcementRepository
-          .putAnnouncementInWatingList(idVolunteer!, idAnnouncement);
+          .putAnnouncementInWatingList(idAnnouncement, idVolunteer!);
       emit(AnnouncementAddedWaitingState(announcement: announcement));
     } catch (e) {
       emit(AnnouncementErrorState(message: e.toString()));
     }
   }
 
-  void changeState(AnnouncementState state) {
-    emit(state);
-  }
 }

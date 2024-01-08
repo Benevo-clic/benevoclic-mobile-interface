@@ -29,7 +29,7 @@ class ModifProfilAsso extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white, size: 45),
             backgroundColor: orange,
             actions: []),
-        body: 
+        body:
         BlocConsumer<AssociationCubit, AssociationState>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -136,7 +136,7 @@ listview(BuildContext context, Association association) {
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.location_on_outlined),
                         hintStyle: TextStyle(color: Colors.grey),
-                        hintText: association.location?.address,
+                        hintText: association.location!.address,
                         border: UnderlineInputBorder()),
                   ),
                   Divider(
@@ -201,7 +201,7 @@ listview(BuildContext context, Association association) {
             Association associationUpdate = Association(
                 name: association.name,
                 phone: phone,
-                location: LocationModel(address: address, latitude: 0, longitude: 0),
+                location: association.location,
                 bio: bio,
                 city: association.city,
                 email: association.email,

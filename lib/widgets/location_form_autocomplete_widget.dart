@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/place_model.dart';
 
-import '../repositories/api/google_api_repository.dart';
+import '../repositories/google/google_api_repository.dart';
 
 Future<LocationModel?> ShowInputAutocomplete(BuildContext context) {
   return showDialog<LocationModel?>(

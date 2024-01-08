@@ -84,7 +84,7 @@ class _InformationDialog extends State<InformationDialogAsso> {
                               name: _name,
                               phone: _phone,
                               type: '',
-                              location: LocationModel(address: _address, latitude: 0, longitude: 0),
+                              location: state.association!.location,
                               bio: state.association!.bio,
                               announcement: state.association!.announcement,
                               city: state.association!.city,

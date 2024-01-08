@@ -2,7 +2,7 @@ library my_prj.globals;
 
 var googleApiKey = "AIzaSyCgHG-myvYDmVWrjjlQHYFlDqwXFDaYauE";
 
-var url = "37.187.38.160:8080";
+var url = "172.20.0.1:8080";
 
 List<String> announcementType = [
   'Randonnées, stands initiation au roller',

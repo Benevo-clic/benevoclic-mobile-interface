@@ -21,20 +21,38 @@ class NavigationAssociation extends StatefulWidget {
 
 class _NavigationAssociationState extends State<NavigationAssociation> {
   int currentPageIndex = 0;
+  String _idAssociation = '';
 
-  final List<Widget> pages = [
-    AnnouncementCommon(rulesType: RulesType.USER_ASSOCIATION),
-    PublishAnnouncement(),
-    Messages(),
-    ProfilPageAssociation(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    try {
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      String? savedIdAssociation = preferences.getString('idAssociation');
+      if (savedIdAssociation != null && savedIdAssociation.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _idAssociation = savedIdAssociation;
+          });
+        }
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération de _idAssociation: $e');
+    }
+  }
 
   Future<void> onPageChanged(int newIndex) async {
     if (newIndex == 0) {
       final SharedPreferences preferences =
           await SharedPreferences.getInstance();
+      if (!mounted) return;
+
       String idAssociation = preferences.getString('idAssociation')!;
-      BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
       BlocProvider.of<AnnouncementCubit>(context)
           .getAllAnnouncementByAssociation(idAssociation);
     }
@@ -55,6 +73,13 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
 
   @override
   Widget build(BuildContext context) {
+    if (_idAssociation.isEmpty) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       bottomNavigationBar: BuldNavBar(
         buildNavigationModel: buildNavigationModel,
@@ -64,7 +89,15 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           onPageChanged(currentPageIndex);
           return IndexedStack(
             index: currentPageIndex,
-            children: pages,
+            children: [
+              AnnouncementCommon(
+                rulesType: RulesType.USER_ASSOCIATION,
+                idAssociation: _idAssociation,
+              ),
+              PublishAnnouncement(),
+              Messages(),
+              ProfilPageAssociation(),
+            ],
           );
         },
       ),

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/repositories/auth_repository.dart';
+import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/members/members_view.dart';
 import 'package:namer_app/views/associtions/profil/modif_profil_asso.dart';
@@ -173,10 +173,9 @@ affichageAssociation(BuildContext context, Association association) {
   String? imageProfileAssociation =
       association.imageProfile ?? 'https://via.placeholder.com/150';
   String bio = "";
-  String address = "";
+  String? address = "";
   if (association.bio != null) bio = association.bio!;
-  address = "association.location!.address";
-
+  if (association.location?.address != null) address = association.location?.address;
   return Center(
     child: Column(
       children: [

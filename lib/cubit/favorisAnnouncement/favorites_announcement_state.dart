@@ -33,15 +33,6 @@ class FavoritesAnnouncementLoadedState extends FavoritesAnnouncementState {
   List<Object?> get props => [favoritesAnnouncement];
 }
 
-class FavoritesAnnouncementIsFavoriteState extends FavoritesAnnouncementState {
-  final bool? isFavorite;
-
-  FavoritesAnnouncementIsFavoriteState({required this.isFavorite});
-
-  @override
-  List<Object?> get props => [isFavorite];
-}
-
 class FavoritesAnnouncementErrorState extends FavoritesAnnouncementState {
   final String message;
 

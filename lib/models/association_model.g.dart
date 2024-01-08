@@ -10,6 +10,9 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
       id: json['id'] as String?,
       name: json['name'] as String,
       bio: json['bio'] as String?,
+      location: json['location'] == null
+          ? null
+          : LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       location: json['address'] == null
           ? null
           : LocationModel.fromJson(json['address'] as Map<String, dynamic>),
@@ -36,7 +39,7 @@ Map<String, dynamic> _$AssociationToJson(Association instance) =>
       'id': instance.id,
       'name': instance.name,
       'bio': instance.bio,
-      'address': instance.location,
+      'location': instance.location,
       'phone': instance.phone,
       'email': instance.email,
       'city': instance.city,

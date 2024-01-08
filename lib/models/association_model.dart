@@ -4,6 +4,8 @@ import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/response_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 
+import 'location_model.dart';
+
 part 'association_model.g.dart';
 
 @JsonSerializable()
@@ -17,7 +19,7 @@ class Association {
   @JsonKey(name: 'bio')
   late final String? bio;
 
-  @JsonKey(name: 'address')
+  @JsonKey(name: 'location')
   late final LocationModel? location;
 
   @JsonKey(name: 'phone')

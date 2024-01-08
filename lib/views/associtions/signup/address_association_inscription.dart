@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/models/location_model.dart';
+import 'package:namer_app/views/common/authentification/signup/info_address.dart';
 
 import '../../../cubit/association/association_state.dart';
 import '../../../widgets/auth_app_bar.dart';
-import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import 'bio_association_inscription.dart';
 
 class AddressAssociationInscription extends StatefulWidget {
@@ -31,26 +31,30 @@ class AddressAssociationInscription extends StatefulWidget {
 
 class _AddressAssociationInscriptionState
     extends State<AddressAssociationInscription> {
-  String _city = "";
-  String _zipCode = "";
-  String _address = "";
+  late LocationModel location;
 
-  late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   void initState() {
     super.initState();
     _initUser();
+    location = LocationModel(
+      address: "",
+      latitude: 0,
+      longitude: 0,
+    );
   }
 
   void _initUser() async {
     final cubit = context.read<AssociationCubit>();
     cubit.initState();
+  }
+
+  void _handleAddressFocusChanges(LocationModel? locationModel) async {
+    setState(() {
+      location = locationModel!;
+    });
   }
 
   @override
@@ -66,9 +70,7 @@ class _AddressAssociationInscriptionState
                 nameAssociation: widget.nameAssociation,
                 typeAssociation: widget.typeAssociation,
                 phoneNumber: widget.phoneNumber,
-                location: LocationModel(address: _address, latitude: 0, longitude: 0),
-                city: _city,
-                zipCode: _zipCode,
+                location: location,
                 id: widget.id,
                 email: widget.email,
               ),
@@ -125,30 +127,11 @@ class _AddressAssociationInscriptionState
                           color: Colors.black87,
                         ),
                       ),
-                      _infoAssociation(context, state),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: TextButton(
-                          onPressed: () {
-                            final cubit = context.read<AssociationCubit>();
-                            cubit.changeState(AssociationInfoState(
-                              name: widget.nameAssociation,
-                              type: widget.typeAssociation,
-                              phone: widget.phoneNumber,
-                              address: "",
-                              city: "",
-                              postalCode: "",
-                            ));
-                          },
-                          child: Text(
-                            "Ingnorer cette étape",
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * .04,
-                              color: Colors.black87,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      InfoAddress(
+                        handleAddressFocusChange: _handleAddressFocusChanges,
                       ),
                       Container(
                         width: MediaQuery.sizeOf(context).width * 0.8,
@@ -165,16 +148,13 @@ class _AddressAssociationInscriptionState
                         padding: EdgeInsets.only(),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
+                            if (location.address != "") {
                               final cubit = context.read<AssociationCubit>();
                               cubit.changeState(AssociationInfoState(
                                 name: widget.nameAssociation,
                                 type: widget.typeAssociation,
                                 phone: widget.phoneNumber,
-                                address: _address,
-                                city: _city,
-                                postalCode: _zipCode,
+                                location: location,
                               ));
                             }
                           },
@@ -208,110 +188,6 @@ class _AddressAssociationInscriptionState
     });
   }
 
-  Widget _infoAssociation(BuildContext context, state) {
-    return Stack(
-      children: [
-        Card(
-          margin: const EdgeInsets.all(30),
-          shadowColor: Colors.grey,
-          elevation: 10,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-              side: BorderSide(color: Color.fromRGBO(235, 126, 26, 1))),
-          color: Colors.white.withOpacity(0.8),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Form(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "Address",
-                        icon: Icons.location_on,
-                        keyboardType: TextInputType.streetAddress,
-                        obscureText: false,
-                        prefixIcons: true,
-                        onSaved: (value) {
-                          _address = value.toString();
-                        },
-                        validator: (value) {
-                          var regex = RegExp(
-                              r"^\d+\s[a-zA-ZàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ'\- ]+$");
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          } else if (!regex.hasMatch(value)) {
-                            return "Votre adresse n'est pas valide";
-                          } else if (value.length > 50) {
-                            return "Votre adresse ne doit pas dépasser 50 caractères";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "Code postal",
-                        keyboardType: TextInputType.number,
-                        obscureText: false,
-                        prefixIcons: false,
-                        maxLine: 1,
-                        onSaved: (value) {
-                          _zipCode = value.toString();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          } else if (!RegExp(r'^\d{5}$').hasMatch(value)) {
-                            return "Votre code postal n'est pas valide";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        hintText: "City",
-                        keyboardType: TextInputType.text,
-                        icon: Icons.location_city,
-                        obscureText: false,
-                        prefixIcons: true,
-                        maxLine: 1,
-                        onSaved: (value) {
-                          _city = value.toString();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "le champ ne doit pas être vide";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox.fromSize(
-                size: const Size(0, 15),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 // UserCreatedState

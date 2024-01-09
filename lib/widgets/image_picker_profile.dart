@@ -6,14 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/signup/signup_state.dart';
 
+import '../cubit/association/association_state.dart';
 import '../cubit/signup/signup_cubit.dart';
 
 class MyImagePicker extends StatefulWidget {
+  bool? isUpdating;
   final Uint8List? image;
 
-  const MyImagePicker({super.key, this.image});
+  MyImagePicker({super.key, this.image, this.isUpdating});
 
   @override
   State<MyImagePicker> createState() => _MyImagePickerState();
@@ -40,14 +43,20 @@ class _MyImagePickerState extends State<MyImagePicker> {
       child: Center(
         child: Stack(
           children: [
-            _image != null
-                ? CircleAvatar(
-                    radius: 100, backgroundImage: MemoryImage(_image!))
-                : const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-                  ),
+            if (widget.image != null)
+              CircleAvatar(
+                radius: 100,
+                backgroundImage: MemoryImage(widget.image!),
+              ),
+            if (widget.image == null)
+              _image != null
+                  ? CircleAvatar(
+                      radius: 100, backgroundImage: MemoryImage(_image!))
+                  : const CircleAvatar(
+                      radius: 100,
+                      backgroundImage: NetworkImage(
+                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
+                    ),
             Positioned(
               bottom: -0,
               left: 140,
@@ -119,8 +128,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
                   child: InkWell(
                     onTap: () {
                       _image = null;
-                      BlocProvider.of<SignupCubit>(context).changeState(
-                          SignupPictureState(imageProfile: _image));
+                      if (widget.isUpdating == true) {
+                        BlocProvider.of<AssociationCubit>(context).changeState(
+                            AssociationPictureState(imageProfile: _image));
+                      } else {
+                        BlocProvider.of<SignupCubit>(context).changeState(
+                            SignupPictureState(imageProfile: _image));
+                      }
                       Navigator.of(context).pop();
                     },
                     child: const SizedBox(
@@ -155,8 +169,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
       () {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
-        BlocProvider.of<SignupCubit>(context)
-            .changeState(SignupPictureState(imageProfile: _image));
+        if (widget.isUpdating == true) {
+          BlocProvider.of<AssociationCubit>(context)
+              .changeState(AssociationPictureState(imageProfile: _image));
+        } else {
+          BlocProvider.of<SignupCubit>(context)
+              .changeState(SignupPictureState(imageProfile: _image));
+        }
       },
     );
     Navigator.of(context).pop();

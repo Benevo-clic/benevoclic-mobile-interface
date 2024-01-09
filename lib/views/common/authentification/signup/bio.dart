@@ -4,8 +4,9 @@ import '../login/widgets/customTextFormField_widget.dart';
 
 class BioSignup extends StatefulWidget {
   final Function(String?) onBioChanged;
+  String? bio = "";
 
-  BioSignup({super.key, required this.onBioChanged});
+  BioSignup({super.key, required this.onBioChanged, this.bio});
 
   @override
   State<BioSignup> createState() => _BioSignupState();
@@ -21,6 +22,12 @@ class _BioSignupState extends State<BioSignup> {
     int wordCount =
         text.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
     return wordCount <= 50;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _descriptionController.text = widget.bio!;
   }
 
   void _handleBioFocusChanges() async {
@@ -42,7 +49,7 @@ class _BioSignupState extends State<BioSignup> {
         SizedBox(
           height: 20,
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * .9,
           height: MediaQuery.of(context).size.height * .35,
           child: Card(
@@ -107,6 +114,5 @@ class _BioSignupState extends State<BioSignup> {
         )
       ],
     );
-    ;
   }
 }

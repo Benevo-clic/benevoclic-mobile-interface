@@ -248,7 +248,6 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
   }
 
   Future<void> _reloadData() async {
-    print(widget.rulesType);
     if (widget.rulesType == RulesType.USER_ASSOCIATION) {
       String idAssociation = widget.idAssociation!;
       BlocProvider.of<AnnouncementCubit>(context)

@@ -5,7 +5,7 @@ import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/util/phone_number_verification.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/image_picker_profile.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
@@ -38,10 +38,6 @@ class ModifProfil extends StatelessWidget {
 }
 
 listview(BuildContext context, Volunteer volunteer) {
-  String _email = "";
-  String _bio = "";
-  String _phone = "";
-  String _address = "";
 
   final _formKey = GlobalKey<FormState>();
   return ListView(padding: EdgeInsets.all(25), children: [
@@ -78,7 +74,7 @@ listview(BuildContext context, Volunteer volunteer) {
               height: 25,
               color: Colors.white,
             ),
-            AbstractContainer2(
+            ContentWidget(
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -110,7 +106,7 @@ listview(BuildContext context, Volunteer volunteer) {
               height: 25,
               color: Colors.white,
             ),
-            AbstractContainer2(
+            ContentWidget(
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

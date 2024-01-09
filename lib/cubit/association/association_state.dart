@@ -66,6 +66,42 @@ class AssociationConnexion extends AssociationState {
   }
 }
 
+class AssociationUpdateState extends AssociationState {
+  final Association associationModel;
+
+  AssociationUpdateState({required this.associationModel});
+
+  @override
+  List<Object?> get props => [associationModel];
+}
+
+class AssociationUpdatingState extends AssociationState {
+  final Association associationModel;
+
+  AssociationUpdatingState({required this.associationModel});
+
+  @override
+  List<Object?> get props => [associationModel];
+}
+
+class AssociationUpdatedState extends AssociationState {
+  final Association associationModel;
+
+  AssociationUpdatedState({required this.associationModel});
+
+  @override
+  List<Object?> get props => [associationModel];
+}
+
+class AssociationEditingState extends AssociationState {
+  final Association associationModel;
+
+  AssociationEditingState({required this.associationModel});
+
+  @override
+  List<Object?> get props => [associationModel];
+}
+
 class AssociationPictureState extends AssociationState {
   final Uint8List? imageProfile;
 

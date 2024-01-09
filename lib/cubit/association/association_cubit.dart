@@ -29,6 +29,8 @@ class AssociationCubit extends Cubit<AssociationState> {
       return;
     }
 
+    emit(AssociationLoadingState());
+
     emit(state);
   }
 
@@ -61,7 +63,14 @@ class AssociationCubit extends Cubit<AssociationState> {
   }
 
   Future<void> updateAssociation(Association association) async {
-    await _associationRepository.updateAssociation(association);
+    emit(AssociationLoadingState());
+    try {
+      Association asso =
+          await _associationRepository.updateAssociation(association);
+      emit(AssociationUpdateState(associationModel: asso));
+    } catch (e) {
+      emit(AssociationErrorState(message: e.toString()));
+    }
   }
 
   Future<void> deleteAccount() async {

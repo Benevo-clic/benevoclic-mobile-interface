@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/util/color.dart';
+import 'package:namer_app/views/associtions/profil/parameters/personal_informations_asso.dart';
+import 'package:namer_app/views/associtions/profil/parameters/phone_number_asso.dart';
 import 'package:namer_app/views/common/profiles/parameters/notifications_dialog.dart';
 import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
 import 'package:namer_app/views/common/profiles/widget/email_dialog.dart';
 import 'package:namer_app/views/common/profiles/widget/password_dialog.dart';
-import 'package:namer_app/views/volunteers/profil/parameter/personal_informations.dart';
-import 'package:namer_app/views/associtions/profil/parameters/personal_informations_asso.dart';
-import 'package:namer_app/views/volunteers/profil/parameter/phone_number.dart';
-import 'package:namer_app/views/associtions/profil/parameters/phone_number_asso.dart';
 import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/views/volunteers/profil/parameter/personal_informations.dart';
+import 'package:namer_app/views/volunteers/profil/parameter/phone_number.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 
 class ParametersView extends StatelessWidget {
   RulesType rule = RulesType.NONE;
@@ -27,7 +27,7 @@ class ParametersView extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(15),
         children: [
-          AbstractContainer2(
+          ContentWidget(
               content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -82,7 +82,7 @@ class ParametersView extends StatelessWidget {
           Divider(
             color: Colors.white,
           ),
-          AbstractContainer2(
+          ContentWidget(
               content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -142,7 +142,7 @@ class ParametersView extends StatelessWidget {
           Divider(
             color: Colors.white,
           ),
-          AbstractContainer2(
+          ContentWidget(
               content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -5,7 +5,7 @@ import 'package:namer_app/cubit/involved_associations/involved_association_state
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/volunteers/associations/association_profil.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
@@ -107,7 +107,7 @@ class AssociationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: AbstractContainer2(
+      title: ContentWidget(
           content: Row(
         children: [
           Expanded(

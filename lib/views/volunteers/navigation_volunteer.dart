@@ -34,7 +34,6 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     super.initState();
     getIdVolunteer();
     _idVolunteer = '';
-    print(widget.volunteer?.id);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -55,11 +54,11 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     if (!mounted) return;
 
     setState(() {
-      _idVolunteer = preferences.getString('idVolunteer')! ?? '';
+      _idVolunteer = preferences.getString('idVolunteer')!;
     });
     if (_idVolunteer.isNotEmpty) {
       var currentVolunteer =
-          await VolunteerRepository().getVolunteer(_idVolunteer!);
+          await VolunteerRepository().getVolunteer(_idVolunteer);
 
       if (!mounted) return;
 

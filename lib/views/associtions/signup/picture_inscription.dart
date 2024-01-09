@@ -76,7 +76,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
       }
 
       if (state is SignupCreatedAssociationState) {
-        print(state.associationModel.email);
         final SharedPreferences preferences =
             await SharedPreferences.getInstance();
         String? id = widget.association?.id;
@@ -100,7 +99,6 @@ class _PictureInscriptionState extends State<PictureInscription> {
             await SharedPreferences.getInstance();
         preferences.setBool('Volunteer', true);
         preferences.setString('idVolunteer', state.volunteerModel.id!);
-        print(state.volunteerModel.id!);
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(

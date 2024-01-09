@@ -14,7 +14,7 @@ import 'package:namer_app/views/volunteers/profil/announcements_view.dart';
 import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,7 +71,8 @@ AppBar getAppBarProfil(BuildContext context) {
             MaterialPageRoute(
                 builder: (context) => ParametersView(
                       rule: RulesType.USER_VOLUNTEER,
-                    )),
+              ),
+            ),
           );
         },
       ),
@@ -159,7 +160,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
         SizedBox(
           height: 10,
         ),
-        AbstractContainer2(
+        ContentWidget(
           content: Column(
             children: [
               Text(
@@ -194,7 +195,7 @@ affichageVolunteer(BuildContext context, Volunteer volunteer) {
         SizedBox(
           height: 20,
         ),
-        AbstractContainer2(
+        ContentWidget(
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

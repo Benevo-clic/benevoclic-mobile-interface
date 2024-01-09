@@ -65,7 +65,7 @@ class AssociationRepository {
       };
       var dio = Dio();
       var response = await dio.request(
-        'http://$url/api/v1/associations/associationId',
+        'http://${globals.url}/api/v1/associations/associationId',
         options: Options(
           method: 'GET',
           headers: headers,

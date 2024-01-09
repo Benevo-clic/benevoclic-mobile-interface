@@ -9,6 +9,7 @@ import 'package:namer_app/views/associtions/announcement/participant_announcemen
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/page/page_cubit.dart';
+import '../../../widgets/bio_widget.dart';
 import '../../../widgets/info_adress_detail_announcement.dart';
 
 class DetailAnnouncementAssociation extends StatelessWidget {
@@ -106,7 +107,10 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 height: 5,
               ),
               infosMission(context, announcement),
-              bio(context),
+              BioWidget(
+                title: "Description",
+                description: announcement.description,
+              ),
               SizedBox(
                 height: 5,
               ),
@@ -154,14 +158,14 @@ class DetailAnnouncementAssociation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    announcement.labelEvent!,
+                    announcement.labelEvent,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   Text(
-                    announcement.dateEvent!,
+                    announcement.dateEvent,
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ],
@@ -340,7 +344,7 @@ class DetailAnnouncementAssociation extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            announcement.description!,
+            announcement.description,
             style: TextStyle(fontSize: 10),
           ),
           SizedBox(height: 10),

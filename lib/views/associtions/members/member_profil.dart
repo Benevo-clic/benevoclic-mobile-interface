@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/container3.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
@@ -48,11 +48,11 @@ class MemberProfil extends StatelessWidget {
         SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
         ),
-        AbstractContainer2(content: Text(volunteer.bio ?? "aucune bio")),
+        ContentWidget(content: Text(volunteer.bio ?? "aucune bio")),
         SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
         ),
-        AbstractContainer2(
+        ContentWidget(
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -82,7 +82,7 @@ class MemberProfil extends StatelessWidget {
         SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.03,
         ),
-        AbstractContainer2(
+        ContentWidget(
             content: TitleWithIcon(
           icon: Icon(Icons.text_snippet_outlined),
           title: "Annones",

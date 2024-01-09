@@ -5,8 +5,10 @@ import '../../../../widgets/location_form_autocomplete_widget.dart';
 
 class InfoAddress extends StatefulWidget {
   final Function(LocationModel?) handleAddressFocusChange;
+  String? address = "";
 
-  const InfoAddress({super.key, required this.handleAddressFocusChange});
+  InfoAddress(
+      {super.key, required this.handleAddressFocusChange, this.address});
 
   @override
   State<InfoAddress> createState() => _InfoAdressState();
@@ -33,6 +35,9 @@ class _InfoAdressState extends State<InfoAddress> {
       latitude: 0,
       longitude: 0,
     );
+    if (widget.address != null) {
+      _addressController.text = widget.address!;
+    }
     _addressFocusNode.addListener(onAddressFocusChange);
   }
 

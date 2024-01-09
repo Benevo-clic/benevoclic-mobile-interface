@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/button.dart';
 
 class MembersCard extends StatelessWidget {
@@ -13,7 +13,7 @@ class MembersCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: AbstractContainer2(
+      title: ContentWidget(
           content: Row(
         children: [
           Expanded(
@@ -48,7 +48,7 @@ class MembersCardToAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: AbstractContainer2(
+      title: ContentWidget(
           content: Row(
         children: [
           Expanded(

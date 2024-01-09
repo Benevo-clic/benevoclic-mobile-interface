@@ -4,7 +4,7 @@ import 'package:namer_app/cubit/involved_associations/involved_association_cubit
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/util/color.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/container3.dart';
@@ -63,11 +63,11 @@ class AssociationProfil extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-          AbstractContainer2(content: Text(association.bio ?? "aucune bio")),
+          ContentWidget(content: Text(association.bio ?? "aucune bio")),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-          AbstractContainer2(
+          ContentWidget(
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -99,7 +99,7 @@ class AssociationProfil extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-          AbstractContainer2(
+          ContentWidget(
               content: TitleWithIcon(
             icon: Icon(Icons.text_snippet_outlined),
             title: "Annones",

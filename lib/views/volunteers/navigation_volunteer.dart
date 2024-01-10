@@ -105,7 +105,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
               FavoritesVolunteer(
                 idVolunteer: _idVolunteer,
               ),
-              Messages(),
+              Messages(rulesType: RulesType.USER_VOLUNTEER),
               ProfilPageVolunteer(volunteer: volunteer!)
             ],
           );

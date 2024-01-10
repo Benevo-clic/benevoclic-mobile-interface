@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/widgets/content_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/page/page_cubit.dart';
 
+import '../../../type/rules_type.dart';
 import '../../../widgets/app_bar_widget.dart';
-import 'widgets/detail_messages.dart';
 
 class Messages extends StatelessWidget {
+  RulesType? rulesType;
+
+  Messages({Key? key, this.rulesType});
+
+  Widget _buildContentText(BuildContext context) {
+    String text = '';
+
+    if (rulesType == RulesType.USER_ASSOCIATION) {
+      text =
+          'Cette fonctionnalité sera disponible prochainement. Restez à l\'écoute!';
+    } else if (rulesType == RulesType.USER_VOLUNTEER) {
+      text =
+          'Cette fonctionnalité sera disponible prochainement. Restez à l\'écoute! \n\n En attendant, vous pouvez consulter les annonces. et contactez les associations par mail ou par téléphone.';
+    }
+
+    return Text(text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,76 +36,21 @@ class Messages extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(20),
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => DetailMessages()));
-                    },
-                    child: Item()),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Item(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+            AlertDialog(
+              title: Text('Fonctionnalité à venir'),
+              content: _buildContentText(context),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Aller aux annonces'),
+                  onPressed: () {
+                    BlocProvider.of<PageCubit>(context).setPage(0);
+                  },
+                ),
+              ],
             )
           ],
         ),
       ),
     );
-  }
-}
-
-class Item extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ContentWidget(
-        content: Row(
-      children: [
-        Expanded(
-                flex: 0,
-                child: Image.asset(
-                  "assets/logo.png",
-                  height: 50,
-                )),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text("Benevole"),
-                  SizedBox(height: 5),
-                  Text(
-                      "Vous avez un nouveau benevole.Vous avez un nouveau benevole")
-                ],
-              ),
-            ),
-          ],
-        ));
   }
 }

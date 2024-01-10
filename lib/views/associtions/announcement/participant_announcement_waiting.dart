@@ -110,9 +110,6 @@ class _ParticipantAnnouncementWaitingState
                         width: 90,
                         child: TextButton(
                           onPressed: () {
-                            BlocProvider.of<AnnouncementCubit>(context)
-                                .getAllAnnouncementByAssociation(
-                                    widget.announcement!.id!);
                             Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(

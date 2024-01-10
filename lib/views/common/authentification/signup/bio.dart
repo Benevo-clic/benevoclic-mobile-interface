@@ -5,8 +5,13 @@ import '../login/widgets/customTextFormField_widget.dart';
 class BioSignup extends StatefulWidget {
   final Function(String?) onBioChanged;
   String? bio = "";
+  bool isEditing;
 
-  BioSignup({super.key, required this.onBioChanged, this.bio});
+  BioSignup(
+      {super.key,
+      required this.onBioChanged,
+      this.bio,
+      required this.isEditing});
 
   @override
   State<BioSignup> createState() => _BioSignupState();
@@ -25,9 +30,16 @@ class _BioSignupState extends State<BioSignup> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.isEditing == true) {
+      _descriptionController.text = widget.bio!;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-    _descriptionController.text = widget.bio!;
   }
 
   void _handleBioFocusChanges() async {

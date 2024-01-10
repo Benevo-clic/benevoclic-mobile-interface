@@ -147,6 +147,7 @@ class _BioAssociationInscriptionState extends State<BioAssociationInscription> {
                       ),
                       BioSignup(
                         onBioChanged: _handleBioChanges,
+                        isEditing: false,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 30, right: 30),

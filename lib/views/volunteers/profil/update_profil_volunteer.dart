@@ -151,6 +151,7 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
           BioSignup(
             onBioChanged: _handleBioChanges,
             bio: volunteer.bio,
+            isEditing: true,
           ),
           ElevatedButton(
             onPressed: () {

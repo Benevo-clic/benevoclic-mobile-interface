@@ -125,6 +125,7 @@ class _UpdateProfileAssociationState extends State<UpdateProfileAssociation> {
           BioSignup(
             onBioChanged: _handleBioChanges,
             bio: association.bio,
+            isEditing: true,
           ),
           InfoAddress(
             handleAddressFocusChange: _handleAddressFocusChanges,

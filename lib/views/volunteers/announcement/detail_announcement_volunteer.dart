@@ -13,6 +13,7 @@ import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
 import '../../../widgets/information_announcement.dart';
 import '../../common/annonces/googleMap/google_map_widget.dart';
+import 'contact_me_widget.dart';
 
 class DetailAnnouncementVolunteer extends StatefulWidget {
   Announcement announcement;
@@ -138,10 +139,7 @@ class _DetailAnnouncementVolunteerState
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementAddedWaitingState) {
-          print("+++++++++++++++++++++++++++++++++++");
           widget.announcement = state.announcement;
-          print(state.announcement.volunteersWaiting!.length);
-          _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementErrorState) {
           return Center(child: Text(state.message));
@@ -221,7 +219,7 @@ class _DetailAnnouncementVolunteerState
             SizedBox(
               height: 5,
             ),
-            infosMission(context),
+            infosMission(context, association),
             bio(context),
             SizedBox(
               height: 5,
@@ -238,7 +236,7 @@ class _DetailAnnouncementVolunteerState
     );
   }
 
-  Widget infosMission(BuildContext context) {
+  Widget infosMission(BuildContext context, Association association) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -297,23 +295,9 @@ class _DetailAnnouncementVolunteerState
                 child: SizedBox(
                   height: 25,
                   width: 150,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(235, 126, 26, 1),
-                      padding: EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.black, width: 1),
-                      ),
-                    ),
-                    child: Text(
-                      "Nous contacter",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
+                  child: ContactAssociationWidget(
+                    phoneNumber: association.phone,
+                    email: association.email,
                   ),
                 ),
               ),

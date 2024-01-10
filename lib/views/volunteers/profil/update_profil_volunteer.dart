@@ -28,10 +28,10 @@ class UpdateProfileVolunteer extends StatefulWidget {
 
 class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
   String _bio = "";
-  late LocationModel location;
+  LocationModel location = LocationModel(address: "address", latitude: 0, longitude: 0);
   Uint8List? image;
   DateTime currentDate = DateTime.now();
-  late String _birthDayDate = "";
+  String _birthDayDate = "";
 
   TextEditingController dateController = TextEditingController();
 
@@ -57,7 +57,7 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
     _lastName.text = widget.volunteer.lastName;
     _firstName.text = widget.volunteer.firstName;
     dateController.text = widget.volunteer.birthDayDate;
-    image = base64Decode(widget.volunteer.imageProfile!);
+    image = base64Decode(widget.volunteer.imageProfile?? '');
   }
 
   void _handleBioChanges(String? bio) async {
@@ -118,7 +118,7 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
             );
           }
           if (state is VolunteerUpdatingState) {
-            image = base64Decode(state.volunteerModel.imageProfile!);
+            image = base64Decode(state.volunteerModel.imageProfile ?? "");
             return _buildWidgetUpdate(context, state.volunteerModel);
           }
 

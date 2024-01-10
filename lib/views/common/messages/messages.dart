@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/widgets/abstract_container2.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 
 import '../../../widgets/app_bar_widget.dart';
 import 'widgets/detail_messages.dart';
@@ -66,9 +66,10 @@ class Messages extends StatelessWidget {
 class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AbstractContainer2(content: Row(
-          children: [
-            Expanded(
+    return ContentWidget(
+        content: Row(
+      children: [
+        Expanded(
                 flex: 0,
                 child: Image.asset(
                   "assets/logo.png",

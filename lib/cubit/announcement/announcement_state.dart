@@ -45,6 +45,24 @@ class AnnouncementLoadedState extends AnnouncementState {
   List<Object?> get props => [announcements];
 }
 
+class AnnouncementLoadedStateAfterFilter extends AnnouncementState {
+  final List<Announcement> announcements;
+
+  AnnouncementLoadedStateAfterFilter({required this.announcements});
+
+  @override
+  List<Object?> get props => [announcements];
+}
+
+class AnnouncementLoadedStateAfterFilterError extends AnnouncementState {
+  final String message;
+
+  AnnouncementLoadedStateAfterFilterError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class AnnouncementAddedWaitingState extends AnnouncementState {
   final Announcement announcement;
 
@@ -137,47 +155,11 @@ class AnnouncementSelectedState extends AnnouncementLoadedState {
   List<Object?> get props => [announcement];
 }
 
-class CustomAnnouncementTypeState extends AnnouncementState {
-  final String customType;
-
-  CustomAnnouncementTypeState(this.customType);
-
-  @override
-  List<Object?> get props => [customType];
-}
-
-class UpdateAnnouncementState extends AnnouncementState {
-  final Announcement announcement;
-  final String id;
-
-  UpdateAnnouncementState({required this.id, required this.announcement});
-
-  @override
-  List<Object?> get props => [announcement, id];
-}
 
 class AnnouncementErrorState extends AnnouncementState {
   final String message;
 
   AnnouncementErrorState({required this.message});
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class AnnouncementEmptyState extends AnnouncementState {
-  final String message;
-
-  AnnouncementEmptyState({required this.message});
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class AnnouncementWaitingState extends AnnouncementState {
-  final String message;
-
-  AnnouncementWaitingState({required this.message});
 
   @override
   List<Object?> get props => [message];

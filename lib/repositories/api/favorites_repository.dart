@@ -9,41 +9,6 @@ class FavoritesRepository {
   final Dio _dio = Dio(); // Instance réutilisable de Dio
   final TokenService _tokenService = TokenService();
 
-  Future<Favorites> getFavoritesByIdVolunteer(String id) async {
-    await _tokenService.refreshTokenIfNeeded();
-
-    try {
-      String? token = await _tokenService.getToken();
-      var headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-        'id': id,
-      };
-
-      var response = await _dio.get(
-        'http://${globals.url}/api/v1/favoritesAnnouncement/favoritesAnnouncementById',
-        options: Options(headers: headers),
-      );
-
-      if (response.statusCode == 200) {
-        return Favorites.fromJson(response.data);
-      } else {
-        throw Exception(
-            'Erreur lors de la récupération des favoris : ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        bool refreshed = await _tokenService.tryRefreshToken();
-        if (!refreshed) {
-          await FirebaseAuth.instance.signOut();
-          throw Exception('Session expirée. Utilisateur déconnecté.');
-        }
-      }
-      throw Exception('Erreur Dio : ${e.message}');
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
 
   Future<Favorites> getFavoritesAnnouncementByVolunteerId(
       String idVolunteer) async {

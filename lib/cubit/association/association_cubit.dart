@@ -29,24 +29,14 @@ class AssociationCubit extends Cubit<AssociationState> {
       return;
     }
 
+    emit(AssociationLoadingState());
+
     emit(state);
   }
 
   void stateInfo(Association association) {
     emit(AssociationConnexion(association));
   }
-
-  // Future<void> verifySiretAssociation(String siret) async {
-  //   emit(AssociationLoadingState());
-  //   try {
-  //     Future.delayed(const Duration(seconds: 3));
-  //     bool verify = await _associationRepository.verifySiretAssociation(siret);
-  //     print(verify);
-  //     emit(AssociationVerifyState(isVerified: verify));
-  //   } catch (e) {
-  //     emit(AssociationVerifyErrorState());
-  //   }
-  // }
 
   Future<void> createAssociation(Association association) async {
     if (state is AssociationCreatedState) {
@@ -73,7 +63,14 @@ class AssociationCubit extends Cubit<AssociationState> {
   }
 
   Future<void> updateAssociation(Association association) async {
-    await _associationRepository.updateAssociation(association);
+    emit(AssociationLoadingState());
+    try {
+      Association asso =
+          await _associationRepository.updateAssociation(association);
+      emit(AssociationUpdateState(associationModel: asso));
+    } catch (e) {
+      emit(AssociationErrorState(message: e.toString()));
+    }
   }
 
   Future<void> deleteAccount() async {

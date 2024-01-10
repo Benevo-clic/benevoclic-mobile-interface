@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
+import 'package:namer_app/cubit/involved_associations/involved_association_cubit.dart';
+import 'package:namer_app/cubit/members/members_cubit.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/repositories/api/announcement_repository.dart';
@@ -12,7 +15,7 @@ import 'package:namer_app/repositories/api/association_repository.dart';
 import 'package:namer_app/repositories/api/favorites_repository.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/repositories/api/volunteer_repository.dart';
-import 'package:namer_app/repositories/auth_repository.dart';
+import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/settings/cubit/setting_cubit.dart';
 import 'package:namer_app/settings/cubit/setting_state.dart';
 import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type_cubit.dart';
@@ -20,6 +23,7 @@ import 'package:namer_app/views/common/authentification/cubit/typeAuth/auth_type
 import 'cubit/dropdown/dropdown_cubit.dart';
 import 'cubit/otherAuth/other_auth_cubit.dart';
 import 'cubit/page/page_cubit.dart';
+import 'cubit/signup/signup_cubit.dart';
 import 'views/home_view.dart';
 
 void main() async {
@@ -35,14 +39,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
+      providers: [
+        BlocProvider(
+          create: (context) => SignupCubit(
+            volunteerRepository: VolunteerRepository(),
+            associationRepository: AssociationRepository(),
+          ),
+        ),
         BlocProvider(
             create: (context) => FavoritesAnnouncementCubit(
                   favoritesRepository: FavoritesRepository(),
                 )),
         BlocProvider(
-              create: (context) => UserCubit(
-                  userRepository: UserRepository(),
+          create: (context) => UserCubit(
+            userRepository: UserRepository(),
             authRepository: AuthRepository(),
           ),
         ),
@@ -69,15 +79,26 @@ class MyApp extends StatelessWidget {
             associationRepository: AssociationRepository(),
           ),
         ),
+        BlocProvider(create: (context) => MembersCubit()),
+        BlocProvider(create: (context) => InvolvedAssociationCubit()),
         BlocProvider(
           create: (context) => PageCubit(),
         ),
         BlocProvider(create: (context) => DropdownCubit())
-        ],
-        child: BlocBuilder<SettingCubit, SettingState>(
-          builder: (context, state) {
-            return MaterialApp(
+      ],
+      child: BlocBuilder<SettingCubit, SettingState>(
+        builder: (context, state) {
+          return MaterialApp(
             title: 'Bénévoclic',
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'),
+              const Locale('fr', 'FR'),
+            ],
             theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,

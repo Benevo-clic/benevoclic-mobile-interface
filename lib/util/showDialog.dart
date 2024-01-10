@@ -24,11 +24,11 @@ class ShowDialogYesNo {
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: Text('Non'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text('Yes'),
+              child: Text('oui'),
               onPressed: () {
                 onYes();
               },

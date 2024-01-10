@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 
 import '../../models/volunteer_model.dart';
 
@@ -41,6 +42,17 @@ class VolunteerErrorState extends VolunteerState {
   List<Object?> get props => [message];
 }
 
+class VolunteerEditingState extends VolunteerState {}
+
+class VolunteerUpdatingState extends VolunteerState {
+  final Volunteer volunteerModel;
+
+  VolunteerUpdatingState({required this.volunteerModel});
+
+  @override
+  List<Object?> get props => [volunteerModel];
+}
+
 class VolunteerPictureState extends VolunteerState {
   final Uint8List? imageProfile;
 
@@ -55,9 +67,7 @@ class VolunteerInfoState extends VolunteerState {
   final String firstName;
   final String birthDate;
   final String phoneNumber;
-  final String? address;
-  final String? city;
-  final String? postalCode;
+  final LocationModel? location;
   final String? bio;
 
   VolunteerInfoState({
@@ -66,9 +76,7 @@ class VolunteerInfoState extends VolunteerState {
     required this.birthDate,
     required this.phoneNumber,
     this.bio,
-    this.address,
-    this.city,
-    this.postalCode,
+    this.location,
   });
 
   @override
@@ -78,9 +86,7 @@ class VolunteerInfoState extends VolunteerState {
         birthDate,
         phoneNumber,
         bio,
-        address,
-        city,
-        postalCode,
+        location,
       ];
 }
 
@@ -110,13 +116,14 @@ class VolunteerUnFollowAssociationState extends VolunteerState {
 }
 
 class VolunteerUpdateState extends VolunteerState {
-  final String statusCode;
+  final Volunteer volunteerModel;
 
-  VolunteerUpdateState({required this.statusCode});
+  VolunteerUpdateState({required this.volunteerModel});
 
   @override
-  List<Object?> get props => [statusCode];
+  List<Object?> get props => [volunteerModel];
 }
+
 
 class VolunteerDeleteState extends VolunteerState {
   final String statusCode;

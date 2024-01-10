@@ -1,7 +1,11 @@
 
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:namer_app/models/association_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/response_model.dart';
+
+import 'location_model.dart';
 
 part 'volunteer_model.g.dart';
 
@@ -22,8 +26,8 @@ class Volunteer{
   @JsonKey(name: 'phone')
   late final String phone;
 
-  @JsonKey(name: 'address')
-  late final String? address;
+  @JsonKey(name: 'location')
+  late final LocationModel? location;
 
   @JsonKey(name: 'city')
   late final String? city;
@@ -42,10 +46,10 @@ class Volunteer{
   late final String? bio;
 
   @JsonKey(name: 'myAssociations')
-  late final List<ResponseModel>? myAssociations;
+  late final List<Association>? myAssociations;
 
   @JsonKey(name: 'myAssociationsWaiting')
-  late final List<ResponseModel>? myAssociationsWaiting;
+  late final List<Association>? myAssociationsWaiting;
 
   Volunteer(
       {required this.firstName,
@@ -53,7 +57,7 @@ class Volunteer{
       required this.lastName,
       this.email,
       required this.phone,
-      this.address,
+      this.location,
       this.city,
       this.postalCode,
       required this.birthDayDate,

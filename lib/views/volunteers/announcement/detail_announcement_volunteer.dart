@@ -7,10 +7,13 @@ import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
+import 'package:namer_app/widgets/info_adress_detail_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
 import '../../../widgets/information_announcement.dart';
+import '../../common/annonces/googleMap/google_map_widget.dart';
+import 'contact_me_widget.dart';
 
 class DetailAnnouncementVolunteer extends StatefulWidget {
   Announcement announcement;
@@ -33,30 +36,24 @@ class DetailAnnouncementVolunteer extends StatefulWidget {
 class _DetailAnnouncementVolunteerState
     extends State<DetailAnnouncementVolunteer> {
   AssociationRepository _associationRepository = AssociationRepository();
-  late bool isWaiting;
-  late bool isParticipate;
+  late bool isWaiting = false;
+  late bool isParticipate = false;
 
   @override
   void initState() {
     super.initState();
-    isParticipate = widget.announcement.volunteers!
-        .map((e) => e.id)
-        .toList()
-        .contains(widget.idVolunteer);
-    isWaiting = widget.announcement.volunteersWaiting!
-        .map((e) => e.id)
-        .toList()
-        .contains(widget.idVolunteer);
-  }
-
-  ImageProvider _getImageProvider(String? imageString) {
-    if (imageString == null) {
-      return AssetImage('assets/logo.png');
+    if (widget.announcement.volunteers != null && widget.idVolunteer != null) {
+      isParticipate = widget.announcement.volunteers!
+          .map((e) => e.id)
+          .toList()
+          .contains(widget.idVolunteer);
     }
-    if (isBase64(imageString)) {
-      return MemoryImage(base64.decode(imageString));
-    } else {
-      return NetworkImage(imageString);
+    if (widget.announcement.volunteersWaiting != null &&
+        widget.idVolunteer != null) {
+      isWaiting = widget.announcement.volunteersWaiting!
+          .map((e) => e.id)
+          .toList()
+          .contains(widget.idVolunteer);
     }
   }
 
@@ -86,7 +83,16 @@ class _DetailAnnouncementVolunteerState
     }
   }
 
-  bool isBase64(String str) {
+  ImageProvider _getImageProvider(String? imageString) {
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString!));
+    } else {
+      return NetworkImage(imageString!);
+    }
+  }
+
+  bool isBase64(String? str) {
+    if (str == null) return false;
     try {
       base64.decode(str);
       return true;
@@ -119,8 +125,11 @@ class _DetailAnnouncementVolunteerState
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementErrorState) {
-          SnackBar snackBar = SnackBar(content: Text("Erreur lors de l'ajout"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            SnackBar snackBar =
+                SnackBar(content: Text("Erreur lors de l'ajout"));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          });
         }
         if (state is AnnouncementLoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -131,7 +140,6 @@ class _DetailAnnouncementVolunteerState
         }
         if (state is AnnouncementAddedWaitingState) {
           widget.announcement = state.announcement;
-          _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementErrorState) {
           return Center(child: Text(state.message));
@@ -168,15 +176,29 @@ class _DetailAnnouncementVolunteerState
             Stack(
               alignment: Alignment.topLeft, // Adjust the alignment as needed
               children: [
-                Container(
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/annonce.png"),
-                        // NetworkImage(announcement.image!),
-                        fit: BoxFit.cover),
-                  ),
-                ),
+                widget.announcement.image != null &&
+                        widget.announcement.image !=
+                            "https://via.placeholder.com/150"
+                    ? Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: MemoryImage(
+                                  base64.decode(widget.announcement.image!)),
+                              // NetworkImage(announcement.image!),
+                              fit: BoxFit.cover),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image:
+                                NetworkImage("https://via.placeholder.com/150"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                 Positioned(
                   top: height * 0.05,
                   left: width * 0.03,
@@ -197,20 +219,24 @@ class _DetailAnnouncementVolunteerState
             SizedBox(
               height: 5,
             ),
-            infosMission(context),
+            infosMission(context, association),
             bio(context),
             SizedBox(
               height: 5,
             ),
             infoAsso(context, association),
-            infoAddress(context),
+            InfoAdressAnnouncement(
+              latitude: widget.announcement.location.latitude,
+              longitude: widget.announcement.location.longitude,
+              address: widget.announcement.location.address,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget infosMission(BuildContext context) {
+  Widget infosMission(BuildContext context, Association association) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -269,23 +295,9 @@ class _DetailAnnouncementVolunteerState
                 child: SizedBox(
                   height: 25,
                   width: 150,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(235, 126, 26, 1),
-                      padding: EdgeInsets.all(0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.black, width: 1),
-                      ),
-                    ),
-                    child: Text(
-                      "Nous contacter",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
+                  child: ContactAssociationWidget(
+                    phoneNumber: association.phone,
+                    email: association.email,
                   ),
                 ),
               ),
@@ -384,7 +396,7 @@ class _DetailAnnouncementVolunteerState
                       onPressed: () {
                         BlocProvider.of<AnnouncementCubit>(context)
                             .addVolunteerToWaitingList(
-                                widget.announcement.id!, widget.idVolunteer!);
+                                widget.idVolunteer!, widget.announcement.id!);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color.fromRGBO(170, 77, 79, 1),
@@ -413,9 +425,8 @@ class _DetailAnnouncementVolunteerState
 
   Widget infoAddress(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      height: 100,
+      width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -429,18 +440,21 @@ class _DetailAnnouncementVolunteerState
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.red, width: 1)),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton.icon(
                     onPressed: () {},
                     icon: Icon(
                       Icons.location_on,
-                      size: 15,
+                      size: 16,
                       color: Colors.black,
                     ),
                     label: Text(
@@ -452,7 +466,16 @@ class _DetailAnnouncementVolunteerState
                       ),
                     ),
                     style: ElevatedButton.styleFrom(),
-                  )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.06),
+                    child: GoogleMapView(
+                      latitude: widget.announcement.location.latitude,
+                      longitude: widget.announcement.location.longitude,
+                      address: widget.announcement.location.address,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -491,7 +514,8 @@ class _DetailAnnouncementVolunteerState
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage: _getImageProvider(
+                        widget.announcement.imageProfileAssociation),
                   ),
                   SizedBox(
                     width: 5,

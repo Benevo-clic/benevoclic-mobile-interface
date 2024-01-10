@@ -102,7 +102,12 @@ class UserRepository {
         'Authorization': 'Bearer $token',
         'email': email,
       };
-      var dio = Dio();
+      Dio dio = Dio(BaseOptions(
+        baseUrl: 'http://${globals.url}/api/v1/',
+        connectTimeout: Duration(seconds: 120), // 30 seconds in milliseconds
+        receiveTimeout: Duration(seconds: 120), // 30 seconds in milliseconds
+        // Autres configurations si nécessaire
+      ));
       var response = await dio.request(
         'http://${globals.url}/api/v1/users/isUserExist',
         options: Options(
@@ -123,7 +128,7 @@ class UserRepository {
           throw Exception('Session expirée. Utilisateur déconnecté.');
         }
       }
-      throw Exception('Erreur Dio : ${e.message}');
+      return false;
     } catch (e) {
       throw Exception(e);
     }

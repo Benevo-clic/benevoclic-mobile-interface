@@ -10,7 +10,9 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
       id: json['id'] as String?,
       name: json['name'] as String,
       bio: json['bio'] as String?,
-      address: json['address'] as String?,
+      location: json['location'] == null
+          ? null
+          : LocationModel.fromJson(json['location'] as Map<String, dynamic>),
       phone: json['phone'] as String,
       email: json['email'] as String?,
       city: json['city'] as String?,
@@ -22,10 +24,10 @@ Association _$AssociationFromJson(Map<String, dynamic> json) => Association(
           .toList(),
       type: json['type'] as String,
       volunteersWaiting: (json['volunteersWaiting'] as List<dynamic>?)
-          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
           .toList(),
       volunteers: (json['volunteers'] as List<dynamic>?)
-          ?.map((e) => ResponseModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Volunteer.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -34,7 +36,7 @@ Map<String, dynamic> _$AssociationToJson(Association instance) =>
       'id': instance.id,
       'name': instance.name,
       'bio': instance.bio,
-      'address': instance.address,
+      'location': instance.location,
       'phone': instance.phone,
       'email': instance.email,
       'city': instance.city,

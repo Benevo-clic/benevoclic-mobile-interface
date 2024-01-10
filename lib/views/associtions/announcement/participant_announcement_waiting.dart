@@ -110,9 +110,6 @@ class _ParticipantAnnouncementWaitingState
                         width: 90,
                         child: TextButton(
                           onPressed: () {
-                            BlocProvider.of<AnnouncementCubit>(context)
-                                .getAllAnnouncementByAssociation(
-                                    widget.announcement!.id!);
                             Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
@@ -290,67 +287,92 @@ class _ParticipantAnnouncementWaitingState
   }
 
   Widget _buildListTile(Volunteer volunteer) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double buttonWidth = screenWidth * 0.25; // 40% de la largeur de l'écran
+    double fontSize = screenWidth * 0.5;
     return Container(
       margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(0),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          elevation: 4,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-            child: Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: 40,
-                ),
-                SizedBox(width: 38),
-                Column(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        elevation: 4,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: Row(
+            children: <Widget>[
+              CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 40,
+              ),
+              SizedBox(width: 38),
+              Expanded(
+                // Utilisez Expanded ici pour le texte et les boutons
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      volunteer.firstName + " " + volunteer.lastName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    FittedBox(
+                      child: Text(
+                        volunteer.firstName + " " + volunteer.lastName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _toggleParticipant(
-                                widget.announcement!, volunteer.id);
-                          },
-                          child: Text("Accepter"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blue, // background (button) color
-                            onPrimary: Colors.white, // text color
+                        Container(
+                          width: buttonWidth,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _toggleParticipant(
+                                  widget.announcement!, volunteer.id);
+                            },
+                            child: FittedBox(
+                              child: Text(
+                                "Accepter",
+                                style: TextStyle(fontSize: fontSize),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blue,
+                              onPrimary: Colors.white,
+                            ),
                           ),
                         ),
-                        SizedBox(width: 18),
-                        ElevatedButton(
-                          onPressed: () {
-                            _toggleRefuse(widget.announcement!, volunteer.id);
-                          },
-                          child: Text("Refuser"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red, // background (button) color
-                            onPrimary: Colors.white, // text color
+                        SizedBox(width: 10),
+                        Container(
+                          width: buttonWidth,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _toggleRefuse(widget.announcement!, volunteer.id);
+                            },
+                            child: FittedBox(
+                              child: Text(
+                                "Refuser",
+                                style: TextStyle(fontSize: fontSize),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                              onPrimary: Colors.white,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

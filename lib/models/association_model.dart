@@ -1,6 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:namer_app/models/announcement_model.dart';
+import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/response_model.dart';
+import 'package:namer_app/models/volunteer_model.dart';
+
+import 'location_model.dart';
 
 part 'association_model.g.dart';
 
@@ -15,8 +19,8 @@ class Association {
   @JsonKey(name: 'bio')
   late final String? bio;
 
-  @JsonKey(name: 'address')
-  late final String? address;
+  @JsonKey(name: 'location')
+  late final LocationModel? location;
 
   @JsonKey(name: 'phone')
   late final String phone;
@@ -46,16 +50,16 @@ class Association {
   late final String type;
 
   @JsonKey(name: 'volunteersWaiting')
-  late final List<ResponseModel>? volunteersWaiting;
+  final List<Volunteer>? volunteersWaiting;
 
   @JsonKey(name: 'volunteers')
-  late final List<ResponseModel>? volunteers;
+  final List<Volunteer>? volunteers;
 
   Association(
       {this.id,
       required this.name,
       this.bio,
-      this.address,
+      this.location,
       required this.phone,
       this.email,
       this.city,

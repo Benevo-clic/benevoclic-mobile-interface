@@ -92,7 +92,7 @@ class _InformationDialog extends State<InformationDialog> {
                     height: 10,
                   ),
                   InputField(
-                      title: "${state.volunteer!.address}", fct: changeAddress),
+                      title: "${state.volunteer!.location}", fct: changeAddress),
                   SizedBox(
                     height: 10,
                   ),
@@ -110,7 +110,7 @@ class _InformationDialog extends State<InformationDialog> {
                               lastName: _lastName,
                               phone: _phone,
                               birthDayDate: _birth,
-                              address: state.volunteer!.birthDayDate,
+                              location: state.volunteer!.location ,
                               bio: state.volunteer!.bio,
                               city: state.volunteer!.city,
                               email: state.volunteer!.email,

@@ -105,9 +105,6 @@ class _BioSignupState extends State<BioSignup> {
                     ),
                   ),
                 ),
-                SizedBox.fromSize(
-                  size: const Size(0, 15),
-                ),
               ],
             ),
           ),

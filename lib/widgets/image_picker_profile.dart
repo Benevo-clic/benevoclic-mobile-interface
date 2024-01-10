@@ -11,12 +11,16 @@ import 'package:namer_app/cubit/signup/signup_state.dart';
 
 import '../cubit/association/association_state.dart';
 import '../cubit/signup/signup_cubit.dart';
+import '../cubit/volunteer/volunteer_cubit.dart';
+import '../cubit/volunteer/volunteer_state.dart';
+import '../type/rules_type.dart';
 
 class MyImagePicker extends StatefulWidget {
   bool? isUpdating;
   final Uint8List? image;
+  RulesType? ruleType;
 
-  MyImagePicker({super.key, this.image, this.isUpdating});
+  MyImagePicker({super.key, this.image, this.isUpdating, this.ruleType});
 
   @override
   State<MyImagePicker> createState() => _MyImagePickerState();
@@ -170,8 +174,13 @@ class _MyImagePickerState extends State<MyImagePicker> {
         selectedIMage = File(croppedFile.path);
         _image = File(croppedFile.path).readAsBytesSync(); // <-- here
         if (widget.isUpdating == true) {
-          BlocProvider.of<AssociationCubit>(context)
-              .changeState(AssociationPictureState(imageProfile: _image));
+          if (widget.ruleType == RulesType.USER_ASSOCIATION) {
+            BlocProvider.of<AssociationCubit>(context)
+                .changeState(AssociationPictureState(imageProfile: _image));
+          } else if (widget.ruleType == RulesType.USER_VOLUNTEER) {
+            BlocProvider.of<VolunteerCubit>(context)
+                .changeState(VolunteerPictureState(imageProfile: _image));
+          }
         } else {
           BlocProvider.of<SignupCubit>(context)
               .changeState(SignupPictureState(imageProfile: _image));

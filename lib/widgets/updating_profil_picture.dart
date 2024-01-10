@@ -2,12 +2,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import '../type/rules_type.dart';
 import 'image_picker_profile.dart';
 
 class UpdatingProfilPicture extends StatelessWidget {
   Uint8List? image;
+  RulesType? rulesType;
 
-  UpdatingProfilPicture({super.key, this.image});
+  UpdatingProfilPicture({super.key, this.image, this.rulesType});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class UpdatingProfilPicture extends StatelessWidget {
               child: MyImagePicker(
                 isUpdating: true,
                 image: image,
+                ruleType: rulesType,
               ),
             ),
           ),

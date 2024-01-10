@@ -10,7 +10,7 @@ import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/members/members_view.dart';
-import 'package:namer_app/views/associtions/profil/UpdateProfil.dart';
+import 'package:namer_app/views/associtions/profil/update_profil_association.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
@@ -22,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../../util/color.dart';
 import '../../../util/showDialog.dart';
+import '../../../widgets/app_bar_profil.dart';
 import '../../../widgets/bio_widget.dart';
 
 class ProfilPageAssociation extends StatefulWidget {
@@ -52,11 +53,8 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
     return BlocConsumer<AssociationCubit, AssociationState>(
       listener: (context, state) {},
       builder: (context, state) {
-        print(state);
         if (state is AssociationUpdateState) {
-          print("association update1");
           if (state.association != null) {
-            print("association update");
             association = state.association!;
           }
         }
@@ -67,7 +65,13 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
         }
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: getAppBarProfil(context, association),
+          appBar: PreferredSize(
+            preferredSize:
+                Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
+            child: AppBarProfile(
+              association: association,
+            ),
+          ),
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -174,7 +178,8 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
                     icon: Icon(Icons.phone_android)),
               ],
             ),
-          )),
+            ),
+          ),
           ContentWidget(
             content: TextButton.icon(
               style: TextButton.styleFrom(
@@ -245,7 +250,8 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
                   ),
                 );
               },
-              child: Text("Déconnexion")),
+            child: Text("Déconnexion"),
+          ),
           SizedBox(
             height: 20,
           ),
@@ -288,7 +294,7 @@ AppBar getAppBarProfil(BuildContext context, association) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UpdateProfile(
+                builder: (context) => UpdateProfileAssociation(
                   association: association,
                 ),
               ),

@@ -42,6 +42,17 @@ class VolunteerErrorState extends VolunteerState {
   List<Object?> get props => [message];
 }
 
+class VolunteerEditingState extends VolunteerState {}
+
+class VolunteerUpdatingState extends VolunteerState {
+  final Volunteer volunteerModel;
+
+  VolunteerUpdatingState({required this.volunteerModel});
+
+  @override
+  List<Object?> get props => [volunteerModel];
+}
+
 class VolunteerPictureState extends VolunteerState {
   final Uint8List? imageProfile;
 
@@ -105,13 +116,14 @@ class VolunteerUnFollowAssociationState extends VolunteerState {
 }
 
 class VolunteerUpdateState extends VolunteerState {
-  final String statusCode;
+  final Volunteer volunteerModel;
 
-  VolunteerUpdateState({required this.statusCode});
+  VolunteerUpdateState({required this.volunteerModel});
 
   @override
-  List<Object?> get props => [statusCode];
+  List<Object?> get props => [volunteerModel];
 }
+
 
 class VolunteerDeleteState extends VolunteerState {
   final String statusCode;

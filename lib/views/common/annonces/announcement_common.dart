@@ -272,12 +272,10 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     return Center(
       child: ListView.builder(
         itemBuilder: (context, index) {
-          if (widget.rulesType == RulesType.USER_ASSOCIATION) {
             int reversedIndex = announcements.length - index - 1;
             return ItemAnnouncementAssociation(
                 announcement: announcements[reversedIndex],
                 nbAnnouncementsAssociation: announcements.length);
-          }
         },
         itemCount: announcements.length,
       ),

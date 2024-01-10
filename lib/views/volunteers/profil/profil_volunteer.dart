@@ -7,18 +7,20 @@ import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
-import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
-import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
-import 'package:namer_app/views/volunteers/profil/announcements_view.dart';
 import 'package:namer_app/views/volunteers/profil/associations_view.dart';
-import 'package:namer_app/views/volunteers/profil/modif_profil.dart';
 import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/content_widget.dart';
-import 'package:namer_app/widgets/title_with_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../cubit/user/user_cubit.dart';
+import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../util/color.dart';
+import '../../../util/showDialog.dart';
+import '../../../widgets/app_bar_profil.dart';
+import '../../../widgets/bio_widget.dart';
+import '../../../widgets/title_with_icon.dart';
+import '../../common/profiles/widget/section_profil.dart';
 
 class ProfilPageVolunteer extends StatefulWidget {
   Volunteer volunteer;
@@ -30,6 +32,13 @@ class ProfilPageVolunteer extends StatefulWidget {
 }
 
 class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
+  late Volunteer volunteer;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    volunteer = widget.volunteer;
+  }
 
   @override
   void initState() {
@@ -39,45 +48,215 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      resizeToAvoidBottomInset: false,
-      appBar: getAppBarProfil(context),
-      body: SingleChildScrollView(
-        child: affichageVolunteer(context, widget.volunteer),
+    return BlocConsumer<VolunteerCubit, VolunteerState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is VolunteerUpdateState) {
+          volunteer = state.volunteerModel;
+        }
+        if (state is VolunteerLoadingState) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize:
+                Size.fromHeight(MediaQuery.of(context).size.height * 0.1),
+            child: AppBarProfile(
+              volunteer: volunteer,
+            ),
+          ),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: affichageVolunteer(context),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget affichageVolunteer(BuildContext context) {
+    String? imageProfileVolunteer =
+        volunteer.imageProfile ?? 'https://via.placeholder.com/150';
+
+    return Center(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AA4D4F,
+                width: 3,
+              ),
+            ),
+            child: CircleAvatar(
+              radius: MediaQuery.of(context).size.width * 0.25,
+              backgroundImage: _getImageProvider(imageProfileVolunteer),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          ContentWidget(
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    "${volunteer.firstName}  ${volunteer.lastName}",
+                    style: TextStyle(),
+                    textAlign: TextAlign.center,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AssociationsSub(
+                            associations: volunteer.myAssociations!,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "${volunteer.myAssociations?.length ?? 0} associations",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          BioWidget(
+            title: "Description",
+            description: volunteer.bio ?? "Pas de description",
+            sizeRaduis: true,
+          ),
+          ContentWidget(
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TitleWithIcon(
+                      title: "Mes informations",
+                      icon: Icon(Icons.info_outline)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(
+                      text: volunteer.location?.address ?? '',
+                      icon: Icon(Icons.location_on_outlined)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(
+                      text: volunteer.email ?? '',
+                      icon: Icon(Icons.email_outlined)),
+                  Divider(
+                    height: 25,
+                    color: Colors.white,
+                  ),
+                  Section(
+                      text: volunteer.phone ?? "",
+                      icon: Icon(Icons.phone_android)),
+                ],
+              ),
+            ),
+          ),
+          ContentWidget(
+            content: TextButton.icon(
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+                onSurface: Colors.grey,
+                alignment: Alignment.centerLeft,
+              ),
+              onPressed: () {
+                // BlocProvider.of<PageCubit>(context).setPage(0);
+              },
+              icon: Icon(Icons.history),
+              label: Text("Historique de missions"),
+            ),
+          ),
+          ContentWidget(
+            content: TextButton.icon(
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+                onSurface: Colors.grey,
+                alignment: Alignment.centerLeft,
+              ),
+              onPressed: () {
+                ShowDialogYesNo.show(
+                  context,
+                  "Suppression de compte",
+                  "Êtes-vous sûr de vouloir supprimer votre compte ?",
+                  () async {
+                    BlocProvider.of<VolunteerCubit>(context).deleteVolunteer();
+                    BlocProvider.of<UserCubit>(context).deleteAccount();
+                    AuthRepository().deleteAccount();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeView()),
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.remove_circle),
+              label: Text("Suppression mon compte"),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red,
+              onPrimary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () async {
+              BlocProvider.of<UserCubit>(context)
+                  .disconnect()
+                  .then((_) async => await AuthRepository().signOut());
+
+              final SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+              preferences.setBool('Volunteer', false);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(
+                    title: RulesType.USER_VOLUNTEER,
+                    isLogin: true,
+                  ),
+                ),
+              );
+            },
+            child: Text("Déconnexion"),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
       ),
     );
   }
-}
-
-AppBar getAppBarProfil(BuildContext context) {
-  return AppBar(
-    automaticallyImplyLeading: false,
-    actions: [
-      IconButton(
-        icon: Icon(Icons.mode),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ModifProfil()),
-          );
-        },
-      ),
-      IconButton(
-        icon: Icon(Icons.settings),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ParametersView(
-                      rule: RulesType.USER_VOLUNTEER,
-              ),
-            ),
-          );
-        },
-      ),
-    ],
-  );
 }
 
 class LineProfil extends StatelessWidget {
@@ -140,143 +319,3 @@ bool isBase64(String? str) {
   }
 }
 
-affichageVolunteer(BuildContext context, Volunteer volunteer) {
-  String? imageProfileVolunteer =
-      volunteer.imageProfile ?? 'https://via.placeholder.com/150';
-  String bio = "";
-  if (volunteer.bio != null) bio = volunteer.bio!;
-  String? address = "";
-  if (volunteer.location?.address != null) address = volunteer.location?.address;
-  String email = "";
-  if (volunteer.email != null) email = volunteer.email!;
-
-  return Center(
-    child: Column(
-      children: [
-        CircleAvatar(
-          radius: MediaQuery.sizeOf(context).width * 0.25,
-          backgroundImage: _getImageProvider(imageProfileVolunteer),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        ContentWidget(
-          content: Column(
-            children: [
-              Text(
-                "${volunteer.firstName}  ${volunteer.lastName}",
-                style: TextStyle(),
-                textAlign: TextAlign.center,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AssociationsSub(
-                                associations: volunteer.myAssociations!,
-                              )));
-                },
-                child: Text(
-                  "${volunteer.myAssociations?.length ?? 0} associations",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Bio(text: bio),
-        SizedBox(
-          height: 20,
-        ),
-        ContentWidget(
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TitleWithIcon(
-                  title: "Informations", icon: Icon(Icons.location_city)),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              Section(text: address, icon: Icon(Icons.location_on_outlined)),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              Section(text: email, icon: Icon(Icons.mail)),
-              Divider(
-                height: 25,
-                color: Colors.white,
-              ),
-              Section(text: volunteer.phone, icon: Icon(Icons.phone_android)),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        LineProfil(
-            text: "Historique de missions",
-            icon: IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AnnouncementView()));
-              },
-              icon: Icon(Icons.map_rounded),
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        LineProfil(
-            text: "Suppression compte",
-            icon: IconButton(
-              onPressed: () async {
-                BlocProvider.of<VolunteerCubit>(context).deleteVolunteer();
-                BlocProvider.of<UserCubit>(context).deleteAccount();
-                AuthRepository().deleteAccount();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeView()),
-                );
-              },
-              icon: Icon(Icons.no_accounts_sharp),
-            )),
-        SizedBox(
-          height: 20,
-        ),
-        ElevatedButton(
-            onPressed: () async {
-              BlocProvider.of<UserCubit>(context)
-                  .disconnect()
-                  .then((_) async => await AuthRepository().signOut());
-
-              final SharedPreferences preferences =
-                  await SharedPreferences.getInstance();
-              preferences.setBool('Volunteer', false);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(
-                    title: RulesType.USER_VOLUNTEER,
-                    isLogin: true,
-                  ),
-                ),
-              );
-            },
-            child: Text("Déconnexion")),
-        SizedBox(
-          height: 20,
-        ),
-      ],
-    ),
-  );
-}

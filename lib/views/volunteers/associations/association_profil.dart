@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/involved_associations/involved_association_cubit.dart';
@@ -31,10 +33,10 @@ class AssociationProfil extends StatelessWidget {
                     else
                       {Navigator.pop(context)}
                   }),
-          Icon(
-            Icons.pie_chart_outline_sharp,
-            size: MediaQuery.sizeOf(context).height * 0.2,
-          ),
+          CircleAvatar(
+              radius: MediaQuery.of(context).size.width * 0.25,
+              backgroundImage: _getImageProvider(association.imageProfile ?? ""),
+            ),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
@@ -113,5 +115,23 @@ class AssociationProfil extends StatelessWidget {
         ]),
       ),
     );
+  }
+}
+
+ImageProvider _getImageProvider(String? imageString) {
+  if (isBase64(imageString)) {
+    return MemoryImage(base64.decode(imageString!));
+  } else {
+    return NetworkImage(imageString!);
+  }
+}
+
+bool isBase64(String? str) {
+  if (str == null) return false;
+  try {
+    base64.decode(str);
+    return true;
+  } catch (e) {
+    return false;
   }
 }

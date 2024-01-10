@@ -56,6 +56,14 @@ class AuthRepository {
     await _auth.currentUser?.delete();
   }
 
+  Future<void> forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<User?> getCurrentUser() async {
     return _auth.currentUser;
   }
@@ -88,7 +96,6 @@ class AuthRepository {
     }
   }
 
-
   Future<bool> verifiedEmail() async {
     await _auth.currentUser?.reload();
     return _auth.currentUser?.emailVerified ?? false;
@@ -96,10 +103,10 @@ class AuthRepository {
 
   Future<void> changePassword(String newPassword) async {
     User? user = await FirebaseAuth.instance.currentUser;
-    user!.updatePassword(newPassword).then((_){
+    user!.updatePassword(newPassword).then((_) {
       print("changed");
-    }).catchError((error){
-      print("not changed")   ;
+    }).catchError((error) {
+      print("not changed");
     });
   }
 }

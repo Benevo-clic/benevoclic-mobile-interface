@@ -12,8 +12,9 @@ import 'package:namer_app/widgets/title_with_icon.dart';
 
 class AssociationProfil extends StatelessWidget {
   Association association;
+  BuildContext? context;
 
-  AssociationProfil({super.key, required this.association});
+  AssociationProfil({super.key, required this.association, this.context});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +23,13 @@ class AssociationProfil extends StatelessWidget {
         child: Column(children: [
           AppBarBackWidgetFct(
               fct: (value) => {
-                    BlocProvider.of<InvolvedAssociationCubit>(context)
-                        .initState("")
+                    if (context == null)
+                      {
+                        BlocProvider.of<InvolvedAssociationCubit>(context)
+                            .initState("")
+                      }
+                    else
+                      {Navigator.pop(context)}
                   }),
           Icon(
             Icons.pie_chart_outline_sharp,
@@ -40,7 +46,7 @@ class AssociationProfil extends StatelessWidget {
                   Text(association.name),
                   Expanded(child: Text("")),
                   Text(association.volunteers?.length.toString() ??
-                      "0 bénévoles"),
+                      "${association.volunteers!.length} bénévoles"),
                 ],
               ),
               Row(
@@ -49,7 +55,7 @@ class AssociationProfil extends StatelessWidget {
                       text: "Adhérer",
                       color: Colors.white,
                       fct: () {},
-                      backgroundColor: Colors.green ),
+                      backgroundColor: Colors.green),
                   Expanded(child: Text("")),
                   Button(
                       text: "Nous contacter",

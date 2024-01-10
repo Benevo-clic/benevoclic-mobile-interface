@@ -7,7 +7,9 @@ import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/authentification/forgotten_password.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
+import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
@@ -115,7 +117,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
@@ -198,8 +199,22 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                 ),
                 TextButton(
                   onPressed: () {
-                    ShowDialog.show(
-                        context, "cette fonctionalité arrive !!", "retour");
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          if (widget.rulesType == RulesType.USER_ASSOCIATION) {
+                            return PopDialog(
+                              content: ForgottenPassword(
+                                  roleType: RulesType.USER_ASSOCIATION),
+                            );
+                          } else {
+                            return PopDialog(
+                              content: ForgottenPassword(
+                                roleType: RulesType.USER_VOLUNTEER,
+                              ),
+                            );
+                          }
+                        });
                   },
                   child: Text(
                     "Mot de passe oublié ?",
@@ -237,8 +252,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 }
 
-Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
-    id) async {
+Future<void> _navigateToNextPage(
+    BuildContext context, RulesType rulesType, id) async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   if (rulesType == RulesType.USER_ASSOCIATION) {
     preferences.setBool('Association', true);
@@ -261,4 +276,3 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
         reverseTransitionDuration: Duration(milliseconds: 1),
       ));
 }
-

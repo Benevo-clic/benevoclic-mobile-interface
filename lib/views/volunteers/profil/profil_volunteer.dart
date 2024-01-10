@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/google/auth_repository.dart';
@@ -9,10 +10,10 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/profil/associations_view.dart';
-import 'package:namer_app/widgets/abstract_container.dart';
 import 'package:namer_app/widgets/content_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../cubit/announcement/announcement_state.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
 import '../../../util/color.dart';
@@ -235,6 +236,9 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
                   .disconnect()
                   .then((_) async => await AuthRepository().signOut());
 
+              BlocProvider.of<AnnouncementCubit>(context)
+                  .changeState(AnnouncementInitialState());
+
               final SharedPreferences preferences =
                   await SharedPreferences.getInstance();
               preferences.setBool('Volunteer', false);
@@ -256,48 +260,6 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
         ],
       ),
     );
-  }
-}
-
-class LineProfil extends StatelessWidget {
-  final String text;
-  final dynamic icon;
-
-  const LineProfil({super.key, required this.text, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-      content: Row(
-        children: [
-          Expanded(
-            flex: 0,
-            child: IconButton(
-              onPressed: () async {
-                await AuthRepository().signOut();
-              },
-              icon: icon,
-            ),
-          ),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-}
-
-class Bio extends StatelessWidget {
-  final String text;
-
-  Bio({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return AbstractContainer(
-        content: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [Text("Bio"), SizedBox(height: 5), Text(text)],
-    ));
   }
 }
 

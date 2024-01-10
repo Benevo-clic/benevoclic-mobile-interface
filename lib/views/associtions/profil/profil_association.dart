@@ -19,6 +19,8 @@ import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
+import '../../../cubit/announcement/announcement_state.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../../util/color.dart';
 import '../../../util/showDialog.dart';
@@ -236,8 +238,10 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
                 BlocProvider.of<UserCubit>(context)
                     .disconnect()
                     .then((_) async => await AuthRepository().signOut());
+              BlocProvider.of<AnnouncementCubit>(context)
+                  .changeState(AnnouncementInitialState());
 
-                final SharedPreferences preferences =
+              final SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 preferences.setBool('Association', false);
                 Navigator.push(

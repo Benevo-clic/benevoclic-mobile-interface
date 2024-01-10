@@ -31,16 +31,12 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     init();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final cubit = context.read<AnnouncementCubit>();
-      cubit.getAllAnnouncementByAssociation(_idAssociation);
-    });
+    BlocProvider.of<PageCubit>(context).setPage(0);
   }
 
   @override
   void initState() {
     super.initState();
-    init();
     _idAssociation = '';
   }
 
@@ -56,6 +52,9 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       var currentAssociation =
           await AssociationRepository().getAssociation(_idAssociation);
 
+      if (currentAssociation == null) {
+        return;
+      }
       if (!mounted) return;
       setState(() {
         association = currentAssociation;
@@ -110,6 +109,10 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
             );
           }
           onPageChanged(currentPageIndex);
+          if (_idAssociation.isNotEmpty) {
+            BlocProvider.of<AnnouncementCubit>(context)
+                .getAllAnnouncementByAssociation(_idAssociation);
+          }
           return IndexedStack(
             index: currentPageIndex,
             children: [

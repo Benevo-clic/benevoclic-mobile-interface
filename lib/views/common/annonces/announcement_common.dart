@@ -64,10 +64,12 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     await Future.delayed(Duration(milliseconds: 500));
     final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
     List<Announcement> loadedAnnouncements = [];
-    if (currentState is AnnouncementLoadedState) {
+    if (currentState is AnnouncementLoadedState && widget.idVolunteer != null) {
       loadedAnnouncements = currentState.announcements;
     }
-    if (currentState is AnnouncementLoadedStateWithoutAnnouncements) {
+    print(currentState);
+    if (currentState is AnnouncementLoadedStateWithoutAnnouncements &&
+        widget.idAssociation != null) {
       loadedAnnouncements = currentState.announcements;
     }
 
@@ -153,11 +155,12 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
-          if (state is AnnouncementLoadedState) {
-              announcements = state.announcements
-                  .where((element) => element.isVisible ?? true)
-                  .toList();
-          } else if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+          if (state is AnnouncementLoadedState && widget.idVolunteer != null) {
+            announcements = state.announcements
+                .where((element) => element.isVisible ?? true)
+                .toList();
+          } else if (state is AnnouncementLoadedStateWithoutAnnouncements &&
+              widget.idAssociation != null) {
             if (widget.idAssociation != null && widget.idAssociation != '') {
                 announcementsAssociation = state.announcements;
             }
@@ -198,7 +201,8 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
                 .where((element) => element.isVisible ?? true)
                 .toList();
           }
-          if (state is AnnouncementLoadedStateWithoutAnnouncements) {
+          if (state is AnnouncementLoadedStateWithoutAnnouncements &&
+              widget.rulesType == RulesType.USER_ASSOCIATION) {
             if (_searchQuery.isNotEmpty && _searchQuery != '') {
               announcementsAssociation = state.announcements
                   .where((element) =>

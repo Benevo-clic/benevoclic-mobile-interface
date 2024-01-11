@@ -94,7 +94,9 @@ class _UpdateProfileAssociationState extends State<UpdateProfileAssociation> {
           }
 
           if (state is AssociationUpdatingState) {
-            image = base64Decode(state.associationModel.imageProfile!);
+            if (state.associationModel.imageProfile != null) {
+              image = base64Decode(state.associationModel.imageProfile!);
+            }
             return _buildWidgetUpdate(context, widget.association);
           }
           return Center(

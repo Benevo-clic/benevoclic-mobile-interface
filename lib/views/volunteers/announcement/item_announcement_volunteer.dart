@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/util/manage_date.dart';
 import 'package:namer_app/widgets/information_announcement.dart';
 
+import '../../../cubit/announcement/announcement_cubit.dart';
+import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../models/association_model.dart';
 import 'detail_announcement_volunteer.dart';
@@ -51,6 +54,8 @@ class _ItemAnnouncementVolunteerState extends State<ItemAnnouncementVolunteer> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<AnnouncementCubit>(context)
+        .changeState(AnnouncementInitialState());
   }
 
   bool isBase64(String str) {

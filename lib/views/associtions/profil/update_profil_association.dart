@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
@@ -10,6 +11,7 @@ import 'package:namer_app/widgets/app_bar_back.dart';
 
 import '../../../models/location_model.dart';
 import '../../../type/rules_type.dart';
+import '../../../util/color.dart';
 import '../../../widgets/updating_profil_picture.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import '../../common/authentification/signup/bio.dart';
@@ -99,8 +101,14 @@ class _UpdateProfileAssociationState extends State<UpdateProfileAssociation> {
             }
             return _buildWidgetUpdate(context, widget.association);
           }
-          return Center(
-            child: CircularProgressIndicator(),
+          return SpinKitFadingCircle(
+            itemBuilder: (BuildContext context, int index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: index.isEven ? Colors.red : marron,
+                ),
+              );
+            },
           );
         },
       ),
@@ -108,61 +116,85 @@ class _UpdateProfileAssociationState extends State<UpdateProfileAssociation> {
   }
 
   Widget _buildWidgetUpdate(BuildContext context, Association association) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            height: 20,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            // Changez ici à min pour que la colonne prenne seulement l'espace nécessaire
+            children: [
+              SizedBox(height: 20),
+              Center(
+                child: UpdatingProfilPicture(
+                  image: image,
+                  rulesType: RulesType.USER_ASSOCIATION,
+                ),
+              ),
+              _infoAssociation(context),
+              BioSignup(
+                onBioChanged: _handleBioChanges,
+                bio: association.bio,
+                isEditing: true,
+              ),
+              InfoAddress(
+                handleAddressFocusChange: _handleAddressFocusChanges,
+                address: association.location!.address,
+              ),
+              SizedBox(height: 80),
+              // Ajoutez un espace supplémentaire pour le bouton
+            ],
           ),
-          Center(
-            child: UpdatingProfilPicture(
-              image: image,
-              rulesType: RulesType.USER_ASSOCIATION,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: marron,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Association associationUpdate = Association(
+                      name: _nameAssociation.text,
+                      phone: _phone.text,
+                      location: location,
+                      bio: _bio,
+                      email: association.email,
+                      imageProfile: base64Encode(image!),
+                      type: _typeAssociation.text);
+
+                  BlocProvider.of<AssociationCubit>(context)
+                      .updateAssociation(associationUpdate);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationAssociation()));
+                } else {
+                  print("erreur");
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                // Utilisez min pour que la Row prenne seulement l'espace nécessaire
+                children: [
+                  Icon(Icons.check, color: Colors.white),
+                  // Icône de votre choix
+                  SizedBox(width: 8),
+                  // Espace entre l'icône et le texte
+                  Text("Modifier", // Texte du bouton
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                ],
+              ),
             ),
           ),
-          _infoAssociation(context),
-          BioSignup(
-            onBioChanged: _handleBioChanges,
-            bio: association.bio,
-            isEditing: true,
-          ),
-          InfoAddress(
-            handleAddressFocusChange: _handleAddressFocusChanges,
-            address: association.location!.address,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Association associationUpdate = Association(
-                    name: _nameAssociation.text,
-                    phone: _phone.text,
-                    location: location,
-                    bio: _bio,
-                    email: association.email,
-                    imageProfile: base64Encode(image!),
-                    type: _typeAssociation.text);
-
-                BlocProvider.of<AssociationCubit>(context)
-                    .updateAssociation(associationUpdate);
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NavigationAssociation()));
-              } else {
-                print("erreur");
-              }
-            },
-            child: Text("Modifier"),
-          ),
-          SizedBox(
-            height: 20,
-          )
-        ],
-      ),
+        ),
+      ],
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
 import '../../../../../repositories/google/auth_repository.dart';
+import '../../../../../util/color.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
 import '../../../../../widgets/inscription_signup.dart';
@@ -127,6 +129,17 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         ShowDialog.show(context, "Erreur de connexion", "retour");
       }
     }, builder: (context, state) {
+      if (state is UserLoadingState) {
+        return SpinKitFadingCircle(
+          itemBuilder: (BuildContext context, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: index.isEven ? Colors.red : marron,
+              ),
+            );
+          },
+        );
+      }
       return Stack(
         children: [
           Card(

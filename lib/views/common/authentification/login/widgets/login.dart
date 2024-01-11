@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:namer_app/cubit/user/user_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
@@ -7,6 +8,7 @@ import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/authentification/login/statefullwIdgets/formulaire_connexion.dart';
 import 'package:namer_app/views/common/authentification/login/statefullwIdgets/other_connexion.dart';
 
+import '../../../../../util/color.dart';
 import '../../../../../widgets/auth_app_bar.dart';
 import '../../../../associtions/signup/signup_association.dart';
 import '../../../../volunteers/signup/widgets/signup_volunteer.dart';
@@ -235,13 +237,14 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _buildLoading(BuildContext context, UserLoadingState state) {
-    return Container(
-      color: Colors.black.withOpacity(0.5), // Fond semi-transparent noir
-      width: double.infinity, // Couvre toute la largeur
-      height: MediaQuery.of(context).size.height, // Couvre toute la hauteur
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return SpinKitFadingCircle(
+      itemBuilder: (BuildContext context, int index) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: index.isEven ? Colors.red : marron,
+          ),
+        );
+      },
     );
   }
 }

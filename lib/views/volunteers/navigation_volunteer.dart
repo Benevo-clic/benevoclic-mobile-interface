@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/volunteers/announcement/announcement_volunteer.dart';
 import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +12,6 @@ import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../repositories/api/volunteer_repository.dart';
 import '../../widgets/build_navbar.dart';
-import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import 'favoris/favorites_volunteers_views.dart';
 
@@ -30,10 +30,18 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
   Volunteer? volunteer;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getIdVolunteer();
+    BlocProvider.of<PageCubit>(context).setPage(0);
+  }
+
+  @override
   void initState() {
     super.initState();
     getIdVolunteer();
     _idVolunteer = '';
+    // print(widget.volunteer!.email);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -79,6 +87,7 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           if (volunteer == null) {
+            print('volunteer is null');
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -95,15 +104,12 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
 
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
               .getFavoritesAnnouncementByVolunteerId(volunteer!.id!);
-
           return IndexedStack(
             index: currentPageIndex,
             children: [
-              AnnouncementCommon(
-                  rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: _idVolunteer),
+              AnnouncementVolunteer(idVolunteer: _idVolunteer),
               FavoritesVolunteer(
-                idVolunteer: _idVolunteer,
+                idVolunteer: volunteer!.id!,
               ),
               Messages(rulesType: RulesType.USER_VOLUNTEER),
               ProfilPageVolunteer(volunteer: volunteer!)

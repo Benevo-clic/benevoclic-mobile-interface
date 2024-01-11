@@ -67,14 +67,14 @@ class _AnnouncementCommonState extends State<AnnouncementCommon> {
     if (currentState is AnnouncementLoadedState && widget.idVolunteer != null) {
       loadedAnnouncements = currentState.announcements;
     }
-    print(currentState);
+
     if (currentState is AnnouncementLoadedStateWithoutAnnouncements &&
         widget.idAssociation != null) {
       loadedAnnouncements = currentState.announcements;
     }
 
     if (currentState is AnnouncementLoadedStateAfterFilter) {
-      if (announcementsAssociation.isNotEmpty) {
+      if (announcementsAssociation.isNotEmpty || widget.idAssociation != null) {
         loadedAnnouncements = announcementsAssociation;
       } else {
         loadedAnnouncements = currentState.announcements;

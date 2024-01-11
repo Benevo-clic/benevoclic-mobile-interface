@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
-import 'package:namer_app/repositories/api/announcement_repository.dart';
 
-import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/favorites_repository.dart';
 import '../../../widgets/app_bar_widget.dart';
@@ -25,7 +22,12 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   List<Announcement> announcements = [];
 
   FavoritesRepository _favoritesRepository = FavoritesRepository();
-  AnnouncementRepository _announcementRepository = AnnouncementRepository();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // _processAnnouncements();
+  }
 
   @override
   void initState() {
@@ -44,19 +46,6 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     }
   }
 
-  Future<List<Announcement>> _processAnnouncements() async {
-    await Future.delayed(Duration(milliseconds: 300));
-    final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
-    List<Announcement> loadedAnnouncements = [];
-    if (currentState is AnnouncementLoadedState) {
-      loadedAnnouncements = currentState.announcements;
-    }
-    print(currentState);
-
-    return loadedAnnouncements
-        .where((element) => element.isVisible ?? true)
-        .toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +55,11 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
-      },
-      builder: (context, state) {
-        if (state is FavoritesAnnouncementLoadingState) {
-          BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
-          return Center(child: CircularProgressIndicator());
+        if (state is FavoritesAnnouncementLoadedState) {
+          print(state.favoritesAnnouncement.announcementFavorites.length);
+          setState(() {
+            announcements = state.favoritesAnnouncement.announcementFavorites;
+          });
         }
         if (state is FavoritesAnnouncementAddingState) {
           BlocProvider.of<FavoritesAnnouncementCubit>(context)
@@ -88,29 +76,18 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
               .where((element) => element != null)
               .toList();
         }
+      },
+      builder: (context, state) {
+        if (state is FavoritesAnnouncementLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
             child: AppBarWidget(contexts: context, label: 'Mes Favoris'),
           ),
-          body: FutureBuilder<List<Announcement>>(
-            future: _processAnnouncements(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final filteredAnnouncements = snapshot.data!
-                    .where((announcement) =>
-                        isAnnouncementInList(announcement, idAnnouncements))
-                    .map((e) => e.copyWith(isFavorite: true))
-                    .toList();
-                print(snapshot.data!.length);
-                return _buildAnnouncementsList(
-                    filteredAnnouncements, _toggleFavorite);
-              } else if (snapshot.hasError) {
-                return Center(child: Text('${snapshot.error}'));
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
+          body: _buildAnnouncementsList(announcements, _toggleFavorite),
         );
       },
     );
@@ -129,7 +106,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         return ItemAnnouncementVolunteer(
           announcement: announcement,
           idVolunteer: widget.idVolunteer,
-          isSelected: announcement.isFavorite,
+          isSelected: true,
           toggleFavorite: () => _toggleFavorite(announcement),
           nbAnnouncementsAssociation: announcements
               .where((element) =>

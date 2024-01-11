@@ -36,6 +36,8 @@ class AnnouncementUpdatingState extends AnnouncementState {
   List<Object?> get props => [announcement, isUpdating];
 }
 
+class AnnouncementLoadingVolunteerState extends AnnouncementState {}
+
 class AnnouncementLoadedState extends AnnouncementState {
   final List<Announcement> announcements;
 
@@ -165,4 +167,13 @@ class AnnouncementErrorState extends AnnouncementState {
   List<Object?> get props => [message];
 }
 
+
+class AnnouncementVolunteerErrorState extends AnnouncementState {
+  final String message;
+
+  AnnouncementVolunteerErrorState({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
 

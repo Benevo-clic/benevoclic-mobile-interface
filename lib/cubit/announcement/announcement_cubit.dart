@@ -116,13 +116,13 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   void getAllAnnouncements() async {
-    emit(AnnouncementLoadingState());
+    emit(AnnouncementLoadingVolunteerState());
     try {
       List<Announcement> announcements =
           await _announcementRepository.getAnnouncements();
       emit(AnnouncementLoadedState(announcements: announcements));
     } catch (e) {
-      emit(AnnouncementErrorState(message: e.toString()));
+      emit(AnnouncementVolunteerErrorState(message: e.toString()));
     }
   }
 

@@ -10,8 +10,8 @@ import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../repositories/api/association_repository.dart';
 import '../../widgets/build_navbar.dart';
-import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
+import 'announcement/announcement_association.dart';
 import 'profil/profil_association.dart';
 
 class NavigationAssociation extends StatefulWidget {
@@ -116,8 +116,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           return IndexedStack(
             index: currentPageIndex,
             children: [
-              AnnouncementCommon(
-                rulesType: RulesType.USER_ASSOCIATION,
+              AnnouncementAssociation(
                 idAssociation: _idAssociation,
               ),
               PublishAnnouncement(),

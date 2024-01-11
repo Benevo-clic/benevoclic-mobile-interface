@@ -244,9 +244,6 @@ class _ParticipantAnnouncementWaitingState
               BlocConsumer<VolunteerCubit, VolunteerState>(
                 listener: (context, state) {},
                 builder: (context, state) {
-                  if (state is AnnouncementLoadingState) {
-                    return Center(child: CircularProgressIndicator());
-                  }
                   return FutureBuilder<List<Volunteer>>(
                     future: _processVolunteer(),
                     builder: (context, snapshot) {

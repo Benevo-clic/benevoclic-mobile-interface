@@ -167,6 +167,14 @@ class AnnouncementErrorState extends AnnouncementState {
   List<Object?> get props => [message];
 }
 
+class AnnouncementVolunteerSearchState extends AnnouncementState {
+  final List<Announcement> announcement;
+
+  AnnouncementVolunteerSearchState({required this.announcement});
+
+  @override
+  List<Object?> get props => [announcement];
+}
 
 class AnnouncementVolunteerErrorState extends AnnouncementState {
   final String message;

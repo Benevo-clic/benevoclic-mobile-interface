@@ -110,7 +110,9 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     return ListView.builder(
       itemCount: filteredAnnouncements.length,
       itemBuilder: (context, index) {
-        Announcement announcement = filteredAnnouncements[index];
+        int reversedIndex = announcements.length - index - 1;
+
+        Announcement announcement = filteredAnnouncements[reversedIndex];
         return ItemAnnouncementVolunteer(
           announcement: announcement,
           idVolunteer: widget.idVolunteer,

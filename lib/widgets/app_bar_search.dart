@@ -29,7 +29,7 @@ class AppBarSearch extends StatefulWidget {
 class _AppBarSearchState extends State<AppBarSearch> {
   final TextEditingController _controller = TextEditingController();
 
-  Timer _debounce = Timer(Duration(milliseconds: 1), () {});
+  Timer _debounce = Timer(Duration(milliseconds: 500), () {});
 
   Future<void> _searchAnnouncement(String query) async {
     try {

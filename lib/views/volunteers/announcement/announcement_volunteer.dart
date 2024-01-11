@@ -28,7 +28,33 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _applySearchFilter(List<Announcement> announcementsList) {
+    List<Announcement> filteredAnnouncements;
+    if (_searchQuery.isNotEmpty) {
+      filteredAnnouncements = announcementsList
+          .where((announcement) =>
+              announcement.labelEvent
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              announcement.description
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              announcement.nameAssociation
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
+          .toList();
+    } else {
+      filteredAnnouncements = announcementsList;
+    }
+
+    _updateFavoriteStatus(filteredAnnouncements);
   }
 
   void _toggleFavorite(Announcement announcement) async {
@@ -58,6 +84,7 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
   void _handleSearchChanged(String? query) {
     setState(() {
       _searchQuery = query!;
+      BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
     });
   }
 
@@ -102,13 +129,12 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
       ),
       body: BlocConsumer<AnnouncementCubit, AnnouncementState>(
         listener: (context, state) {
+          if (state is AnnouncementVolunteerSearchState) {
+            print("AnnouncementVolunteerSearchState");
+          }
+
           if (state is AnnouncementLoadedState) {
-            setState(() {
-              _updateFavoriteStatus(state.announcements);
-              announcements = state.announcements
-                  .where((element) => element.isVisible ?? true)
-                  .toList();
-            });
+            _applySearchFilter(state.announcements);
           }
           if (state is AnnouncementRemovedParticipateState) {
             BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
@@ -138,6 +164,7 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
           if (state is AnnouncementVolunteerErrorState) {
             return Center(child: Text('Erreur de chargement'));
           }
+
           return _buildAnnouncementsList(announcements);
         },
       ),

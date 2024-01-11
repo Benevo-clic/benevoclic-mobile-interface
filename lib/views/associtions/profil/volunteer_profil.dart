@@ -2,22 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/involved_associations/involved_association_cubit.dart';
-import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/util/color.dart';
-import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
-import 'package:namer_app/widgets/app_bar_back.dart';
-import 'package:namer_app/widgets/content_widget.dart';
-import 'package:namer_app/widgets/title_with_icon.dart';
 
+import '../../../cubit/involved_associations/involved_association_cubit.dart';
+import '../../../models/volunteer_model.dart';
+import '../../../util/color.dart';
+import '../../../widgets/app_bar_back.dart';
 import '../../../widgets/bio_widget.dart';
+import '../../../widgets/content_widget.dart';
+import '../../../widgets/title_with_icon.dart';
+import '../../common/profiles/widget/section_profil.dart';
 
-class AssociationProfil extends StatelessWidget {
-  Association association;
-  int? nbAnnouncement;
+class VolunteerProfil extends StatelessWidget {
+  Volunteer volunteer;
 
-  AssociationProfil(
-      {super.key, required this.association, this.nbAnnouncement});
+  VolunteerProfil({super.key, required this.volunteer});
 
   @override
   Widget build(BuildContext context) {
@@ -37,58 +35,19 @@ class AssociationProfil extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-          // Container3(
-          //     content: Column(
-          //   children: [
-          //     Row(
-          //       children: [
-          //         Text(association.name),
-          //         Expanded(child: Text("")),
-          //         Text(association.volunteers?.length.toString() ??
-          //             "${association.volunteers!.length} bénévoles"),
-          //       ],
-          //     ),
-          //     Row(
-          //       children: [
-          //         Button(
-          //             text: "Adhérer",
-          //             color: Colors.white,
-          //             fct: () {},
-          //             backgroundColor: Colors.green),
-          //         Expanded(child: Text("")),
-          //         Button(
-          //             text: "Nous contacter",
-          //             color: Colors.white,
-          //             fct: () {},
-          //             backgroundColor: orange)
-          //       ],
-          //     )
-          //   ],
-          // )),
-          // SizedBox(
-          //   height: MediaQuery.sizeOf(context).height * 0.03,
-          // ),
-          // ContentWidget(content: Text(association.bio ?? "aucune bio")),
-          // SizedBox(
-          //   height: MediaQuery.sizeOf(context).height * 0.03,
-          // ),
-          affichageAssociation(context),
+          affichageVolunteer(context),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-          // ContentWidget(
-          //     content: TitleWithIcon(
-          //   icon: Icon(Icons.text_snippet_outlined),
-          //   title: "Annones",
-          // )),
         ]),
       ),
     );
   }
 
-  Widget affichageAssociation(BuildContext context) {
-    String? imageProfileAssociation =
-        association.imageProfile ?? 'https://via.placeholder.com/150';
+  Widget affichageVolunteer(BuildContext context) {
+    String? imageProfileVolunteer =
+        volunteer.imageProfile ?? 'https://via.placeholder.com/150';
+
     return Center(
       child: Column(
         children: [
@@ -103,7 +62,7 @@ class AssociationProfil extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: MediaQuery.of(context).size.width * 0.25,
-              backgroundImage: _getImageProvider(imageProfileAssociation),
+              backgroundImage: _getImageProvider(imageProfileVolunteer),
             ),
           ),
           SizedBox(
@@ -115,14 +74,14 @@ class AssociationProfil extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    association.name ?? "Pas de nom",
+                    "${volunteer.firstName}  ${volunteer.lastName}",
                     style: TextStyle(),
                     textAlign: TextAlign.center,
                   ),
                   InkWell(
                     onTap: () {},
                     child: Text(
-                      "${association.volunteers!.length} bénévoles",
+                      "${volunteer.myAssociations?.length ?? 0} associations",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold),
@@ -135,7 +94,7 @@ class AssociationProfil extends StatelessWidget {
           ),
           BioWidget(
             title: "Description",
-            description: association.bio ?? "Pas de description",
+            description: volunteer.bio ?? "Pas de description",
             sizeRaduis: true,
           ),
           ContentWidget(
@@ -145,27 +104,28 @@ class AssociationProfil extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TitleWithIcon(
-                      title: "Informations", icon: Icon(Icons.info_outline)),
+                      title: "Mes informations",
+                      icon: Icon(Icons.info_outline)),
                   Divider(
                     height: 25,
                     color: Colors.white,
                   ),
                   Section(
-                      text: association.location?.address ?? '',
+                      text: volunteer.location?.address ?? '',
                       icon: Icon(Icons.location_on_outlined)),
                   Divider(
                     height: 25,
                     color: Colors.white,
                   ),
                   Section(
-                      text: association.email ?? '',
+                      text: volunteer.email ?? '',
                       icon: Icon(Icons.email_outlined)),
                   Divider(
                     height: 25,
                     color: Colors.white,
                   ),
                   Section(
-                      text: association.phone ?? "",
+                      text: volunteer.phone ?? "",
                       icon: Icon(Icons.phone_android)),
                 ],
               ),
@@ -178,11 +138,9 @@ class AssociationProfil extends StatelessWidget {
                 onSurface: Colors.grey,
                 alignment: Alignment.centerLeft,
               ),
-              onPressed: () {
-                // BlocProvider.of<PageCubit>(context).setPage(0);
-              },
-              icon: Icon(Icons.announcement),
-              label: Text("Annonces ( ${nbAnnouncement ?? 0} )"),
+              onPressed: () {},
+              icon: Icon(Icons.history),
+              label: Text("Nombres de missions effectuées"),
             ),
           ),
           SizedBox(

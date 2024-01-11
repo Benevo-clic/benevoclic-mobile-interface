@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
 import '../../cubit/announcement/announcement_state.dart';
-import '../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../repositories/api/volunteer_repository.dart';
@@ -105,8 +104,6 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
           }
           BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
 
-          BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(volunteer!.id!);
           return IndexedStack(
             index: currentPageIndex,
             children: [

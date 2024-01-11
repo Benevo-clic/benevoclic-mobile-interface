@@ -28,7 +28,8 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // _processAnnouncements();
+    BlocProvider.of<FavoritesAnnouncementCubit>(context)
+        .getFavoritesAnnouncementByVolunteerId(widget.idVolunteer);
   }
 
   @override

@@ -28,7 +28,7 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _processAnnouncements();
+    // BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
   }
 
   void _toggleFavorite(Announcement announcement) async {
@@ -54,38 +54,6 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
     return await _favoritesRepository.isFavorite(idVolunteer, idAnnouncement!);
   }
 
-  Future<List<Announcement>> _processAnnouncements() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    final currentState = BlocProvider.of<AnnouncementCubit>(context).state;
-    List<Announcement> loadedAnnouncements = [];
-    if (currentState is AnnouncementLoadedState) {
-      loadedAnnouncements = currentState.announcements;
-    }
-
-    if (currentState is AnnouncementLoadedStateAfterFilter) {
-      loadedAnnouncements = currentState.announcements;
-    }
-
-    if (_searchQuery.isNotEmpty && _searchQuery != '') {
-      loadedAnnouncements = loadedAnnouncements
-          .where((element) =>
-              element.labelEvent
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()) ||
-              element.description
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()) ||
-              element.nameAssociation
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()))
-          .toList();
-    }
-    setState(() {
-      announcements = loadedAnnouncements;
-    });
-
-    return await _updateFavoriteStatus(loadedAnnouncements);
-  }
 
   void _handleSearchChanged(String? query) {
     setState(() {

@@ -46,7 +46,6 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
     getIdVolunteer();
     _idVolunteer = '';
 
-    // print(widget.volunteer!.email);
   }
 
   List<BuildNavigationModel> buildNavigationModel = [

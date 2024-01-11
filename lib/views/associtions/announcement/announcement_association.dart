@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../models/association_model.dart';
+import '../../../util/color.dart';
 import '../../../widgets/app_bar_search.dart';
 import 'item_announcement_association.dart';
 
@@ -73,6 +75,25 @@ class _AnnouncementAssociationState extends State<AnnouncementAssociation> {
     return announcements!;
   }
 
+  void _applySearchFilter(List<Announcement> announcementsList) {
+    if (_searchQuery.isNotEmpty && _searchQuery != '') {
+      announcementsAssociation = announcementsList
+          .where((element) =>
+              element.labelEvent
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              element.description
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              element.nameAssociation
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
+          .toList();
+    } else {
+      announcementsAssociation = announcementsList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,29 +125,11 @@ class _AnnouncementAssociationState extends State<AnnouncementAssociation> {
           }
         },
         builder: (context, state) {
-          if (state is AnnouncementLoadingState) {
-            return Center(child: CircularProgressIndicator());
-          }
           if (state is AnnouncementErrorState) {
             return Center(child: Text(state.message));
           }
           if (state is AnnouncementLoadedStateWithoutAnnouncements) {
-            if (_searchQuery.isNotEmpty && _searchQuery != '') {
-              announcementsAssociation = state.announcements
-                  .where((element) =>
-                      element.labelEvent
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase()) ||
-                      element.description
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase()) ||
-                      element.nameAssociation
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase()))
-                  .toList();
-            } else {
-              announcementsAssociation = state.announcements;
-            }
+            _applySearchFilter(state.announcements);
           }
 
           return FutureBuilder<List<Announcement>>(
@@ -134,7 +137,15 @@ class _AnnouncementAssociationState extends State<AnnouncementAssociation> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // print('waiting');
-                return Center(child: CircularProgressIndicator());
+                return SpinKitFadingCircle(
+                  itemBuilder: (BuildContext context, int index) {
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: index.isEven ? Colors.red : marron,
+                      ),
+                    );
+                  },
+                );
               }
               if (snapshot.hasError) {
                 return _buildEmptyList();

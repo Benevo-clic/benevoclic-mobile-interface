@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
@@ -9,6 +10,7 @@ import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/volunteer_repository.dart';
+import '../../../util/color.dart';
 import '../../../widgets/app_bar_back.dart';
 
 class ParticipantAnnouncementWaiting extends StatefulWidget {
@@ -91,9 +93,6 @@ class _ParticipantAnnouncementWaitingState
         }
       },
       builder: (context, state) {
-        if (state is AnnouncementLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
         return Scaffold(
           body: Column(
             children: [
@@ -252,7 +251,15 @@ class _ParticipantAnnouncementWaitingState
                     future: _processVolunteer(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SpinKitFadingCircle(
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: index.isEven ? Colors.red : marron,
+                              ),
+                            );
+                          },
+                        );
                       }
                       if (snapshot.hasError) {
                         return Center(

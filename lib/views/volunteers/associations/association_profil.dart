@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/involved_associations/involved_association_cubit.dart';
@@ -12,8 +14,9 @@ import 'package:namer_app/widgets/title_with_icon.dart';
 
 class AssociationProfil extends StatelessWidget {
   Association association;
+  BuildContext? context;
 
-  AssociationProfil({super.key, required this.association});
+  AssociationProfil({super.key, required this.association, this.context});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +25,18 @@ class AssociationProfil extends StatelessWidget {
         child: Column(children: [
           AppBarBackWidgetFct(
               fct: (value) => {
-                    BlocProvider.of<InvolvedAssociationCubit>(context)
-                        .initState("")
+                    if (context == null)
+                      {
+                        BlocProvider.of<InvolvedAssociationCubit>(context)
+                            .initState("")
+                      }
+                    else
+                      {Navigator.pop(context)}
                   }),
-          Icon(
-            Icons.pie_chart_outline_sharp,
-            size: MediaQuery.sizeOf(context).height * 0.2,
-          ),
+          CircleAvatar(
+              radius: MediaQuery.of(context).size.width * 0.25,
+              backgroundImage: _getImageProvider(association.imageProfile ?? ""),
+            ),
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
@@ -40,7 +48,7 @@ class AssociationProfil extends StatelessWidget {
                   Text(association.name),
                   Expanded(child: Text("")),
                   Text(association.volunteers?.length.toString() ??
-                      "0 bénévoles"),
+                      "${association.volunteers!.length} bénévoles"),
                 ],
               ),
               Row(
@@ -49,7 +57,7 @@ class AssociationProfil extends StatelessWidget {
                       text: "Adhérer",
                       color: Colors.white,
                       fct: () {},
-                      backgroundColor: Colors.green ),
+                      backgroundColor: Colors.green),
                   Expanded(child: Text("")),
                   Button(
                       text: "Nous contacter",
@@ -107,5 +115,23 @@ class AssociationProfil extends StatelessWidget {
         ]),
       ),
     );
+  }
+}
+
+ImageProvider _getImageProvider(String? imageString) {
+  if (isBase64(imageString)) {
+    return MemoryImage(base64.decode(imageString!));
+  } else {
+    return NetworkImage(imageString!);
+  }
+}
+
+bool isBase64(String? str) {
+  if (str == null) return false;
+  try {
+    base64.decode(str);
+    return true;
+  } catch (e) {
+    return false;
   }
 }

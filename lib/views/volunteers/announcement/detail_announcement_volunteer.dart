@@ -7,6 +7,7 @@ import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
+import 'package:namer_app/views/volunteers/associations/association_profil.dart';
 import 'package:namer_app/widgets/info_adress_detail_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
@@ -512,10 +513,19 @@ class _DetailAnnouncementVolunteerState
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: _getImageProvider(
-                        widget.announcement.imageProfileAssociation),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AssociationProfil(
+                                  association: association, context: context)));
+                    },
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: _getImageProvider(
+                          widget.announcement.imageProfileAssociation),
+                    ),
                   ),
                   SizedBox(
                     width: 5,

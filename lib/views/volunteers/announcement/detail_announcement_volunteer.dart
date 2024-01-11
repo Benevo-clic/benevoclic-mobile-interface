@@ -531,7 +531,10 @@ class _DetailAnnouncementVolunteerState
                           context,
                           MaterialPageRoute(
                               builder: (context) => AssociationProfil(
-                                  association: association, context: context)));
+                                    association: association,
+                                    nbAnnouncement:
+                                        widget.nbAnnouncementsAssociation,
+                                  )));
                     },
                     child: CircleAvatar(
                       radius: 30,

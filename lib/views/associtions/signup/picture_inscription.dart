@@ -3,9 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
-import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +43,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
 
   void _initUser() async {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final cubit = context.read<VolunteerCubit>();
+      final cubit = context.read<SignupCubit>();
       cubit.initState();
     });
   }
@@ -62,7 +60,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
             ),
           );
           _imageProfile = state.imageProfile;
-          BlocProvider.of<AssociationCubit>(context).initState();
+          BlocProvider.of<SignupCubit>(context).initState();
         }
         if (widget.volunteer != null) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -71,7 +69,7 @@ class _PictureInscriptionState extends State<PictureInscription> {
             ),
           );
           _imageProfile = state.imageProfile;
-          BlocProvider.of<VolunteerCubit>(context).initState();
+          BlocProvider.of<SignupCubit>(context).initState();
         }
       }
 

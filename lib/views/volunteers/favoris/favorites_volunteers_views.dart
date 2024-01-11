@@ -51,8 +51,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
     if (currentState is AnnouncementLoadedState) {
       loadedAnnouncements = currentState.announcements;
     }
-
-    announcements = await _announcementRepository.getAnnouncements();
+    print(currentState);
 
     return loadedAnnouncements
         .where((element) => element.isVisible ?? true)
@@ -103,6 +102,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
                         isAnnouncementInList(announcement, idAnnouncements))
                     .map((e) => e.copyWith(isFavorite: true))
                     .toList();
+                print(snapshot.data!.length);
                 return _buildAnnouncementsList(
                     filteredAnnouncements, _toggleFavorite);
               } else if (snapshot.hasError) {
@@ -129,7 +129,7 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         return ItemAnnouncementVolunteer(
           announcement: announcement,
           idVolunteer: widget.idVolunteer,
-          isSelected: announcement.isFavorite ?? false,
+          isSelected: announcement.isFavorite,
           toggleFavorite: () => _toggleFavorite(announcement),
           nbAnnouncementsAssociation: announcements
               .where((element) =>

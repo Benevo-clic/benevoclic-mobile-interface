@@ -133,8 +133,15 @@ class _MyImagePickerState extends State<MyImagePicker> {
                     onTap: () {
                       _image = null;
                       if (widget.isUpdating == true) {
-                        BlocProvider.of<AssociationCubit>(context).changeState(
-                            AssociationPictureState(imageProfile: _image));
+                        if (widget.ruleType == RulesType.USER_ASSOCIATION) {
+                          BlocProvider.of<AssociationCubit>(context)
+                              .changeState(AssociationPictureState(
+                                  imageProfile: _image));
+                        } else if (widget.ruleType ==
+                            RulesType.USER_VOLUNTEER) {
+                          BlocProvider.of<VolunteerCubit>(context).changeState(
+                              VolunteerPictureState(imageProfile: _image));
+                        }
                       } else {
                         BlocProvider.of<SignupCubit>(context).changeState(
                             SignupPictureState(imageProfile: _image));

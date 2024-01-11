@@ -20,6 +20,7 @@ import '../../../util/showDialog.dart';
 import '../../../widgets/app_bar_profil.dart';
 import '../../../widgets/bio_widget.dart';
 import '../../../widgets/title_with_icon.dart';
+import '../../common/profiles/widget/pop_dialog.dart';
 import '../../common/profiles/widget/section_profil.dart';
 
 class ProfilPageVolunteer extends StatefulWidget {
@@ -128,7 +129,7 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
                       );
                     },
                     child: Text(
-                      "${volunteer.myAssociations?.length ?? 0} associations",
+                      "Bénévole",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold),
@@ -186,7 +187,13 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () {
-                // BlocProvider.of<PageCubit>(context).setPage(0);
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return PopDialog(
+                          content: Text(
+                              "Cette fonctionnalité sera disponible prochainement. Restez à l\'écoute!"));
+                    });
               },
               icon: Icon(Icons.history),
               label: Text("Historique de missions"),

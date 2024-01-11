@@ -93,6 +93,7 @@ class AppBarProfile extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ParametersView(
                       rule: RulesType.USER_ASSOCIATION,
+                      association: association,
                     ),
                   ),
                 );
@@ -102,6 +103,7 @@ class AppBarProfile extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ParametersView(
                       rule: RulesType.USER_VOLUNTEER,
+                      volunteer: volunteer,
                     ),
                   ),
                 );

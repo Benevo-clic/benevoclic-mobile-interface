@@ -133,7 +133,7 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
                       );
                     },
                     child: Text(
-                      "${association.volunteers!.length} bénévoles",
+                      "Association",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold),

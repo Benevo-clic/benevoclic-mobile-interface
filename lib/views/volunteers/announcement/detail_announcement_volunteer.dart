@@ -573,87 +573,90 @@ class _DetailAnnouncementVolunteerState
               //   icon: ,
               // ),
 
-              if (!association.volunteersWaiting!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer) &&
-                  !association.volunteers!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer))
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _toggleFollowAssociation(association);
-                  },
-                  icon: Icon(Icons.back_hand, size: 15),
-                  label: Text(
-                    "Adhérer",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.black, width: 1),
-                    ),
-                  ),
-                ),
-
-              if (!association.volunteers!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer) &&
-                  association.volunteersWaiting!
-                      .map((e) => e.id)
-                      .toList()
-                      .contains(widget.idVolunteer))
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _toggleFollowAssociation(association);
-                  },
-                  icon: Icon(Icons.back_hand, size: 15),
-                  label: Text(
-                    "En attente",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.black, width: 1),
-                    ),
-                  ),
-                ),
-              if (association.volunteers!
-                  .map((e) => e.id)
-                  .toList()
-                  .contains(widget.idVolunteer))
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _toggleFollowAssociation(association);
-                  },
-                  icon: Icon(Icons.back_hand, size: 15),
-                  label: Text(
-                    "Se désinscrire",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(color: Colors.black, width: 1),
-                    ),
-                  ),
-                ),
+              // if (!association.volunteersWaiting!
+              //         .map((e) => e.id)
+              //         .toList()
+              //         .contains(widget.idVolunteer) &&
+              //     !association.volunteers!
+              //         .map((e) => e.id)
+              //         .toList()
+              //         .contains(widget.idVolunteer))
+              //   ElevatedButton.icon(
+              //     onPressed: () {
+              //       // _toggleFollowAssociation(association);
+              //       PopDialog(
+              //           content: Text(
+              //               "Cette fonctionnalité sera disponible prochainement. Restez à l\'écoute!"));
+              //     },
+              //     icon: Icon(Icons.back_hand, size: 15),
+              //     label: Text(
+              //       "Adhérer",
+              //       style: TextStyle(
+              //         fontSize: 10,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Colors.green,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         side: BorderSide(color: Colors.black, width: 1),
+              //       ),
+              //     ),
+              //   ),
+              //
+              // if (!association.volunteers!
+              //         .map((e) => e.id)
+              //         .toList()
+              //         .contains(widget.idVolunteer) &&
+              //     association.volunteersWaiting!
+              //         .map((e) => e.id)
+              //         .toList()
+              //         .contains(widget.idVolunteer))
+              //   ElevatedButton.icon(
+              //     onPressed: () {
+              //       _toggleFollowAssociation(association);
+              //     },
+              //     icon: Icon(Icons.back_hand, size: 15),
+              //     label: Text(
+              //       "En attente",
+              //       style: TextStyle(
+              //         fontSize: 10,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Colors.green,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         side: BorderSide(color: Colors.black, width: 1),
+              //       ),
+              //     ),
+              //   ),
+              // if (association.volunteers!
+              //     .map((e) => e.id)
+              //     .toList()
+              //     .contains(widget.idVolunteer))
+              //   ElevatedButton.icon(
+              //     onPressed: () {
+              //       _toggleFollowAssociation(association);
+              //     },
+              //     icon: Icon(Icons.back_hand, size: 15),
+              //     label: Text(
+              //       "Se désinscrire",
+              //       style: TextStyle(
+              //         fontSize: 10,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       primary: Colors.green,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         side: BorderSide(color: Colors.black, width: 1),
+              //       ),
+              //     ),
+              //   ),
             ],
           ),
         ],

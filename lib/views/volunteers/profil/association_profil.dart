@@ -41,7 +41,8 @@ class AssociationProfil extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-        ]),
+          ],
+        ),
       ),
     );
   }

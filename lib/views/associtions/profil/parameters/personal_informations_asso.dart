@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/association/association_state.dart';
 import 'package:namer_app/models/association_model.dart';
-import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/widgets/button.dart';
 import 'package:namer_app/widgets/title_with_icon.dart';
 
 class InformationDialogAsso extends StatefulWidget {
-  const InformationDialogAsso({super.key});
+  Association association;
+
+  InformationDialogAsso({super.key, required this.association});
 
   @override
   State<StatefulWidget> createState() {
@@ -77,9 +78,6 @@ class _InformationDialog extends State<InformationDialogAsso> {
                       color: Colors.black,
                       fct: () {
                         if (_formKey.currentState!.validate()) {
-                          print(_name);
-                          print(_phone);
-                          print(_address);
                           Association association = Association(
                               name: _name,
                               phone: _phone,

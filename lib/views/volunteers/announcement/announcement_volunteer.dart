@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:namer_app/util/color.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
@@ -155,7 +157,15 @@ class _AnnouncementVolunteerState extends State<AnnouncementVolunteer> {
         },
         builder: (context, state) {
           if (state is AnnouncementLoadingVolunteerState) {
-            return Center(child: CircularProgressIndicator());
+            return SpinKitFadingCircle(
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? Colors.red : marron,
+                  ),
+                );
+              },
+            );
           }
           if (state is AnnouncementVolunteerErrorState) {
             return Center(child: Text('Erreur de chargement'));

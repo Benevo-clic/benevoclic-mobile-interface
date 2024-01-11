@@ -13,6 +13,7 @@ import 'package:namer_app/widgets/info_adress_detail_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
+import '../../../util/color.dart';
 import '../../../widgets/information_announcement.dart';
 import '../../common/annonces/googleMap/google_map_widget.dart';
 import 'contact_me_widget.dart';
@@ -156,7 +157,7 @@ class _DetailAnnouncementVolunteerState
                 itemBuilder: (BuildContext context, int index) {
                   return DecoratedBox(
                     decoration: BoxDecoration(
-                      color: index.isEven ? Colors.red : Colors.green,
+                      color: index.isEven ? Colors.red : marron,
                     ),
                   );
                 },

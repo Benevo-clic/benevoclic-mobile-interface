@@ -106,9 +106,13 @@ class LoginPage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
                         width: MediaQuery.sizeOf(context).width * 0.8,
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               onPressed: () {
@@ -130,54 +134,32 @@ class LoginPage extends StatelessWidget {
                                     horizontal: 20, vertical: 10),
                               ),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  FaIcon(FontAwesomeIcons.google),
-                                  // Icône Google
-                                  SizedBox(width: 10),
-
-                                  Text("Google"),
-                                  // Texte
+                                  Icon(
+                                    FontAwesomeIcons.google,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    "Continuer avec Google",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ],
                               ),
                             ),
                             SizedBox(
                               width: 5,
                             ),
-                            Divider(
-                              color: Colors.black,
-                              height: 100,
-                              indent: 12,
-                              endIndent: 5,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => OtherConnection(
-                                          context: context, rulesType: title),
-                                    ),
-                                  );
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  FaIcon(FontAwesomeIcons.squareFacebook),
-                                  SizedBox(width: 10),
-                                  Text("Facebook"),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
+                      ),
+                      SizedBox(
+                        height: 30,
                       ),
                       SizedBox(
                         height: 30,

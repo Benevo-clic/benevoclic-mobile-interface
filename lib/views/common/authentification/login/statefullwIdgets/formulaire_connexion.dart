@@ -213,27 +213,27 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                 TextButton(
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          if (widget.rulesType == RulesType.USER_ASSOCIATION) {
-                            return PopDialog(
-                              content: ForgottenPassword(
-                                  roleType: RulesType.USER_ASSOCIATION),
-                            );
-                          } else {
-                            return PopDialog(
-                              content: ForgottenPassword(
-                                roleType: RulesType.USER_VOLUNTEER,
-                              ),
-                            );
-                          }
-                        });
+                      context: context,
+                      builder: (BuildContext context) {
+                        // Déterminer le type de rôle en fonction de widget.rulesType
+                        RulesType roleType =
+                            widget.rulesType == RulesType.USER_ASSOCIATION
+                                ? RulesType.USER_ASSOCIATION
+                                : RulesType.USER_VOLUNTEER;
+
+                        // Afficher PopDialog avec le contenu approprié
+                        return PopDialog(
+                          content: ForgottenPassword(roleType: roleType),
+                        );
+                      },
+                    );
                   },
                   child: Text(
                     "Mot de passe oublié ?",
                     style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.black),
+                      decoration: TextDecoration.underline,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 Container(

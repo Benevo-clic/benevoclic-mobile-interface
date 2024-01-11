@@ -6,8 +6,6 @@ import 'package:namer_app/cubit/announcement/announcement_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/repositories/google/auth_repository.dart';
-import 'package:namer_app/type/rules_type.dart';
-import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/home_view.dart';
 import 'package:namer_app/views/volunteers/profil/associations_view.dart';
 import 'package:namer_app/widgets/content_widget.dart';
@@ -16,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../cubit/user/user_cubit.dart';
 import '../../../cubit/volunteer/volunteer_state.dart';
+import '../../../main.dart';
 import '../../../util/color.dart';
 import '../../../util/showDialog.dart';
 import '../../../widgets/app_bar_profil.dart';
@@ -242,13 +241,10 @@ class _ProfilPageVolunteerState extends State<ProfilPageVolunteer> {
               final SharedPreferences preferences =
                   await SharedPreferences.getInstance();
               preferences.setBool('Volunteer', false);
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LoginPage(
-                    title: RulesType.USER_VOLUNTEER,
-                    isLogin: true,
-                  ),
+                  builder: (context) => MyApp(),
                 ),
               );
             },

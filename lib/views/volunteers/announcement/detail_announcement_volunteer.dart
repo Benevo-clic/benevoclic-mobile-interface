@@ -2,15 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:namer_app/cubit/announcement/announcement_state.dart';
 import 'package:namer_app/models/announcement_model.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/repositories/api/association_repository.dart';
+import 'package:namer_app/views/volunteers/profil/association_profil.dart';
 import 'package:namer_app/widgets/info_adress_detail_announcement.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/volunteer/volunteer_cubit.dart';
+import '../../../util/color.dart';
 import '../../../widgets/information_announcement.dart';
 import '../../common/annonces/googleMap/google_map_widget.dart';
 import 'contact_me_widget.dart';
@@ -55,6 +58,8 @@ class _DetailAnnouncementVolunteerState
           .toList()
           .contains(widget.idVolunteer);
     }
+    BlocProvider.of<AnnouncementCubit>(context)
+        .changeState(AnnouncementInitialState());
   }
 
   Future<Association> getAssociation() async {
@@ -102,6 +107,9 @@ class _DetailAnnouncementVolunteerState
   }
 
   void _processAnnouncements(Announcement announcement) {
+    if (widget.idVolunteer == null) {
+      return;
+    }
     isParticipate = announcement.volunteers!
         .map((e) => e.id)
         .toList()
@@ -114,8 +122,8 @@ class _DetailAnnouncementVolunteerState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnnouncementCubit, AnnouncementState>(
-      builder: (context, state) {
+    return BlocConsumer<AnnouncementCubit, AnnouncementState>(
+      listener: (context, state) {
         if (state is AnnouncementRemovedParticipateState) {
           widget.announcement = state.announcement;
           _processAnnouncements(state.announcement);
@@ -131,24 +139,29 @@ class _DetailAnnouncementVolunteerState
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           });
         }
-        if (state is AnnouncementLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
         if (state is AnnouncementRemovedWaitingState) {
           widget.announcement = state.announcement;
           _processAnnouncements(state.announcement);
         }
         if (state is AnnouncementAddedWaitingState) {
           widget.announcement = state.announcement;
+          _processAnnouncements(state.announcement);
         }
-        if (state is AnnouncementErrorState) {
-          return Center(child: Text(state.message));
-        }
+      },
+      builder: (context, state) {
         return FutureBuilder<Association>(
           future: getAssociation(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return SpinKitFadingCircle(
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: index.isEven ? Colors.red : marron,
+                    ),
+                  );
+                },
+              );
             }
             if (snapshot.hasError) {
               return Center(
@@ -512,10 +525,22 @@ class _DetailAnnouncementVolunteerState
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: _getImageProvider(
-                        widget.announcement.imageProfileAssociation),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AssociationProfil(
+                                    association: association,
+                                    nbAnnouncement:
+                                        widget.nbAnnouncementsAssociation,
+                                  )));
+                    },
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: _getImageProvider(
+                          widget.announcement.imageProfileAssociation),
+                    ),
                   ),
                   SizedBox(
                     width: 5,
@@ -674,53 +699,3 @@ class _DetailAnnouncementVolunteerState
 
 // Widget
 }
-
-//
-// a(int b) {
-//   print(b);
-// }
-//
-// class Bio extends StatelessWidget {
-//   final String text;
-//
-//   Bio({super.key, required this.text});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//         padding: EdgeInsets.all(15),
-//         width: MediaQuery.sizeOf(context).width * 0.85,
-//         decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(15),
-//             border: Border.all(color: orange, width: 2)),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [Text("Bio"), SizedBox(height: 5), Text(text)],
-//         ));
-//   }
-// }
-//
-// class Asso extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return AbstractContainer(
-//         content: Row(
-//       children: [
-//         Expanded(
-//           child: Image.asset(
-//             "assets/logo.png",
-//             height: 80,
-//           ),
-//         ),
-//         Expanded(child: Text("Nom asso")),
-//         Expanded(
-//           child: Button(
-//               backgroundColor: Colors.green,
-//               color: Colors.white,
-//               fct: () => {},
-//               text: "Adhérer"),
-//         )
-//       ],
-//     ));
-//   }
-// }

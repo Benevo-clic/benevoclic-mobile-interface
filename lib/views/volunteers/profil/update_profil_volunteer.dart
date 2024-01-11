@@ -10,6 +10,7 @@ import 'package:namer_app/models/location_model.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 
 import '../../../type/rules_type.dart';
+import '../../../util/color.dart';
 import '../../../widgets/app_bar_back.dart';
 import '../../../widgets/updating_profil_picture.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
@@ -51,13 +52,17 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
   @override
   void initState() {
     super.initState();
+    if (widget.volunteer.imageProfile != null) {
+      image = base64Decode(widget.volunteer.imageProfile!);
+    } else {
+      image = null;
+    }
     _phone.text = widget.volunteer.phone;
     _bio = widget.volunteer.bio!;
     location = widget.volunteer.location!;
     _lastName.text = widget.volunteer.lastName;
     _firstName.text = widget.volunteer.firstName;
     dateController.text = widget.volunteer.birthDayDate;
-    image = base64Decode(widget.volunteer.imageProfile!);
   }
 
   void _handleBioChanges(String? bio) async {
@@ -118,7 +123,9 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
             );
           }
           if (state is VolunteerUpdatingState) {
-            image = base64Decode(state.volunteerModel.imageProfile!);
+            if (state.volunteerModel.imageProfile != null) {
+              image = base64Decode(state.volunteerModel.imageProfile!);
+            }
             return _buildWidgetUpdate(context, state.volunteerModel);
           }
 
@@ -131,69 +138,83 @@ class _UpdateProfileVolunteerState extends State<UpdateProfileVolunteer> {
   }
 
   Widget _buildWidgetUpdate(BuildContext context, Volunteer volunteer) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: UpdatingProfilPicture(
+                  image: image,
+                  rulesType: RulesType.USER_VOLUNTEER,
+                ),
+              ),
+              _infoVolunteer(context),
+              InfoAddress(
+                handleAddressFocusChange: _handleAddressFocusChanges,
+                address: volunteer.location!.address,
+              ),
+              BioSignup(
+                onBioChanged: _handleBioChanges,
+                bio: volunteer.bio,
+                isEditing: true,
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
           ),
-          Center(
-            child: UpdatingProfilPicture(
-              image: image,
-              rulesType: RulesType.USER_VOLUNTEER,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: marron,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Volunteer volunteerUpdate = Volunteer(
+                    id: volunteer.id,
+                    firstName: _firstName.text,
+                    lastName: _lastName.text,
+                    phone: _phone.text,
+                    bio: _bio,
+                    location: location,
+                    birthDayDate: dateController.text,
+                    imageProfile: base64Encode(image!),
+                  );
+
+                  BlocProvider.of<VolunteerCubit>(context)
+                      .updateVolunteer(volunteerUpdate);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NavigationVolunteer()));
+                } else {
+                  print("erreur");
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.check, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text("Modifier",
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                ],
+              ),
             ),
           ),
-          _infoVolunteer(context),
-          InfoAddress(
-            handleAddressFocusChange: _handleAddressFocusChanges,
-            address: volunteer.location!.address,
-          ),
-          BioSignup(
-            onBioChanged: _handleBioChanges,
-            bio: volunteer.bio,
-            isEditing: true,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                Volunteer volunteerUpdate = Volunteer(
-                  id: volunteer.id,
-                  firstName: _firstName.text,
-                  lastName: _lastName.text,
-                  phone: _phone.text,
-                  bio: _bio,
-                  location: location,
-                  birthDayDate: dateController.text,
-                  imageProfile: base64Encode(image!),
-                );
-                print(volunteerUpdate.id);
-                print(volunteerUpdate.firstName);
-                print(volunteerUpdate.lastName);
-                print(volunteerUpdate.phone);
-                print(volunteerUpdate.bio);
-                print(volunteerUpdate.location!.address);
-                print(volunteerUpdate.birthDayDate);
-                print(volunteerUpdate.imageProfile);
-                print(volunteerUpdate.location!.latitude);
-                print(volunteerUpdate.location!.longitude);
-
-                BlocProvider.of<VolunteerCubit>(context)
-                    .updateVolunteer(volunteerUpdate);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NavigationVolunteer()));
-              } else {
-                print("erreur");
-              }
-            },
-            child: Text("Modifier"),
-          ),
-          SizedBox(
-            height: 20,
-          )
-        ],
-      ),
+        ),
+      ],
     );
   }
 

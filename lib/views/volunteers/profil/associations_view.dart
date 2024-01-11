@@ -4,10 +4,10 @@ import 'package:namer_app/cubit/involved_associations/involved_association_cubit
 import 'package:namer_app/cubit/involved_associations/involved_association_state.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/util/color.dart';
-import 'package:namer_app/views/volunteers/associations/association_profil.dart';
-import 'package:namer_app/widgets/content_widget.dart';
+import 'package:namer_app/views/volunteers/profil/association_profil.dart';
 import 'package:namer_app/widgets/app_bar_back.dart';
 import 'package:namer_app/widgets/button.dart';
+import 'package:namer_app/widgets/content_widget.dart';
 import 'package:namer_app/widgets/searchbar_widget.dart';
 
 class AssociationsSub extends StatefulWidget {
@@ -117,13 +117,6 @@ class AssociationCard extends StatelessWidget {
                 onPressed: () {
                   BlocProvider.of<InvolvedAssociationCubit>(context)
                       .detail(association.id ?? "id");
-                  /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AssociationProfil(
-                                association: Association(
-                                    name: "fefe", phone: "phone", type: "type"),
-                              )));*/
                 },
               )),
           SizedBox(

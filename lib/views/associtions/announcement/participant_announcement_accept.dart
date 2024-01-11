@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
@@ -9,7 +12,9 @@ import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/volunteer_repository.dart';
+import '../../../util/color.dart';
 import '../../../widgets/app_bar_back.dart';
+import '../profil/volunteer_profil.dart';
 
 class ParticipantAnnouncementAccept extends StatefulWidget {
   Announcement? announcement;
@@ -42,6 +47,16 @@ class _ParticipantAnnouncementAcceptState
     }
 
     setState(() {});
+  }
+
+  ImageProvider _getImageProvider(String? imageString) {
+    imageString ??=
+        "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString));
+    } else {
+      return NetworkImage(imageString);
+    }
   }
 
   Future<List<Volunteer>> _processAnnouncements() async {
@@ -77,9 +92,6 @@ class _ParticipantAnnouncementAcceptState
         }
       },
       builder: (context, state) {
-        if (state is AnnouncementLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
         return Scaffold(
           body: Column(
             children: [
@@ -238,7 +250,15 @@ class _ParticipantAnnouncementAcceptState
                     future: _processAnnouncements(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SpinKitFadingCircle(
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: index.isEven ? Colors.red : marron,
+                              ),
+                            );
+                          },
+                        );
                       }
                       if (snapshot.hasError) {
                         return Center(
@@ -273,51 +293,63 @@ class _ParticipantAnnouncementAcceptState
   }
 
   Widget _buildListTile(Volunteer volunteer) {
-    return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.red,
-          width: 1.0,
-        ),
-        borderRadius:
-            BorderRadius.circular(10.0), // Bordure arrondie (optionnel)
+    return Card(
+      shadowColor: Colors.grey,
+      margin: EdgeInsets.all(20.0),
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0), // Bordure arrondie
+        side: BorderSide(
+            color: Colors.transparent, width: 1.0), // Bordure colorée
       ),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 20,
-          backgroundImage: AssetImage('assets/logo.png'),
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text(volunteer.firstName),
-        trailing: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.white,
-            backgroundColor: Colors.red,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            textStyle: TextStyle(
-              fontSize: 12,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: ListTile(
+          leading: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VolunteerProfil(
+                    volunteer: volunteer,
+                  ),
+                ),
+              );
+            },
+            child: CircleAvatar(
+              backgroundImage: _getImageProvider(volunteer.imageProfile),
+              radius: 50,
             ),
           ),
-          onPressed: () {
-            var isParticipant = widget.announcement!.volunteers!
-                .map((e) => e.id)
-                .toList()
-                .contains(volunteer.id);
-            if (isParticipant) {
-              BlocProvider.of<AnnouncementCubit>(context)
-                  .unregisterAnnouncement(
-                      widget.announcement!.id, volunteer.id!);
-            }
-          },
-          child: Text(
-            'Supprimer',
-            style: TextStyle(
-              fontSize: 12,
+          title: Text(volunteer.firstName),
+          trailing: TextButton(
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              textStyle: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            onPressed: () {
+              var isParticipant = widget.announcement!.volunteers!
+                  .map((e) => e.id)
+                  .toList()
+                  .contains(volunteer.id);
+              if (isParticipant) {
+                BlocProvider.of<AnnouncementCubit>(context)
+                    .unregisterAnnouncement(
+                        widget.announcement!.id, volunteer.id!);
+              }
+            },
+            child: Text(
+              'Supprimer',
+              style: TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),

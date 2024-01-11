@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_state.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/views/associtions/announcement/participant_announcement_accept.dart';
+import 'package:namer_app/views/associtions/profil/volunteer_profil.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/volunteer_repository.dart';
+import '../../../util/color.dart';
 import '../../../widgets/app_bar_back.dart';
 
 class ParticipantAnnouncementWaiting extends StatefulWidget {
@@ -58,6 +63,26 @@ class _ParticipantAnnouncementWaitingState
     setState(() {});
   }
 
+  ImageProvider _getImageProvider(String? imageString) {
+    imageString ??=
+        "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+    if (isBase64(imageString)) {
+      return MemoryImage(base64.decode(imageString));
+    } else {
+      return NetworkImage(imageString);
+    }
+  }
+
+  bool isBase64(String? str) {
+    if (str == null) return false;
+    try {
+      base64.decode(str);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<List<Volunteer>> _processVolunteer() async {
     await Future.delayed(Duration(milliseconds: 500));
 
@@ -91,9 +116,6 @@ class _ParticipantAnnouncementWaitingState
         }
       },
       builder: (context, state) {
-        if (state is AnnouncementLoadingState) {
-          return Center(child: CircularProgressIndicator());
-        }
         return Scaffold(
           body: Column(
             children: [
@@ -245,14 +267,19 @@ class _ParticipantAnnouncementWaitingState
               BlocConsumer<VolunteerCubit, VolunteerState>(
                 listener: (context, state) {},
                 builder: (context, state) {
-                  if (state is AnnouncementLoadingState) {
-                    return Center(child: CircularProgressIndicator());
-                  }
                   return FutureBuilder<List<Volunteer>>(
                     future: _processVolunteer(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return SpinKitFadingCircle(
+                          itemBuilder: (BuildContext context, int index) {
+                            return DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: index.isEven ? Colors.red : marron,
+                              ),
+                            );
+                          },
+                        );
                       }
                       if (snapshot.hasError) {
                         return Center(
@@ -302,9 +329,21 @@ class _ParticipantAnnouncementWaitingState
           width: MediaQuery.of(context).size.width * 0.9,
           child: Row(
             children: <Widget>[
-              CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 40,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VolunteerProfil(
+                        volunteer: volunteer,
+                      ),
+                    ),
+                  );
+                },
+                child: CircleAvatar(
+                  backgroundImage: _getImageProvider(volunteer.imageProfile),
+                  radius: 40,
+                ),
               ),
               SizedBox(width: 38),
               Expanded(

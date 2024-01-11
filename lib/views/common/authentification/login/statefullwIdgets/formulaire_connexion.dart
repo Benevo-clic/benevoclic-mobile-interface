@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/association/association_cubit.dart';
 import 'package:namer_app/cubit/user/user_state.dart';
 import 'package:namer_app/cubit/volunteer/volunteer_cubit.dart';
 import 'package:namer_app/models/user_model.dart';
 import 'package:namer_app/repositories/api/user_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/common/authentification/forgotten_password.dart';
 import 'package:namer_app/views/common/authentification/login/widgets/customTextFormField_widget.dart';
+import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
 import '../../../../../repositories/google/auth_repository.dart';
+import '../../../../../util/color.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../../util/showDialog.dart';
 import '../../../../../widgets/inscription_signup.dart';
@@ -115,7 +119,6 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
@@ -126,6 +129,17 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
         ShowDialog.show(context, "Erreur de connexion", "retour");
       }
     }, builder: (context, state) {
+      if (state is UserLoadingState) {
+        return SpinKitFadingCircle(
+          itemBuilder: (BuildContext context, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: index.isEven ? Colors.red : marron,
+              ),
+            );
+          },
+        );
+      }
       return Stack(
         children: [
           Card(
@@ -198,14 +212,28 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
                 ),
                 TextButton(
                   onPressed: () {
-                    ShowDialog.show(
-                        context, "cette fonctionalité arrive !!", "retour");
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        // Déterminer le type de rôle en fonction de widget.rulesType
+                        RulesType roleType =
+                            widget.rulesType == RulesType.USER_ASSOCIATION
+                                ? RulesType.USER_ASSOCIATION
+                                : RulesType.USER_VOLUNTEER;
+
+                        // Afficher PopDialog avec le contenu approprié
+                        return PopDialog(
+                          content: ForgottenPassword(roleType: roleType),
+                        );
+                      },
+                    );
                   },
                   child: Text(
                     "Mot de passe oublié ?",
                     style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.black),
+                      decoration: TextDecoration.underline,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 Container(
@@ -237,8 +265,8 @@ class _FormulaireLoginState extends State<FormulaireLogin> {
   }
 }
 
-Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
-    id) async {
+Future<void> _navigateToNextPage(
+    BuildContext context, RulesType rulesType, id) async {
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   if (rulesType == RulesType.USER_ASSOCIATION) {
     preferences.setBool('Association', true);
@@ -261,4 +289,3 @@ Future<void> _navigateToNextPage(BuildContext context, RulesType rulesType,
         reverseTransitionDuration: Duration(milliseconds: 1),
       ));
 }
-

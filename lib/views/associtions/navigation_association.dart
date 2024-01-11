@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/models/association_model.dart';
 import 'package:namer_app/models/buildNavigation_model.dart';
 import 'package:namer_app/type/rules_type.dart';
@@ -7,11 +8,13 @@ import 'package:namer_app/views/associtions/publish/publish_association_views.da
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
+import '../../cubit/announcement/announcement_state.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../repositories/api/association_repository.dart';
+import '../../util/color.dart';
 import '../../widgets/build_navbar.dart';
-import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
+import 'announcement/announcement_association.dart';
 import 'profil/profil_association.dart';
 
 class NavigationAssociation extends StatefulWidget {
@@ -32,6 +35,8 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
     super.didChangeDependencies();
     init();
     BlocProvider.of<PageCubit>(context).setPage(0);
+    BlocProvider.of<AnnouncementCubit>(context)
+        .changeState(AnnouncementInitialState());
   }
 
   @override
@@ -96,16 +101,14 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           if (association == null) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/background1.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return SpinKitFadingCircle(
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? Colors.red : marron,
+                  ),
+                );
+              },
             );
           }
           onPageChanged(currentPageIndex);
@@ -116,8 +119,7 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
           return IndexedStack(
             index: currentPageIndex,
             children: [
-              AnnouncementCommon(
-                rulesType: RulesType.USER_ASSOCIATION,
+              AnnouncementAssociation(
                 idAssociation: _idAssociation,
               ),
               PublishAnnouncement(),

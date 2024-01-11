@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/models/volunteer_model.dart';
 import 'package:namer_app/type/rules_type.dart';
+import 'package:namer_app/views/volunteers/announcement/announcement_volunteer.dart';
 import 'package:namer_app/views/volunteers/profil/profil_volunteer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../cubit/announcement/announcement_cubit.dart';
-import '../../cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
+import '../../cubit/announcement/announcement_state.dart';
 import '../../cubit/page/page_cubit.dart';
 import '../../models/buildNavigation_model.dart';
 import '../../repositories/api/volunteer_repository.dart';
+import '../../util/color.dart';
 import '../../widgets/build_navbar.dart';
-import '../common/annonces/announcement_common.dart';
 import '../common/messages/messages.dart';
 import 'favoris/favorites_volunteers_views.dart';
 
@@ -30,10 +32,20 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
   Volunteer? volunteer;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getIdVolunteer();
+    BlocProvider.of<PageCubit>(context).setPage(0);
+    BlocProvider.of<AnnouncementCubit>(context)
+        .changeState(AnnouncementInitialState());
+  }
+
+  @override
   void initState() {
     super.initState();
     getIdVolunteer();
     _idVolunteer = '';
+
   }
 
   List<BuildNavigationModel> buildNavigationModel = [
@@ -79,31 +91,24 @@ class _NavigationVolunteerState extends State<NavigationVolunteer> {
       body: BlocBuilder<PageCubit, int>(
         builder: (context, currentPageIndex) {
           if (volunteer == null) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/background1.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return SpinKitFadingCircle(
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? Colors.red : marron,
+                  ),
+                );
+              },
             );
           }
           BlocProvider.of<AnnouncementCubit>(context).getAllAnnouncements();
 
-          BlocProvider.of<FavoritesAnnouncementCubit>(context)
-              .getFavoritesAnnouncementByVolunteerId(volunteer!.id!);
-
           return IndexedStack(
             index: currentPageIndex,
             children: [
-              AnnouncementCommon(
-                  rulesType: RulesType.USER_VOLUNTEER,
-                  idVolunteer: _idVolunteer),
+              AnnouncementVolunteer(idVolunteer: _idVolunteer),
               FavoritesVolunteer(
-                idVolunteer: _idVolunteer,
+                idVolunteer: volunteer!.id!,
               ),
               Messages(rulesType: RulesType.USER_VOLUNTEER),
               ProfilPageVolunteer(volunteer: volunteer!)

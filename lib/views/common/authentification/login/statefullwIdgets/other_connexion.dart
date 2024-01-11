@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../cubit/user/user_cubit.dart';
@@ -9,6 +10,7 @@ import '../../../../../models/user_model.dart';
 import '../../../../../repositories/api/user_repository.dart';
 import '../../../../../repositories/google/auth_repository.dart';
 import '../../../../../type/rules_type.dart';
+import '../../../../../util/color.dart';
 import '../../../../../util/errorFirebase.dart';
 import '../../../../associtions/navigation_association.dart';
 import '../../../../associtions/signup/inscription_assocition_signup.dart';
@@ -133,8 +135,14 @@ class _OtherConnectionState extends State<OtherConnection> {
         }
       },
       builder: (context, state) {
-        return const Center(
-          child: CircularProgressIndicator(),
+        return SpinKitFadingCircle(
+          itemBuilder: (BuildContext context, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: index.isEven ? Colors.red : marron,
+              ),
+            );
+          },
         );
       },
     );

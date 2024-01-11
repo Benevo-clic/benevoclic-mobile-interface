@@ -9,7 +9,7 @@ part of 'favorites_model.dart';
 Favorites _$FavoritesFromJson(Map<String, dynamic> json) => Favorites(
       idVolunteer: json['idVolunteer'] as String,
       announcementFavorites: (json['announcementFavorites'] as List<dynamic>)
-          .map((e) => AnnouncementItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => Announcement.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

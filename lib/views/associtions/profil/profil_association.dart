@@ -11,7 +11,6 @@ import 'package:namer_app/repositories/google/auth_repository.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/associtions/members/members_view.dart';
 import 'package:namer_app/views/associtions/profil/update_profil_association.dart';
-import 'package:namer_app/views/common/authentification/login/widgets/login.dart';
 import 'package:namer_app/views/common/profiles/parameters/parameters.dart';
 import 'package:namer_app/views/common/profiles/widget/section_profil.dart';
 import 'package:namer_app/views/home_view.dart';
@@ -22,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../cubit/user/user_cubit.dart';
+import '../../../main.dart';
 import '../../../util/color.dart';
 import '../../../util/showDialog.dart';
 import '../../../widgets/app_bar_profil.dart';
@@ -244,14 +244,11 @@ class _ProfilPageAssociationState extends State<ProfilPageAssociation> {
               final SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 preferences.setBool('Association', false);
-                Navigator.push(
-                  context,
+              Navigator.pushReplacement(
+                context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(
-                      title: RulesType.USER_ASSOCIATION,
-                      isLogin: true,
-                    ),
-                  ),
+                  builder: (context) => MyApp(),
+                ),
                 );
               },
             child: Text("Déconnexion"),

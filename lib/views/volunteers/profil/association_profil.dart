@@ -83,7 +83,7 @@ class AssociationProfil extends StatelessWidget {
                   InkWell(
                     onTap: () {},
                     child: Text(
-                      "${association.volunteers!.length} bénévoles",
+                      "Association",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold),

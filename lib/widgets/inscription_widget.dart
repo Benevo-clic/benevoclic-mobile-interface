@@ -93,72 +93,80 @@ class InscriptionWidget extends StatelessWidget {
                     ),
                     SizedBox(
                       width: MediaQuery.sizeOf(context).width * 0.8,
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => OtherConnection(
-                                      context: context,
-                                      rulesType: rulesType,
-                                    ),
-                                  ),
-                                );
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.8,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                FaIcon(FontAwesomeIcons.google),
-                                // Icône Google
-                                SizedBox(width: 10),
-
-                                Text("Google"),
-                                // Texte
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width * 0.8,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OtherConnection(
+                                                  context: context,
+                                                  rulesType: rulesType,
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              FontAwesomeIcons.google,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "Continuer avec Google",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
                               ],
                             ),
                           ),
                           SizedBox(
                             width: 5,
-                          ),
-                          Divider(
-                            color: Colors.black,
-                            height: 100,
-                            indent: 12,
-                            endIndent: 5,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => OtherConnection(
-                                        context: context, rulesType: rulesType),
-                                  ),
-                                );
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                FaIcon(FontAwesomeIcons.squareFacebook),
-                                SizedBox(width: 10),
-                                Text("Facebook"),
-                              ],
-                            ),
                           ),
                         ],
                       ),

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/type/rules_type.dart';
 import 'package:namer_app/views/common/profiles/parameters/widget/parameters_card.dart';
 import 'package:namer_app/views/common/profiles/widget/pop_dialog.dart';
-import 'package:namer_app/views/volunteers/profil/parameter/phone_number.dart';
 import 'package:namer_app/widgets/content_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -152,7 +151,9 @@ class ParametersView extends StatelessWidget {
                                       builder: ((context) {
                                         if (rule == RulesType.USER_VOLUNTEER) {
                                           return PopDialog(
-                                              content: PhoneDialog());
+                                              content: PopDialog(
+                                            content: _buildContentText(context),
+                                          ));
                                         } else {
                                           return PopDialog(
                                               content:

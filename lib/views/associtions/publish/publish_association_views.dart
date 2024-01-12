@@ -11,13 +11,16 @@ import 'package:namer_app/widgets/location_form_autocomplete_widget.dart';
 
 import '../../../cubit/announcement/announcement_state.dart';
 import '../../../models/announcement_model.dart';
+import '../../../models/association_model.dart';
 import '../../../widgets/app_bar_widget.dart';
 import '../../../widgets/image_picker_announcement.dart';
 import '../../common/authentification/login/widgets/customTextFormField_widget.dart';
 import '../navigation_association.dart';
 
 class PublishAnnouncement extends StatefulWidget {
-  PublishAnnouncement({super.key});
+  Association? association;
+
+  PublishAnnouncement({super.key, this.association});
 
   @override
   State<StatefulWidget> createState() {
@@ -328,7 +331,9 @@ class _PublishAnnouncement extends State<PublishAnnouncement> {
                     MediaQuery.of(context).size.height *
                         0.15), // Hauteur personnalisée
                 child: AppBarWidget(
-                    contexts: context, label: 'Publier une annonce'),
+                    contexts: context,
+                    label: 'Publier une annonce',
+                    association: widget.association),
               ),
               body: Stack(
                 children: [

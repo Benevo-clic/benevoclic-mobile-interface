@@ -122,8 +122,12 @@ class _NavigationAssociationState extends State<NavigationAssociation> {
               AnnouncementAssociation(
                 idAssociation: _idAssociation,
               ),
-              PublishAnnouncement(),
-              Messages(rulesType: RulesType.USER_ASSOCIATION),
+              PublishAnnouncement(
+                association: association,
+              ),
+              Messages(
+                  rulesType: RulesType.USER_ASSOCIATION,
+                  association: association),
               ProfilPageAssociation(association: association),
             ],
           );

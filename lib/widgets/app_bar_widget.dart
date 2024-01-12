@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:namer_app/models/association_model.dart';
+
+import '../models/volunteer_model.dart';
+import '../type/rules_type.dart';
+import '../views/common/profiles/parameters/parameters.dart';
 
 class AppBarWidget extends StatelessWidget {
+  Association? association;
+  Volunteer? volunteer;
   String? label;
 
-  AppBarWidget({super.key, required this.contexts, this.label});
+  AppBarWidget(
+      {super.key,
+      required this.contexts,
+      this.label,
+      this.association,
+      this.volunteer});
 
   final BuildContext contexts;
 
@@ -61,7 +73,28 @@ class AppBarWidget extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      // Action pour le deuxième bouton
+                      print(association);
+                      if (association != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ParametersView(
+                              rule: RulesType.USER_ASSOCIATION,
+                              association: association,
+                            ),
+                          ),
+                        );
+                      } else if (volunteer != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ParametersView(
+                              rule: RulesType.USER_VOLUNTEER,
+                              volunteer: volunteer,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     icon: const Icon(
                       Icons.settings,

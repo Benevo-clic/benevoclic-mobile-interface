@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namer_app/cubit/page/page_cubit.dart';
 
+import '../../../models/association_model.dart';
+import '../../../models/volunteer_model.dart';
 import '../../../type/rules_type.dart';
 import '../../../widgets/app_bar_widget.dart';
 
 class Messages extends StatelessWidget {
   RulesType? rulesType;
+  Association? association;
+  Volunteer? volunteer;
 
-  Messages({Key? key, this.rulesType});
+  Messages({Key? key, this.rulesType, this.association, this.volunteer})
+      : super(key: key);
 
   Widget _buildContentText(BuildContext context) {
     String text = '';
@@ -30,7 +35,11 @@ class Messages extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
             MediaQuery.of(context).size.height * 0.15), // Hauteur personnalisée
-        child: AppBarWidget(contexts: context, label: 'Messages'),
+        child: AppBarWidget(
+            contexts: context,
+            label: 'Messages',
+            association: association,
+            volunteer: volunteer),
       ),
       body: Center(
         child: Column(

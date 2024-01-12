@@ -41,7 +41,8 @@ class AssociationProfil extends StatelessWidget {
           SizedBox(
             height: MediaQuery.sizeOf(context).height * 0.03,
           ),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -82,7 +83,7 @@ class AssociationProfil extends StatelessWidget {
                   InkWell(
                     onTap: () {},
                     child: Text(
-                      "${association.volunteers!.length} bénévoles",
+                      "Association",
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold),

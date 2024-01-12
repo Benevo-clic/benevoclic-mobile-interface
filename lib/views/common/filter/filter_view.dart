@@ -13,7 +13,6 @@ import 'package:namer_app/views/common/filter/widget/check_box.dart';
 import 'package:namer_app/views/common/filter/widget/filter_Item_widget.dart';
 import 'package:namer_app/views/common/filter/widget/radio_section.dart';
 import 'package:namer_app/views/common/filter/widget/slider_heures.dart';
-import 'package:namer_app/views/common/filter/widget/slider_km.dart';
 
 import '../../../cubit/announcement/announcement_cubit.dart';
 import '../../../models/announcement_model.dart';
@@ -222,61 +221,61 @@ class _FilterView extends State<FilterView> {
         body: ListView(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
           children: [
-            FilterItem(
-              title: "Position",
-              content: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Activer la géolocalisation",
-                            style: TextStyle(
-                              fontSize: 16,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Switch(
-                            value: position,
-                            onChanged: (value) {
-                              setState(() {
-                                position = value;
-                              });
-                              if (value) {
-                                _getCurrentLocation();
-                              } else {
-                                _resetLocation();
-                              }
-                            },
-                            activeTrackColor: orange,
-                            activeColor: AA4D4F,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SliderKm(
-                        onSliderChange: (double value) {
-                          setState(() {
-                            if (position) {
-                              filter.maxDistance = value;
-                            } else {
-                              filter.maxDistance = null;
-                            }
-                          });
-                        },
-                        value: filter.maxDistance ?? 0,
-                        min: 0,
-                        max: 100,
-                        label: "Distance maximale",
-                        unit: "km",
-                      ),
-                    ],
-                  )),
-            ),
+            // FilterItem(
+            //   title: "Position",
+            //   content: Padding(
+            //       padding: const EdgeInsets.all(10.0),
+            //       child: Column(
+            //         children: [
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //             children: [
+            //               Text(
+            //                 "Activer la géolocalisation",
+            //                 style: TextStyle(
+            //                   fontSize: 16,
+            //                   overflow: TextOverflow.ellipsis,
+            //                 ),
+            //               ),
+            //               Switch(
+            //                 value: position,
+            //                 onChanged: (value) {
+            //                   setState(() {
+            //                     position = value;
+            //                   });
+            //                   if (value) {
+            //                     _getCurrentLocation();
+            //                   } else {
+            //                     _resetLocation();
+            //                   }
+            //                 },
+            //                 activeTrackColor: orange,
+            //                 activeColor: AA4D4F,
+            //               ),
+            //             ],
+            //           ),
+            //           SizedBox(
+            //             height: 10,
+            //           ),
+            //           SliderKm(
+            //             onSliderChange: (double value) {
+            //               setState(() {
+            //                 if (position) {
+            //                   filter.maxDistance = value;
+            //                 } else {
+            //                   filter.maxDistance = null;
+            //                 }
+            //               });
+            //             },
+            //             value: filter.maxDistance ?? 0,
+            //             min: 0,
+            //             max: 100,
+            //             label: "Distance maximale",
+            //             unit: "km",
+            //           ),
+            //         ],
+            //       )),
+            // ),
             SizedBox(
               height: 5,
             ),

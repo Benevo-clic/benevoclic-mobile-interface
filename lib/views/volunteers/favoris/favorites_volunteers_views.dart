@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_cubit.dart';
 import 'package:namer_app/cubit/favorisAnnouncement/favorites_announcement_state.dart';
+import 'package:namer_app/models/volunteer_model.dart';
 
 import '../../../models/announcement_model.dart';
 import '../../../repositories/api/favorites_repository.dart';
@@ -12,8 +13,9 @@ import '../announcement/item_announcement_volunteer.dart';
 
 class FavoritesVolunteer extends StatefulWidget {
   final String idVolunteer;
+  Volunteer? volunteer;
 
-  const FavoritesVolunteer({super.key, required this.idVolunteer});
+  FavoritesVolunteer({super.key, required this.idVolunteer, this.volunteer});
 
   @override
   State<FavoritesVolunteer> createState() => _FavoritesVolunteerState();
@@ -93,7 +95,10 @@ class _FavoritesVolunteerState extends State<FavoritesVolunteer> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.15),
-            child: AppBarWidget(contexts: context, label: 'Mes Favoris'),
+            child: AppBarWidget(
+                contexts: context,
+                label: 'Mes Favoris',
+                volunteer: widget.volunteer),
           ),
           body: _buildAnnouncementsList(announcements, _toggleFavorite),
         );
